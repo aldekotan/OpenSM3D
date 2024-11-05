@@ -1,7 +1,5 @@
 package code;
 
-import code.Items.Item;
-
 //Класс отвечающий РПГ составляющую
 
 public final class Scripts {
@@ -249,13 +247,6 @@ public final class Scripts {
     public static short[] stashItems;
     public static byte openedActivableObjId;
     public static short[] traderItems;
-    
-    private static void createItemsHashTable() 
-    {//инициализация
-        Item.loadItems();
-        //TODO: Что-то сделать с итемами
-        //System.out.println(Item.getItem("bigm").getDesc());
-    }
 
     private static void resetActorQuestAndDialogProgress() {
         batyaDialogState = 0;
@@ -283,7 +274,6 @@ public final class Scripts {
     }
 
     public static void setAllActorStatsToDefault() {
-        createItemsHashTable();
         
         for (short var0 = 0; var0 < 100; ++var0) //Опустошить инвентарь
         {
