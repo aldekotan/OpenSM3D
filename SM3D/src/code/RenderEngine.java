@@ -19,6 +19,7 @@ import javax.microedition.m3g.Object3D;
 import javax.microedition.m3g.Sprite3D;
 import javax.microedition.m3g.Transform;
 import javax.microedition.m3g.World;
+import java.lang.Integer;
 
 public final class RenderEngine {
 
@@ -258,6 +259,7 @@ public final class RenderEngine {
     private static byte var_205e;
     public static boolean var_20a4;
    //Возвращаю старый дебаггер
+    private static int fpsCounterEnabled;
 
     static {
         float_doublemassive_1st = new float[10][3];
@@ -320,6 +322,14 @@ public final class RenderEngine {
         cropHeight = new int[32];
         var_1ffd = new boolean[10];
         var_20a4 = true;
+
+        try {
+        fpsCounterEnabled = Integer.parseInt(Main.main.getAppProperty("ShowFPS"));
+        }
+        catch (NumberFormatException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static void init() {
@@ -2409,15 +2419,13 @@ public final class RenderEngine {
     }
 
     public static void renderWorld(Graphics graphics) {
-        boolean fpsCounter = true;//включение и выключение счётчика
-        
         try {
             if(currentGameState != -2 && currentGameState != 0 && currentGameState != 13 && currentGameState != 14) {
                 graphics3D.bindTarget(graphics, true, Graphics3D.OVERWRITE);
                 graphics3D.render(gameWorld);
                 graphics3D.releaseTarget();
                 
-                if(fpsCounter) {
+                if(fpsCounterEnabled==1) {
                     int fps = MathUtils.calcFps();
                     graphics.setColor(2670136);
                     //graphics_cont.fillRect(200, 12, 60, 15);
