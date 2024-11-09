@@ -4,9 +4,30 @@ import javax.microedition.lcdui.Font;
 
 public final class AllScreens {
 
-   public static short[] var_47;
-   public static final short[] var_a1 = new short[]{(short)20, (short)21, (short)23, (short)24, (short)25, (short)26, (short)27};
-   public static final short[] var_f1 = new short[]{(short)20, (short)21, (short)22, (short)23, (short)24, (short)25, (short)26, (short)27};
+   public static short[] mainMenuTextIds;
+   //массив с репликами, куда копируются значения из переменных ниже
+   public static final short[] menuTextIdEmptySave = new short[]{(short)20, (short)21, (short)23, (short)24, (short)25, (short)26, (short)27};
+   //id реплик меню, если сейвов нет
+   //id|реплика
+   //20 продолжить
+   //21 новая игра
+   //23 настройки
+   //24 помощь
+   //25 об игре
+   //26 ещё игры
+   //27 выход
+   public static final short[] menuTextIdSaveCreated = new short[]{(short)20, (short)21, (short)22, (short)23, (short)24, (short)25, (short)26, (short)27};
+   //id реплик меню, если сохранения уже были
+    //textId|реплика  | screenId
+    //20 продолжить      4
+    //21 новая игра      9
+    //22 загрузка игры   10
+    //23 настройки       1
+    //24 помощь          1
+    //25 об игре         2
+    //26 ещё игры        15
+    //27 выход           3
+   
    public static final String MORE_GAMES_URL = Main.main.getAppProperty("SiteURL");
    public static int TEXT_LINE_HEIGHT_NOINDENT;
    public static int SymbolHeight;
