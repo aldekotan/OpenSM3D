@@ -5,10 +5,11 @@ import javax.microedition.lcdui.Graphics;
 public class MenuScreen implements Screen 
 {
    //Отвечает за отображение интерфейса и надписей над правым и
-   //левым софткеем, а также в верхней части экрана. Но не за все, а за те, что
-   //рисуются с заглавной буквы, тонким шрифтом? Странная логика
+   //левым софткеем, а также в верхней части экрана.
    public byte interfaceNumber;
    public short[][] replicsMassive;
+   //Ссылки на объекты Screen после перехода и их ID, по левой и правой
+   //софт клавишам
    public Screen[] screenTransitionRightOption;
    public byte[] screenIdTransitionRightOption;
    public Screen[] screensTransitionLeftOption;

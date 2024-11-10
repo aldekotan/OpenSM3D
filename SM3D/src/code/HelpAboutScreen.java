@@ -59,7 +59,8 @@ public final class HelpAboutScreen extends MenuScreen {
    }
 
    public final void resetVariables() {
-      super.screensTransitionLeftOption = new Screen[]{AllScreens.menu2, AllScreens.menu,
+      super.screensTransitionLeftOption = new Screen[]{
+          AllScreens.menu2, AllScreens.menu,
           AllScreens.menu, AllScreens.menu};
    }
 
@@ -133,27 +134,27 @@ public final class HelpAboutScreen extends MenuScreen {
       MasterCanvas.graphics.fillRect(x, yInner, 5, height);
    }
 
-   public final void keyPressed(int key) {
-      switch(key) {
-      //Промотка текста вниз
-          case 1:
-         if(this.yStart < MenuScreen.textClipY) {
-            this.yStart += TextCreator.getHeightFromTextParamMassive(1);
-         }
-         Main.main.repaint();
-         return;
-      //Возврат в главное меню
-      case 3:
-         Main.main.setScreen(super.screensTransitionLeftOption[super.drawingScreenId], (byte)1);
-      //Промотка текста вверх
-      case 6:
-         if(this.yStart + this.textTotalHeight 
-                 * TextCreator.getHeightFromTextParamMassive(1) > MenuScreen.textClipY 
-                 + MenuScreen.textClipHeight) {
-            this.yStart -= TextCreator.getHeightFromTextParamMassive(1);
-         }
-         Main.main.repaint();
-      default:
-      }
-   }
+    public final void keyPressed(int key) {
+        switch (key) {
+            //Промотка текста вниз
+            case 1:
+                if (this.yStart < MenuScreen.textClipY) {
+                    this.yStart += TextCreator.getHeightFromTextParamMassive(1);
+                }
+                Main.main.repaint();
+                return;
+            //Возврат в главное меню
+            case 3:
+                Main.main.setScreen(super.screensTransitionLeftOption[super.drawingScreenId], (byte) 1);
+            //Промотка текста вверх
+            case 6:
+                if (this.yStart + this.textTotalHeight
+                        * TextCreator.getHeightFromTextParamMassive(1) > MenuScreen.textClipY
+                        + MenuScreen.textClipHeight) {
+                    this.yStart -= TextCreator.getHeightFromTextParamMassive(1);
+                }
+                Main.main.repaint();
+            default:
+        }
+    }
 }
