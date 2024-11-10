@@ -14,14 +14,19 @@ import javax.microedition.m3g.World;
 
 public final class Personage //Персонажи, модели, освещение, спрайты...
 {
-
-   public static byte[] by_varMassive_1 = new byte[10];
+   //Уровень уворотов для каждого врага, от 0 до 3. 
+   //Сами вероятности см. в NPCShootPlayer
+   public static byte[] enemyDodgeLevels = new byte[10];
+   
    private static Mesh mesh;
    private static Light light;
-   private static final byte[] by_varMassive_2 = new byte[10];
+   
+   //Уровень опытности каждого добавленного на уровень противника (от 0 до 12)
+   //По нему вычисляется количество получаемого опыта за убийство
+   private static final byte[] enemyExpLevels = new byte[10];
 
 
-   public static void loadPersM3G(byte enemy_level, byte var1) 
+   public static void loadPersM3G(byte expLevel, byte modelId) 
    {
       if(RenderEngine.persWorld == null) //?
       {
@@ -45,11 +50,11 @@ public final class Personage //Персонажи, модели, освещен�
          }
       }
 
-      by_varMassive_2[var1] = enemy_level;
-      if(RenderEngine.StalkersAppearanceGroups[var1] != null) 
+      enemyExpLevels[modelId] = expLevel;
+      if(RenderEngine.StalkersAppearanceGroups[modelId] != null) 
       {
-         sub_ad(enemy_level, var1);
-         LoadStalkerModelWithThisTextures(enemy_level, var1);
+         setDodgeLevel(expLevel, modelId);
+         LoadStalkerModelWithThisTextures(expLevel, modelId);
       } 
       else 
       {
@@ -86,48 +91,48 @@ public final class Personage //Персонажи, модели, освещен�
          } 
          else 
          {
-            RenderEngine.StalkersAppearanceGroups[var1] = (Group)RenderEngine.StalkersAppearanceGroups[0].duplicate();
+            RenderEngine.StalkersAppearanceGroups[modelId] = (Group)RenderEngine.StalkersAppearanceGroups[0].duplicate();
          }
 
-         RenderEngine.StalkersAppearanceGroups[var1].setRenderingEnable(false);
-         RenderEngine.gameWorld.addChild(RenderEngine.StalkersAppearanceGroups[var1]);
-         sub_ad(enemy_level, var1);
-         LoadStalkerModelWithThisTextures(enemy_level, var1);
+         RenderEngine.StalkersAppearanceGroups[modelId].setRenderingEnable(false);
+         RenderEngine.gameWorld.addChild(RenderEngine.StalkersAppearanceGroups[modelId]);
+         setDodgeLevel(expLevel, modelId);
+         LoadStalkerModelWithThisTextures(expLevel, modelId);
       }
    }
 
-   private static void sub_ad(byte var0, byte var1) 
+   private static void setDodgeLevel(byte expLevel, byte modelId) 
    {
       byte var2;
-      if(var0 == 0) 
+      if(expLevel == 0) 
       {
          var2 = 22;
-         by_varMassive_1[var1] = (byte)(var0 - 0);
+         enemyDodgeLevels[modelId] = (byte)(expLevel - 0);
       } 
-      else if(var0 > 0 && var0 < 4) //bandit
+      else if(expLevel > 0 && expLevel < 4) //bandit
       {
-         var2 = (byte)(var0 + 21);
-         by_varMassive_1[var1] = (byte)(var0 - 0);
+         var2 = (byte)(expLevel + 21);
+         enemyDodgeLevels[modelId] = (byte)(expLevel - 0);
       } 
-      else if(var0 >= 4 && var0 < 7) //killer
+      else if(expLevel >= 4 && expLevel < 7) //killer
       {
-         var2 = (byte)(var0 + 18);
-         by_varMassive_1[var1] = (byte)(var0 - 3);
+         var2 = (byte)(expLevel + 18);
+         enemyDodgeLevels[modelId] = (byte)(expLevel - 3);
       } 
-      else if(var0 >= 7 && var0 < 10) //stalker
+      else if(expLevel >= 7 && expLevel < 10) //stalker
       {
-         var2 = (byte)(var0 + 15);
-         by_varMassive_1[var1] = (byte)(var0 - 6);
+         var2 = (byte)(expLevel + 15);
+         enemyDodgeLevels[modelId] = (byte)(expLevel - 6);
       } 
       else //soldier
       {
-         var2 = (byte)(var0 + 12);
-         by_varMassive_1[var1] = (byte)(var0 - 9);
+         var2 = (byte)(expLevel + 12);
+         enemyDodgeLevels[modelId] = (byte)(expLevel - 9);
       }
 
       mesh = (Mesh)RenderEngine.persWorld.find(var2);
-      Mesh var3 = (Mesh)mesh.duplicate();
-      RenderEngine.StalkersAppearanceGroups[var1].addChild(var3);
+      Mesh newMesh = (Mesh)mesh.duplicate();
+      RenderEngine.StalkersAppearanceGroups[modelId].addChild(newMesh);
       mesh = null;
    }
 
@@ -167,9 +172,9 @@ public final class Personage //Персонажи, модели, освещен�
 
    }
 
-   public static byte sub_15c(byte var0) 
+   public static byte getExpLevelOfEnemy(byte modelId) 
    {
-      return by_varMassive_2[var0];
+      return enemyExpLevels[modelId];
    }
 
    private static void LoadThis3DSpriteWithTextures(byte number_in_group, byte var1) 
