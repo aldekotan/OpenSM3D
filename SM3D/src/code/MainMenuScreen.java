@@ -271,16 +271,16 @@ public final class MainMenuScreen implements Screen
 
    private static void sleepForAWhile(long milliseconds) 
    {
-      long awakenTime = System.currentTimeMillis() + milliseconds;
+      //long awakenTime = System.currentTimeMillis() + milliseconds;
 
-       while (System.currentTimeMillis() < awakenTime) {
+       //while (System.currentTimeMillis() < awakenTime) {
            //Починил плавную перемотку 10.11
            try {
                Thread.sleep(milliseconds);
            } catch (InterruptedException ex) {
                ex.printStackTrace();
            }
-       }
+       //}
 
    }
 
