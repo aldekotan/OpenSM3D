@@ -59,7 +59,7 @@ public final class HelpAboutScreen extends MenuScreen {
    }
 
    public final void resetVariables() {
-      super.screenMassive2 = new Screen[]{AllScreens.menu2, AllScreens.menu,
+      super.screensTransitionLeftOption = new Screen[]{AllScreens.menu2, AllScreens.menu,
           AllScreens.menu, AllScreens.menu};
    }
 
@@ -144,7 +144,7 @@ public final class HelpAboutScreen extends MenuScreen {
          return;
       //Возврат в главное меню
       case 3:
-         Main.main.setScreen(super.screenMassive2[super.drawingScreenId], (byte)1);
+         Main.main.setScreen(super.screensTransitionLeftOption[super.drawingScreenId], (byte)1);
       //Промотка текста вверх
       case 6:
          if(this.yStart + this.textTotalHeight 

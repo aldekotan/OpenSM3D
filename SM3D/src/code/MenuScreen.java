@@ -9,10 +9,10 @@ public class MenuScreen implements Screen
    //рисуются с заглавной буквы, тонким шрифтом? Странная логика
    public byte interfaceNumber;
    public short[][] replicsMassive;
-   public Screen[] screenMassive;
-   public byte[] screenIds;
-   public Screen[] screenMassive2;
-   public byte[] screenIds2;
+   public Screen[] screenTransitionRightOption;
+   public byte[] screenIdTransitionRightOption;
+   public Screen[] screensTransitionLeftOption;
+   public byte[] screenIdTransitionLeftOption;
    
    //id текста
    public short menuNameTextId;

@@ -36,7 +36,7 @@ public class ListScreen extends MenuScreen
    public ListScreen() 
    {
       super.replicsMassive = new short[][]{{(short)0, (short)23, (short)37, (short)367, (short)41}, {(short)0, (short)6, (short)0, (short)0, (short)7}, {(short)0, (short)10, (short)10, (short)6, (short)11}};
-      super.screenIds2 = new byte[]{(byte)0, (byte)1, (byte)0, (byte)2, (byte)0};
+      super.screenIdTransitionLeftOption = new byte[]{(byte)0, (byte)1, (byte)0, (byte)2, (byte)0};
       this.by_var_1 = 0;
       this.by_var_2 = (byte)Math.min(MenuScreen.textClipHeight / AllScreens.SINGLE_TEXT_LINE_HEIGHT, this.numberOfOptions);
       this.timer = new Timer(true, 100L);
@@ -48,7 +48,7 @@ public class ListScreen extends MenuScreen
       var_404 = new Screen[]{AllScreens.menu2, AllScreens.menu2};
       var_429 = new Screen[]{AllScreens.menu, AllScreens.menu, AllScreens.menu2, AllScreens.masterInventory, AllScreens.masterInventory, AllScreens.menu, AllScreens.pauseScreen};
       var_47a = new Screen[][]{null, var_404, var_429, null};
-      super.screenMassive2 = new Screen[]{AllScreens.menu2, AllScreens.menu, AllScreens.menu2, AllScreens.pauseScreen, AllScreens.menu2};
+      super.screensTransitionLeftOption = new Screen[]{AllScreens.menu2, AllScreens.menu, AllScreens.menu2, AllScreens.pauseScreen, AllScreens.menu2};
    }
 
    public boolean onShow(byte var1) 
@@ -275,7 +275,7 @@ public class ListScreen extends MenuScreen
 
                 if(super.drawingScreenId == 3) 
                 {
-                   Main.main.setScreen(super.screenMassive2[super.drawingScreenId], super.screenIds2[super.drawingScreenId]);
+                   Main.main.setScreen(super.screensTransitionLeftOption[super.drawingScreenId], super.screenIdTransitionLeftOption[super.drawingScreenId]);
                    return;
                 } 
                 else 
@@ -322,7 +322,7 @@ public class ListScreen extends MenuScreen
                 ;
              }
 
-             Main.main.setScreen(super.screenMassive2[super.drawingScreenId], super.screenIds2[super.drawingScreenId]);
+             Main.main.setScreen(super.screensTransitionLeftOption[super.drawingScreenId], super.screenIdTransitionLeftOption[super.drawingScreenId]);
              return;
           case 6:
           case 56:
