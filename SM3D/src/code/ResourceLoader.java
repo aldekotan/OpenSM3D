@@ -346,7 +346,7 @@ public final class ResourceLoader {
         } else if(spriteId == -101) {
             cm.setBlending(CompositingMode.ALPHA_ADD);
         } else {
-            cm.setBlending(RenderEngine.objectBlendMode[spriteId]);
+            cm.setBlending(RenderEngine.objectLighstBlendMode[spriteId]);
         }
 
         if(spriteId != -101) {

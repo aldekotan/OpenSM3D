@@ -169,11 +169,11 @@ public final class RenderEngine {
     public static byte[] objectUnusedField;
     public static String[] objectModelName;
     public static String[] objectTextureName;
-    public static byte[] objectBlendMode;
+    public static byte[] objectLighstBlendMode;
     public static byte[] objectLightsId;
     public static float[] objectScale;
-    public static byte[] objectPersId;
-    public static byte[] objectPersAnimTime;
+    public static byte[] objectStaticBotWeaponId;
+    public static byte[] objectStaticBotAnimTime;
 	
     private static float var_b80;
     private static float var_bb1;
@@ -187,14 +187,13 @@ public final class RenderEngine {
     public static Mesh[] mesh_massive_third;
     public static Light[] light_massive_1st;
     public static Sprite3D[] world_sprites3D_massive;
-    private static Sprite3D var_e1c;
+    private static Sprite3D bloodSprite;
     private static Sprite3D var_e59;
-    public static Mesh var_e6b;
     private static Light var_ea6;
     public static World lightsWorld;
-    public static Group[] stationaryPersonages;
+    public static Group[] staticBotMdlGroup;
     public static Group[] botModelGroup;
-    private static Group enemies_group;
+    private static Group playerModel;
     private static boolean needToLoadPersM3G;
     public static World persWorld;
     public static boolean[] FireAnimActiveFrames;
@@ -273,11 +272,11 @@ public final class RenderEngine {
         objectModelName = new String[127];
         objectTextureName = new String[127];
 
-        objectBlendMode = new byte[127];
+        objectLighstBlendMode = new byte[127];
         objectLightsId = new byte[127];
         objectScale = new float[127];
-        objectPersId = new byte[100];
-        objectPersAnimTime = new byte[100];
+        objectStaticBotWeaponId = new byte[100];
+        objectStaticBotAnimTime = new byte[100];
 		
         tmpMehsScale = new float[]{1.0F, 1.0F, 1.0F};
         isTexture_n_AdressMassivesFull = true;
@@ -287,7 +286,7 @@ public final class RenderEngine {
         light_massive_1st = new Light[32];
         world_sprites3D_massive = new Sprite3D[32];
         lightsWorld = null;
-        stationaryPersonages = new Group[10];
+        staticBotMdlGroup = new Group[10];
         botModelGroup = new Group[10];
         FireAnimActiveFrames = new boolean[32];
         byte_massive_1st = new byte[32];
@@ -400,10 +399,10 @@ public final class RenderEngine {
         sub_360(currentRoom);
         if(var_1a01[location_number] == 1 && roomsCount > 1) //Если враги на уровне вообще есть 
         {
-            DuplicateStalkerModel();
+            loadPlayerModel();
         } else {
-            gameWorld.removeChild(enemies_group);
-            enemies_group = null;
+            gameWorld.removeChild(playerModel);
+            playerModel = null;
             System.gc();
         }
 
@@ -601,9 +600,8 @@ public final class RenderEngine {
                                 var11.printStackTrace();
                             }
 
-                            var_e6b = (Mesh) lightsWorld.find(objectLightsId[objId]);
+                            Mesh var_e6b = (Mesh) lightsWorld.find(objectLightsId[objId]);
                             world_meshes_massive[gameObjId] = (Mesh) var_e6b.duplicate();
-                            var_e6b = null;
                             System.gc();
                             gameWorld.addChild(world_meshes_massive[gameObjId]);
                             world_meshes_massive[gameObjId].getScale(tmpMehsScale);
@@ -691,11 +689,11 @@ public final class RenderEngine {
 					
                     if(objectModelSource[objId] == 4) {
 						//load from pers??
-                        objectPersId[objId] = dis.readByte();
-                        objectPersAnimTime[objId] = dis.readByte();
+                        objectStaticBotWeaponId[objId] = dis.readByte();
+                        objectStaticBotAnimTime[objId] = dis.readByte();
                     } else {
 						//load from lights??
-                        objectBlendMode[objId] = dis.readByte();
+                        objectLighstBlendMode[objId] = dis.readByte();
                         objectLightsId[objId] = dis.readByte();
                     }
 
@@ -1022,8 +1020,8 @@ public final class RenderEngine {
             }
 
             for(var4 = 0; var4 < 10; ++var4) {
-                gameWorld.removeChild(stationaryPersonages[var4]);
-                stationaryPersonages[var4] = null;
+                gameWorld.removeChild(staticBotMdlGroup[var4]);
+                staticBotMdlGroup[var4] = null;
             }
 
             gameWorld.removeChild(light);
@@ -1089,13 +1087,13 @@ public final class RenderEngine {
     }
 
     private static void sub_387() {
-        if(var_e1c == null) {
-            var_e1c = ResourceLoader.getSprite(-100);
-            var_e1c.setScale(0.6F, 0.6F, 0.6F);
-            gameWorld.addChild(var_e1c);
+        if(bloodSprite == null) {
+            bloodSprite = ResourceLoader.getSprite(-100);
+            bloodSprite.setScale(0.6F, 0.6F, 0.6F);
+            gameWorld.addChild(bloodSprite);
         }
 
-        var_e1c.setRenderingEnable(false);
+        bloodSprite.setRenderingEnable(false);
         LoadingScreen.RunGarbageCollector();
         if(var_e59 == null) {
             var_e59 = ResourceLoader.getSprite(-101);
@@ -1105,64 +1103,50 @@ public final class RenderEngine {
         var_e59.setRenderingEnable(false);
     }
 
-    private static void sub_3e4(byte var0) {
-        byte var2 = 0;
-        switch(var0) {
-            case 0:
-                var2 = 0;
-                break;
-            case 1:
-                var2 = 22;
-                break;
-            case 2:
-                var2 = 23;
-                break;
-            case 3:
-                var2 = 24;
-        }
-
-        if(var2 != 0) {
-            var_e6b = (Mesh) persWorld.find(var2);
-            Mesh var1 = (Mesh) var_e6b.duplicate();
-            enemies_group.addChild(var1);
-            var_e6b = null;
-        }
-
-        enemies_group.setOrientation(0.0F, 0.0F, 0.0F, 0.0F);
-        enemies_group.setRenderingEnable(true);
-    }
-
-    private static void DuplicateStalkerModel() {
-        if(enemies_group == null) {
-            enemies_group = new Group();
+    private static void loadPlayerModel() {
+        if(playerModel == null) {
+            playerModel = new Group();
+			
             if(botModelGroup[0] != null) {
-                enemies_group = (Group) botModelGroup[0].duplicate();
+                playerModel = (Group) botModelGroup[0].duplicate();
                 System.out.println("STALKER COPIED !!! ");
             }
 
-            DefineStalkerModelAppearance();
-            gameWorld.addChild(enemies_group);
+            setPlayerModelAppearance();
+            gameWorld.addChild(playerModel);
         }
     }
 
-    private static void DefineStalkerModelAppearance() {
+    private static void setPlayerModelAppearance() {
+        Appearance ap = new Appearance(); //Внешний вид
+        ap.setTexture(0, ResourceLoader.getTexture("pstalker.png"));//текстура
+		
         CompositingMode compositMode = new CompositingMode(); //Способ зарисовки в мире
-        Appearance appearance; //Внешний вид
-        (appearance = new Appearance()).setTexture(0, ResourceLoader.getTexture("pstalker.png"));//текстура
-        compositMode.setBlending(68); //смешивание
-        Material material = new Material(); //освещение и блеск
-        appearance.setCompositingMode(compositMode);
-        appearance.setMaterial(material);
+        compositMode.setBlending(CompositingMode.REPLACE); //смешивание
+        ap.setCompositingMode(compositMode);
+		
+        Material mat = new Material(); //освещение и блеск
+        ap.setMaterial(mat);
 
-        for(byte var4 = 0; var4 < 12; ++var4) {
-            ((Mesh) enemies_group.find(var4 + 1)).setAppearance(0, appearance); //внешний вид для конкретного сабмеша
-            System.gc();
+        for(int i = 0; i < 12; ++i) {
+			Mesh bodyPart = (Mesh) playerModel.find(i + 1);
+            bodyPart.setAppearance(0, ap); //внешний вид для конкретного сабмеша
         }
 
-        var_e6b = (Mesh) persWorld.find(25);
-        Mesh var0 = (Mesh) var_e6b.duplicate();
-        enemies_group.addChild(var0);
-        var_e6b = null;
+        Mesh backpackModel = (Mesh) persWorld.find(25);
+        Mesh backpackCopy = (Mesh) backpackModel.duplicate();
+        playerModel.addChild(backpackCopy);
+    }
+	
+    private static void preparePlayerModel(byte weaponId) {
+        if(weaponId > 0) {
+            Mesh weaponModel = (Mesh) persWorld.find(weaponId + 22 - 1);
+            Mesh weaponCopy = (Mesh) weaponModel.duplicate();
+            playerModel.addChild(weaponCopy);
+        }
+
+        playerModel.setOrientation(0.0F, 0.0F, 0.0F, 0.0F);
+        playerModel.setRenderingEnable(true);
     }
 
     private static void backupCameraPos() {
@@ -1281,12 +1265,12 @@ public final class RenderEngine {
                 var3 = activableObjSettings[place_number][number][1];
                 var4 = activableObjSettings[place_number][number][2];
                 mesh_massive_third[number].setTranslation(var2, var3, var4);
-            } else if(stationaryPersonages[number] != null) {
-                stationaryPersonages[number].setOrientation(activableObjSettings[place_number][number][4], 0.0F, 1.0F, 0.0F);
+            } else if(staticBotMdlGroup[number] != null) {
+                staticBotMdlGroup[number].setOrientation(activableObjSettings[place_number][number][4], 0.0F, 1.0F, 0.0F);
                 var2 = activableObjSettings[place_number][number][0];
                 var3 = activableObjSettings[place_number][number][1];
                 var4 = activableObjSettings[place_number][number][2];
-                stationaryPersonages[number].setTranslation(var2, var3, var4);
+                staticBotMdlGroup[number].setTranslation(var2, var3, var4);
             }
         }
 
@@ -1720,7 +1704,7 @@ public final class RenderEngine {
                 int_1st = (int) Only3DRenderTime;
                 backupCameraPos();
                 if(var_19b5) {
-                    sub_3e4(Scripts.CurrentGunInTheHands);
+                    preparePlayerModel(Scripts.CurrentGunInTheHands);
                 }
             case 2:
             case 3:
@@ -1770,8 +1754,8 @@ public final class RenderEngine {
 
     private static void sub_bd0() {
         Scripts.koboldDialogState = 2;
-        DuplicateStalkerModel();
-        sub_3e4(Scripts.CurrentGunInTheHands);
+        loadPlayerModel();
+        preparePlayerModel(Scripts.CurrentGunInTheHands);
         Scripts.startDialog((short) 19, (byte) 0);
         var_1e37 = 500;
         var_1a54 = (int) Only3DRenderTime;
@@ -1914,21 +1898,21 @@ public final class RenderEngine {
                 camera.setOrientation((float) cameraYRotOffset + cameraYRot, 0.0F, 1.0F, 0.0F);
                 camera.postRotate(cameraXRot, 1.0F, 0.0F, 0.0F);
                 var_1cda = false;
-                var_e1c.setRenderingEnable(false);
+                bloodSprite.setRenderingEnable(false);
             }
 
         }
     }
 
     public static void sub_daf() {
+		Mesh var_e6b;
         switch(var_1e92[botIdUndercursor]) {
             case 0:
             case 4:
                 var_e6b = (Mesh) botModelGroup[botIdUndercursor].find(30);
                 var_e6b.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
-                var_e1c.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
-                var_e6b = null;
+                bloodSprite.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
                 break;
             case 1:
             case 2:
@@ -1936,11 +1920,10 @@ public final class RenderEngine {
                 var_e6b = (Mesh) botModelGroup[botIdUndercursor].find(31);
                 var_e6b.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
-                var_e1c.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
-                var_e6b = null;
+                bloodSprite.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
         }
 
-        var_e1c.setRenderingEnable(true);
+        bloodSprite.setRenderingEnable(true);
     }
 
     private static void CameraXPostRotate() {
@@ -1983,7 +1966,7 @@ public final class RenderEngine {
         } else {
             var_1d93 = -1;
             IsWayAheadLocked = true;
-            var_e1c.setRenderingEnable(false);
+            bloodSprite.setRenderingEnable(false);
         }
     }
 
@@ -2286,7 +2269,7 @@ public final class RenderEngine {
             }
         } else {
             if(var_19b5) {
-                enemies_group.setRenderingEnable(false);
+                playerModel.setRenderingEnable(false);
             }
 
             sub_115f();
@@ -2298,7 +2281,7 @@ public final class RenderEngine {
             switch(currentGameState) {
                 case 1:
                     if(var_19b5) {
-                        sub_10cf(enemies_group);
+                        sub_10cf(playerModel);
                         return;
                     }
 
@@ -2310,17 +2293,17 @@ public final class RenderEngine {
                         int var13 = (int) Only3DRenderTime - var_1a54;
                         boolean var14 = false;
                         SetCameraTranslation(61.5F, 3.0F, 134.0F);
-                        enemies_group.setTranslation(75.2F, 0.0F, 130.0F);
-                        enemies_group.setOrientation((float) (cameraYRotOffset + 180), 0.0F, 1.0F, 0.0F);
+                        playerModel.setTranslation(75.2F, 0.0F, 130.0F);
+                        playerModel.setOrientation((float) (cameraYRotOffset + 180), 0.0F, 1.0F, 0.0F);
                         if(var13 <= 6000) {
                             if(var13 >= 5000) {
-                                enemies_group.animate(1700 + 300 * (1000 - (6000 - var13)) / 1000);
+                                playerModel.animate(1700 + 300 * (1000 - (6000 - var13)) / 1000);
                                 camera.setOrientation((float) (cameraYRotOffset + 65 + 23 * (1000 - (6000 - var13)) / 1000), 0.0F, 1.0F, 0.0F);
                                 camera.postRotate(-10.0F, 1.0F, 0.0F, 0.0F);
                             } else {
                                 camera.setOrientation((float) (cameraYRotOffset + 65), 0.0F, 1.0F, 0.0F);
                                 camera.postRotate(-10.0F, 1.0F, 0.0F, 0.0F);
-                                enemies_group.animate(200);
+                                playerModel.animate(200);
                             }
                         } else {
                             var_1ab8 = (int) Only3DRenderTime;
@@ -2397,13 +2380,13 @@ public final class RenderEngine {
         System.gc();
 
         for(number = 0; number < 10; ++number) {
-            gameWorld.removeChild(stationaryPersonages[number]);
-            stationaryPersonages[number] = null;
+            gameWorld.removeChild(staticBotMdlGroup[number]);
+            staticBotMdlGroup[number] = null;
         }
 
         System.gc();
-        gameWorld.removeChild(enemies_group);
-        enemies_group = null;
+        gameWorld.removeChild(playerModel);
+        playerModel = null;
         System.gc();
         gameWorld.removeChild(light);
         light = null;
