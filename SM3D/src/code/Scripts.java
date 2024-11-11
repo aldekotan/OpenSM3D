@@ -497,7 +497,7 @@ public final class Scripts {
             byte damage = 0;
             boolean hit_bool = false;
             byte var2;
-            switch (var2 = Personage.enemyDodgeLevels[RenderEngine.var_1eae]) {
+            switch (var2 = Bot.enemyDodgeLevels[RenderEngine.var_1eae]) {
                 case 0:
                     damage = 3;
                     hit_bool = MathUtils.getRandomNumber(100) <= 60;
@@ -1480,11 +1480,11 @@ public final class Scripts {
     }
 
     private static void GetExperienceForKill() {
-        RenderEngine.npcKilled[RenderEngine.currentRoom][RenderEngine.npcUnderCursor] = true;
+        RenderEngine.botKilled[RenderEngine.currentRoom][RenderEngine.botIdUndercursor] = true;
         ++RenderEngine.var_1fb1;
-        RenderEngine.sub_ab1(RenderEngine.npcUnderCursor);
+        RenderEngine.sub_ab1(RenderEngine.botIdUndercursor);
         RenderEngine.sub_daf();
-        switch (Personage.getExpLevelOfEnemy(RenderEngine.npcUnderCursor)) {
+        switch (Bot.getBotExpLevel(RenderEngine.botIdUndercursor)) {
             case 0:
                 ++CurrentActorExpirience;
                 break;
@@ -1525,7 +1525,7 @@ public final class Scripts {
                 CurrentActorExpirience = (short) (CurrentActorExpirience + 16);
         }
 
-        if (RenderEngine.npcsCount[RenderEngine.currentRoom] - RenderEngine.var_1fb1 == 0) {
+        if (RenderEngine.botsCount[RenderEngine.currentRoom] - RenderEngine.var_1fb1 == 0) {
             giveItemsForKillingAll();
         }
 

@@ -136,18 +136,19 @@ public final class RenderEngine {
     //model id [6]
     //activable object id (0 is unusable) [7]
     
-    public static byte[] npcsCount = new byte[15];
-    private static float[][][] npcSettings = new float[15][10][15];
-    //[roomId][npc][settings]
+    public static byte[] botsCount = new byte[15];
+    private static float[][][] botSettings = new float[15][10][15];
+    //[roomId][bot][settings]
     //x, z [0,1] [2,3] [4,5]
     //y [6]
     //rotation ?? [7]
     //position number ?? wtf [8]
     //idk.. ?? [9+]
     //idk.. ?? [14]
-    public static boolean[][] npcKilled = new boolean[15][10];
-    private static float[][] npcPositions = new float[10][3];
-    //[npc][x, y, z]
+    public static boolean[][] botKilled = new boolean[15][10];
+    //[roomId][bot]
+    private static float[][] botPositions = new float[10][3];
+    //[bot][x, y, z]
     
     public static byte[] itemsForKillingAllCount = new byte[15];
     public static short[][] itemsForKillingAll = new short[15][10];
@@ -192,7 +193,7 @@ public final class RenderEngine {
     private static Light var_ea6;
     public static World lightsWorld;
     public static Group[] stationaryPersonages;
-    public static Group[] movablePersonages;
+    public static Group[] botModelGroup;
     private static Group enemies_group;
     private static boolean needToLoadPersM3G;
     public static World persWorld;
@@ -217,7 +218,7 @@ public final class RenderEngine {
     public static boolean[] activableObjsStatus;
     public static boolean DamageEffect;
     public static byte var_17f2;
-    public static byte npcUnderCursor; //not sure
+    public static byte botIdUndercursor; //not sure
     public static byte TypeOfInteractWithObjectAhead;
     private static int var_185a;
     private static int var_1877;
@@ -287,7 +288,7 @@ public final class RenderEngine {
         world_sprites3D_massive = new Sprite3D[32];
         lightsWorld = null;
         stationaryPersonages = new Group[10];
-        movablePersonages = new Group[10];
+        botModelGroup = new Group[10];
         FireAnimActiveFrames = new boolean[32];
         byte_massive_1st = new byte[32];
         var_12f0 = new byte[32];
@@ -365,7 +366,7 @@ public final class RenderEngine {
         Scripts.var_2204 = false;
         Scripts.locationExclusiveItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
         var_1ffd = new boolean[10];
-        npcKilled = new boolean[15][10];
+        botKilled = new boolean[15][10];
     }
 
     private static void loadLocation(int location_number) {//что-то с загрузкой локации
@@ -391,9 +392,9 @@ public final class RenderEngine {
         PlayerHUD.loadHUDTexturesAndLocationCoorditates();
         LoadingScreen.RunGarbageCollector();
         ConfigureAndActivateCamera();
-        if(movablePersonages[0] == null) //Если модели сталкеров не загружены
+        if(botModelGroup[0] == null) //Если модели сталкеров не загружены
         {
-            Personage.createMovablePers((byte) 1, (byte) 0);
+            Bot.loadBot((byte) 1, (byte) 0);
         }
 
         sub_360(currentRoom);
@@ -460,7 +461,7 @@ public final class RenderEngine {
         try {
             if(needToLoadPersM3G) {
                 try {
-                    Personage.createMovablePers(objId, gameObjId);
+                    Bot.loadBot(objId, gameObjId);
                     return;
                 } catch (Exception ex) {
                     System.out.println("error enemy-model loading");
@@ -519,7 +520,7 @@ public final class RenderEngine {
                             break label155;
                         case 100:
                             if(mdlSource == 4) {
-                                Personage.createStationaryPers(gameObjId, objId);
+                                Bot.loadStaticBot(gameObjId, objId);
                             } else if(mesh_massive_third[gameObjId] == null) {
                                 mesh_massive_third[gameObjId] = ResourceLoader.loadZ1Model(adress);
                                 System.gc();
@@ -859,16 +860,16 @@ public final class RenderEngine {
                     activableObjSettings[roomId][i][7] = dis.readUnsignedByte();
                 }
 
-                //Npcs
-                npcsCount[roomId] = dis.readByte();
+                //Bots
+                botsCount[roomId] = dis.readByte();
 
-                for(int i = 0; i < npcsCount[roomId]; i++) {
+                for(int i = 0; i < botsCount[roomId]; i++) {
                     //uuh
                     for(int t = 0; t < 15; ++t) {
                         if(t < 8) {
-                            npcSettings[roomId][i][t] = dis.readInt() / 100.0F;
+                            botSettings[roomId][i][t] = dis.readInt() / 100.0F;
                         } else {
-                            npcSettings[roomId][i][t] = dis.readByte();
+                            botSettings[roomId][i][t] = dis.readByte();
                         }
                     }
                 }
@@ -918,10 +919,10 @@ public final class RenderEngine {
                 bckMeshSettings[roomdId][i][2] *= -1;
             }
 
-            for(int i = 0; i < npcsCount[roomdId]; ++i) {
-                npcSettings[roomdId][i][1] *= -1;
-                npcSettings[roomdId][i][5] *= -1;
-                npcSettings[roomdId][i][3] *= -1;
+            for(int i = 0; i < botsCount[roomdId]; ++i) {
+                botSettings[roomdId][i][1] *= -1;
+                botSettings[roomdId][i][5] *= -1;
+                botSettings[roomdId][i][3] *= -1;
             }
 
             for(int i = 0; i < meshesCount[roomdId]; ++i) {
@@ -994,12 +995,12 @@ public final class RenderEngine {
             }
 
             System.gc();
-            byte var6 = npcsCount[nextRoom];
+            byte var6 = botsCount[nextRoom];
 
             for(var4 = 1; var4 < 10; ++var4) {
                 if(var4 >= var6) {
-                    gameWorld.removeChild(movablePersonages[var4]);
-                    movablePersonages[var4] = null;
+                    gameWorld.removeChild(botModelGroup[var4]);
+                    botModelGroup[var4] = null;
                 }
             }
 
@@ -1060,12 +1061,12 @@ public final class RenderEngine {
 
         LoadingScreen.RunGarbageCollector();
         needToLoadPersM3G = true;
-        if(npcsCount[var0] == 0) {
-            movablePersonages[0].setRenderingEnable(false);
+        if(botsCount[var0] == 0) {
+            botModelGroup[0].setRenderingEnable(false);
         }
 
-        for(var1 = 0; var1 < npcsCount[var0]; ++var1) {
-            addObjectToGameWorld((byte) ((int) npcSettings[var0][var1][14]), var1, (byte) 4);
+        for(var1 = 0; var1 < botsCount[var0]; ++var1) {
+            addObjectToGameWorld((byte) ((int) botSettings[var0][var1][14]), var1, (byte) 4);
         }
 
         needToLoadPersM3G = false;
@@ -1134,8 +1135,8 @@ public final class RenderEngine {
     private static void DuplicateStalkerModel() {
         if(enemies_group == null) {
             enemies_group = new Group();
-            if(movablePersonages[0] != null) {
-                enemies_group = (Group) movablePersonages[0].duplicate();
+            if(botModelGroup[0] != null) {
+                enemies_group = (Group) botModelGroup[0].duplicate();
                 System.out.println("STALKER COPIED !!! ");
             }
 
@@ -1206,16 +1207,16 @@ public final class RenderEngine {
         var_1eae = -1;
         var_1fb1 = 0;
 
-        for(byte group_number = 0; group_number < npcsCount[place_number]; ++group_number) {
+        for(byte group_number = 0; group_number < botsCount[place_number]; ++group_number) {
             var_1dce[group_number] = (int) Only3DRenderTime + var_1e37;
             var_1e05[group_number] = (int) Only3DRenderTime + 500;
             var_1e92[group_number] = 2;
-            movablePersonages[group_number].setOrientation(npcSettings[place_number][group_number][7], 0.0F, 1.0F, 0.0F);
-            SetGroupTranslation(group_number, npcSettings[place_number][group_number][0], npcSettings[place_number][group_number][6], npcSettings[place_number][group_number][1]);
-            movablePersonages[group_number].setTranslation(npcPositions[group_number][0], npcPositions[group_number][1], npcPositions[group_number][2]);
+            botModelGroup[group_number].setOrientation(botSettings[place_number][group_number][7], 0.0F, 1.0F, 0.0F);
+            SetGroupTranslation(group_number, botSettings[place_number][group_number][0], botSettings[place_number][group_number][6], botSettings[place_number][group_number][1]);
+            botModelGroup[group_number].setTranslation(botPositions[group_number][0], botPositions[group_number][1], botPositions[group_number][2]);
         }
 
-        if(npcsCount[place_number] == 0) {
+        if(botsCount[place_number] == 0) {
             Scripts.giveItemsForKillingAll();
         }
 
@@ -1373,7 +1374,7 @@ public final class RenderEngine {
             sub_79c(objId, roomId);
         }
 
-        for(objId = 0; objId < npcsCount[roomId]; ++objId) {
+        for(objId = 0; objId < botsCount[roomId]; ++objId) {
             sub_775(objId, roomId, var_1e92[objId]);
         }
 
@@ -1421,23 +1422,23 @@ public final class RenderEngine {
         float var9 = cameraPos[1] - 1.6F;
         var_1669 = var2 == 0 || var2 == 4;
         float var11 = 0.0F;
-        float var12 = npcSettings[var1][var0][6] + (var_1669 ? 1.0999999F : 1.8F);
-        float var13 = var_1669 ? npcSettings[var1][var0][6] : npcSettings[var1][var0][6] + 0.9F;
+        float var12 = botSettings[var1][var0][6] + (var_1669 ? 1.0999999F : 1.8F);
+        float var13 = var_1669 ? botSettings[var1][var0][6] : botSettings[var1][var0][6] + 0.9F;
         float var14 = 0.0F;
         switch(var2) {
             case 0:
             case 1:
-                var11 = npcSettings[var1][var0][2];
-                var14 = npcSettings[var1][var0][3];
+                var11 = botSettings[var1][var0][2];
+                var14 = botSettings[var1][var0][3];
                 break;
             case 2:
-                var11 = npcSettings[var1][var0][0];
-                var14 = npcSettings[var1][var0][1];
+                var11 = botSettings[var1][var0][0];
+                var14 = botSettings[var1][var0][1];
                 break;
             case 3:
             case 4:
-                var11 = npcSettings[var1][var0][4];
-                var14 = npcSettings[var1][var0][5];
+                var11 = botSettings[var1][var0][4];
+                var14 = botSettings[var1][var0][5];
         }
 
         var_1539[var0] = sub_5d9(var5, var7, var11, var14, var3, var4);
@@ -1645,11 +1646,11 @@ public final class RenderEngine {
 
     public static boolean sub_acc() {
         byte var0 = var_1eae;
-        npcUnderCursor = -100;
+        botIdUndercursor = -100;
         if(var0 < 0) {
             return false;
-        } else if(var_1700[var0] && !npcKilled[currentRoom][var0] && var_1ffd[var0] && !var_84a[currentLocation][currentRoom]) {
-            npcUnderCursor = var0;
+        } else if(var_1700[var0] && !botKilled[currentRoom][var0] && var_1ffd[var0] && !var_84a[currentLocation][currentRoom]) {
+            botIdUndercursor = var0;
             
             if(!Scripts.var_2602) {
                 if(var_1877 == -1) {
@@ -1920,10 +1921,10 @@ public final class RenderEngine {
     }
 
     public static void sub_daf() {
-        switch(var_1e92[npcUnderCursor]) {
+        switch(var_1e92[botIdUndercursor]) {
             case 0:
             case 4:
-                var_e6b = (Mesh) movablePersonages[npcUnderCursor].find(30);
+                var_e6b = (Mesh) botModelGroup[botIdUndercursor].find(30);
                 var_e6b.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 var_e1c.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -1932,7 +1933,7 @@ public final class RenderEngine {
             case 1:
             case 2:
             case 3:
-                var_e6b = (Mesh) movablePersonages[npcUnderCursor].find(31);
+                var_e6b = (Mesh) botModelGroup[botIdUndercursor].find(31);
                 var_e6b.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 var_e1c.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -1977,7 +1978,7 @@ public final class RenderEngine {
 
         if(var2 <= 500) {
             int var5 = var3 + (var4 - var3) * var2 / 500;
-            movablePersonages[var0].animate(var5);
+            botModelGroup[var0].animate(var5);
             IsWayAheadLocked = false;
         } else {
             var_1d93 = -1;
@@ -2016,9 +2017,9 @@ public final class RenderEngine {
         var_e59.setRenderingEnable(false);
         if(var4 > var5 / 2 - 750 && var4 < var5 / 2 + 750) {
             var_1db5 = true;
-            movablePersonages[var0].animate(var3);
+            botModelGroup[var0].animate(var3);
             if(var4 % 300 <= 150) {
-                var_ea6 = (Light) movablePersonages[var_1eae].find(50);
+                var_ea6 = (Light) botModelGroup[var_1eae].find(50);
                 var_ea6.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 var_e59.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -2029,10 +2030,10 @@ public final class RenderEngine {
             }
         } else {
             var_1db5 = false;
-            float var7 = npcPositions[var0][0] - float_doublemassive_1st[var0][0];
-            float var8 = npcPositions[var0][2] - float_doublemassive_1st[var0][2];
+            float var7 = botPositions[var0][0] - float_doublemassive_1st[var0][0];
+            float var8 = botPositions[var0][2] - float_doublemassive_1st[var0][2];
             float var9 = 0.0F;
-            float var10 = npcSettings[currentRoom][var0][6];
+            float var10 = botSettings[currentRoom][var0][6];
             float var11 = 0.0F;
             if(var4 <= var5) {
                 int var6;
@@ -2042,7 +2043,7 @@ public final class RenderEngine {
                     var11 = float_doublemassive_1st[var0][2] + var8 * (float) var4 / (float) (var_1e37 / 2 - 750);
                     var13 = (var3 - var2) * var4 / (var_1e37 / 2 - 750);
                     var6 = var2 + var13;
-                    movablePersonages[var0].animate(var6);
+                    botModelGroup[var0].animate(var6);
                 }
 
                 if(var4 >= var5 / 2 + 750) {
@@ -2050,10 +2051,10 @@ public final class RenderEngine {
                     var11 = float_doublemassive_1st[var0][2] + var8 * (float) (var5 - var4) / (float) (var_1e37 / 2 - 750);
                     var13 = (var3 - var2) * (var5 - var4) / (var_1e37 / 2 - 750);
                     var6 = var2 + var13;
-                    movablePersonages[var0].animate(var6);
+                    botModelGroup[var0].animate(var6);
                 }
 
-                movablePersonages[var0].setTranslation(var9, var10, var11);
+                botModelGroup[var0].setTranslation(var9, var10, var11);
             } else {
                 var_1e92[var0] = -1;
             }
@@ -2061,20 +2062,20 @@ public final class RenderEngine {
     }
 
     private static boolean sub_e95(byte var0) {
-        return var0 == -1 ? true : (npcsCount[currentRoom] - var_1fb1 == 1 ? Only3DRenderTime >= (long) (var_1dce[var0] + 2000) : Only3DRenderTime >= (long) var_1dce[var0]);
+        return var0 == -1 ? true : (botsCount[currentRoom] - var_1fb1 == 1 ? Only3DRenderTime >= (long) (var_1dce[var0] + 2000) : Only3DRenderTime >= (long) var_1dce[var0]);
     }
 
     private static boolean sub_eee(byte var0) {
-        return var_1ffd[var0] && !npcKilled[currentRoom][var0] && sub_e95(var_1eae);
+        return var_1ffd[var0] && !botKilled[currentRoom][var0] && sub_e95(var_1eae);
     }
 
     private static void sub_f2e() {
         byte var0;
-        if((var0 = npcsCount[currentRoom]) != 0) {
+        if((var0 = botsCount[currentRoom]) != 0) {
             float var1 = 0.0F;
             float var2 = 0.0F;
             byte var3 = (byte) MathUtils.getRandomNumber(var0);
-            float var4 = npcSettings[currentRoom][var3][6];
+            float var4 = botSettings[currentRoom][var3][6];
             if(var3 == var_1eae) {
                 var3 = (byte) MathUtils.getRandomNumber(var0);
             }
@@ -2090,31 +2091,31 @@ public final class RenderEngine {
 
             byte var5 = (byte) MathUtils.getRandomNumber(4);
             var_1ec4 = var0 - var_1fb1 == 1;
-            byte npcId;
+            byte botId;
             if(var_1ec4) {
-                for(npcId = 0; npcId < var0; ++npcId) {
-                    if(!npcKilled[currentRoom][npcId]) {
-                        var3 = npcId;
+                for(botId = 0; botId < var0; ++botId) {
+                    if(!botKilled[currentRoom][botId]) {
+                        var3 = botId;
                         break;
                     }
                 }
             }
 
-            if(npcSettings[currentRoom][var3][9 + var5] != 0.0F && sub_eee(var3) && var_1d93 == -1) {
+            if(botSettings[currentRoom][var3][9 + var5] != 0.0F && sub_eee(var3) && var_1d93 == -1) {
                 switch(var5) {
                     case 0:
                     case 1:
-                        var1 = npcSettings[currentRoom][var3][2];
-                        var2 = npcSettings[currentRoom][var3][3];
+                        var1 = botSettings[currentRoom][var3][2];
+                        var2 = botSettings[currentRoom][var3][3];
                         break;
                     case 2:
-                        var1 = npcSettings[currentRoom][var3][0];
-                        var2 = npcSettings[currentRoom][var3][1];
+                        var1 = botSettings[currentRoom][var3][0];
+                        var2 = botSettings[currentRoom][var3][1];
                         break;
                     case 3:
                     case 4:
-                        var1 = npcSettings[currentRoom][var3][4];
-                        var2 = npcSettings[currentRoom][var3][5];
+                        var1 = botSettings[currentRoom][var3][4];
+                        var2 = botSettings[currentRoom][var3][5];
                 }
 
                 Scripts.var_22f1 = false;
@@ -2122,13 +2123,13 @@ public final class RenderEngine {
                 sub_775(var3, currentRoom, var5);
                 var_1eae = var3;
                 SetGroupTranslation(var3, var1, var4, var2);
-                float_doublemassive_1st[var3][0] = npcSettings[currentRoom][var3][0];
-                float_doublemassive_1st[var3][1] = npcSettings[currentRoom][var3][6];
-                float_doublemassive_1st[var3][2] = npcSettings[currentRoom][var3][1];
+                float_doublemassive_1st[var3][0] = botSettings[currentRoom][var3][0];
+                float_doublemassive_1st[var3][1] = botSettings[currentRoom][var3][6];
+                float_doublemassive_1st[var3][2] = botSettings[currentRoom][var3][1];
                 var_1dce[var3] = (int) Only3DRenderTime + var_1e37;
             }
 
-            if(var_1eae != -1 && !npcKilled[currentRoom][var_1eae]) {
+            if(var_1eae != -1 && !botKilled[currentRoom][var_1eae]) {
                 if(!Scripts.var_2602) {
                     sub_e55(var_1eae, var_1e92[var_1eae]);
                 } else {
@@ -2137,12 +2138,12 @@ public final class RenderEngine {
             }
 
             if(Scripts.var_2602) {
-                for(npcId = 0; npcId < var0; ++npcId) {
-                    var1 = npcSettings[currentRoom][npcId][0];
-                    var2 = npcSettings[currentRoom][npcId][1];
-                    float var7 = npcSettings[currentRoom][npcId][6];
-                    SetGroupTranslation(npcId, var1, var7, var2);
-                    movablePersonages[npcId].animate(200);
+                for(botId = 0; botId < var0; ++botId) {
+                    var1 = botSettings[currentRoom][botId][0];
+                    var2 = botSettings[currentRoom][botId][1];
+                    float var7 = botSettings[currentRoom][botId][6];
+                    SetGroupTranslation(botId, var1, var7, var2);
+                    botModelGroup[botId].animate(200);
                 }
             }
 
@@ -2150,19 +2151,19 @@ public final class RenderEngine {
                 var_e59.setRenderingEnable(false);
                 sub_e34(var_1d93, var_1e92[var_1eae]);
             } else {
-                for(npcId = 0; npcId < var0; ++npcId) {
+                for(botId = 0; botId < var0; ++botId) {
                     //если атакует?
                     if(Scripts.var_2602) {
-                        movablePersonages[npcId].setRenderingEnable(true);
+                        botModelGroup[botId].setRenderingEnable(true);
                     } else {
                         //отключить отрисовку, если спрятался за укрытием
-                        if(!npcKilled[currentRoom][npcId] && npcId != var_1eae) {
-                            movablePersonages[npcId].setRenderingEnable(false);
+                        if(!botKilled[currentRoom][botId] && botId != var_1eae) {
+                            botModelGroup[botId].setRenderingEnable(false);
                         }
 
                         //включить анимацию смерти
-                        if(npcKilled[currentRoom][npcId]) {
-                            movablePersonages[npcId].animate(2000);
+                        if(botKilled[currentRoom][botId]) {
+                            botModelGroup[botId].animate(2000);
                         }
                     }
                 }
@@ -2172,10 +2173,10 @@ public final class RenderEngine {
     }
 
     private static void SetGroupTranslation(byte group_number, float trans_x, float trans_y, float trans_z) {
-        npcPositions[group_number][0] = trans_x;
-        npcPositions[group_number][1] = trans_y;
-        npcPositions[group_number][2] = trans_z;
-        movablePersonages[group_number].setTranslation(trans_x, trans_y, trans_z);
+        botPositions[group_number][0] = trans_x;
+        botPositions[group_number][1] = trans_y;
+        botPositions[group_number][2] = trans_z;
+        botModelGroup[group_number].setTranslation(trans_x, trans_y, trans_z);
     }
 
     private static void AnimateFire() {
@@ -2202,41 +2203,41 @@ public final class RenderEngine {
     }
 
     private static void sub_103b() {
-        if(npcsCount[currentRoom] == 0) {
+        if(botsCount[currentRoom] == 0) {
             var_84a[currentLocation][currentRoom] = true;
         }
 
         byte var0 = 0;
 
-        for(int npc = 0; npc < npcsCount[currentRoom]; ++npc) {
-            if(npcKilled[currentRoom][npc]) {
+        for(int bot = 0; bot < botsCount[currentRoom]; ++bot) {
+            if(botKilled[currentRoom][bot]) {
                 ++var0;
             }
         }
 
-        var_84a[currentLocation][currentRoom] = var0 == npcsCount[currentRoom];
+        var_84a[currentLocation][currentRoom] = var0 == botsCount[currentRoom];
     }
 
     private static void sub_1072() {
         var_205e = 0;
 
-        for(int i = 0; i < npcsCount[currentRoom]; ++i) {
+        for(int i = 0; i < botsCount[currentRoom]; ++i) {
             if(Scripts.var_2602) {
-                movablePersonages[i].setRenderingEnable(true);
+                botModelGroup[i].setRenderingEnable(true);
             } else {
-                if(npcSettings[currentRoom][i][8] - 1.0F != (float) cameraDoorId) {
-                    movablePersonages[i].setRenderingEnable(false);
+                if(botSettings[currentRoom][i][8] - 1.0F != (float) cameraDoorId) {
+                    botModelGroup[i].setRenderingEnable(false);
                     var_1ffd[i] = false;
                 } else {
-                    movablePersonages[i].setRenderingEnable(true);
+                    botModelGroup[i].setRenderingEnable(true);
                     var_1ffd[i] = true;
-                    if(!npcKilled[currentRoom][i]) {
+                    if(!botKilled[currentRoom][i]) {
                         ++var_205e;
                     }
                 }
 
-                if(var_84a[currentLocation][currentRoom] || npcKilled[currentRoom][i]) {
-                    movablePersonages[i].setRenderingEnable(true);
+                if(var_84a[currentLocation][currentRoom] || botKilled[currentRoom][i]) {
+                    botModelGroup[i].setRenderingEnable(true);
                 }
             }
         }
@@ -2368,8 +2369,8 @@ public final class RenderEngine {
         System.gc();
 
         for(number = 0; number < 10; ++number) {
-            gameWorld.removeChild(movablePersonages[number]);
-            movablePersonages[number] = null;
+            gameWorld.removeChild(botModelGroup[number]);
+            botModelGroup[number] = null;
         }
 
         System.gc();
