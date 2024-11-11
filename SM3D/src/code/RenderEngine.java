@@ -38,7 +38,6 @@ public final class RenderEngine {
     private static float[][] float_doublemassive_1st;
     public static short currentGameState;
     public static short prevGameState;
-    private static int int_1st;
     
     //Camera
     public static Camera camera;
@@ -83,6 +82,16 @@ public final class RenderEngine {
     //item to unlock door
     private static boolean[] doorUnlocked = new boolean[5];
     
+    private static int walkAnimStartTime;
+    public static byte walkCurrentDoorId;
+    public static int walkNextDoorId;
+    private static float walkPointTargetX;
+    private static float walkPointTargetZ;
+    private static int walkTimeToWalkPoint;
+    private static int walkTimeToDoor;
+    private static float walkStartYRot;
+    private static float walkPointYRot;
+	
     private static byte[] walkPointsCount = new byte[15];
     private static float[][][] walkPoints = new float[15][4][5];
     //[roomId][walkPoint][settings]
@@ -161,8 +170,6 @@ public final class RenderEngine {
     
     public static byte var_7ee;
     public static boolean[][] var_84a;
-    public static byte var_891;
-    public static byte var_8f5;
 	
     public static boolean objectsDataLoaded;
     public static byte[] objectModelSource;
@@ -175,10 +182,6 @@ public final class RenderEngine {
     public static byte[] objectStaticBotWeaponId;
     public static byte[] objectStaticBotAnimTime;
 	
-    private static float var_b80;
-    private static float var_bb1;
-    private static int var_bf7;
-    private static int var_c21;
     public static float[] tmpMehsScale;
     private static boolean isTexture_n_AdressMassivesFull;
     public static boolean showIntro;
@@ -224,8 +227,6 @@ public final class RenderEngine {
     private static float var_18b0;
     private static float var_18bf;
     private static boolean CameraMovementDeactive;
-    private static float var_191d;
-    private static float var_1974;
     public static boolean useThirdPerson;
     public static final byte[] levelUseThirdperson;
     private static int var_1a13;
@@ -236,7 +237,7 @@ public final class RenderEngine {
     private static final int screen_width;
     private static final int screen_height;
     public static long var_1bb1;
-    public static long Only3DRenderTime;
+    public static long renderTimeOnly3D;
     public static long currentTimeMill;
     private static int TickDurationMills;
     public static int var_1c84;
@@ -1191,8 +1192,8 @@ public final class RenderEngine {
         var_1fb1 = 0;
 
         for(byte group_number = 0; group_number < botsCount[place_number]; ++group_number) {
-            var_1dce[group_number] = (int) Only3DRenderTime + var_1e37;
-            var_1e05[group_number] = (int) Only3DRenderTime + 500;
+            var_1dce[group_number] = (int) renderTimeOnly3D + var_1e37;
+            var_1e05[group_number] = (int) renderTimeOnly3D + 500;
             var_1e92[group_number] = 2;
             botModelGroup[group_number].setOrientation(botSettings[place_number][group_number][7], 0.0F, 1.0F, 0.0F);
             SetGroupTranslation(group_number, botSettings[place_number][group_number][0], botSettings[place_number][group_number][6], botSettings[place_number][group_number][1]);
@@ -1303,7 +1304,7 @@ public final class RenderEngine {
         cameraYRot = 0.0F;
         cameraXRot = 0.0F;
         FireAnimActiveFrames = new boolean[32];
-        var_185a = (int) Only3DRenderTime;
+        var_185a = (int) renderTimeOnly3D;
         var_1cda = false;
         CameraMovementDeactive = false;
         doorUnlocked = new boolean[doorsCount[currentRoom]];
@@ -1467,17 +1468,17 @@ public final class RenderEngine {
         }
     }
 
-    private static float[] sub_7cb(byte var0, boolean var1) {
+    private static float[] sub_7cb(byte walkCurrentDoorId, boolean var1) {
         float var2 = roomSettings[currentRoom][0];
         float var3 = roomSettings[currentRoom][2];
         float var4 = cameraPos[0];
         float var5 = cameraPos[2];
-        float var6 = var_b80;
-        float var7 = var_bb1;
-        float var8 = doorSettings[currentRoom][var0][0];
-        float var9 = doorSettings[currentRoom][var0][2];
-        float var10 = doorSettings[currentRoom][var_8f5 - 1][0];
-        float var11 = doorSettings[currentRoom][var_8f5 - 1][2];
+        float var6 = walkPointTargetX;
+        float var7 = walkPointTargetZ;
+        float var8 = doorSettings[currentRoom][walkCurrentDoorId][0];
+        float var9 = doorSettings[currentRoom][walkCurrentDoorId][2];
+        float var10 = doorSettings[currentRoom][walkNextDoorId - 1][0];
+        float var11 = doorSettings[currentRoom][walkNextDoorId - 1][2];
         useThirdPerson = var1;
         float var12 = sub_5d9(var4, var5, var6, var7, var2, var3);
         float[] var13 = getVectorForCrossProduct(var4, var5, var2, var3);
@@ -1559,8 +1560,8 @@ public final class RenderEngine {
     }
 
     private static boolean sub_966() {
-        if((int) Only3DRenderTime - var_185a >= 1000) {
-            var_185a = (int) Only3DRenderTime;
+        if((int) renderTimeOnly3D - var_185a >= 1000) {
+            var_185a = (int) renderTimeOnly3D;
             return true;
         } else {
             return false;
@@ -1581,7 +1582,7 @@ public final class RenderEngine {
         } else if(sub_966()) {
             DealTerrainDamageThroughArmor();
         } else {
-            if(Only3DRenderTime - (long) var_185a >= 500L) {
+            if(renderTimeOnly3D - (long) var_185a >= 500L) {
                 StopDamageEffect();
             }
 
@@ -1624,7 +1625,7 @@ public final class RenderEngine {
 
     public static void sub_ab1(byte var0) {
         var_1d93 = var0;
-        var_1e05[var0] = (int) Only3DRenderTime + 500;
+        var_1e05[var0] = (int) renderTimeOnly3D + 500;
     }
 
     public static boolean sub_acc() {
@@ -1637,15 +1638,15 @@ public final class RenderEngine {
             
             if(!Scripts.var_2602) {
                 if(var_1877 == -1) {
-                    var_1877 = (int) Only3DRenderTime;
+                    var_1877 = (int) renderTimeOnly3D;
                     var_18b0 = cameraYRot;
                     var_18bf = cameraXRot;
                 }
 
-                if(Only3DRenderTime - (long) var_1877 < 300L) {
-                    cameraYRot = var_18b0 + (var_1539[var0] - var_18b0) * (float) (Only3DRenderTime - (long) var_1877) / 300.0F;
+                if(renderTimeOnly3D - (long) var_1877 < 300L) {
+                    cameraYRot = var_18b0 + (var_1539[var0] - var_18b0) * (float) (renderTimeOnly3D - (long) var_1877) / 300.0F;
                     float var1 = var_156e[var0] - (var_156e[var0] - var_157d[var0]) / (float) (var_1669 ? 4 : 2);
-                    cameraXRot = var_18bf + (var1 - var_18bf) * (float) (Only3DRenderTime - (long) var_1877) / 300.0F;
+                    cameraXRot = var_18bf + (var1 - var_18bf) * (float) (renderTimeOnly3D - (long) var_1877) / 300.0F;
                 } else {
                     var_1877 = -1;
                 }
@@ -1675,32 +1676,33 @@ public final class RenderEngine {
                 }
                 break;
             case 1:
-                if(var_1afa == var_891) {
+                if(var_1afa == walkCurrentDoorId) {
                     return;
                 }
 
-                byte var1 = (byte) (var_891 + 1);
-
-                for(byte var2 = 0; var2 < walkPointsCount[currentRoom]; ++var2) {
-                    var_8f5 = (byte) ((int) (walkPoints[currentRoom][var2][0] - (float) var1));
-                    if(var_8f5 == var_1afa + 1) {
-                        var_b80 = walkPoints[currentRoom][var2][1];
-                        var_bb1 = walkPoints[currentRoom][var2][2];
-                        if(var_8f5 - 1 > var_891) {
-                            var_bf7 = (int) walkPoints[currentRoom][var2][3] * 1000 / 3;
-                            var_c21 = (int) walkPoints[currentRoom][var2][4] * 1000 / 3;
+                for(int i = 0; i < walkPointsCount[currentRoom]; ++i) {
+                    walkNextDoorId = ((int) walkPoints[currentRoom][i][0]) - 1 - walkCurrentDoorId;
+					
+                    if(walkNextDoorId == var_1afa + 1) {
+                        walkPointTargetX = walkPoints[currentRoom][i][1];
+                        walkPointTargetZ = walkPoints[currentRoom][i][2];
+						
+                        if(walkNextDoorId - 1 > walkCurrentDoorId) {
+                            walkTimeToWalkPoint = (int) walkPoints[currentRoom][i][3] * 1000 / 3;
+                            walkTimeToDoor = (int) walkPoints[currentRoom][i][4] * 1000 / 3;
                         } else {
-                            var_bf7 = (int) walkPoints[currentRoom][var2][4] * 1000 / 3;
-                            var_c21 = (int) walkPoints[currentRoom][var2][3] * 1000 / 3;
+                            walkTimeToWalkPoint = (int) walkPoints[currentRoom][i][4] * 1000 / 3;
+                            walkTimeToDoor = (int) walkPoints[currentRoom][i][3] * 1000 / 3;
                         }
+						
                         break;
                     }
                 }
 
-                float[] var3;
-                var_191d = (var3 = sub_7cb(var_891, levelUseThirdperson[currentLocation] == 1))[0] != 180.0F ? var3[0] : 0.0F;
-                var_1974 = var_191d + var3[1];
-                int_1st = (int) Only3DRenderTime;
+                float[] var3 = sub_7cb(walkCurrentDoorId, levelUseThirdperson[currentLocation] == 1);
+                walkStartYRot = var3[0] != 180.0F ? var3[0] : 0.0F;
+                walkPointYRot = walkStartYRot + var3[1];
+                walkAnimStartTime = (int) renderTimeOnly3D;
                 backupCameraPos();
                 if(useThirdPerson) {
                     preparePlayerModel(Scripts.playerActiveWeapon);
@@ -1729,13 +1731,13 @@ public final class RenderEngine {
     }
 
     public static void endGame(short var0, int var1) {//11 - прод. след., 4 - конец игры
-        var_1a13 = (int) Only3DRenderTime + var1;
+        var_1a13 = (int) renderTimeOnly3D + var1;
         prevGameState = currentGameState;
         currentGameState = var0;
     }
 
     private static void sub_b67() {
-        if(Only3DRenderTime >= (long) var_1a13) {
+        if(renderTimeOnly3D >= (long) var_1a13) {
             switch(currentGameState) {
                 case 4:
                     sub_b83();
@@ -1757,7 +1759,7 @@ public final class RenderEngine {
         preparePlayerModel(Scripts.playerActiveWeapon);
         Scripts.startDialog((short) 19, (byte) 0);
         var_1e37 = 500;
-        var_1a54 = (int) Only3DRenderTime;
+        var_1a54 = (int) renderTimeOnly3D;
     }
 
     private static void updateGameState() {
@@ -1776,7 +1778,7 @@ public final class RenderEngine {
                 setDialogWindowState((short) 2);
                 return;
             case 1://переход между уровнями?
-                if(var_1afa == var_891) {
+                if(var_1afa == walkCurrentDoorId) {
                     PlayerHUD.garbageCollected = 0;
                     sub_115f();
                     return;
@@ -1828,7 +1830,7 @@ public final class RenderEngine {
 
     public static void sub_c4f(byte var0) {
         if(var_84a[currentLocation][currentRoom] || var_205e == 0) {
-            var_891 = cameraDoorId;
+            walkCurrentDoorId = cameraDoorId;
             nextRoom = (byte) (loadedDoorsSettings[currentRoom][var0][0] - 1);
             if(nextRoom >= 0) {
                 cameraDoorId = (byte) (loadedDoorsSettings[currentRoom][var0][1] - 1);
@@ -1852,7 +1854,7 @@ public final class RenderEngine {
         var_1bb1 += (long) TickDurationMills;
         currentTimeMill = curr_time;
         if(!gamePaused) {
-            Only3DRenderTime += (long) TickDurationMills;
+            renderTimeOnly3D += (long) TickDurationMills;
         }
 
     }
@@ -1864,7 +1866,7 @@ public final class RenderEngine {
 
     private static void AnimateLight() {
         if(RotatingLight != -1) {
-            int time = (int) Only3DRenderTime & 1000;
+            int time = (int) renderTimeOnly3D & 1000;
             light_massive_1st[RotatingLight].animate(time);
         }
 
@@ -1874,7 +1876,7 @@ public final class RenderEngine {
         if(var_1cda) {
             boolean var0 = MathUtils.fps < 10;
             int var1;
-            if((var1 = (int) Only3DRenderTime - var_1c84) <= 200) {
+            if((var1 = (int) renderTimeOnly3D - var_1c84) <= 200) {
                 if(!var0) {
                     float x_angle;
                     float y_angle;
@@ -1927,7 +1929,7 @@ public final class RenderEngine {
 
     private static void CameraXPostRotate() {
         int current_time;
-        if((current_time = (int) Only3DRenderTime & 1000) <= 1000) {
+        if((current_time = (int) renderTimeOnly3D & 1000) <= 1000) {
             float angle;
             if(current_time <= 500) {
                 angle = cameraXRot + 2.0F * (float) current_time / 1000.0F;
@@ -1942,7 +1944,7 @@ public final class RenderEngine {
     }
 
     private static void sub_e34(byte var0, byte var1) {
-        int var2 = 500 - (var_1e05[var0] - (int) Only3DRenderTime);
+        int var2 = 500 - (var_1e05[var0] - (int) renderTimeOnly3D);
         short var3 = 0;
         short var4 = 0;
         switch(var1) {
@@ -1994,7 +1996,7 @@ public final class RenderEngine {
                 var3 = 800;
         }
 
-        int var4 = var_1e37 - (var_1dce[var0] - (int) Only3DRenderTime);
+        int var4 = var_1e37 - (var_1dce[var0] - (int) renderTimeOnly3D);
         int var5 = var_1e37;
         var_e59.setRenderingEnable(false);
         if(var4 > var5 / 2 - 750 && var4 < var5 / 2 + 750) {
@@ -2044,7 +2046,7 @@ public final class RenderEngine {
     }
 
     private static boolean sub_e95(byte var0) {
-        return var0 == -1 ? true : (botsCount[currentRoom] - var_1fb1 == 1 ? Only3DRenderTime >= (long) (var_1dce[var0] + 2000) : Only3DRenderTime >= (long) var_1dce[var0]);
+        return var0 == -1 ? true : (botsCount[currentRoom] - var_1fb1 == 1 ? renderTimeOnly3D >= (long) (var_1dce[var0] + 2000) : renderTimeOnly3D >= (long) var_1dce[var0]);
     }
 
     private static boolean sub_eee(byte var0) {
@@ -2108,7 +2110,7 @@ public final class RenderEngine {
                 float_doublemassive_1st[var3][0] = botSettings[currentRoom][var3][0];
                 float_doublemassive_1st[var3][1] = botSettings[currentRoom][var3][6];
                 float_doublemassive_1st[var3][2] = botSettings[currentRoom][var3][1];
-                var_1dce[var3] = (int) Only3DRenderTime + var_1e37;
+                var_1dce[var3] = (int) renderTimeOnly3D + var_1e37;
             }
 
             if(var_1eae != -1 && !botKilled[currentRoom][var_1eae]) {
@@ -2165,7 +2167,7 @@ public final class RenderEngine {
         for(byte FrameNumber = 0; FrameNumber < 32; ++FrameNumber) {
             if(FireAnimActiveFrames[FrameNumber]) {
                 int cropWidth = RenderEngine.cropWidth[FrameNumber] / 8;
-                int frame_to_time = (int) (Only3DRenderTime + (long) (FrameNumber * 300)) % 1000 / 200;
+                int frame_to_time = (int) (renderTimeOnly3D + (long) (FrameNumber * 300)) % 1000 / 200;
                 int cropX = cropWidth * frame_to_time;
                 world_sprites3D_massive[FrameNumber].setCrop(cropX, 0, cropWidth, cropHeight[FrameNumber]);
             }
@@ -2228,48 +2230,54 @@ public final class RenderEngine {
     }
 
     private static void updateWalkAnimation(Node node) {
-        int var1;
-        float var2;
-        if((var1 = (int) Only3DRenderTime - int_1st) <= 500) {
-            var2 = cameraYRot + (var_191d - cameraYRot) * (float) var1 / 500.0F;
-            camera.setOrientation((float) cameraYRotOffset + var2, 0.0F, 1.0F, 0.0F);
-        } else if((var1 = (int) Only3DRenderTime - (int_1st + 500)) < var_bf7 + var_c21) {
-            float var3;
-            float var4;
-            if(var1 <= var_bf7) {
-                var2 = prevCameraPos[0] + (var_b80 - prevCameraPos[0]) * (float) var1 / (float) var_bf7;
-                var3 = !useThirdPerson ? cameraPos[1] : 0.0F;
-                var4 = prevCameraPos[2] + (var_bb1 - prevCameraPos[2]) * (float) var1 / (float) var_bf7;
-                node.setTranslation(var2, var3, var4);
-                float var5 = var_191d + (var_1974 - var_191d) * (float) var1 / (float) var_bf7;
+        int timeElapsed = (int) renderTimeOnly3D - walkAnimStartTime;
+		
+        if(timeElapsed <= 500) {
+			//Rotate camera first
+            float rotY = cameraYRot + (walkStartYRot - cameraYRot) * (float) timeElapsed / 500;
+            camera.setOrientation((float) cameraYRotOffset + rotY, 0, 1, 0);
+			
+        } else if(timeElapsed - 500 < walkTimeToWalkPoint + walkTimeToDoor) {
+			timeElapsed -= 500; //Subtract camera rotation time
+			
+            if(timeElapsed <= walkTimeToWalkPoint) {
+				//Walk to walk point
+                float x = prevCameraPos[0] + (walkPointTargetX - prevCameraPos[0]) * (float) timeElapsed / walkTimeToWalkPoint;
+                float y = useThirdPerson ? 0 : cameraPos[1];
+                float z = prevCameraPos[2] + (walkPointTargetZ - prevCameraPos[2]) * (float) timeElapsed / walkTimeToWalkPoint;
+				
+                node.setTranslation(x, y, z);
+				
                 if(useThirdPerson) {
-                    node.setOrientation((float) (cameraYRotOffset + 180) + var_191d, 0.0F, 1.0F, 0.0F);
+                    node.setOrientation(cameraYRotOffset + 180 + walkStartYRot, 0, 1, 0);
                 } else {
-                    node.setOrientation((float) cameraYRotOffset + var5, 0.0F, 1.0F, 0.0F);
+					float rotY = walkStartYRot + (walkPointYRot - walkStartYRot) * (float) timeElapsed / walkTimeToWalkPoint;
+                    node.setOrientation(cameraYRotOffset + rotY, 0, 1, 0);
                 }
             } else {
-                var1 = (int) Only3DRenderTime - (int_1st + 500 + var_bf7);
-                var2 = var_b80 + (doorSettings[currentRoom][var_8f5 - 1][0] - var_b80) * (float) var1 / (float) var_c21;
-                var3 = !useThirdPerson ? cameraPos[1] : 0.0F;
-                var4 = var_bb1 + (doorSettings[currentRoom][var_8f5 - 1][2] - var_bb1) * (float) var1 / (float) var_c21;
-                node.setTranslation(var2, var3, var4);
-                if(useThirdPerson) {
-                    node.setOrientation((float) (cameraYRotOffset + 180) + var_1974, 0.0F, 1.0F, 0.0F);
-                } else {
-                    node.setOrientation((float) cameraYRotOffset + var_1974, 0.0F, 1.0F, 0.0F);
-                }
+				//Walk to door
+                timeElapsed -= walkTimeToWalkPoint; //Subtract walk time to walk point
+				
+				float doorX = doorSettings[currentRoom][walkNextDoorId - 1][0];
+				float doorZ = doorSettings[currentRoom][walkNextDoorId - 1][2];
+				
+                float x = walkPointTargetX + (doorX - walkPointTargetX) * (float) timeElapsed / walkTimeToDoor;
+                float y = useThirdPerson ? 0 : cameraPos[1];
+                float z = walkPointTargetZ + (doorZ - walkPointTargetZ) * (float) timeElapsed / walkTimeToDoor;
+				
+                node.setTranslation(x, y, z);
+                node.setOrientation(cameraYRotOffset + walkPointYRot + (useThirdPerson ? 180 : 0), 0, 1, 0);
             }
 
             if(useThirdPerson) {
-                int var6 = 2400 + 390 * (int) (Only3DRenderTime & 1000L) / 1000;
-                node.animate(var6);
+                int playerModelAnimTime = 2400 + 390 * (int) (renderTimeOnly3D & 1000L) / 1000;
+                node.animate(playerModelAnimTime);
             } else {
                 CameraXPostRotate();
             }
         } else {
-            if(useThirdPerson) {
-                playerModel.setRenderingEnable(false);
-            }
+			//Walk anim end
+            if(useThirdPerson) playerModel.setRenderingEnable(false);
 
             sub_115f();
         }
@@ -2286,7 +2294,7 @@ public final class RenderEngine {
                 default:
                     if(Scripts.var_2602 && !showFinalDialog) {
                         boolean var12 = false;
-                        int var13 = (int) Only3DRenderTime - var_1a54;
+                        int var13 = (int) renderTimeOnly3D - var_1a54;
                         boolean var14 = false;
                         SetCameraTranslation(61.5F, 3.0F, 134.0F);
                         playerModel.setTranslation(75.2F, 0.0F, 130.0F);
@@ -2302,11 +2310,11 @@ public final class RenderEngine {
                                 playerModel.animate(200);
                             }
                         } else {
-                            var_1ab8 = (int) Only3DRenderTime;
+                            var_1ab8 = (int) renderTimeOnly3D;
                             showFinalDialog = true;
                         }
                     } else if(showFinalDialog) {
-                        int var0 = (int) Only3DRenderTime - var_1ab8;
+                        int var0 = (int) renderTimeOnly3D - var_1ab8;
                         float var2 = 61.5F;
                         float var3 = 75.2F;
                         float var4 = 3.0F;

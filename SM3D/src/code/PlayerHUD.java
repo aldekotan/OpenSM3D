@@ -218,7 +218,7 @@ public final class PlayerHUD {
         int var8;
         short var9;
         if (Scripts.var_215f) {
-            var8 = (int) RenderEngine.Only3DRenderTime - Scripts.var_21d2;
+            var8 = (int) RenderEngine.renderTimeOnly3D - Scripts.var_21d2;
             var9 = Scripts.var_21a7;
             if (var8 <= var9) {
                 if (var8 <= var9 / 2) {
@@ -232,7 +232,7 @@ public final class PlayerHUD {
         }
 
         if (Scripts.var_2075) {
-            var8 = (int) RenderEngine.Only3DRenderTime - Scripts.var_2108;
+            var8 = (int) RenderEngine.renderTimeOnly3D - Scripts.var_2108;
             var9 = Scripts.var_20d6;
             if (var8 <= var9) {
                 if (var8 <= var9 / 2) {
@@ -281,7 +281,7 @@ public final class PlayerHUD {
     public static void drawDamageIndicatorAndHealthBar(boolean insideInv) {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         if (playerDamaged && !insideInv) {
-            if (RenderEngine.Only3DRenderTime >= (long) timeToDisplayDamageIndicator) {
+            if (RenderEngine.renderTimeOnly3D >= (long) timeToDisplayDamageIndicator) {
                 playerDamaged = false;
             }
 

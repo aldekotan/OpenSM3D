@@ -538,12 +538,12 @@ public final class Scripts {
             RenderEngine.setDialogWindowState((short) 2);
         }
 
-        if (var_215f && RenderEngine.Only3DRenderTime - (long) var_21d2 >= (long) (var_21a7 / 2) && !var_2040) {
+        if (var_215f && RenderEngine.renderTimeOnly3D - (long) var_21d2 >= (long) (var_21a7 / 2) && !var_2040) {
             SoundAndVibro.playSound(1);
             var_2040 = true;
         }
 
-        if (var_2075 && RenderEngine.Only3DRenderTime - (long) var_2108 >= (long) (var_20d6 / 2) && !var_2040) {
+        if (var_2075 && RenderEngine.renderTimeOnly3D - (long) var_2108 >= (long) (var_20d6 / 2) && !var_2040) {
             SoundAndVibro.playSound(2);
             var_2040 = true;
         }
@@ -559,7 +559,7 @@ public final class Scripts {
     public static void takeGunInHands(byte var0) {
         if (!var_215f) {
             var_2075 = true;
-            var_2108 = (int) RenderEngine.Only3DRenderTime;
+            var_2108 = (int) RenderEngine.renderTimeOnly3D;
             EncasedWeapon = playerActiveWeapon;
             playerActiveWeapon = var0;
             var_2040 = false;
@@ -614,7 +614,7 @@ public final class Scripts {
 
                 var_2040 = false;
                 var_215f = true;
-                var_21d2 = (int) RenderEngine.Only3DRenderTime;
+                var_21d2 = (int) RenderEngine.renderTimeOnly3D;
             }
         }
     }
@@ -1557,7 +1557,7 @@ public final class Scripts {
         if (!var_2075 && !var_215f) {
             if (MassiveActorAmmo[gun] > 0 || gun == 0) {
                 var_228e = true;
-                RenderEngine.var_1c84 = (int) RenderEngine.Only3DRenderTime;
+                RenderEngine.var_1c84 = (int) RenderEngine.renderTimeOnly3D;
                 RenderEngine.var_1cda = true;
                 switch (gun) {
                     case 0: //Если в руках форт
@@ -1594,7 +1594,7 @@ public final class Scripts {
     {
         var_22f1 = true;
         PlayerHUD.playerDamaged = true;
-        PlayerHUD.timeToDisplayDamageIndicator = (int) RenderEngine.Only3DRenderTime + 500;
+        PlayerHUD.timeToDisplayDamageIndicator = (int) RenderEngine.renderTimeOnly3D + 500;
         ActorCurrentHealth = (short) (ActorCurrentHealth - Hitpoints);
         SoundAndVibro.vibrate(200);
     }

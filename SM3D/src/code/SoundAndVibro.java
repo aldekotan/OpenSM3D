@@ -66,7 +66,7 @@ public final class SoundAndVibro {
     }
 
     public static void stopTooLongVibro() {
-        if(lastVibrationTime != 0 && RenderEngine.Only3DRenderTime - lastVibrationTime >= 200L) {
+        if(lastVibrationTime != 0 && RenderEngine.renderTimeOnly3D - lastVibrationTime >= 200L) {
             Main.main.vibrate(0); //Остановить вибрацию телефона
             lastVibrationTime = 0;
         }
@@ -74,7 +74,7 @@ public final class SoundAndVibro {
 
     public static void vibrate(int duration) {
         if(vibroEnabled && duration != 0) {
-            lastVibrationTime = RenderEngine.Only3DRenderTime;
+            lastVibrationTime = RenderEngine.renderTimeOnly3D;
             Main.main.vibrate(duration);
         }
     }
