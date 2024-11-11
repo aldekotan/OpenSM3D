@@ -10,6 +10,7 @@ import javax.microedition.m3g.Mesh;
 import javax.microedition.m3g.Node;
 import javax.microedition.m3g.Object3D;
 import javax.microedition.m3g.Image2D;
+import javax.microedition.m3g.Material;
 import javax.microedition.m3g.Texture2D;
 import javax.microedition.m3g.World;
 
@@ -223,12 +224,19 @@ public class ModChanges //Здесь буду размещать внесённ�
 				
 				ap.setLayer(2); //render terrain after forest
             }
-        } else {
+        }
+		
+		if(pers) {
             int[] list = new int[]{12, 13, 14, 15};
 
             for(int i = 0; i < list.length; i++) {
                 Mesh child = meshSearch(world, list[i]);
-                child.getAppearance(0).setTexture(0, ResourceLoader.getTexture("texobj2.png"));
+				Appearance ap = child.getAppearance(0);
+				
+                ap.setTexture(0, ResourceLoader.getTexture("texobj2.png"));
+				ap.getTexture(0).setBlending(Texture2D.FUNC_MODULATE);
+				
+				ap.setMaterial(new Material());
             }
         }
 
