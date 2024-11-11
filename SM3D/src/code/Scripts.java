@@ -7,7 +7,7 @@ public final class Scripts {
 
     public static byte EncasedWeapon;
     //Оружие в руках
-    public static byte CurrentGunInTheHands;
+    public static byte playerActiveWeapon;
 
     //===Характеристики бронежилетов=== //Защита от пуль, радиации, аномалий, и цена бронежилета
     public static final short[] armorLeatherJacketStats = new short[]{(short) 10, (short) 0, (short) 10, (short) 200};
@@ -560,8 +560,8 @@ public final class Scripts {
         if (!var_215f) {
             var_2075 = true;
             var_2108 = (int) RenderEngine.Only3DRenderTime;
-            EncasedWeapon = CurrentGunInTheHands;
-            CurrentGunInTheHands = var0;
+            EncasedWeapon = playerActiveWeapon;
+            playerActiveWeapon = var0;
             var_2040 = false;
             if (OpticalSight) {
                 OpticalSight = false;
@@ -572,7 +572,7 @@ public final class Scripts {
 
     private static void TakeUpGun() {
         short var0;
-        if (CurrentGunInTheHands == 0) //Если в руках ничего
+        if (playerActiveWeapon == 0) //Если в руках ничего
         {
             var0 = equipmentSlots[0]; //Ячейке присваивается значение слота основного оружия
         } else {
@@ -1622,7 +1622,7 @@ public final class Scripts {
                         if (RenderEngine.sub_a33()) {
                             sub_62f(RenderEngine.var_17f2);
                         } else if (!RenderEngine.sub_a69()) {
-                            shoot(CurrentGunInTheHands);
+                            shoot(playerActiveWeapon);
                         } else {
                             InteractionWith(RenderEngine.TypeOfInteractWithObjectAhead);
                         }
@@ -1645,13 +1645,13 @@ public final class Scripts {
                     }
 
                     if (Keys.num1) {
-                        ReloadThisGun(CurrentGunInTheHands);
+                        ReloadThisGun(playerActiveWeapon);
                         Keys.num1 = false;
                     }
 
                     if (Keys.pound) {
                         Keys.pound = false;
-                        if (CurrentGunInTheHands == 3) //Если в руках в текущий момент Энфилд
+                        if (playerActiveWeapon == 3) //Если в руках в текущий момент Энфилд
                         {
                             OpticalSight = !OpticalSight; //поменять значение активности
                             if (OpticalSight) {

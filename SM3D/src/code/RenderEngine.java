@@ -226,8 +226,8 @@ public final class RenderEngine {
     private static boolean CameraMovementDeactive;
     private static float var_191d;
     private static float var_1974;
-    public static boolean var_19b5;
-    public static final byte[] var_1a01;
+    public static boolean useThirdPerson;
+    public static final byte[] levelUseThirdperson;
     private static int var_1a13;
     private static int var_1a54;
     private static int var_1ab8;
@@ -306,7 +306,7 @@ public final class RenderEngine {
         var_1700 = new boolean[10];
         activableObjsStatus = new boolean[10];
         var_1877 = -1;
-        var_1a01 = new byte[]{(byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0};
+        levelUseThirdperson = new byte[]{0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0};
         screen_width = MainMenuScreen.scrWidth;
         screen_height = MainMenuScreen.scrHeight;
         transform = new Transform();
@@ -368,9 +368,9 @@ public final class RenderEngine {
         botKilled = new boolean[15][10];
     }
 
-    private static void loadLocation(int location_number) {//что-то с загрузкой локации
+    private static void loadLocation(int levelId) {//что-то с загрузкой локации
         resetLocation();
-        loadLocationData(location_number);
+        loadLocationData(levelId);
         LoadingScreen.RunGarbageCollector();
         nextRoom = currentRoom;
         ConfigureAndActivateCamera();
@@ -397,13 +397,12 @@ public final class RenderEngine {
         }
 
         sub_360(currentRoom);
-        if(var_1a01[location_number] == 1 && roomsCount > 1) //Если враги на уровне вообще есть 
-        {
+		
+        if(levelUseThirdperson[levelId] == 1 && roomsCount > 1) {
             loadPlayerModel();
         } else {
             gameWorld.removeChild(playerModel);
             playerModel = null;
-            System.gc();
         }
 
         ResourceLoader.clearTextures();
@@ -1479,7 +1478,7 @@ public final class RenderEngine {
         float var9 = doorSettings[currentRoom][var0][2];
         float var10 = doorSettings[currentRoom][var_8f5 - 1][0];
         float var11 = doorSettings[currentRoom][var_8f5 - 1][2];
-        var_19b5 = var1;
+        useThirdPerson = var1;
         float var12 = sub_5d9(var4, var5, var6, var7, var2, var3);
         float[] var13 = getVectorForCrossProduct(var4, var5, var2, var3);
         float[] var14 = getVectorForCrossProduct(var4, var5, var6, var7);
@@ -1699,12 +1698,12 @@ public final class RenderEngine {
                 }
 
                 float[] var3;
-                var_191d = (var3 = sub_7cb(var_891, var_1a01[currentLocation] == 1))[0] != 180.0F ? var3[0] : 0.0F;
+                var_191d = (var3 = sub_7cb(var_891, levelUseThirdperson[currentLocation] == 1))[0] != 180.0F ? var3[0] : 0.0F;
                 var_1974 = var_191d + var3[1];
                 int_1st = (int) Only3DRenderTime;
                 backupCameraPos();
-                if(var_19b5) {
-                    preparePlayerModel(Scripts.CurrentGunInTheHands);
+                if(useThirdPerson) {
+                    preparePlayerModel(Scripts.playerActiveWeapon);
                 }
             case 2:
             case 3:
@@ -1755,7 +1754,7 @@ public final class RenderEngine {
     private static void sub_bd0() {
         Scripts.koboldDialogState = 2;
         loadPlayerModel();
-        preparePlayerModel(Scripts.CurrentGunInTheHands);
+        preparePlayerModel(Scripts.playerActiveWeapon);
         Scripts.startDialog((short) 19, (byte) 0);
         var_1e37 = 500;
         var_1a54 = (int) Only3DRenderTime;
@@ -2228,7 +2227,7 @@ public final class RenderEngine {
         sub_f2e();
     }
 
-    private static void sub_10cf(Node var0) {
+    private static void updateWalkAnimation(Node node) {
         int var1;
         float var2;
         if((var1 = (int) Only3DRenderTime - int_1st) <= 500) {
@@ -2239,36 +2238,36 @@ public final class RenderEngine {
             float var4;
             if(var1 <= var_bf7) {
                 var2 = prevCameraPos[0] + (var_b80 - prevCameraPos[0]) * (float) var1 / (float) var_bf7;
-                var3 = !var_19b5 ? cameraPos[1] : 0.0F;
+                var3 = !useThirdPerson ? cameraPos[1] : 0.0F;
                 var4 = prevCameraPos[2] + (var_bb1 - prevCameraPos[2]) * (float) var1 / (float) var_bf7;
-                var0.setTranslation(var2, var3, var4);
+                node.setTranslation(var2, var3, var4);
                 float var5 = var_191d + (var_1974 - var_191d) * (float) var1 / (float) var_bf7;
-                if(var_19b5) {
-                    var0.setOrientation((float) (cameraYRotOffset + 180) + var_191d, 0.0F, 1.0F, 0.0F);
+                if(useThirdPerson) {
+                    node.setOrientation((float) (cameraYRotOffset + 180) + var_191d, 0.0F, 1.0F, 0.0F);
                 } else {
-                    var0.setOrientation((float) cameraYRotOffset + var5, 0.0F, 1.0F, 0.0F);
+                    node.setOrientation((float) cameraYRotOffset + var5, 0.0F, 1.0F, 0.0F);
                 }
             } else {
                 var1 = (int) Only3DRenderTime - (int_1st + 500 + var_bf7);
                 var2 = var_b80 + (doorSettings[currentRoom][var_8f5 - 1][0] - var_b80) * (float) var1 / (float) var_c21;
-                var3 = !var_19b5 ? cameraPos[1] : 0.0F;
+                var3 = !useThirdPerson ? cameraPos[1] : 0.0F;
                 var4 = var_bb1 + (doorSettings[currentRoom][var_8f5 - 1][2] - var_bb1) * (float) var1 / (float) var_c21;
-                var0.setTranslation(var2, var3, var4);
-                if(var_19b5) {
-                    var0.setOrientation((float) (cameraYRotOffset + 180) + var_1974, 0.0F, 1.0F, 0.0F);
+                node.setTranslation(var2, var3, var4);
+                if(useThirdPerson) {
+                    node.setOrientation((float) (cameraYRotOffset + 180) + var_1974, 0.0F, 1.0F, 0.0F);
                 } else {
-                    var0.setOrientation((float) cameraYRotOffset + var_1974, 0.0F, 1.0F, 0.0F);
+                    node.setOrientation((float) cameraYRotOffset + var_1974, 0.0F, 1.0F, 0.0F);
                 }
             }
 
-            if(var_19b5) {
+            if(useThirdPerson) {
                 int var6 = 2400 + 390 * (int) (Only3DRenderTime & 1000L) / 1000;
-                var0.animate(var6);
+                node.animate(var6);
             } else {
                 CameraXPostRotate();
             }
         } else {
-            if(var_19b5) {
+            if(useThirdPerson) {
                 playerModel.setRenderingEnable(false);
             }
 
@@ -2280,12 +2279,9 @@ public final class RenderEngine {
         try {
             switch(currentGameState) {
                 case 1:
-                    if(var_19b5) {
-                        sub_10cf(playerModel);
-                        return;
-                    }
-
-                    sub_10cf(camera);
+                    if(useThirdPerson) updateWalkAnimation(playerModel);
+					else updateWalkAnimation(camera);
+					
                     return;
                 default:
                     if(Scripts.var_2602 && !showFinalDialog) {
@@ -2396,7 +2392,7 @@ public final class RenderEngine {
 
     private static void sub_115f() {
         sub_328();
-        var_19b5 = false;
+        useThirdPerson = false;
         currentRoom = nextRoom;
         ConfigureAndActivateCamera();
         setDialogWindowState((short) 13);

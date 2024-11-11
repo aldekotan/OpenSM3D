@@ -367,14 +367,14 @@ public final class PlayerHUD {
         drawSoftButtonNames(1, 0, 1, true);
         drawSoftButtonNames(0, 1, rightSoftText, true);
         int var3 = TextCreator.sub_7eb(1, 377); //символ /
-        int var4 = var0 + 24 - (Scripts.MassiveActorAmmo[Scripts.CurrentGunInTheHands] / 10 > 0 ? var3 * 2 : var3 + 1);
+        int var4 = var0 + 24 - (Scripts.MassiveActorAmmo[Scripts.playerActiveWeapon] / 10 > 0 ? var3 * 2 : var3 + 1);
         int var5 = var1 + ResourseManager.getRectangleHeight(13) / 2 - TextCreator.getHeightFromTextParamMassive(1) / 2;
-        TextCreator.drawNumbers(1, Scripts.MassiveActorAmmo[Scripts.CurrentGunInTheHands], var4, var5, 0);
+        TextCreator.drawNumbers(1, Scripts.MassiveActorAmmo[Scripts.playerActiveWeapon], var4, var5, 0);
         int var6 = var0 + 24;
         TextCreator.FindParametersnDrawText(1, 377, var6, var5, 0);// символ /
         int var8 = var0 + 24 + var3;
         byte var10;
-        switch (Scripts.CurrentGunInTheHands) {
+        switch (Scripts.playerActiveWeapon) {
             case 0:
                 var10 = 12;
                 break;
@@ -874,9 +874,9 @@ public final class PlayerHUD {
                 } else if (RenderEngine.currentGameState == 9) {
                     drawDialogUI();
                 } else {
-                    if (!RenderEngine.var_19b5) {
+                    if (!RenderEngine.useThirdPerson) {
                         if (!Scripts.OpticalSight) {
-                            drawWeapon(Scripts.CurrentGunInTheHands);
+                            drawWeapon(Scripts.playerActiveWeapon);
                             if (!RenderEngine.sub_a69() && !RenderEngine.sub_a33()) {
                                 if (doorLocked) {
                                     DrawLockAtCenter();

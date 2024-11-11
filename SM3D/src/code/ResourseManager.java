@@ -104,7 +104,7 @@ public final class ResourseManager {
                 var1.writeShort(Scripts.equipmentSlots[var2]);
             }
 
-            var1.writeByte(Scripts.CurrentGunInTheHands);
+            var1.writeByte(Scripts.playerActiveWeapon);
             var1.writeShort(Scripts.ActorCurrentHealth);
             var1.writeShort(Scripts.ActorCurrentWeight);
             var1.writeShort(Scripts.CurrentActorMoney);
@@ -214,8 +214,8 @@ public final class ResourseManager {
                     Scripts.equipmentSlots[var2] = var1.readShort();
                 }
 
-                Scripts.CurrentGunInTheHands = var1.readByte();
-                Scripts.takeGunInHands(Scripts.CurrentGunInTheHands);
+                Scripts.playerActiveWeapon = var1.readByte();
+                Scripts.takeGunInHands(Scripts.playerActiveWeapon);
                 Scripts.ActorCurrentHealth = var1.readShort();
                 Scripts.ActorCurrentWeight = var1.readShort();
                 Scripts.CurrentActorMoney = var1.readShort();
