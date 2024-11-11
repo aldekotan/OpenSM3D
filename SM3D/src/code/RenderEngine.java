@@ -191,8 +191,8 @@ public final class RenderEngine {
     public static Mesh var_e6b;
     private static Light var_ea6;
     public static World lightsWorld;
-    public static Group[] group_massive_2st;
-    public static Group[] StalkersAppearanceGroups;
+    public static Group[] stationaryPersonages;
+    public static Group[] movablePersonages;
     private static Group enemies_group;
     private static boolean needToLoadPersM3G;
     public static World persWorld;
@@ -286,8 +286,8 @@ public final class RenderEngine {
         light_massive_1st = new Light[32];
         world_sprites3D_massive = new Sprite3D[32];
         lightsWorld = null;
-        group_massive_2st = new Group[10];
-        StalkersAppearanceGroups = new Group[10];
+        stationaryPersonages = new Group[10];
+        movablePersonages = new Group[10];
         FireAnimActiveFrames = new boolean[32];
         byte_massive_1st = new byte[32];
         var_12f0 = new byte[32];
@@ -391,9 +391,9 @@ public final class RenderEngine {
         PlayerHUD.loadHUDTexturesAndLocationCoorditates();
         LoadingScreen.RunGarbageCollector();
         ConfigureAndActivateCamera();
-        if(StalkersAppearanceGroups[0] == null) //Если модели сталкеров не загружены
+        if(movablePersonages[0] == null) //Если модели сталкеров не загружены
         {
-            Personage.loadPersM3G((byte) 1, (byte) 0);
+            Personage.createMovablePers((byte) 1, (byte) 0);
         }
 
         sub_360(currentRoom);
@@ -460,7 +460,7 @@ public final class RenderEngine {
         try {
             if(needToLoadPersM3G) {
                 try {
-                    Personage.loadPersM3G(objId, gameObjId);
+                    Personage.createMovablePers(objId, gameObjId);
                     return;
                 } catch (Exception ex) {
                     System.out.println("error enemy-model loading");
@@ -519,7 +519,7 @@ public final class RenderEngine {
                             break label155;
                         case 100:
                             if(mdlSource == 4) {
-                                Personage.DuplicatePersonageWithThisPose(gameObjId, objId);
+                                Personage.createStationaryPers(gameObjId, objId);
                             } else if(mesh_massive_third[gameObjId] == null) {
                                 mesh_massive_third[gameObjId] = ResourceLoader.loadZ1Model(adress);
                                 System.gc();
@@ -998,8 +998,8 @@ public final class RenderEngine {
 
             for(var4 = 1; var4 < 10; ++var4) {
                 if(var4 >= var6) {
-                    gameWorld.removeChild(StalkersAppearanceGroups[var4]);
-                    StalkersAppearanceGroups[var4] = null;
+                    gameWorld.removeChild(movablePersonages[var4]);
+                    movablePersonages[var4] = null;
                 }
             }
 
@@ -1021,8 +1021,8 @@ public final class RenderEngine {
             }
 
             for(var4 = 0; var4 < 10; ++var4) {
-                gameWorld.removeChild(group_massive_2st[var4]);
-                group_massive_2st[var4] = null;
+                gameWorld.removeChild(stationaryPersonages[var4]);
+                stationaryPersonages[var4] = null;
             }
 
             gameWorld.removeChild(light);
@@ -1061,7 +1061,7 @@ public final class RenderEngine {
         LoadingScreen.RunGarbageCollector();
         needToLoadPersM3G = true;
         if(npcsCount[var0] == 0) {
-            StalkersAppearanceGroups[0].setRenderingEnable(false);
+            movablePersonages[0].setRenderingEnable(false);
         }
 
         for(var1 = 0; var1 < npcsCount[var0]; ++var1) {
@@ -1134,8 +1134,8 @@ public final class RenderEngine {
     private static void DuplicateStalkerModel() {
         if(enemies_group == null) {
             enemies_group = new Group();
-            if(StalkersAppearanceGroups[0] != null) {
-                enemies_group = (Group) StalkersAppearanceGroups[0].duplicate();
+            if(movablePersonages[0] != null) {
+                enemies_group = (Group) movablePersonages[0].duplicate();
                 System.out.println("STALKER COPIED !!! ");
             }
 
@@ -1210,9 +1210,9 @@ public final class RenderEngine {
             var_1dce[group_number] = (int) Only3DRenderTime + var_1e37;
             var_1e05[group_number] = (int) Only3DRenderTime + 500;
             var_1e92[group_number] = 2;
-            StalkersAppearanceGroups[group_number].setOrientation(npcSettings[place_number][group_number][7], 0.0F, 1.0F, 0.0F);
+            movablePersonages[group_number].setOrientation(npcSettings[place_number][group_number][7], 0.0F, 1.0F, 0.0F);
             SetGroupTranslation(group_number, npcSettings[place_number][group_number][0], npcSettings[place_number][group_number][6], npcSettings[place_number][group_number][1]);
-            StalkersAppearanceGroups[group_number].setTranslation(npcPositions[group_number][0], npcPositions[group_number][1], npcPositions[group_number][2]);
+            movablePersonages[group_number].setTranslation(npcPositions[group_number][0], npcPositions[group_number][1], npcPositions[group_number][2]);
         }
 
         if(npcsCount[place_number] == 0) {
@@ -1280,12 +1280,12 @@ public final class RenderEngine {
                 var3 = activableObjSettings[place_number][number][1];
                 var4 = activableObjSettings[place_number][number][2];
                 mesh_massive_third[number].setTranslation(var2, var3, var4);
-            } else if(group_massive_2st[number] != null) {
-                group_massive_2st[number].setOrientation(activableObjSettings[place_number][number][4], 0.0F, 1.0F, 0.0F);
+            } else if(stationaryPersonages[number] != null) {
+                stationaryPersonages[number].setOrientation(activableObjSettings[place_number][number][4], 0.0F, 1.0F, 0.0F);
                 var2 = activableObjSettings[place_number][number][0];
                 var3 = activableObjSettings[place_number][number][1];
                 var4 = activableObjSettings[place_number][number][2];
-                group_massive_2st[number].setTranslation(var2, var3, var4);
+                stationaryPersonages[number].setTranslation(var2, var3, var4);
             }
         }
 
@@ -1923,7 +1923,7 @@ public final class RenderEngine {
         switch(var_1e92[npcUnderCursor]) {
             case 0:
             case 4:
-                var_e6b = (Mesh) StalkersAppearanceGroups[npcUnderCursor].find(30);
+                var_e6b = (Mesh) movablePersonages[npcUnderCursor].find(30);
                 var_e6b.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 var_e1c.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -1932,7 +1932,7 @@ public final class RenderEngine {
             case 1:
             case 2:
             case 3:
-                var_e6b = (Mesh) StalkersAppearanceGroups[npcUnderCursor].find(31);
+                var_e6b = (Mesh) movablePersonages[npcUnderCursor].find(31);
                 var_e6b.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 var_e1c.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -1977,7 +1977,7 @@ public final class RenderEngine {
 
         if(var2 <= 500) {
             int var5 = var3 + (var4 - var3) * var2 / 500;
-            StalkersAppearanceGroups[var0].animate(var5);
+            movablePersonages[var0].animate(var5);
             IsWayAheadLocked = false;
         } else {
             var_1d93 = -1;
@@ -2016,9 +2016,9 @@ public final class RenderEngine {
         var_e59.setRenderingEnable(false);
         if(var4 > var5 / 2 - 750 && var4 < var5 / 2 + 750) {
             var_1db5 = true;
-            StalkersAppearanceGroups[var0].animate(var3);
+            movablePersonages[var0].animate(var3);
             if(var4 % 300 <= 150) {
-                var_ea6 = (Light) StalkersAppearanceGroups[var_1eae].find(50);
+                var_ea6 = (Light) movablePersonages[var_1eae].find(50);
                 var_ea6.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 var_e59.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -2042,7 +2042,7 @@ public final class RenderEngine {
                     var11 = float_doublemassive_1st[var0][2] + var8 * (float) var4 / (float) (var_1e37 / 2 - 750);
                     var13 = (var3 - var2) * var4 / (var_1e37 / 2 - 750);
                     var6 = var2 + var13;
-                    StalkersAppearanceGroups[var0].animate(var6);
+                    movablePersonages[var0].animate(var6);
                 }
 
                 if(var4 >= var5 / 2 + 750) {
@@ -2050,10 +2050,10 @@ public final class RenderEngine {
                     var11 = float_doublemassive_1st[var0][2] + var8 * (float) (var5 - var4) / (float) (var_1e37 / 2 - 750);
                     var13 = (var3 - var2) * (var5 - var4) / (var_1e37 / 2 - 750);
                     var6 = var2 + var13;
-                    StalkersAppearanceGroups[var0].animate(var6);
+                    movablePersonages[var0].animate(var6);
                 }
 
-                StalkersAppearanceGroups[var0].setTranslation(var9, var10, var11);
+                movablePersonages[var0].setTranslation(var9, var10, var11);
             } else {
                 var_1e92[var0] = -1;
             }
@@ -2142,7 +2142,7 @@ public final class RenderEngine {
                     var2 = npcSettings[currentRoom][npcId][1];
                     float var7 = npcSettings[currentRoom][npcId][6];
                     SetGroupTranslation(npcId, var1, var7, var2);
-                    StalkersAppearanceGroups[npcId].animate(200);
+                    movablePersonages[npcId].animate(200);
                 }
             }
 
@@ -2153,16 +2153,16 @@ public final class RenderEngine {
                 for(npcId = 0; npcId < var0; ++npcId) {
                     //если атакует?
                     if(Scripts.var_2602) {
-                        StalkersAppearanceGroups[npcId].setRenderingEnable(true);
+                        movablePersonages[npcId].setRenderingEnable(true);
                     } else {
                         //отключить отрисовку, если спрятался за укрытием
                         if(!npcKilled[currentRoom][npcId] && npcId != var_1eae) {
-                            StalkersAppearanceGroups[npcId].setRenderingEnable(false);
+                            movablePersonages[npcId].setRenderingEnable(false);
                         }
 
                         //включить анимацию смерти
                         if(npcKilled[currentRoom][npcId]) {
-                            StalkersAppearanceGroups[npcId].animate(2000);
+                            movablePersonages[npcId].animate(2000);
                         }
                     }
                 }
@@ -2175,7 +2175,7 @@ public final class RenderEngine {
         npcPositions[group_number][0] = trans_x;
         npcPositions[group_number][1] = trans_y;
         npcPositions[group_number][2] = trans_z;
-        StalkersAppearanceGroups[group_number].setTranslation(trans_x, trans_y, trans_z);
+        movablePersonages[group_number].setTranslation(trans_x, trans_y, trans_z);
     }
 
     private static void AnimateFire() {
@@ -2222,13 +2222,13 @@ public final class RenderEngine {
 
         for(int i = 0; i < npcsCount[currentRoom]; ++i) {
             if(Scripts.var_2602) {
-                StalkersAppearanceGroups[i].setRenderingEnable(true);
+                movablePersonages[i].setRenderingEnable(true);
             } else {
                 if(npcSettings[currentRoom][i][8] - 1.0F != (float) cameraDoorId) {
-                    StalkersAppearanceGroups[i].setRenderingEnable(false);
+                    movablePersonages[i].setRenderingEnable(false);
                     var_1ffd[i] = false;
                 } else {
-                    StalkersAppearanceGroups[i].setRenderingEnable(true);
+                    movablePersonages[i].setRenderingEnable(true);
                     var_1ffd[i] = true;
                     if(!npcKilled[currentRoom][i]) {
                         ++var_205e;
@@ -2236,7 +2236,7 @@ public final class RenderEngine {
                 }
 
                 if(var_84a[currentLocation][currentRoom] || npcKilled[currentRoom][i]) {
-                    StalkersAppearanceGroups[i].setRenderingEnable(true);
+                    movablePersonages[i].setRenderingEnable(true);
                 }
             }
         }
@@ -2368,8 +2368,8 @@ public final class RenderEngine {
         System.gc();
 
         for(number = 0; number < 10; ++number) {
-            gameWorld.removeChild(StalkersAppearanceGroups[number]);
-            StalkersAppearanceGroups[number] = null;
+            gameWorld.removeChild(movablePersonages[number]);
+            movablePersonages[number] = null;
         }
 
         System.gc();
@@ -2396,8 +2396,8 @@ public final class RenderEngine {
         System.gc();
 
         for(number = 0; number < 10; ++number) {
-            gameWorld.removeChild(group_massive_2st[number]);
-            group_massive_2st[number] = null;
+            gameWorld.removeChild(stationaryPersonages[number]);
+            stationaryPersonages[number] = null;
         }
 
         System.gc();
