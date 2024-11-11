@@ -1484,7 +1484,7 @@ public final class Scripts {
         ++RenderEngine.var_1fb1;
         RenderEngine.sub_ab1(RenderEngine.botIdUndercursor);
         RenderEngine.sub_daf();
-        switch (Bot.getBotExpLevel(RenderEngine.botIdUndercursor)) {
+        switch (Bot.getBotType(RenderEngine.botIdUndercursor)) {
             case 0:
                 ++CurrentActorExpirience;
                 break;

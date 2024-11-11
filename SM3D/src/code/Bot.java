@@ -20,9 +20,9 @@ public final class Bot //Персонажи, модели, освещение, �
 	public static byte[] enemyDodgeLevels = new byte[10];
 	//Уровень опытности каждого добавленного на уровень противника (от 0 до 12)
 	//По нему вычисляется количество получаемого опыта за убийство
-	private static final byte[] botExpLevel = new byte[10];
+	private static final int[] botTypes = new int[10];
 
-	public static void loadBot(byte botType, byte botId) {
+	public static void loadBot(int botType, int botId) {
 		if(RenderEngine.persWorld == null) {
 			try {
 				String path = "/pers.m3g";
@@ -43,7 +43,7 @@ public final class Bot //Персонажи, модели, освещение, �
 			}
 		}
 
-		botExpLevel[botId] = botType;
+		botTypes[botId] = botType;
 		if(RenderEngine.botModelGroup[botId] != null) {
 			setBotType(botType, botId);
 			setBotAppearance(botType, botId);
@@ -114,9 +114,9 @@ public final class Bot //Персонажи, модели, освещение, �
 		RenderEngine.botModelGroup[botId].addChild(weaponCopy);
 	}
 
-	private static void setBotAppearance(byte expLevel, byte botId) {
-		CompositingMode compos_mode = new CompositingMode();
+	private static void setBotAppearance(int expLevel, int botId) {
 		String textureName;
+		
 		if(expLevel >= 0 && expLevel < 4) {
 			textureName = "pbandit.png"; //бандит
 		} else if(expLevel >= 4 && expLevel < 7) {
@@ -127,22 +127,25 @@ public final class Bot //Персонажи, модели, освещение, �
 			textureName = "psoldier.png"; //солдат
 		}
 
-		Appearance new_appearance;
-		(new_appearance = new Appearance()).setTexture(0, ResourceLoader.getTexture(textureName));
-		compos_mode.setBlending(68);
-		Material new_material = new Material();
-		new_appearance.setCompositingMode(compos_mode);
-		new_appearance.setMaterial(new_material);
+		Appearance ap = new Appearance();
+		ap.setTexture(0, ResourceLoader.getTexture(textureName));
+		
+		CompositingMode cm = new CompositingMode();
+		cm.setBlending(68);
+		ap.setCompositingMode(cm);
+		
+		Material mat = new Material();
+		ap.setMaterial(mat);
 
-		for(byte i = 0; i < 12; ++i) {
-			((Mesh) RenderEngine.botModelGroup[botId].find(i + 1)).setAppearance(0, new_appearance);
-			System.gc();
+		for(int i = 0; i < 12; i++) {
+			Mesh bodyPart = (Mesh) RenderEngine.botModelGroup[botId].find(i + 1);
+			bodyPart.setAppearance(0, ap);
 		}
 
 	}
 
-	public static byte getBotExpLevel(byte botId) {
-		return botExpLevel[botId];
+	public static int getBotType(int botId) {
+		return botTypes[botId];
 	}
 
 	public static void loadStaticBot(byte botId, byte persId) {
