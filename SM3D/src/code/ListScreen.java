@@ -17,13 +17,20 @@ public class ListScreen extends MenuScreen {
     public Screen[] screenByOptionId;
     public byte[] screenIdByOptionId;
     
-    public final static int[] settingsOptionsTextId = new int[]{42, 43};
-    public final static byte[] settingsOptionsScreenId = new byte[]{(byte) 0, (byte) 0};
-    public final static int[] pauseOptionsTextId = new int[]{57, 58, 0, 50, 51, 56, 367};
-    public final static byte[] pauseOptionsScreenId = new byte[]{(byte) 14, (byte) 1, (byte) 0, (byte) 3, (byte) 5, (byte) 14, (byte) 3};
-    
-    public static int[][] allListOptionsTextId = new int[][]{null, settingsOptionsTextId, pauseOptionsTextId, null};
-    public static byte[][] allListScreenIds = new byte[][]{null, settingsOptionsScreenId, pauseOptionsScreenId, null};
+    public static int[][] allListOptionsTextId = new int[][] {
+		null, 
+		new int[] {42, 43}, 
+		new int[] {57, 58, 0, 50, 51, 56, 367}, 
+		null
+	};
+	
+    public static byte[][] allListScreenIds = new byte[][] {
+		null, 
+		new byte[] {0, 0}, 
+		new byte[] {14, 1, 0, 3, 5, 14, 3}, 
+		null
+	};
+	
     public static Screen[] settingsScreens;
     public static Screen[] pauseScreens;
     public static Screen[][] allListScreens;
