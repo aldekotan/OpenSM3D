@@ -46,6 +46,8 @@ public final class RenderEngine {
     public static byte cameraDoorId;
     private static float cameraXRot, cameraYRot;
     private static int cameraYRotOffset;
+	
+    private static Group playerModel;
 
     public static byte roomsCount;
     private static float[][] roomSettings = new float[15][8];
@@ -59,7 +61,7 @@ public final class RenderEngine {
     //ambient color [5]
     //ambient intensity [6]
     //background color [7]
-    private static int backgroundColor;
+    private static int backgroundColor; //todo remove?
 
     private static byte[] doorsCount = new byte[15];
     private static float[][][] doorSettings = new float[15][5][8];
@@ -102,6 +104,7 @@ public final class RenderEngine {
     //walk to time
     //walk from time
     
+    public static Mesh[] bckMeshes;
     private static byte[] bckMeshesCount = new byte[15];
     private static float[][][] bckMeshSettings = new float[15][32][6];
     //[roomId][mesh][settings]
@@ -112,6 +115,9 @@ public final class RenderEngine {
     //model id [4]
     //scale [5]
     
+    public static Light[] roomLights;
+    private static Light ambientLight;
+    private static int rotatingLightId;
     private static byte[] lightsCount = new byte[15];
     private static float[][][] lightSettings = new float[15][32][5];
     //[roomId][mesh][settings]
@@ -121,6 +127,8 @@ public final class RenderEngine {
     //rotation y [3]
     //light id [4]
     
+    public static Mesh[] roomMeshes;
+    public static Sprite3D[] bckMeshesSprites;
     private static byte[] meshesCount = new byte[15];
     private static float[][][] meshSettings = new float[15][32][8];
     //[roomId][mesh][settings]
@@ -133,6 +141,8 @@ public final class RenderEngine {
     //model id [6]
     //scale [7]
     
+    public static Mesh[] activableObjMeshes;
+    public static Group[] staticBotMdlGroup;
     private static byte[] activableObjsCount = new byte[15];
     private static float[][][] activableObjSettings = new float[15][10][8];
     //[roomId][obj][settings]
@@ -145,6 +155,7 @@ public final class RenderEngine {
     //model id [6]
     //activable object id (0 is unusable) [7]
     
+    public static Group[] roomBotGroups;
     public static byte[] botsCount = new byte[15];
     private static float[][][] botSettings = new float[15][10][15];
     //[roomId][bot][settings]
@@ -185,26 +196,17 @@ public final class RenderEngine {
     public static float[] tmpMehsScale;
     private static boolean isTexture_n_AdressMassivesFull;
     public static boolean showIntro;
-    public static Mesh[] world_meshes_massive;
-    public static Mesh[] mesh_massive_second;
-    public static Mesh[] mesh_massive_third;
-    public static Light[] light_massive_1st;
-    public static Sprite3D[] world_sprites3D_massive;
+	
     private static Sprite3D bloodSprite;
     private static Sprite3D var_e59;
     private static Light var_ea6;
-    public static World lightsWorld;
-    public static Group[] staticBotMdlGroup;
-    public static Group[] botModelGroup;
-    private static Group playerModel;
     private static boolean needToLoadPersM3G;
     public static World persWorld;
+    public static World lightsWorld;
     public static boolean[] FireAnimActiveFrames;
     private static byte[] byte_massive_1st;
     private static byte[] var_12f0;
     private static byte[] var_1310;
-    private static Light light;
-    private static byte RotatingLight;
     public static float[] var_143c;
     public static float[] var_1485;
     public static float[] var_14de;
@@ -256,8 +258,8 @@ public final class RenderEngine {
     private static int[] cropWidth;
     private static int[] cropHeight;
     public static byte var_1fb1;
-    public static boolean[] var_1ffd;
-    private static byte var_205e;
+    public static boolean[] botActive;
+    private static byte botsAlive;
     public static boolean var_20a4;
    //Возвращаю старый дебаггер
     private static int fpsCounterEnabled;
@@ -281,19 +283,19 @@ public final class RenderEngine {
 		
         tmpMehsScale = new float[]{1.0F, 1.0F, 1.0F};
         isTexture_n_AdressMassivesFull = true;
-        world_meshes_massive = new Mesh[32];
-        mesh_massive_second = new Mesh[32];
-        mesh_massive_third = new Mesh[10];
-        light_massive_1st = new Light[32];
-        world_sprites3D_massive = new Sprite3D[32];
+        bckMeshes = new Mesh[32];
+        roomMeshes = new Mesh[32];
+        activableObjMeshes = new Mesh[10];
+        roomLights = new Light[32];
+        bckMeshesSprites = new Sprite3D[32];
         lightsWorld = null;
         staticBotMdlGroup = new Group[10];
-        botModelGroup = new Group[10];
+        roomBotGroups = new Group[10];
         FireAnimActiveFrames = new boolean[32];
         byte_massive_1st = new byte[32];
         var_12f0 = new byte[32];
         var_1310 = new byte[10];
-        RotatingLight = -1;
+        rotatingLightId = -1;
         var_143c = new float[5];
         var_1485 = new float[5];
         var_14de = new float[5];
@@ -321,7 +323,7 @@ public final class RenderEngine {
         var_1eae = -1;
         cropWidth = new int[32];
         cropHeight = new int[32];
-        var_1ffd = new boolean[10];
+        botActive = new boolean[10];
         var_20a4 = true;
 
         try {
@@ -365,7 +367,7 @@ public final class RenderEngine {
     private static void resetLocation() {
         Scripts.var_2204 = false;
         Scripts.locationExclusiveItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
-        var_1ffd = new boolean[10];
+        botActive = new boolean[10];
         botKilled = new boolean[15][10];
     }
 
@@ -392,7 +394,7 @@ public final class RenderEngine {
         PlayerHUD.loadHUDTexturesAndLocationCoorditates();
         LoadingScreen.RunGarbageCollector();
         ConfigureAndActivateCamera();
-        if(botModelGroup[0] == null) //Если модели сталкеров не загружены
+        if(roomBotGroups[0] == null) //Если модели сталкеров не загружены
         {
             Bot.loadBot((byte) 1, (byte) 0);
         }
@@ -412,17 +414,17 @@ public final class RenderEngine {
     }
 
     private static void SetTranformOfAllObjects(byte place_number) {
-        CreateLightInTheWorld(place_number);
+        setRoomEnvironment(place_number);
         LoadingScreen.RunGarbageCollector();
-        OrientAndTranslateLights(place_number);
+        setRoomLights(place_number);
         LoadingScreen.RunGarbageCollector();
-        Meshes_ScaleOrientTranslation(place_number);
+        setRoomBckMeshes(place_number);
         LoadingScreen.RunGarbageCollector();
-        GroupsOrientAndTranslate(place_number);
+        seRoomBots(place_number);
         LoadingScreen.RunGarbageCollector();
-        sub_56b(place_number); //настраивает группы или меши в дополнительной базе
+        setRoomActivableObjs(place_number); //настраивает группы или меши в дополнительной базе
         LoadingScreen.RunGarbageCollector();
-        Meshes_ScaleTranslationPreRotate(place_number);
+        setRoomMeshes(place_number);
         LoadingScreen.RunGarbageCollector();
         SetCameraTranslationAndOrientation(place_number, cameraDoorId);
         LoadingScreen.RunGarbageCollector();
@@ -487,53 +489,53 @@ public final class RenderEngine {
                         default:
                             break label155;
                         case 1:
-                            if(world_meshes_massive[gameObjId] == null) {
-                                world_meshes_massive[gameObjId] = ResourceLoader.loadZ1Model(adress);
+                            if(bckMeshes[gameObjId] == null) {
+                                bckMeshes[gameObjId] = ResourceLoader.loadZ1Model(adress);
                                 System.gc();
-                                gameWorld.addChild(world_meshes_massive[gameObjId]);
-                                world_meshes_massive[gameObjId].getScale(tmpMehsScale);
+                                gameWorld.addChild(bckMeshes[gameObjId]);
+                                bckMeshes[gameObjId].getScale(tmpMehsScale);
 
                                 for(int i = 0; i < 3; ++i) {
                                     tmpMehsScale[i] *= scale;
                                 }
 
-                                world_meshes_massive[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                                world_meshes_massive[gameObjId].setRenderingEnable(true);
+                                bckMeshes[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+                                bckMeshes[gameObjId].setRenderingEnable(true);
                             } else {
-                                gameWorld.addChild(world_meshes_massive[gameObjId]);
-                                world_meshes_massive[gameObjId].setScale(0.1F, 0.1F, 0.1F);
+                                gameWorld.addChild(bckMeshes[gameObjId]);
+                                bckMeshes[gameObjId].setScale(0.1F, 0.1F, 0.1F);
                             }
                             break label155;
                         case 2:
-                            mesh_massive_second[gameObjId] = ResourceLoader.loadZ1Model(adress);
+                            roomMeshes[gameObjId] = ResourceLoader.loadZ1Model(adress);
                             System.gc();
-                            gameWorld.addChild(mesh_massive_second[gameObjId]);
-                            mesh_massive_second[gameObjId].getScale(tmpMehsScale);
+                            gameWorld.addChild(roomMeshes[gameObjId]);
+                            roomMeshes[gameObjId].getScale(tmpMehsScale);
 
                             for(int i = 0; i < 3; ++i) {
                                 tmpMehsScale[i] *= scale;
                             }
 
-                            mesh_massive_second[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                            mesh_massive_second[gameObjId].setRenderingEnable(true);
+                            roomMeshes[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+                            roomMeshes[gameObjId].setRenderingEnable(true);
                             break label155;
                         case 100:
                             if(mdlSource == 4) {
                                 Bot.loadStaticBot(gameObjId, objId);
-                            } else if(mesh_massive_third[gameObjId] == null) {
-                                mesh_massive_third[gameObjId] = ResourceLoader.loadZ1Model(adress);
+                            } else if(activableObjMeshes[gameObjId] == null) {
+                                activableObjMeshes[gameObjId] = ResourceLoader.loadZ1Model(adress);
                                 System.gc();
-                                gameWorld.addChild(mesh_massive_third[gameObjId]);
+                                gameWorld.addChild(activableObjMeshes[gameObjId]);
                             } else {
-                                gameWorld.addChild(mesh_massive_third[gameObjId]);
-                                mesh_massive_third[gameObjId].setScale(0.1F, 0.1F, 0.1F);
+                                gameWorld.addChild(activableObjMeshes[gameObjId]);
+                                activableObjMeshes[gameObjId].setScale(0.1F, 0.1F, 0.1F);
                             }
                             break label155;
                     }
                 case 1:
-                    world_meshes_massive[gameObjId] = null;
-                    world_sprites3D_massive[gameObjId] = ResourceLoader.getSprite(objId);
-                    if(world_sprites3D_massive[gameObjId] != null) {
+                    bckMeshes[gameObjId] = null;
+                    bckMeshesSprites[gameObjId] = ResourceLoader.getSprite(objId);
+                    if(bckMeshesSprites[gameObjId] != null) {
                         if(objectTextureName[objId].equals("sfire1.png")) {
                             FireAnimActiveFrames[gameObjId] = true;
                             cropWidth[gameObjId] = ResourceLoader.getSpriteWidth();
@@ -541,15 +543,15 @@ public final class RenderEngine {
                             AnimateFire();
                         }
 
-                        gameWorld.addChild(world_sprites3D_massive[gameObjId]);
-                        world_sprites3D_massive[gameObjId].getScale(tmpMehsScale);
+                        gameWorld.addChild(bckMeshesSprites[gameObjId]);
+                        bckMeshesSprites[gameObjId].getScale(tmpMehsScale);
 
                         for(int i = 0; i < 3; ++i) {
                             tmpMehsScale[i] *= scale;
                         }
 
-                        world_sprites3D_massive[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                        world_sprites3D_massive[gameObjId].setRenderingEnable(true);
+                        bckMeshesSprites[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+                        bckMeshesSprites[gameObjId].setRenderingEnable(true);
                     }
                     break;
                 case 2:
@@ -566,11 +568,11 @@ public final class RenderEngine {
                         }
 
                         var_ea6 = (Light) lightsWorld.find(objectLightsId[objId]);
-                        light_massive_1st[gameObjId] = (Light) var_ea6.duplicate();
+                        roomLights[gameObjId] = (Light) var_ea6.duplicate();
                         var_ea6 = null;
                         System.gc();
-                        gameWorld.addChild(light_massive_1st[gameObjId]);
-                        light_massive_1st[gameObjId].setRenderingEnable(true);
+                        gameWorld.addChild(roomLights[gameObjId]);
+                        roomLights[gameObjId].setRenderingEnable(true);
                     } catch (Exception var9) {
                         System.out.println("error light loading" + var9);
 
@@ -601,17 +603,17 @@ public final class RenderEngine {
                             }
 
                             Mesh var_e6b = (Mesh) lightsWorld.find(objectLightsId[objId]);
-                            world_meshes_massive[gameObjId] = (Mesh) var_e6b.duplicate();
+                            bckMeshes[gameObjId] = (Mesh) var_e6b.duplicate();
                             System.gc();
-                            gameWorld.addChild(world_meshes_massive[gameObjId]);
-                            world_meshes_massive[gameObjId].getScale(tmpMehsScale);
+                            gameWorld.addChild(bckMeshes[gameObjId]);
+                            bckMeshes[gameObjId].getScale(tmpMehsScale);
 
                             for(int i = 0; i < 3; ++i) {
                                 tmpMehsScale[i] *= scale;
                             }
 
-                            world_meshes_massive[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                            world_meshes_massive[gameObjId].setRenderingEnable(true);
+                            bckMeshes[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+                            bckMeshes[gameObjId].setRenderingEnable(true);
                             break;
                         case 2:
                             try {
@@ -629,18 +631,18 @@ public final class RenderEngine {
                             }
 
                             var_e6b = (Mesh) lightsWorld.find(objectLightsId[objId]);
-                            mesh_massive_second[gameObjId] = (Mesh) var_e6b.duplicate();
+                            roomMeshes[gameObjId] = (Mesh) var_e6b.duplicate();
                             var_e6b = null;
                             System.gc();
-                            gameWorld.addChild(mesh_massive_second[gameObjId]);
-                            mesh_massive_second[gameObjId].getScale(tmpMehsScale);
+                            gameWorld.addChild(roomMeshes[gameObjId]);
+                            roomMeshes[gameObjId].getScale(tmpMehsScale);
 
                             for(int i = 0; i < 3; ++i) {
                                 tmpMehsScale[i] *= scale;
                             }
 
-                            mesh_massive_second[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                            mesh_massive_second[gameObjId].setRenderingEnable(true);
+                            roomMeshes[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+                            roomMeshes[gameObjId].setRenderingEnable(true);
                     }
             }
 
@@ -654,20 +656,19 @@ public final class RenderEngine {
         System.gc();
     }
 
-    private static String ReadStringsFromDataContainer(DataInputStream datacontainer) //Загрузка массива букв
-    {
-        try //На выходе получаются адреса моделей с расширением z1
-        {
-            char[] charmassive = new char[datacontainer.readByte()]; //Прочесть несколько букв и занести в массив
-
-            for(int var2 = 0; var2 < charmassive.length; ++var2) //Заполнить массив буквами
-            {
-                charmassive[var2] = (char) datacontainer.readByte();
+    private static String readStringFromDis(DataInputStream dis) {
+		//Загрузка массива букв
+        try {
+            char[] chars = new char[dis.readByte()]; //Прочесть несколько букв и занести в массив
+			
+			//Заполнить массив буквами
+            for(int i = 0; i < chars.length; ++i)  {
+                chars[i] = (char) dis.readByte();
             }
 
-            return String.valueOf(charmassive);
-        } catch (IOException var3) {
-            var3.printStackTrace();
+            return String.valueOf(chars);
+        } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -684,8 +685,8 @@ public final class RenderEngine {
 					
                     objectModelSource[objId] = dis.readByte(); //0?
                     objectUnusedField[objId] = dis.readByte(); //1?
-                    objectModelName[objId] = ReadStringsFromDataContainer(dis); //Название объекта
-                    objectTextureName[objId] = ReadStringsFromDataContainer(dis); //название текстур
+                    objectModelName[objId] = readStringFromDis(dis); //Название объекта
+                    objectTextureName[objId] = readStringFromDis(dis); //название текстур
 					
                     if(objectModelSource[objId] == 4) {
 						//load from pers??
@@ -970,21 +971,21 @@ public final class RenderEngine {
             }
 
             for(var4 = 0; var4 < var1.length; ++var4) {
-                if(var1[var4] != -1 && world_meshes_massive[var1[var4]] != null && var0[var2[var4]] == null) {
-                    var0[var2[var4]] = (Mesh) world_meshes_massive[var1[var4]].duplicate();
+                if(var1[var4] != -1 && bckMeshes[var1[var4]] != null && var0[var2[var4]] == null) {
+                    var0[var2[var4]] = (Mesh) bckMeshes[var1[var4]].duplicate();
                 }
             }
 
             for(var4 = 0; var4 < 32; ++var4) {
-                gameWorld.removeChild(world_meshes_massive[var4]);
-                world_meshes_massive[var4] = null;
-                gameWorld.removeChild(world_sprites3D_massive[var4]);
-                world_sprites3D_massive[var4] = null;
+                gameWorld.removeChild(bckMeshes[var4]);
+                bckMeshes[var4] = null;
+                gameWorld.removeChild(bckMeshesSprites[var4]);
+                bckMeshesSprites[var4] = null;
             }
 
             for(var4 = 0; var4 < 32; ++var4) {
                 if(var0[var4] != null) {
-                    world_meshes_massive[var4] = (Mesh) var0[var4].duplicate();
+                    bckMeshes[var4] = (Mesh) var0[var4].duplicate();
                 }
             }
 
@@ -997,26 +998,26 @@ public final class RenderEngine {
 
             for(var4 = 1; var4 < 10; ++var4) {
                 if(var4 >= var6) {
-                    gameWorld.removeChild(botModelGroup[var4]);
-                    botModelGroup[var4] = null;
+                    gameWorld.removeChild(roomBotGroups[var4]);
+                    roomBotGroups[var4] = null;
                 }
             }
 
             for(var4 = 0; var4 < 32; ++var4) {
-                gameWorld.removeChild(mesh_massive_second[var4]);
-                mesh_massive_second[var4] = null;
+                gameWorld.removeChild(roomMeshes[var4]);
+                roomMeshes[var4] = null;
             }
 
             System.gc();
 
             for(var4 = 0; var4 < 10; ++var4) {
-                gameWorld.removeChild(mesh_massive_third[var4]);
-                mesh_massive_third[var4] = null;
+                gameWorld.removeChild(activableObjMeshes[var4]);
+                activableObjMeshes[var4] = null;
             }
 
-            for(var4 = 0; var4 < light_massive_1st.length; ++var4) {
-                gameWorld.removeChild(light_massive_1st[var4]);
-                light_massive_1st[var4] = null;
+            for(var4 = 0; var4 < roomLights.length; ++var4) {
+                gameWorld.removeChild(roomLights[var4]);
+                roomLights[var4] = null;
             }
 
             for(var4 = 0; var4 < 10; ++var4) {
@@ -1024,8 +1025,8 @@ public final class RenderEngine {
                 staticBotMdlGroup[var4] = null;
             }
 
-            gameWorld.removeChild(light);
-            light = null;
+            gameWorld.removeChild(ambientLight);
+            ambientLight = null;
             System.gc();
         } catch (Exception var7) {
             var7.printStackTrace();
@@ -1060,7 +1061,7 @@ public final class RenderEngine {
         LoadingScreen.RunGarbageCollector();
         needToLoadPersM3G = true;
         if(botsCount[var0] == 0) {
-            botModelGroup[0].setRenderingEnable(false);
+            roomBotGroups[0].setRenderingEnable(false);
         }
 
         for(var1 = 0; var1 < botsCount[var0]; ++var1) {
@@ -1107,8 +1108,8 @@ public final class RenderEngine {
         if(playerModel == null) {
             playerModel = new Group();
 			
-            if(botModelGroup[0] != null) {
-                playerModel = (Group) botModelGroup[0].duplicate();
+            if(roomBotGroups[0] != null) {
+                playerModel = (Group) roomBotGroups[0].duplicate();
                 System.out.println("STALKER COPIED !!! ");
             }
 
@@ -1153,19 +1154,24 @@ public final class RenderEngine {
         System.arraycopy(cameraPos, 0, prevCameraPos, 0, 3);
     }
 
-    private static void CreateLightInTheWorld(int place_number) {
-        float light_intencity;
-        if((light_intencity = roomSettings[place_number][6] / 100.0F) != 0.0F) {
-            light = new Light();
-            light.setMode(Light.AMBIENT);
-            int light_color = (int) roomSettings[place_number][5];
-            light.setColor(light_color); //(21431)
-            light.setIntensity(light_intencity); //
-            gameWorld.addChild(light);
+    private static void setRoomEnvironment(int roomId) {
+        float lightIntensity = roomSettings[roomId][6] / 100.0F;
+		
+        if(lightIntensity != 0.0F) {
+            ambientLight = new Light();
+            ambientLight.setMode(Light.AMBIENT);
+			
+            int lightCol = (int) roomSettings[roomId][5];
+			
+            ambientLight.setColor(lightCol); //(21431)
+            ambientLight.setIntensity(lightIntensity); //
+			
+            gameWorld.addChild(ambientLight);
         }
 
-        backgroundColor = (int) roomSettings[place_number][7];//
-        if(gameWorld.getBackground() == null) {
+        backgroundColor = (int) roomSettings[roomId][7];//
+        
+		if(gameWorld.getBackground() == null) {
             Background background = new Background();
             gameWorld.setBackground(background);
             //todo отключать очистку фона если мы в здании
@@ -1174,106 +1180,110 @@ public final class RenderEngine {
 
     }
 
-    private static void OrientAndTranslateLights(int place_number) {
-        RotatingLight = -1;
+    private static void setRoomLights(int roomId) {
+        rotatingLightId = -1;
 
-        for(byte light_number = 0; light_number < lightsCount[place_number]; ++light_number) {
-            light_massive_1st[light_number].setOrientation(lightSettings[place_number][light_number][3], 0.0F, 1.0F, 0.0F);
-            light_massive_1st[light_number].setTranslation(lightSettings[place_number][light_number][0], lightSettings[place_number][light_number][1], lightSettings[place_number][light_number][2]);
-            if(light_massive_1st[light_number].getAnimationTrackCount() != 0) {
-                RotatingLight = light_number;
-            }
+        for(int i = 0; i < lightsCount[roomId]; i++) {
+			float x = lightSettings[roomId][i][0];
+			float y = lightSettings[roomId][i][1];
+			float z = lightSettings[roomId][i][2];
+			float rotY = lightSettings[roomId][i][3];
+			
+            roomLights[i].setOrientation(rotY, 0.0F, 1.0F, 0.0F);
+            roomLights[i].setTranslation(x, y, z);
+            
+			if(roomLights[i].getAnimationTrackCount() != 0) rotatingLightId = i;
         }
-
     }
 
-    private static void GroupsOrientAndTranslate(int place_number) {
+    private static void seRoomBots(int roomId) {
         var_1eae = -1;
         var_1fb1 = 0;
 
-        for(byte group_number = 0; group_number < botsCount[place_number]; ++group_number) {
-            var_1dce[group_number] = (int) renderTimeOnly3D + var_1e37;
-            var_1e05[group_number] = (int) renderTimeOnly3D + 500;
-            var_1e92[group_number] = 2;
-            botModelGroup[group_number].setOrientation(botSettings[place_number][group_number][7], 0.0F, 1.0F, 0.0F);
-            SetGroupTranslation(group_number, botSettings[place_number][group_number][0], botSettings[place_number][group_number][6], botSettings[place_number][group_number][1]);
-            botModelGroup[group_number].setTranslation(botPositions[group_number][0], botPositions[group_number][1], botPositions[group_number][2]);
+        for(int i = 0; i < botsCount[roomId]; i++) {
+            var_1dce[i] = (int) renderTimeOnly3D + var_1e37;
+            var_1e05[i] = (int) renderTimeOnly3D + 500;
+            var_1e92[i] = 2;
+			
+            roomBotGroups[i].setOrientation(botSettings[roomId][i][7], 0.0F, 1.0F, 0.0F);
+            setBotPosition(i, botSettings[roomId][i][0], botSettings[roomId][i][6], botSettings[roomId][i][1]);
         }
 
-        if(botsCount[place_number] == 0) {
+        if(botsCount[roomId] == 0) {
             Scripts.giveItemsForKillingAll();
         }
 
         sub_1072();
     }
 
-    private static void Meshes_ScaleOrientTranslation(int place_number) {
-        for(int number_of_mesh = 0; number_of_mesh < bckMeshesCount[place_number]; ++number_of_mesh) {
-            float mesh_transl_1 = bckMeshSettings[place_number][number_of_mesh][0];
-            float mesh_transl_2 = bckMeshSettings[place_number][number_of_mesh][1];
-            float mesh_transl_3 = bckMeshSettings[place_number][number_of_mesh][2];
-            float mesh_scale = bckMeshSettings[place_number][number_of_mesh][5];
-            if(world_meshes_massive[number_of_mesh] != null) {
-                world_meshes_massive[number_of_mesh].getScale(tmpMehsScale);
+    private static void setRoomBckMeshes(int roomId) {
+        for(int i = 0; i < bckMeshesCount[roomId]; i++) {
+			
+            float x = bckMeshSettings[roomId][i][0];
+            float y = bckMeshSettings[roomId][i][1];
+            float z = bckMeshSettings[roomId][i][2];
+            float scale = bckMeshSettings[roomId][i][5];
+			
+            if(bckMeshes[i] != null) {
+                bckMeshes[i].getScale(tmpMehsScale);
 
                 for(byte var6 = 0; var6 < 3; ++var6) {
-                    tmpMehsScale[var6] *= mesh_scale;
+                    tmpMehsScale[var6] *= scale;
                 }
 
-                world_meshes_massive[number_of_mesh].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                world_meshes_massive[number_of_mesh].setOrientation(bckMeshSettings[place_number][number_of_mesh][3], 0.0F, 1.0F, 0.0F);
-                world_meshes_massive[number_of_mesh].setTranslation(mesh_transl_1, mesh_transl_2, mesh_transl_3);
-            } else if(world_sprites3D_massive[number_of_mesh] != null) {
-                world_sprites3D_massive[number_of_mesh].setTranslation(mesh_transl_1, mesh_transl_2, mesh_transl_3);
-                world_sprites3D_massive[number_of_mesh].setScale(mesh_scale, mesh_scale, mesh_scale);
+                bckMeshes[i].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+				
+                bckMeshes[i].setOrientation(bckMeshSettings[roomId][i][3], 0.0F, 1.0F, 0.0F);
+                bckMeshes[i].setTranslation(x, y, z);
+            } else if(bckMeshesSprites[i] != null) {
+                bckMeshesSprites[i].setScale(scale, scale, scale);
+                bckMeshesSprites[i].setTranslation(x, y, z);
             }
         }
-
     }
 
-    private static void Meshes_ScaleTranslationPreRotate(int place_number) {
-        for(int mesh_number = 0; mesh_number < meshesCount[place_number]; ++mesh_number) {
-            if(mesh_massive_second[mesh_number] != null) {
-                float scale = meshSettings[place_number][mesh_number][7];
-                mesh_massive_second[mesh_number].getScale(tmpMehsScale);
+    private static void setRoomMeshes(int roomId) {
+        for(int i = 0; i < meshesCount[roomId]; i++) {
+			Mesh mesh = roomMeshes[i];
+			if(mesh == null) continue;
+			
+			float scale = meshSettings[roomId][i][7];
+			mesh.getScale(tmpMehsScale);
 
-                for(byte var3 = 0; var3 < 3; ++var3) {
-                    tmpMehsScale[var3] *= scale;
-                }
+			for(int t = 0; t < 3; ++t) {
+				tmpMehsScale[t] *= scale;
+			}
+			
+			mesh.setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+			
+			float x = meshSettings[roomId][i][0];
+			float y = meshSettings[roomId][i][1];
+			float z = meshSettings[roomId][i][2];
 
-                mesh_massive_second[mesh_number].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                float x = meshSettings[place_number][mesh_number][0];
-                float y = meshSettings[place_number][mesh_number][1];
-                float z = meshSettings[place_number][mesh_number][2];
-                mesh_massive_second[mesh_number].setTranslation(x, y, z);
-                mesh_massive_second[mesh_number].preRotate(meshSettings[place_number][mesh_number][3], 1.0F, 0.0F, 0.0F);
-                mesh_massive_second[mesh_number].preRotate(meshSettings[place_number][mesh_number][5], 0.0F, 0.0F, 1.0F);
-                mesh_massive_second[mesh_number].preRotate(meshSettings[place_number][mesh_number][4], 0.0F, 1.0F, 0.0F);
-            }
+			mesh.setTranslation(x, y, z);
+			
+			mesh.preRotate(meshSettings[roomId][i][3], 1.0F, 0.0F, 0.0F);
+			mesh.preRotate(meshSettings[roomId][i][5], 0.0F, 0.0F, 1.0F);
+			mesh.preRotate(meshSettings[roomId][i][4], 0.0F, 1.0F, 0.0F);
         }
-
     }
 
-    private static void sub_56b(int place_number) {
-        for(int number = 0; number < activableObjsCount[place_number]; ++number) {
-            float var2;
-            float var3;
-            float var4;
-            if(mesh_massive_third[number] != null) {
-                mesh_massive_third[number].setOrientation(activableObjSettings[place_number][number][4], 0.0F, 1.0F, 0.0F);
-                var2 = activableObjSettings[place_number][number][0];
-                var3 = activableObjSettings[place_number][number][1];
-                var4 = activableObjSettings[place_number][number][2];
-                mesh_massive_third[number].setTranslation(var2, var3, var4);
-            } else if(staticBotMdlGroup[number] != null) {
-                staticBotMdlGroup[number].setOrientation(activableObjSettings[place_number][number][4], 0.0F, 1.0F, 0.0F);
-                var2 = activableObjSettings[place_number][number][0];
-                var3 = activableObjSettings[place_number][number][1];
-                var4 = activableObjSettings[place_number][number][2];
-                staticBotMdlGroup[number].setTranslation(var2, var3, var4);
+    private static void setRoomActivableObjs(int roomId) {
+        for(int i = 0; i < activableObjsCount[roomId]; i++) {
+			float x = activableObjSettings[roomId][i][0];
+			float y = activableObjSettings[roomId][i][1];
+			float z = activableObjSettings[roomId][i][2];
+			
+			float rotY = activableObjSettings[roomId][i][4];
+			
+            if(activableObjMeshes[i] != null) {
+                activableObjMeshes[i].setOrientation(rotY, 0.0F, 1.0F, 0.0F);
+                activableObjMeshes[i].setTranslation(x, y, z);
+            } else if(staticBotMdlGroup[i] != null) {
+                staticBotMdlGroup[i].setOrientation(rotY, 0.0F, 1.0F, 0.0F);
+                staticBotMdlGroup[i].setTranslation(x, y, z);
             }
         }
-
     }
 
     private static float sub_5d9(float x1, float y1, float x2, float y2, float x3, float y3) 
@@ -1518,7 +1528,7 @@ public final class RenderEngine {
 
     private static void sub_844() {
         PlayerHUD.doorLocked = false;
-        if(var_84a[currentLocation][currentRoom] || var_205e == 0) {
+        if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
             for(byte var0 = 0; var0 < doorsCount[currentRoom]; ++var0) {
                 if(cameraYRot > (float) ((int) var_143c[var0] - 10) && cameraYRot < (float) ((int) var_143c[var0] + 10) && cameraXRot >= var_14de[var0] && cameraXRot <= var_1485[var0]) {
                     var_16a2[var0] = true;
@@ -1543,7 +1553,7 @@ public final class RenderEngine {
     }
 
     private static void sub_8d1() {
-        if(var_84a[currentLocation][currentRoom] || var_205e == 0) {
+        if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
             for(byte objId = 0; objId < activableObjsCount[currentRoom]; ++objId) {
                 if(cameraYRot > objYreachAngle[objId] - 5.0F && cameraYRot < objYreachAngle[objId] + 5.0F && cameraXRot >= objXMinReachAngle[objId] && cameraXRot <= objXMaxReachAngle[objId]) {
                     activableObjsStatus[objId] = true;
@@ -1633,7 +1643,7 @@ public final class RenderEngine {
         botIdUndercursor = -100;
         if(var0 < 0) {
             return false;
-        } else if(var_1700[var0] && !botKilled[currentRoom][var0] && var_1ffd[var0] && !var_84a[currentLocation][currentRoom]) {
+        } else if(var_1700[var0] && !botKilled[currentRoom][var0] && botActive[var0] && !var_84a[currentLocation][currentRoom]) {
             botIdUndercursor = var0;
             
             if(!Scripts.var_2602) {
@@ -1829,7 +1839,7 @@ public final class RenderEngine {
     }
 
     public static void sub_c4f(byte var0) {
-        if(var_84a[currentLocation][currentRoom] || var_205e == 0) {
+        if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
             walkCurrentDoorId = cameraDoorId;
             nextRoom = (byte) (loadedDoorsSettings[currentRoom][var0][0] - 1);
             if(nextRoom >= 0) {
@@ -1865,9 +1875,9 @@ public final class RenderEngine {
     }
 
     private static void AnimateLight() {
-        if(RotatingLight != -1) {
+        if(rotatingLightId != -1) {
             int time = (int) renderTimeOnly3D & 1000;
-            light_massive_1st[RotatingLight].animate(time);
+            roomLights[rotatingLightId].animate(time);
         }
 
     }
@@ -1910,7 +1920,7 @@ public final class RenderEngine {
         switch(var_1e92[botIdUndercursor]) {
             case 0:
             case 4:
-                var_e6b = (Mesh) botModelGroup[botIdUndercursor].find(30);
+                var_e6b = (Mesh) roomBotGroups[botIdUndercursor].find(30);
                 var_e6b.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 bloodSprite.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -1918,7 +1928,7 @@ public final class RenderEngine {
             case 1:
             case 2:
             case 3:
-                var_e6b = (Mesh) botModelGroup[botIdUndercursor].find(31);
+                var_e6b = (Mesh) roomBotGroups[botIdUndercursor].find(31);
                 var_e6b.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 bloodSprite.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -1962,7 +1972,7 @@ public final class RenderEngine {
 
         if(var2 <= 500) {
             int var5 = var3 + (var4 - var3) * var2 / 500;
-            botModelGroup[var0].animate(var5);
+            roomBotGroups[var0].animate(var5);
             IsWayAheadLocked = false;
         } else {
             var_1d93 = -1;
@@ -2001,9 +2011,9 @@ public final class RenderEngine {
         var_e59.setRenderingEnable(false);
         if(var4 > var5 / 2 - 750 && var4 < var5 / 2 + 750) {
             var_1db5 = true;
-            botModelGroup[var0].animate(var3);
+            roomBotGroups[var0].animate(var3);
             if(var4 % 300 <= 150) {
-                var_ea6 = (Light) botModelGroup[var_1eae].find(50);
+                var_ea6 = (Light) roomBotGroups[var_1eae].find(50);
                 var_ea6.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
                 var_e59.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
@@ -2027,7 +2037,7 @@ public final class RenderEngine {
                     var11 = float_doublemassive_1st[var0][2] + var8 * (float) var4 / (float) (var_1e37 / 2 - 750);
                     var13 = (var3 - var2) * var4 / (var_1e37 / 2 - 750);
                     var6 = var2 + var13;
-                    botModelGroup[var0].animate(var6);
+                    roomBotGroups[var0].animate(var6);
                 }
 
                 if(var4 >= var5 / 2 + 750) {
@@ -2035,10 +2045,10 @@ public final class RenderEngine {
                     var11 = float_doublemassive_1st[var0][2] + var8 * (float) (var5 - var4) / (float) (var_1e37 / 2 - 750);
                     var13 = (var3 - var2) * (var5 - var4) / (var_1e37 / 2 - 750);
                     var6 = var2 + var13;
-                    botModelGroup[var0].animate(var6);
+                    roomBotGroups[var0].animate(var6);
                 }
 
-                botModelGroup[var0].setTranslation(var9, var10, var11);
+                roomBotGroups[var0].setTranslation(var9, var10, var11);
             } else {
                 var_1e92[var0] = -1;
             }
@@ -2050,7 +2060,7 @@ public final class RenderEngine {
     }
 
     private static boolean sub_eee(byte var0) {
-        return var_1ffd[var0] && !botKilled[currentRoom][var0] && sub_e95(var_1eae);
+        return botActive[var0] && !botKilled[currentRoom][var0] && sub_e95(var_1eae);
     }
 
     private static void sub_f2e() {
@@ -2106,7 +2116,7 @@ public final class RenderEngine {
                 var_1e92[var3] = var5;
                 sub_775(var3, currentRoom, var5);
                 var_1eae = var3;
-                SetGroupTranslation(var3, var1, var4, var2);
+                setBotPosition(var3, var1, var4, var2);
                 float_doublemassive_1st[var3][0] = botSettings[currentRoom][var3][0];
                 float_doublemassive_1st[var3][1] = botSettings[currentRoom][var3][6];
                 float_doublemassive_1st[var3][2] = botSettings[currentRoom][var3][1];
@@ -2126,8 +2136,8 @@ public final class RenderEngine {
                     var1 = botSettings[currentRoom][botId][0];
                     var2 = botSettings[currentRoom][botId][1];
                     float var7 = botSettings[currentRoom][botId][6];
-                    SetGroupTranslation(botId, var1, var7, var2);
-                    botModelGroup[botId].animate(200);
+                    setBotPosition(botId, var1, var7, var2);
+                    roomBotGroups[botId].animate(200);
                 }
             }
 
@@ -2138,16 +2148,16 @@ public final class RenderEngine {
                 for(botId = 0; botId < var0; ++botId) {
                     //если атакует?
                     if(Scripts.var_2602) {
-                        botModelGroup[botId].setRenderingEnable(true);
+                        roomBotGroups[botId].setRenderingEnable(true);
                     } else {
                         //отключить отрисовку, если спрятался за укрытием
                         if(!botKilled[currentRoom][botId] && botId != var_1eae) {
-                            botModelGroup[botId].setRenderingEnable(false);
+                            roomBotGroups[botId].setRenderingEnable(false);
                         }
 
                         //включить анимацию смерти
                         if(botKilled[currentRoom][botId]) {
-                            botModelGroup[botId].animate(2000);
+                            roomBotGroups[botId].animate(2000);
                         }
                     }
                 }
@@ -2156,11 +2166,12 @@ public final class RenderEngine {
         }
     }
 
-    private static void SetGroupTranslation(byte group_number, float trans_x, float trans_y, float trans_z) {
-        botPositions[group_number][0] = trans_x;
-        botPositions[group_number][1] = trans_y;
-        botPositions[group_number][2] = trans_z;
-        botModelGroup[group_number].setTranslation(trans_x, trans_y, trans_z);
+    private static void setBotPosition(int botId, float x, float y, float z) {
+        botPositions[botId][0] = x;
+        botPositions[botId][1] = y;
+        botPositions[botId][2] = z;
+		
+        roomBotGroups[botId].setTranslation(x, y, z);
     }
 
     private static void AnimateFire() {
@@ -2169,7 +2180,7 @@ public final class RenderEngine {
                 int cropWidth = RenderEngine.cropWidth[FrameNumber] / 8;
                 int frame_to_time = (int) (renderTimeOnly3D + (long) (FrameNumber * 300)) % 1000 / 200;
                 int cropX = cropWidth * frame_to_time;
-                world_sprites3D_massive[FrameNumber].setCrop(cropX, 0, cropWidth, cropHeight[FrameNumber]);
+                bckMeshesSprites[FrameNumber].setCrop(cropX, 0, cropWidth, cropHeight[FrameNumber]);
             }
         }
 
@@ -2203,25 +2214,26 @@ public final class RenderEngine {
     }
 
     private static void sub_1072() {
-        var_205e = 0;
+        botsAlive = 0;
 
         for(int i = 0; i < botsCount[currentRoom]; ++i) {
             if(Scripts.var_2602) {
-                botModelGroup[i].setRenderingEnable(true);
+                roomBotGroups[i].setRenderingEnable(true);
             } else {
-                if(botSettings[currentRoom][i][8] - 1.0F != (float) cameraDoorId) {
-                    botModelGroup[i].setRenderingEnable(false);
-                    var_1ffd[i] = false;
+                if(botSettings[currentRoom][i][8] - 1 != cameraDoorId) {
+                    roomBotGroups[i].setRenderingEnable(false);
+                    botActive[i] = false;
                 } else {
-                    botModelGroup[i].setRenderingEnable(true);
-                    var_1ffd[i] = true;
+                    roomBotGroups[i].setRenderingEnable(true);
+                    botActive[i] = true;
+					
                     if(!botKilled[currentRoom][i]) {
-                        ++var_205e;
+                        botsAlive++;
                     }
                 }
 
                 if(var_84a[currentLocation][currentRoom] || botKilled[currentRoom][i]) {
-                    botModelGroup[i].setRenderingEnable(true);
+                    roomBotGroups[i].setRenderingEnable(true);
                 }
             }
         }
@@ -2343,42 +2355,42 @@ public final class RenderEngine {
     }
 
     public static void SetToNullAllWorldnMeshMassives() {
-        RotatingLight = -1;
+        rotatingLightId = -1;
 
         int number;
         for(number = 0; number < 32; ++number) {
-            gameWorld.removeChild(world_meshes_massive[number]);
-            world_meshes_massive[number] = null;
-            gameWorld.removeChild(world_sprites3D_massive[number]);
-            world_sprites3D_massive[number] = null;
+            gameWorld.removeChild(bckMeshes[number]);
+            bckMeshes[number] = null;
+            gameWorld.removeChild(bckMeshesSprites[number]);
+            bckMeshesSprites[number] = null;
         }
 
         System.gc();
 
         for(number = 0; number < 10; ++number) {
-            gameWorld.removeChild(botModelGroup[number]);
-            botModelGroup[number] = null;
+            gameWorld.removeChild(roomBotGroups[number]);
+            roomBotGroups[number] = null;
         }
 
         System.gc();
 
         for(number = 0; number < 32; ++number) {
-            gameWorld.removeChild(mesh_massive_second[number]);
-            mesh_massive_second[number] = null;
+            gameWorld.removeChild(roomMeshes[number]);
+            roomMeshes[number] = null;
         }
 
         System.gc();
 
         for(number = 0; number < 10; ++number) {
-            gameWorld.removeChild(mesh_massive_third[number]);
-            mesh_massive_third[number] = null;
+            gameWorld.removeChild(activableObjMeshes[number]);
+            activableObjMeshes[number] = null;
         }
 
         System.gc();
 
         for(number = 0; number < 32; ++number) {
-            gameWorld.removeChild(light_massive_1st[number]);
-            light_massive_1st[number] = null;
+            gameWorld.removeChild(roomLights[number]);
+            roomLights[number] = null;
         }
 
         System.gc();
@@ -2392,8 +2404,8 @@ public final class RenderEngine {
         gameWorld.removeChild(playerModel);
         playerModel = null;
         System.gc();
-        gameWorld.removeChild(light);
-        light = null;
+        gameWorld.removeChild(ambientLight);
+        ambientLight = null;
         System.gc();
         var_20a4 = true;
     }

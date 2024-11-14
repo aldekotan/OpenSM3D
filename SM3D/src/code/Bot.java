@@ -45,15 +45,15 @@ public final class Bot //Персонажи, модели, освещение, �
 
 		botTypes[botId] = (byte) botType;
 		
-		if(RenderEngine.botModelGroup[botId] == null) {
-			if(RenderEngine.botModelGroup[0] == null) {
-				RenderEngine.botModelGroup[0] = new Group();
+		if(RenderEngine.roomBotGroups[botId] == null) {
+			if(RenderEngine.roomBotGroups[0] == null) {
+				RenderEngine.roomBotGroups[0] = new Group();
 
 				for(int i = 0; i < 12; ++i) {
 					Mesh bodyPart = (Mesh) RenderEngine.persWorld.find(i + 1);
 					Mesh meshCopy = (Mesh) bodyPart.duplicate();
 					
-					RenderEngine.botModelGroup[0].addChild(meshCopy);
+					RenderEngine.roomBotGroups[0].addChild(meshCopy);
 				}
 
 				for(int i = 30; i < 34; ++i) {
@@ -61,20 +61,20 @@ public final class Bot //Персонажи, модели, освещение, �
 					Mesh meshCopy = (Mesh) bloodSpawnMesh.duplicate();
 					
 					meshCopy.setRenderingEnable(false);
-					RenderEngine.botModelGroup[0].addChild(meshCopy);
+					RenderEngine.roomBotGroups[0].addChild(meshCopy);
 				}
 
 				Light flash = (Light) RenderEngine.persWorld.find(50);
 				Light lightCopy = (Light) flash.duplicate();
 				
 				lightCopy.setRenderingEnable(false);
-				RenderEngine.botModelGroup[0].addChild(lightCopy);
+				RenderEngine.roomBotGroups[0].addChild(lightCopy);
 			} else {
-				RenderEngine.botModelGroup[botId] = (Group) RenderEngine.botModelGroup[0].duplicate();
+				RenderEngine.roomBotGroups[botId] = (Group) RenderEngine.roomBotGroups[0].duplicate();
 			}
 
-			RenderEngine.botModelGroup[botId].setRenderingEnable(false);
-			RenderEngine.gameWorld.addChild(RenderEngine.botModelGroup[botId]);
+			RenderEngine.roomBotGroups[botId].setRenderingEnable(false);
+			RenderEngine.gameWorld.addChild(RenderEngine.roomBotGroups[botId]);
 		}
 		
 		setBotType(botType, botId);
@@ -108,7 +108,7 @@ public final class Bot //Персонажи, модели, освещение, �
 
 		Mesh weaponMesh = (Mesh) RenderEngine.persWorld.find(weaponId);
 		Mesh weaponCopy = (Mesh) weaponMesh.duplicate();
-		RenderEngine.botModelGroup[botId].addChild(weaponCopy);
+		RenderEngine.roomBotGroups[botId].addChild(weaponCopy);
 	}
 
 	private static void setBotAppearance(byte botType, int botId) {
@@ -135,7 +135,7 @@ public final class Bot //Персонажи, модели, освещение, �
 		ap.setMaterial(mat);
 
 		for(int i = 0; i < 12; i++) {
-			Mesh bodyPart = (Mesh) RenderEngine.botModelGroup[botId].find(i + 1);
+			Mesh bodyPart = (Mesh) RenderEngine.roomBotGroups[botId].find(i + 1);
 			bodyPart.setAppearance(0, ap);
 		}
 
@@ -146,8 +146,8 @@ public final class Bot //Персонажи, модели, освещение, �
 	}
 
 	public static void loadStaticBot(byte botId, byte persId) { 
-		if(RenderEngine.botModelGroup[0] != null) {	
-			Group botMdlCopy = (Group) RenderEngine.botModelGroup[0].duplicate();
+		if(RenderEngine.roomBotGroups[0] != null) {	
+			Group botMdlCopy = (Group) RenderEngine.roomBotGroups[0].duplicate();
 			RenderEngine.staticBotMdlGroup[botId] = botMdlCopy;
 		}
 
