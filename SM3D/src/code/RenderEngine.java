@@ -2213,7 +2213,7 @@ public final class RenderEngine {
         var_84a[currentLocation][currentRoom] = var0 == botsCount[currentRoom];
     }
 
-    private static void sub_1072() {
+    private static void sub_1072() {//выглядывание ботов
         botsAlive = 0;
 
         for(int i = 0; i < botsCount[currentRoom]; ++i) {
