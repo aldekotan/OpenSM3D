@@ -138,7 +138,7 @@ public final class MainMenuScreen implements Screen
       if(screenId == 16) 
       {
          SoundAndVibro.soundsEnabled = false;
-         ResourseManager.saveGameSettings();
+         ResourseManager.saveSettings();
          ((SettingsScreen)AllScreens.settingsScreen).loadSettings();
       }
 

@@ -665,7 +665,7 @@ public final class PlayerHUD {
 
         for (byte locId = 0; locId < 17; ++locId) {
             if (Scripts.sub_819(locId) || locId == RenderEngine.currentLocation || locId == previousLocation) {
-                if (!RenderEngine.bool_massive_3th[locId] && locId != 0) {
+                if (!RenderEngine.locationCampMark[locId] && locId != 0) {
                     ResourseManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
                 } else {
                     ResourseManager.DrawInterfaceImageToSelectedRegion(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);

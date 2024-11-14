@@ -92,7 +92,7 @@ public class Main extends MIDlet
 
    public final void destroyApp(boolean var1) 
    {
-      ResourseManager.saveGameSettings();
+      ResourseManager.saveSettings();
       this.notifyDestroyed();
    }
 

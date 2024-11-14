@@ -413,7 +413,7 @@ public final class ItemsInteraction implements Screen
 
             while(true) 
             {
-               if(itemIndex >= Scripts.CurrentNumberOfInventaryItems) 
+               if(itemIndex >= Scripts.inventoryItemsCount) 
                {
                   break label36;
                }

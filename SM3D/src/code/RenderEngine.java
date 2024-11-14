@@ -29,9 +29,9 @@ public final class RenderEngine {
     public static byte currentRoom;
     private static byte nextRoom;
     
-    public static boolean[] bool_massive_1st = new boolean[17];
-    public static boolean[] bool_massive_2th = new boolean[17];
-    public static boolean[] bool_massive_3th = new boolean[17];
+    public static boolean[] locationCompleted = new boolean[17];
+    public static boolean[] locationTaskMark = new boolean[17];
+    public static boolean[] locationCampMark = new boolean[17];
     public static boolean gamePaused;
     public static Graphics3D graphics3D;
     public static World gameWorld = new World();
@@ -354,10 +354,10 @@ public final class RenderEngine {
         //13 - друзья беломора
         nextLocation = 0;
         showIntro = true; //не посмотрел интро
-        bool_massive_1st = new boolean[17];
-        bool_massive_2th = new boolean[17];
-        bool_massive_3th = new boolean[17];
-        bool_massive_3th[1] = true;
+        locationCompleted = new boolean[17];
+        locationTaskMark = new boolean[17];
+        locationCampMark = new boolean[17];
+        locationCampMark[1] = true;
         var_16a2 = new boolean[5];
         activableObjsStatus = new boolean[10];
         var_1700 = new boolean[10];

@@ -87,16 +87,16 @@ public final class ResourseManager {
 			
             dis.writeInt(RenderEngine.currentLocation);
 
-            for(int i = 0; i < RenderEngine.bool_massive_1st.length; i++) {
-                dis.writeBoolean(RenderEngine.bool_massive_1st[i]);
+            for(int i = 0; i < RenderEngine.locationCompleted.length; i++) {
+                dis.writeBoolean(RenderEngine.locationCompleted[i]);
             }
 
-            for(int i = 0; i < RenderEngine.bool_massive_2th.length; i++) {
-                dis.writeBoolean(RenderEngine.bool_massive_2th[i]);
+            for(int i = 0; i < RenderEngine.locationTaskMark.length; i++) {
+                dis.writeBoolean(RenderEngine.locationTaskMark[i]);
             }
 
-            for(int i = 0; i < RenderEngine.bool_massive_3th.length; i++) {
-                dis.writeBoolean(RenderEngine.bool_massive_3th[i]);
+            for(int i = 0; i < RenderEngine.locationCampMark.length; i++) {
+                dis.writeBoolean(RenderEngine.locationCampMark[i]);
             }
 
             dis.writeShort(Scripts.inventoryItemsCount);
@@ -201,16 +201,16 @@ public final class ResourseManager {
             try {
                 RenderEngine.currentLocation = dis.readInt();
 
-                for(int i = 0; i < RenderEngine.bool_massive_1st.length; i++) {
-                    RenderEngine.bool_massive_1st[i] = dis.readBoolean();
+                for(int i = 0; i < RenderEngine.locationCompleted.length; i++) {
+                    RenderEngine.locationCompleted[i] = dis.readBoolean();
                 }
 
-                for(int i = 0; i < RenderEngine.bool_massive_2th.length; i++) {
-                    RenderEngine.bool_massive_2th[i] = dis.readBoolean();
+                for(int i = 0; i < RenderEngine.locationTaskMark.length; i++) {
+                    RenderEngine.locationTaskMark[i] = dis.readBoolean();
                 }
 
-                for(int i = 0; i < RenderEngine.bool_massive_3th.length; i++) {
-                    RenderEngine.bool_massive_3th[i] = dis.readBoolean();
+                for(int i = 0; i < RenderEngine.locationCampMark.length; i++) {
+                    RenderEngine.locationCampMark[i] = dis.readBoolean();
                 }
 
                 Scripts.inventoryItemsCount = dis.readShort();

@@ -113,7 +113,7 @@ public final class LoadingScreen implements Screen {
     {
         switch(this.toLoad) {
             case 4: //сохранение игровых настроек
-                ResourseManager.saveGameSettings();
+                ResourseManager.saveSettings();
                 break;
             case 5:
                 ResourseManager.sub_4d();
@@ -131,7 +131,7 @@ public final class LoadingScreen implements Screen {
                 RenderEngine.init();
                 break;
             case 12: //загрузка сохранённой игры
-                ResourseManager.LoadSavedGameFile();
+                ResourseManager.loadGameSave();
                 PlayerHUD.loadLocationsCoordinates();
                 Scripts.sub_72f();
         }
@@ -156,7 +156,7 @@ public final class LoadingScreen implements Screen {
             TextCreator.sub_607();
             Main.main.sub_2c();
             ResourseManager.loadAllInterfaceImages();
-            ResourseManager.LoadGameSettings();
+            ResourseManager.loadSettings();
         }
 
         Main.main.repaint();

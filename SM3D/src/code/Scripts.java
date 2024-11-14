@@ -1750,7 +1750,7 @@ public final class Scripts {
 
     private static void addMarkToPDA(byte var0) {
         var_2204 = true;
-        RenderEngine.bool_massive_2th[var0] = true;
+        RenderEngine.locationTaskMark[var0] = true;
     }
 
     public static byte getLocationNameId(byte var0) {
@@ -1774,15 +1774,15 @@ public final class Scripts {
     }
 
     public static boolean sub_819(int var0) {
-        return !RenderEngine.bool_massive_1st[var0] && (RenderEngine.bool_massive_3th[var0] || RenderEngine.bool_massive_2th[var0]) || RenderEngine.currentLocation == var0;
+        return !RenderEngine.locationCompleted[var0] && (RenderEngine.locationCampMark[var0] || RenderEngine.locationTaskMark[var0]) || RenderEngine.currentLocation == var0;
     }
 
     private static void GoToNextLocation() {
         PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) RenderEngine.currentLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
         RenderEngine.nextLocation = RenderEngine.currentLocation;
         if (var_2204) {
-            RenderEngine.bool_massive_3th[RenderEngine.currentLocation] = RenderEngine.currentLocation == 1 || RenderEngine.currentLocation == 6 || RenderEngine.currentLocation == 12;
-            RenderEngine.bool_massive_1st[RenderEngine.currentLocation] = !RenderEngine.bool_massive_3th[RenderEngine.currentLocation];
+            RenderEngine.locationCampMark[RenderEngine.currentLocation] = RenderEngine.currentLocation == 1 || RenderEngine.currentLocation == 6 || RenderEngine.currentLocation == 12;
+            RenderEngine.locationCompleted[RenderEngine.currentLocation] = !RenderEngine.locationCampMark[RenderEngine.currentLocation];
             if (RenderEngine.currentLocation == StoryLocationMassive[0]) {
                 rustyDialogState = 3;
                 playerExp = (short) (playerExp + 20);
@@ -2491,7 +2491,7 @@ public final class Scripts {
                             dialogCompleted = true;
                             playerMoney = (short) (playerMoney - 500);
                             addMarkToPDA((byte) 9);
-                            RenderEngine.bool_massive_1st[StoryLocationMassive[6]] = true;
+                            RenderEngine.locationCompleted[StoryLocationMassive[6]] = true;
                             batyaDialogState = 3;
                         }
                         break;
@@ -2837,8 +2837,8 @@ public final class Scripts {
                         koboldDialogState = 0;
                         RenderEngine.var_7ee = RenderEngine.currentRoom;
                         RenderEngine.currentLocation = 16;
-                        RenderEngine.bool_massive_3th[RenderEngine.currentLocation] = RenderEngine.currentLocation == 1 || RenderEngine.currentLocation == 6 || RenderEngine.currentLocation == 12;
-                        RenderEngine.bool_massive_1st[RenderEngine.currentLocation] = !RenderEngine.bool_massive_3th[RenderEngine.currentLocation];
+                        RenderEngine.locationCampMark[RenderEngine.currentLocation] = RenderEngine.currentLocation == 1 || RenderEngine.currentLocation == 6 || RenderEngine.currentLocation == 12;
+                        RenderEngine.locationCompleted[RenderEngine.currentLocation] = !RenderEngine.locationCampMark[RenderEngine.currentLocation];
                         RenderEngine.setDialogWindowState((short) -2);
                         RenderEngine.setActiveObjState(var_23b6, (short) 0);
                         return;
