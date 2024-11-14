@@ -35,7 +35,7 @@ public final class InventoryScreen implements Screen
       ResourseManager.drawUserInterfaceItems(MasterCanvas.graphics, 80, 0, 0);
 
       //Рисуем поле с текущим/максимальным переносимым весом
-      byte[] currentPlayerWeight = TextCreator.CreateTextMassiveForNumber(Scripts.ActorCurrentWeight);
+      byte[] currentPlayerWeight = TextCreator.CreateTextMassiveForNumber(Scripts.playerWeight);
       //"кг/"
       byte[] kgSlash = TextCreator.CopyReplicToNewMassive(65);
       byte[] leftPartText = TextCreator.combineTextMassives(currentPlayerWeight, kgSlash);
@@ -59,7 +59,7 @@ public final class InventoryScreen implements Screen
       
       short[] moneyText;
       //106 - символ доллара
-      (moneyText = TextCreator.surroundNumberWithChars(Scripts.CurrentActorMoney,
+      (moneyText = TextCreator.surroundNumberWithChars(Scripts.playerMoney,
               false))[moneyText.length - 1] = 106;
       x_dest = ResourseManager.getUIElementXcoord(39, 21);
       y_dest = ResourseManager.getUIElementYcoord(39, 21);

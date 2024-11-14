@@ -28,246 +28,257 @@ public final class ResourseManager {
     public static short[] MassiveY_startOfInterfaceImage;
     public static short[] var_419;
 
-    public static void saveGameSettings() {
-        byte[] settings;
-        (settings = new byte[3])[0] = (byte) (SoundAndVibro.soundsEnabled ? 1 : 0);
+    public static void saveSettings() {
+        byte[] settings = new byte[3];
+		
+        settings[0] = (byte) (SoundAndVibro.soundsEnabled ? 1 : 0);
         settings[1] = (byte) (SoundAndVibro.vibroEnabled ? 1 : 0);
         settings[2] = Main.main.numberOfPlayers;
-        recreateSettingsSaveFile(settings, "qpset");
+		
+        saveArrayToRms(settings, "qpset");
+		
         System.out.println("ResourceManager.saveSettings: settings saved");
     }
 
     public static void sub_4d() {//
         try {
             byte[][] tempMassive = Main.main.sub_1d8();
+			
             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-            DataOutputStream dataOutput;
-            (dataOutput = new DataOutputStream(byteArray)).writeByte(Main.main.numberOfPlayers);
+            DataOutputStream dataOutput = new DataOutputStream(byteArray);
+			
+            dataOutput.writeByte(Main.main.numberOfPlayers);
 
             for (int i = 0; i < Main.main.numberOfPlayers; ++i) {
                 dataOutput.writeByte((byte) tempMassive[i].length);
                 dataOutput.write(tempMassive[i]);
             }
 
-            recreateSettingsSaveFile(byteArray.toByteArray(), "qppla");
+            saveArrayToRms(byteArray.toByteArray(), "qppla");
             byteArray.close();
         } catch (IOException var4) {
             var4.printStackTrace();
         }
     }
 
-    private static void recreateSettingsSaveFile(byte[] settingsMassive, String saveFileName) {
-        try {
-            try {
-                RecordStore.deleteRecordStore(saveFileName);
-            } catch (RecordStoreException var3) {
-                System.out.println("Saving data/ delating old store/ exception: there is no store" + saveFileName);
-                var3.printStackTrace();
-            }
+    private static void saveArrayToRms(byte[] data, String saveName) {
+		try {
+			RecordStore.deleteRecordStore(saveName);
+		} catch (RecordStoreException e) {
+			System.out.println("Saving data/ delating old store/ exception: there is no store" + saveName);
+			e.printStackTrace();
+		}
 
-            RecordStore recStore;
-            (recStore = RecordStore.openRecordStore(saveFileName, true)).addRecord(settingsMassive, 0, settingsMassive.length);
+        try {
+            RecordStore recStore = RecordStore.openRecordStore(saveName, true);
+            recStore.addRecord(data, 0, data.length);
             recStore.closeRecordStore();
-        } catch (RecordStoreException var4) {
-            var4.printStackTrace();
+        } catch (RecordStoreException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void WriteSavedGame() {
+    public static void saveGame() {
         Main.main.numberOfPlayers = 1;
 
         try {
-            ByteArrayOutputStream var0 = new ByteArrayOutputStream();
-            DataOutputStream var1;
-            (var1 = new DataOutputStream(var0)).writeInt(RenderEngine.currentLocation);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            DataOutputStream dis = new DataOutputStream(baos);
+			
+            dis.writeInt(RenderEngine.currentLocation);
 
-            int var2;
-            for (var2 = 0; var2 < RenderEngine.bool_massive_1st.length; ++var2) {
-                var1.writeBoolean(RenderEngine.bool_massive_1st[var2]);
+            for(int i = 0; i < RenderEngine.bool_massive_1st.length; i++) {
+                dis.writeBoolean(RenderEngine.bool_massive_1st[i]);
             }
 
-            for (var2 = 0; var2 < RenderEngine.bool_massive_2th.length; ++var2) {
-                var1.writeBoolean(RenderEngine.bool_massive_2th[var2]);
+            for(int i = 0; i < RenderEngine.bool_massive_2th.length; i++) {
+                dis.writeBoolean(RenderEngine.bool_massive_2th[i]);
             }
 
-            for (var2 = 0; var2 < RenderEngine.bool_massive_3th.length; ++var2) {
-                var1.writeBoolean(RenderEngine.bool_massive_3th[var2]);
+            for(int i = 0; i < RenderEngine.bool_massive_3th.length; i++) {
+                dis.writeBoolean(RenderEngine.bool_massive_3th[i]);
             }
 
-            var1.writeShort(Scripts.CurrentNumberOfInventaryItems);
+            dis.writeShort(Scripts.inventoryItemsCount);
 
-            for (var2 = 0; var2 < Scripts.CurrentNumberOfInventaryItems; ++var2) {
-                var1.writeShort(Scripts.inventoryItems[var2]);
+            for(int i = 0; i < Scripts.inventoryItemsCount; i++) {
+                dis.writeShort(Scripts.inventoryItems[i]);
             }
 
-            for (var2 = 0; var2 < Scripts.equipmentSlots.length; ++var2) {
-                var1.writeShort(Scripts.equipmentSlots[var2]);
+            for(int i = 0; i < Scripts.equipmentSlots.length; i++) {
+                dis.writeShort(Scripts.equipmentSlots[i]);
             }
 
-            var1.writeByte(Scripts.playerActiveWeapon);
-            var1.writeShort(Scripts.ActorCurrentHealth);
-            var1.writeShort(Scripts.ActorCurrentWeight);
-            var1.writeShort(Scripts.CurrentActorMoney);
-            var1.writeShort(Scripts.playerMaxHealth);
-            var1.writeShort(Scripts.playerMaxWeight);
-            var1.writeByte(Scripts.playerAccuracy);
-            var1.writeByte(Scripts.playerBulletProtection);
-            var1.writeByte(Scripts.playerRadiationResistance);
-            var1.writeByte(Scripts.playerAnomalyResistance);
-            var1.writeShort(Scripts.currentPlayerLevel);
-            var1.writeShort(Scripts.CurrentActorExpirience);
+            dis.writeByte(Scripts.playerActiveWeapon);
+            dis.writeShort(Scripts.playerHealth);
+            dis.writeShort(Scripts.playerWeight);
+            dis.writeShort(Scripts.playerMoney);
+            dis.writeShort(Scripts.playerMaxHealth);
+            dis.writeShort(Scripts.playerMaxWeight);
+            dis.writeByte(Scripts.playerAccuracy);
+            dis.writeByte(Scripts.playerBulletProtection);
+            dis.writeByte(Scripts.playerRadiationResistance);
+            dis.writeByte(Scripts.playerAnomalyResistance);
+            dis.writeShort(Scripts.playerLevel);
+            dis.writeShort(Scripts.playerExp);
 
-            byte var4;
-            for (var4 = 0; var4 < Scripts.CurrentActorCharLevelsMassive.length; ++var4) {
-                var1.writeByte(Scripts.CurrentActorCharLevelsMassive[var4]);
+			//Accuracy, max health, max weight
+            for(int i = 0; i < Scripts.playerStatLevel.length; i++) {
+                dis.writeByte(Scripts.playerStatLevel[i]);
             }
 
-            for (var4 = 0; var4 < 4; ++var4) {
-                var1.writeShort(Scripts.MassiveActorAmmo[var4]);
+            for(int i = 0; i < 4; i++) {
+                dis.writeShort(Scripts.playerWeaponsAmmo[i]);
             }
 
-            var1.writeByte(Scripts.batyaDialogState);
-            var1.writeByte(Scripts.rustyDialogState);
+            dis.writeByte(Scripts.batyaDialogState);
+            dis.writeByte(Scripts.rustyDialogState);
             //"Всего хорошего, нашёл идиота" = 1
             //Первое задание ржавого взято = 2
             //Бандиты на лесной дороге убиты = 3
             //Взято задание на канализацию = 4
             //Получена рация = 6
-            var1.writeByte(Scripts.trusDialogState);
-            var1.writeByte(Scripts.svistunDialogState);
-            var1.writeByte(Scripts.botanikDialogState);
-            var1.writeByte(Scripts.zaborDialogState);
+            dis.writeByte(Scripts.trusDialogState);
+            dis.writeByte(Scripts.svistunDialogState);
+            dis.writeByte(Scripts.botanikDialogState);
+            dis.writeByte(Scripts.zaborDialogState);
             //Диалог с забором = 1
-            var1.writeByte(Scripts.galoshQuestState);
+            dis.writeByte(Scripts.galoshQuestState);
             //Задание Галоша выполнено = 1
-            var1.writeByte(Scripts.shlangDialogState);
-            var1.writeByte(Scripts.militaryDialogState);
+            dis.writeByte(Scripts.shlangDialogState);
+            dis.writeByte(Scripts.militaryDialogState);
             //Первое задание по рации = 1
-            var1.writeByte(Scripts.prizrakDialogState);
-            var1.writeByte(Scripts.kaynazovskiDialogState);
-            var1.writeByte(Scripts.krotDialogState);
-            var1.writeByte(Scripts.haryaDialogState);
-            var1.writeByte(Scripts.commanderDialogState);
-            var1.writeByte(Scripts.manikovskiDialogState);
-            var1.writeByte(Scripts.gutalinDialogState);
-            var1.writeByte(Scripts.belomorDialogState);
-            var1.writeByte(Scripts.koboldDialogState);
+            dis.writeByte(Scripts.prizrakDialogState);
+            dis.writeByte(Scripts.kaynazovskiDialogState);
+            dis.writeByte(Scripts.krotDialogState);
+            dis.writeByte(Scripts.haryaDialogState);
+            dis.writeByte(Scripts.commanderDialogState);
+            dis.writeByte(Scripts.manikovskiDialogState);
+            dis.writeByte(Scripts.gutalinDialogState);
+            dis.writeByte(Scripts.belomorDialogState);
+            dis.writeByte(Scripts.koboldDialogState);
             //В начале игры 1
-            var1.writeBoolean(Scripts.var_2544);
-            var1.writeBoolean(Scripts.var_25bf);
-            var1.writeByte(PlayerHUD.previousLocation);
-            recreateSettingsSaveFile(var0.toByteArray(), "qpmrsp");
-            var0.close();
-        } catch (IOException var3) {
-            var3.printStackTrace();
+            dis.writeBoolean(Scripts.svistunQuestCompleted);
+            dis.writeBoolean(Scripts.capItemGot);
+			
+            dis.writeByte(PlayerHUD.previousLocation);
+			
+            saveArrayToRms(baos.toByteArray(), "qpmrsp");
+            baos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void LoadGameSettings() {
+    public static void loadSettings() {
         System.out.println("ResourceManager.loadSettings");
 
         try {
-            RecordStore settingsbytemassive = RecordStore.openRecordStore("qpset", false);
-            byte[] var1 = settingsbytemassive.getRecord(1);
+            RecordStore rs = RecordStore.openRecordStore("qpset", false);
+            byte[] data = rs.getRecord(1);
 
-            SoundAndVibro.soundsEnabled = var1[0] == 1;
-            SoundAndVibro.vibroEnabled = var1[1] == 1;
-            Main.main.numberOfPlayers = var1[2];
+            SoundAndVibro.soundsEnabled = data[0] == 1;
+            SoundAndVibro.vibroEnabled = data[1] == 1;
+            Main.main.numberOfPlayers = data[2];
+			
             System.out.println("Main.instance .numberOfPlayers = " + Main.main.numberOfPlayers);
+			
             ((SettingsScreen) AllScreens.settingsScreen).loadSettings();
-            settingsbytemassive.closeRecordStore();
-        } catch (RecordStoreException var2) {
-            var2.printStackTrace();
+			
+            rs.closeRecordStore();
+        } catch (RecordStoreException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void LoadSavedGameFile() {
+    public static void loadGameSave() {
         System.out.println("LOADING RS");
 
         try {
-            RecordStore var0 = RecordStore.openRecordStore("qpmrsp", false);
-            DataInputStream var1 = new DataInputStream(new ByteArrayInputStream(var0.getRecord(1)));
+            RecordStore rs = RecordStore.openRecordStore("qpmrsp", false);
+            DataInputStream dis = new DataInputStream(new ByteArrayInputStream(rs.getRecord(1)));
 
             try {
-                RenderEngine.currentLocation = var1.readInt();
+                RenderEngine.currentLocation = dis.readInt();
 
-                int var2;
-                for (var2 = 0; var2 < RenderEngine.bool_massive_1st.length; ++var2) {
-                    RenderEngine.bool_massive_1st[var2] = var1.readBoolean();
+                for(int i = 0; i < RenderEngine.bool_massive_1st.length; i++) {
+                    RenderEngine.bool_massive_1st[i] = dis.readBoolean();
                 }
 
-                for (var2 = 0; var2 < RenderEngine.bool_massive_2th.length; ++var2) {
-                    RenderEngine.bool_massive_2th[var2] = var1.readBoolean();
+                for(int i = 0; i < RenderEngine.bool_massive_2th.length; i++) {
+                    RenderEngine.bool_massive_2th[i] = dis.readBoolean();
                 }
 
-                for (var2 = 0; var2 < RenderEngine.bool_massive_3th.length; ++var2) {
-                    RenderEngine.bool_massive_3th[var2] = var1.readBoolean();
+                for(int i = 0; i < RenderEngine.bool_massive_3th.length; i++) {
+                    RenderEngine.bool_massive_3th[i] = dis.readBoolean();
                 }
 
-                Scripts.CurrentNumberOfInventaryItems = var1.readShort();
+                Scripts.inventoryItemsCount = dis.readShort();
 
-                for (var2 = 0; var2 < Scripts.CurrentNumberOfInventaryItems; ++var2) {
-                    Scripts.inventoryItems[var2] = var1.readShort();
+                for(int i = 0; i < Scripts.inventoryItemsCount; i++) {
+                    Scripts.inventoryItems[i] = dis.readShort();
                 }
 
-                for (var2 = 0; var2 < Scripts.equipmentSlots.length; ++var2) {
-                    Scripts.equipmentSlots[var2] = var1.readShort();
+                for(int i = 0; i < Scripts.equipmentSlots.length; i++) {
+                    Scripts.equipmentSlots[i] = dis.readShort();
                 }
 
-                Scripts.playerActiveWeapon = var1.readByte();
+                Scripts.playerActiveWeapon = dis.readByte();
                 Scripts.takeGunInHands(Scripts.playerActiveWeapon);
-                Scripts.ActorCurrentHealth = var1.readShort();
-                Scripts.ActorCurrentWeight = var1.readShort();
-                Scripts.CurrentActorMoney = var1.readShort();
-                Scripts.playerMaxHealth = var1.readShort();
-                Scripts.playerMaxWeight = var1.readShort();
-                Scripts.playerAccuracy = var1.readByte();
-                Scripts.playerBulletProtection = var1.readByte();
-                Scripts.playerRadiationResistance = var1.readByte();
-                Scripts.playerAnomalyResistance = var1.readByte();
-                Scripts.currentPlayerLevel = var1.readShort();
-                Scripts.CurrentActorExpirience = var1.readShort();
+				
+                Scripts.playerHealth = dis.readShort();
+                Scripts.playerWeight = dis.readShort();
+                Scripts.playerMoney = dis.readShort();
+                Scripts.playerMaxHealth = dis.readShort();
+                Scripts.playerMaxWeight = dis.readShort();
+                Scripts.playerAccuracy = dis.readByte();
+                Scripts.playerBulletProtection = dis.readByte();
+                Scripts.playerRadiationResistance = dis.readByte();
+                Scripts.playerAnomalyResistance = dis.readByte();
+                Scripts.playerLevel = dis.readShort();
+                Scripts.playerExp = dis.readShort();
 
-                byte var6;
-                for (var6 = 0; var6 < Scripts.CurrentActorCharLevelsMassive.length; ++var6) {
-                    Scripts.CurrentActorCharLevelsMassive[var6] = var1.readByte();
+                for(int i = 0; i < Scripts.playerStatLevel.length; i++) {
+                    Scripts.playerStatLevel[i] = dis.readByte();
                 }
 
-                for (var6 = 0; var6 < 4; ++var6) {
-                    Scripts.MassiveActorAmmo[var6] = var1.readShort();
+                for(int i = 0; i < 4; i++) {
+                    Scripts.playerWeaponsAmmo[i] = dis.readShort();
                 }
 
-                Scripts.batyaDialogState = var1.readByte();
-                Scripts.rustyDialogState = var1.readByte();
-                Scripts.trusDialogState = var1.readByte();
-                Scripts.svistunDialogState = var1.readByte();
-                Scripts.botanikDialogState = var1.readByte();
-                Scripts.zaborDialogState = var1.readByte();
-                Scripts.galoshQuestState = var1.readByte();
-                Scripts.shlangDialogState = var1.readByte();
-                Scripts.militaryDialogState = var1.readByte();
-                Scripts.prizrakDialogState = var1.readByte();
-                Scripts.kaynazovskiDialogState = var1.readByte();
-                Scripts.krotDialogState = var1.readByte();
-                Scripts.haryaDialogState = var1.readByte();
-                Scripts.commanderDialogState = var1.readByte();
-                Scripts.manikovskiDialogState = var1.readByte();
-                Scripts.gutalinDialogState = var1.readByte();
-                Scripts.belomorDialogState = var1.readByte();
-                Scripts.koboldDialogState = var1.readByte();
-                Scripts.var_2544 = var1.readBoolean();
-                Scripts.var_25bf = var1.readBoolean();
-                PlayerHUD.previousLocation = var1.readByte();
-                var1.close();
-            } catch (IOException var3) {
-                var3.printStackTrace();
+                Scripts.batyaDialogState = dis.readByte();
+                Scripts.rustyDialogState = dis.readByte();
+                Scripts.trusDialogState = dis.readByte();
+                Scripts.svistunDialogState = dis.readByte();
+                Scripts.botanikDialogState = dis.readByte();
+                Scripts.zaborDialogState = dis.readByte();
+                Scripts.galoshQuestState = dis.readByte();
+                Scripts.shlangDialogState = dis.readByte();
+                Scripts.militaryDialogState = dis.readByte();
+                Scripts.prizrakDialogState = dis.readByte();
+                Scripts.kaynazovskiDialogState = dis.readByte();
+                Scripts.krotDialogState = dis.readByte();
+                Scripts.haryaDialogState = dis.readByte();
+                Scripts.commanderDialogState = dis.readByte();
+                Scripts.manikovskiDialogState = dis.readByte();
+                Scripts.gutalinDialogState = dis.readByte();
+                Scripts.belomorDialogState = dis.readByte();
+                Scripts.koboldDialogState = dis.readByte();
+                Scripts.svistunQuestCompleted = dis.readBoolean();
+                Scripts.capItemGot = dis.readBoolean();
+				
+                PlayerHUD.previousLocation = dis.readByte();
+				
+                dis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            var0.closeRecordStore();
+            rs.closeRecordStore();
             System.out.println("RS LOADED");
-        } catch (RecordStoreNotFoundException var4) {
+        } catch (RecordStoreNotFoundException e) {
             ;
-        } catch (RecordStoreException var5) {
+        } catch (RecordStoreException e) {
             ;
         }
     }

@@ -28,7 +28,7 @@ public final class PlayerStatsScreen implements Screen {
         //id 39: УРОВЕНЬ:__
         byte[] currentValueText = 
                 TextCreator.combineTextMassives(TextCreator.CopyReplicToNewMassive(39), 
-                        TextCreator.CreateMassiveWithRankLength(Scripts.currentPlayerLevel));
+                        TextCreator.CreateMassiveWithRankLength(Scripts.playerLevel));
         int x_start = ResourseManager.getUIElementXcoord(43, 0);
         int y_start = ResourseManager.getUIElementYcoord(43, 0);
         TextCreator.drawReplicWithParameters(0, currentValueText, 0, currentValueText.length, x_start, y_start, 4);
@@ -158,15 +158,15 @@ public final class PlayerStatsScreen implements Screen {
 
         MasterCanvas.graphics.setColor(outlineColor);
         MasterCanvas.graphics.fillRect(x_start, y_start, 
-                width * Scripts.currentPlayerLevel / 10, height / 3);
+                width * Scripts.playerLevel / 10, height / 3);
 
         MasterCanvas.graphics.setColor(inlineColor);
         MasterCanvas.graphics.fillRect(x_start, y_start + height / 3, 
-                width * Scripts.currentPlayerLevel / 10, height / 3);
+                width * Scripts.playerLevel / 10, height / 3);
 
         MasterCanvas.graphics.setColor(outlineColor);
         MasterCanvas.graphics.fillRect(x_start, y_start + 2 * height / 3, 
-                width * Scripts.currentPlayerLevel / 10, height / 3);
+                width * Scripts.playerLevel / 10, height / 3);
 
         //Отрисовка кнопок меню
         PlayerHUD.drawSoftButtonNames(1, 0, 391, true);
@@ -210,16 +210,16 @@ public final class PlayerStatsScreen implements Screen {
 
     private static byte[] getPlayerStatsLevel() {
         byte statsLevelSumm = 
-                (byte) (Scripts.CurrentActorCharLevelsMassive[0] 
-                + Scripts.CurrentActorCharLevelsMassive[1] 
-                + Scripts.CurrentActorCharLevelsMassive[2]);
+                (byte) (Scripts.playerStatLevel[0] 
+                + Scripts.playerStatLevel[1] 
+                + Scripts.playerStatLevel[2]);
         return new byte[]{
-            Scripts.CurrentActorCharLevelsMassive[0], 
-            Scripts.CurrentActorCharLevelsMassive[1], 
-            Scripts.CurrentActorCharLevelsMassive[2], 
+            Scripts.playerStatLevel[0], 
+            Scripts.playerStatLevel[1], 
+            Scripts.playerStatLevel[2], 
             (byte) 0, 
-            (byte) (Scripts.currentPlayerLevel - statsLevelSumm), 
-            (byte) Scripts.currentPlayerLevel};
+            (byte) (Scripts.playerLevel - statsLevelSumm), 
+            (byte) Scripts.playerLevel};
     }
 
     private static short[] getPlayerStats() {

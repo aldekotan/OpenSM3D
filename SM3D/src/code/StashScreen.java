@@ -62,7 +62,7 @@ public final class StashScreen implements Screen
       int y_dest = ResourseManager.getUIElementYcoord(47, 6);
       TextCreator.FindParametersnDrawText(1, 309, x_dest, y_dest, 5);
       
-      byte[] currWeight = TextCreator.CreateTextMassiveForNumber(Scripts.ActorCurrentWeight);
+      byte[] currWeight = TextCreator.CreateTextMassiveForNumber(Scripts.playerWeight);
       byte[] kgSlash = TextCreator.CopyReplicToNewMassive(65);
       byte[] playerWeightText = TextCreator.combineTextMassives(currWeight, kgSlash);
       

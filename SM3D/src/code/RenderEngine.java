@@ -1803,7 +1803,7 @@ public final class RenderEngine {
                 sub_844();//doors obj status
                 sub_8d1();//activable obj status
                 antiradTimer();
-                if(Scripts.ActorCurrentHealth <= 0) {
+                if(Scripts.playerHealth <= 0) {
                     endGame((short) 4, 3000);
                 }
 

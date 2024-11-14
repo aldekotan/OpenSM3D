@@ -295,7 +295,7 @@ public final class PlayerHUD {
             }
         }
 
-        int var1 = 55 * Scripts.ActorCurrentHealth / Scripts.playerMaxHealth;
+        int var1 = 55 * Scripts.playerHealth / Scripts.playerMaxHealth;
         int var2;
         int var3;
         if (insideInv) {
@@ -367,9 +367,9 @@ public final class PlayerHUD {
         drawSoftButtonNames(1, 0, 1, true);
         drawSoftButtonNames(0, 1, rightSoftText, true);
         int var3 = TextCreator.sub_7eb(1, 377); //символ /
-        int var4 = var0 + 24 - (Scripts.MassiveActorAmmo[Scripts.playerActiveWeapon] / 10 > 0 ? var3 * 2 : var3 + 1);
+        int var4 = var0 + 24 - (Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon] / 10 > 0 ? var3 * 2 : var3 + 1);
         int var5 = var1 + ResourseManager.getRectangleHeight(13) / 2 - TextCreator.getHeightFromTextParamMassive(1) / 2;
-        TextCreator.drawNumbers(1, Scripts.MassiveActorAmmo[Scripts.playerActiveWeapon], var4, var5, 0);
+        TextCreator.drawNumbers(1, Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon], var4, var5, 0);
         int var6 = var0 + 24;
         TextCreator.FindParametersnDrawText(1, 377, var6, var5, 0);// символ /
         int var8 = var0 + 24 + var3;

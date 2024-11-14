@@ -20,7 +20,7 @@ public final class Scripts {
     //Размер инвентаря
     public static short[] inventoryItems = new short[100];
     //Текущее количество предметов в нём
-    public static short CurrentNumberOfInventaryItems;
+    public static short inventoryItemsCount;
 
     //Будут удалены после выхода с локации
     public static short[] locationExclusiveItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
@@ -184,13 +184,13 @@ public final class Scripts {
     //Максимальный вес
     public static short playerMaxWeight = 350;
     //Текущее здоровье
-    public static short ActorCurrentHealth = playerMaxHealth;
+    public static short playerHealth = playerMaxHealth;
     //Текущая сумма денег
-    public static short CurrentActorMoney = 0;
+    public static short playerMoney = 0;
     //Текущий вес
-    public static short ActorCurrentWeight;
+    public static short playerWeight;
     //Аммуниция
-    public static short[] MassiveActorAmmo = new short[4];
+    public static short[] playerWeaponsAmmo = new short[4];
     //Точность главгероя
     public static byte playerAccuracy = 50;//50
     //Защита от пуль
@@ -200,11 +200,11 @@ public final class Scripts {
     //Защита от аномалий
     public static byte playerAnomalyResistance;
     //Текущий опыт главгероя
-    public static short CurrentActorExpirience;
+    public static short playerExp;
     //Текущий уровень главгероя
-    public static short currentPlayerLevel;
+    public static short playerLevel;
     //Набор значений уровней характеристик
-    public static byte[] CurrentActorCharLevelsMassive = new byte[3];
+    public static byte[] playerStatLevel = new byte[3];
 
     //Использован ли антирад?
     public static boolean IsAntiradIsUsed;
@@ -239,9 +239,9 @@ public final class Scripts {
     public static byte currentNpcPhrase;
     public static byte selectedAnswer;
     public static byte NumberOfAnswers;
-    public static boolean var_2544;
+    public static boolean svistunQuestCompleted;
     public static boolean dialogCompleted;
-    public static boolean var_25bf;
+    public static boolean capItemGot;
     public static boolean ItemWalkieTalkieInInventaryBool;
     public static boolean endingCutscene;
     public static short[] stashItems;
@@ -284,35 +284,35 @@ public final class Scripts {
         }
 
         resetActorQuestAndDialogProgress();
-        MassiveActorAmmo[0] = 12;
+        playerWeaponsAmmo[0] = 12;
 
-        for (byte var1 = 1; var1 < MassiveActorAmmo.length; ++var1) //Опустошить аммуницию основного оружия
+        for (byte var1 = 1; var1 < playerWeaponsAmmo.length; ++var1) //Опустошить аммуницию основного оружия
         {
-            MassiveActorAmmo[var1] = 0;
+            playerWeaponsAmmo[var1] = 0;
         }
 
         ItemWalkieTalkieInInventaryBool = false;
-        currentPlayerLevel = 1;
-        CurrentActorExpirience = 0;
-        CurrentActorCharLevelsMassive = new byte[3];
+        playerLevel = 1;
+        playerExp = 0;
+        playerStatLevel = new byte[3];
         playerMaxHealth = 100;
-        ActorCurrentHealth = playerMaxHealth;
+        playerHealth = playerMaxHealth;
         playerMaxWeight = 350;
-        ActorCurrentWeight = 0;
-        CurrentActorMoney = 0;
+        playerWeight = 0;
+        playerMoney = 0;
         playerAccuracy = 50;
         playerAnomalyResistance = 0;
         playerRadiationResistance = 0;
         playerBulletProtection = 0;
-        var_2544 = false;
-        var_25bf = false;
+        svistunQuestCompleted = false;
+        capItemGot = false;
         /*//Для тестов
         playerMaxWeight = 350;
         //*/
         inventoryItems = new short[100];
         equipmentSlots = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
         locationExclusiveItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
-        CurrentNumberOfInventaryItems = 0;
+        inventoryItemsCount = 0;
 
         /*//add medkits
         addItemToInventary((short) 101);
@@ -353,7 +353,7 @@ public final class Scripts {
     }
 
     public static void levelUpPlayerStat(byte stat_number) {
-        if (CurrentActorCharLevelsMassive[0] + CurrentActorCharLevelsMassive[1] + CurrentActorCharLevelsMassive[2] < currentPlayerLevel) {//Если сумма всех стат персонажа меньше текущего уровня
+        if (playerStatLevel[0] + playerStatLevel[1] + playerStatLevel[2] < playerLevel) {//Если сумма всех стат персонажа меньше текущего уровня
             switch (stat_number) {
                 case 0:
                     playerAccuracy = (byte) (playerAccuracy + playerAccuracy * 10 / 100); //Увеличить точность
@@ -364,7 +364,7 @@ public final class Scripts {
                 case 2:
                     playerMaxWeight = (short) (playerMaxWeight + 50); //Увеличить силу
             }
-            ++CurrentActorCharLevelsMassive[stat_number]; //Поднять уровень выбранной характеристики
+            playerStatLevel[stat_number]++; //Поднять уровень выбранной характеристики
         }
     }
 
@@ -528,7 +528,7 @@ public final class Scripts {
         if (PlayerHUD.IsTransitWasCompleted) //Если был выполнен переход по локации
         {
             PlayerHUD.IsTransitWasCompleted = false; //Включение ожидания перехода
-            ResourseManager.WriteSavedGame(); //Провести сохранение
+            ResourseManager.saveGame(); //Провести сохранение
             RenderEngine.setDialogWindowState((short) -2);
         }
 
@@ -620,7 +620,7 @@ public final class Scripts {
     }
 
     private static boolean tryDropOrPickupItem(short item, boolean b) {//true для попытки поднять
-        short temporaryWeight = ActorCurrentWeight;
+        short temporaryWeight = playerWeight;
         short coefWeight = -1;
 
         if (b == true) {
@@ -682,89 +682,89 @@ public final class Scripts {
             default:
                 break;
             case 101:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 5 * coefWeight);
+                playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
             case 102:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 10 * coefWeight);
+                playerWeight = (short) (playerWeight + 10 * coefWeight);
                 break;
             case 103:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 3 * coefWeight);
+                playerWeight = (short) (playerWeight + 3 * coefWeight);
                 break;
             case 104:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 4 * coefWeight);
+                playerWeight = (short) (playerWeight + 4 * coefWeight);
                 break;
             case 105:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 12 * coefWeight);
+                playerWeight = (short) (playerWeight + 12 * coefWeight);
                 break;
             case 106:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 3 * coefWeight);
+                playerWeight = (short) (playerWeight + 3 * coefWeight);
                 break;
             case 107:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 3 * coefWeight);
+                playerWeight = (short) (playerWeight + 3 * coefWeight);
                 break;
             case 108:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 4 * coefWeight);
+                playerWeight = (short) (playerWeight + 4 * coefWeight);
                 break;
             case 109:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 3 * coefWeight);
+                playerWeight = (short) (playerWeight + 3 * coefWeight);
                 break;
             case 110:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 30 * coefWeight);
+                playerWeight = (short) (playerWeight + 30 * coefWeight);
                 break;
             case 111:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 45 * coefWeight);
+                playerWeight = (short) (playerWeight + 45 * coefWeight);
                 break;
             case 112:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 70 * coefWeight);
+                playerWeight = (short) (playerWeight + 70 * coefWeight);
                 break;
             case 113:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 50 * coefWeight);
+                playerWeight = (short) (playerWeight + 50 * coefWeight);
                 break;
             case 114:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 110 * coefWeight);
+                playerWeight = (short) (playerWeight + 110 * coefWeight);
                 break;
             case 115:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 80 * coefWeight);
+                playerWeight = (short) (playerWeight + 80 * coefWeight);
                 break;
             case 116:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 10 * coefWeight);
+                playerWeight = (short) (playerWeight + 10 * coefWeight);
                 break;
             case 117:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 36 * coefWeight);
+                playerWeight = (short) (playerWeight + 36 * coefWeight);
                 break;
             case 118:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 25 * coefWeight);
+                playerWeight = (short) (playerWeight + 25 * coefWeight);
                 break;
             case 119:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 50 * coefWeight);
+                playerWeight = (short) (playerWeight + 50 * coefWeight);
                 break;
             case 120:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 5 * coefWeight);
+                playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
             case 121:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 5 * coefWeight);
+                playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
             case 122:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 5 * coefWeight);
+                playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
             case 123:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 5 * coefWeight);
+                playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
             case 124:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 0 * coefWeight);
+                playerWeight = (short) (playerWeight + 0 * coefWeight);
                 break;
             case 125:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 5 * coefWeight);
+                playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
             case 126:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 5 * coefWeight);
+                playerWeight = (short) (playerWeight + 5 * coefWeight);
             case 300:
-                ActorCurrentWeight = (short) (ActorCurrentWeight + 30 * coefWeight);
+                playerWeight = (short) (playerWeight + 30 * coefWeight);
         }
 
-        if (ActorCurrentWeight > playerMaxWeight) //Если вес предмета превышает максимально возможный вес
+        if (playerWeight > playerMaxWeight) //Если вес предмета превышает максимально возможный вес
         {
-            ActorCurrentWeight = temporaryWeight; //Вернуть всё как было и выкинуть предмет
+            playerWeight = temporaryWeight; //Вернуть всё как было и выкинуть предмет
             return false;
         } else {
             return true; //Иначе взять его
@@ -772,7 +772,7 @@ public final class Scripts {
     }
 
     private static boolean tryTrade(short item, boolean b) {//true для покупки
-        short temporaryMoney = CurrentActorMoney;
+        short temporaryMoney = playerMoney;
         short t = -100;//50 продажа, -100 покупка
 
         if (b == false) {
@@ -834,91 +834,91 @@ public final class Scripts {
             default:
                 break;
             case 101:
-                CurrentActorMoney = (short) (CurrentActorMoney + 100 * t / 100);
+                playerMoney = (short) (playerMoney + 100 * t / 100);
                 break;
             case 102:
-                CurrentActorMoney = (short) (CurrentActorMoney + 250 * t / 100);
+                playerMoney = (short) (playerMoney + 250 * t / 100);
                 break;
             case 103:
-                CurrentActorMoney = (short) (CurrentActorMoney + 250 * t / 100);
+                playerMoney = (short) (playerMoney + 250 * t / 100);
                 break;
             case 104:
-                CurrentActorMoney = (short) (CurrentActorMoney + 50 * t / 100);
+                playerMoney = (short) (playerMoney + 50 * t / 100);
                 break;
             case 105:
-                CurrentActorMoney = (short) (CurrentActorMoney + 350 * t / 100);
+                playerMoney = (short) (playerMoney + 350 * t / 100);
                 break;
             case 106:
-                CurrentActorMoney = (short) (CurrentActorMoney + 0 * t / 100);
+                playerMoney = (short) (playerMoney + 0 * t / 100);
                 break;
             case 107:
-                CurrentActorMoney = (short) (CurrentActorMoney + 60 * t / 100);
+                playerMoney = (short) (playerMoney + 60 * t / 100);
                 break;
             case 108:
-                CurrentActorMoney = (short) (CurrentActorMoney + 50 * t / 100);
+                playerMoney = (short) (playerMoney + 50 * t / 100);
                 break;
             case 109:
-                CurrentActorMoney = (short) (CurrentActorMoney + 140 * t / 100);
+                playerMoney = (short) (playerMoney + 140 * t / 100);
                 break;
             case 110:
-                CurrentActorMoney = (short) (CurrentActorMoney + armorLeatherJacketStats[3] * t / 100);
+                playerMoney = (short) (playerMoney + armorLeatherJacketStats[3] * t / 100);
                 break;
             case 111:
-                CurrentActorMoney = (short) (CurrentActorMoney + armorMailJacketStats[3] * t / 100);
+                playerMoney = (short) (playerMoney + armorMailJacketStats[3] * t / 100);
                 break;
             case 112:
-                CurrentActorMoney = (short) (CurrentActorMoney + armorMercSuitStats[3] * t / 100);
+                playerMoney = (short) (playerMoney + armorMercSuitStats[3] * t / 100);
                 break;
             case 113:
-                CurrentActorMoney = (short) (CurrentActorMoney + armorSevaSuitStats[3] * t / 100);
+                playerMoney = (short) (playerMoney + armorSevaSuitStats[3] * t / 100);
                 break;
             case 114:
-                CurrentActorMoney = (short) (CurrentActorMoney + armorStalkerSuitStats[3] * t / 100);
+                playerMoney = (short) (playerMoney + armorStalkerSuitStats[3] * t / 100);
                 break;
             case 115:
-                CurrentActorMoney = (short) (CurrentActorMoney + armorSPP9mStats[3] * t / 100);
+                playerMoney = (short) (playerMoney + armorSPP9mStats[3] * t / 100);
                 break;
             case 116:
-                CurrentActorMoney = (short) (CurrentActorMoney + 0 * t / 100);
+                playerMoney = (short) (playerMoney + 0 * t / 100);
                 break;
             case 117:
-                CurrentActorMoney = (short) (CurrentActorMoney + 1500 * t / 100);
+                playerMoney = (short) (playerMoney + 1500 * t / 100);
                 break;
             case 118:
-                CurrentActorMoney = (short) (CurrentActorMoney + 1000 * t / 100);
+                playerMoney = (short) (playerMoney + 1000 * t / 100);
                 break;
             case 119:
-                CurrentActorMoney = (short) (CurrentActorMoney + 2000 * t / 100);
+                playerMoney = (short) (playerMoney + 2000 * t / 100);
                 break;
             case 120:
-                CurrentActorMoney = (short) (CurrentActorMoney + 400 * t / 100);
+                playerMoney = (short) (playerMoney + 400 * t / 100);
                 break;
             case 121:
-                CurrentActorMoney = (short) (CurrentActorMoney + 500 * t / 100);
+                playerMoney = (short) (playerMoney + 500 * t / 100);
                 break;
             case 122:
-                CurrentActorMoney = (short) (CurrentActorMoney + 750 * t / 100);
+                playerMoney = (short) (playerMoney + 750 * t / 100);
                 break;
             case 123:
-                CurrentActorMoney = (short) (CurrentActorMoney + 450 * t / 100);
+                playerMoney = (short) (playerMoney + 450 * t / 100);
                 break;
             case 124:
-                CurrentActorMoney = (short) (CurrentActorMoney + 600 * t / 100);
+                playerMoney = (short) (playerMoney + 600 * t / 100);
                 break;
             case 125:
-                CurrentActorMoney = (short) (CurrentActorMoney + 800 * t / 100);
+                playerMoney = (short) (playerMoney + 800 * t / 100);
                 break;
             case 126:
-                CurrentActorMoney = (short) (CurrentActorMoney + 500 * t / 100);
+                playerMoney = (short) (playerMoney + 500 * t / 100);
             case 300:
-                CurrentActorMoney = (short) (CurrentActorMoney + 1000 * t / 100);
+                playerMoney = (short) (playerMoney + 1000 * t / 100);
         }
 
         if (t < 0) //Если мы что-то покупаем
         {
-            if (CurrentActorMoney < 0) //Но денег не хватает
+            if (playerMoney < 0) //Но денег не хватает
             {
-                CurrentActorMoney = temporaryMoney; //Отменить сделку
+                playerMoney = temporaryMoney; //Отменить сделку
                 return false;
             } else //Если денег хватает
             {
@@ -1011,8 +1011,8 @@ public final class Scripts {
                     }
                 }
 
-                inventoryItems[CurrentNumberOfInventaryItems] = item;
-                ++CurrentNumberOfInventaryItems;
+                inventoryItems[inventoryItemsCount] = item;
+                ++inventoryItemsCount;
                 if (item >= 140 && item <= 148 || item == 100) //Если подняты деньги - сразу использовать
                 {
                     useItem(item);
@@ -1051,11 +1051,11 @@ public final class Scripts {
                 }
                 break;
             case 101: //Использование полевой аптечки
-                ActorCurrentHealth = (short) Math.min(ActorCurrentHealth + 25, playerMaxHealth);
+                playerHealth = (short) Math.min(playerHealth + 25, playerMaxHealth);
                 dropItem(i);
                 break;
             case 102: //Использование военной аптечки
-                ActorCurrentHealth = (short) Math.min(ActorCurrentHealth + 75, playerMaxHealth);
+                playerHealth = (short) Math.min(playerHealth + 75, playerMaxHealth);
                 dropItem(i);
                 break;
             case 103:
@@ -1132,19 +1132,19 @@ public final class Scripts {
                 break;
             case 107: //Смена рожка у АК
                 if (searchItem((short) 117)) {
-                    MassiveActorAmmo[1] = 30;
+                    playerWeaponsAmmo[1] = 30;
                     dropItem(i);
                 }
                 break;
             case 108: //Смена рожка у Грозы
                 if (searchItem((short) 118)) {
-                    MassiveActorAmmo[2] = 20;
+                    playerWeaponsAmmo[2] = 20;
                     dropItem(i);
                 }
                 break;
             case 109: //Смена рожка у Энфилда
                 if (searchItem((short) 119)) {
-                    MassiveActorAmmo[3] = 25;
+                    playerWeaponsAmmo[3] = 25;
                     dropItem(i);
                 }
                 break;
@@ -1210,61 +1210,61 @@ public final class Scripts {
                 changePlayerStatsByItem(i, 1);
                 break;
             case 140:
-                CurrentActorMoney = (short) (CurrentActorMoney + 100);
+                playerMoney = (short) (playerMoney + 100);
                 MoneyTaken = 100;
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 141:
                 MoneyTaken = 250;
-                CurrentActorMoney = (short) (CurrentActorMoney + 250);
+                playerMoney = (short) (playerMoney + 250);
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 142:
                 MoneyTaken = 500;
-                CurrentActorMoney = (short) (CurrentActorMoney + 500);
+                playerMoney = (short) (playerMoney + 500);
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 143:
-                CurrentActorMoney = (short) (CurrentActorMoney + 1000);
+                playerMoney = (short) (playerMoney + 1000);
                 MoneyTaken = 1000;
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 144:
-                CurrentActorMoney = (short) (CurrentActorMoney + 2000);
+                playerMoney = (short) (playerMoney + 2000);
                 MoneyTaken = 2000;
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 145:
-                CurrentActorMoney = (short) (CurrentActorMoney + 5000);
+                playerMoney = (short) (playerMoney + 5000);
                 MoneyTaken = 5000;
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 146:
-                CurrentActorMoney = (short) (CurrentActorMoney + 25);
+                playerMoney = (short) (playerMoney + 25);
                 MoneyTaken = 25;
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 147:
-                CurrentActorMoney = (short) (CurrentActorMoney + 50);
+                playerMoney = (short) (playerMoney + 50);
                 MoneyTaken = 50;
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 148:
-                CurrentActorMoney = (short) (CurrentActorMoney + 75);
+                playerMoney = (short) (playerMoney + 75);
                 MoneyTaken = 75;
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
                 break;
             case 300: //засланный казачок
-                CurrentActorMoney = (short) (CurrentActorMoney + 10000);
+                playerMoney = (short) (playerMoney + 10000);
                 MoneyTaken = 10000;
                 PlayerHUD.allowShowingTakenMoney();
                 dropItem(i);
@@ -1417,7 +1417,7 @@ public final class Scripts {
     }
 
     private static void ActorAllCharControll() {
-        ActorCurrentHealth = (short) Math.min(ActorCurrentHealth, playerMaxHealth);
+        playerHealth = (short) Math.min(playerHealth, playerMaxHealth);
         playerAccuracy = (byte) Math.max(0, playerAccuracy);
         playerMaxWeight = (short) Math.max(0, playerMaxWeight);
         playerBulletProtection = (byte) Math.max(0, playerBulletProtection);
@@ -1431,7 +1431,7 @@ public final class Scripts {
             short var1 = 0;
 
             short var2; //Номер ячейки инвентаря
-            for (var2 = 1; var2 < CurrentNumberOfInventaryItems; ++var2) //Определение номера ячейки с нужным предметом
+            for (var2 = 1; var2 < inventoryItemsCount; ++var2) //Определение номера ячейки с нужным предметом
             {
                 if (inventoryItems[var2] == item) //Если предмет найден в массиве ячеек инвентаря
                 {
@@ -1441,12 +1441,12 @@ public final class Scripts {
             }
 
             if (var1 > 0) {
-                for (var2 = var1; var2 < CurrentNumberOfInventaryItems - 1; ++var2) { //Присвоить ячейке значение следующей ячейки инвентаря
+                for (var2 = var1; var2 < inventoryItemsCount - 1; ++var2) { //Присвоить ячейке значение следующей ячейки инвентаря
                     inventoryItems[var2] = inventoryItems[var2 + 1];
                     inventoryItems[var2 + 1] = -1;
                 } //Сделать следующую ячейку инвентаря пустой
 
-                --CurrentNumberOfInventaryItems; //Уменьшить число предметов в инвентаре на единицу
+                --inventoryItemsCount; //Уменьшить число предметов в инвентаре на единицу
                 tryDropOrPickupItem(item, false); //Уменьшить вес инвентаря на вес этого предмета
             }
         }
@@ -1454,7 +1454,7 @@ public final class Scripts {
 
     private static boolean searchItem(short var0) //Поиск предмета в инвентаре
     {
-        for (int var1 = 0; var1 < CurrentNumberOfInventaryItems; ++var1) {
+        for (int var1 = 0; var1 < inventoryItemsCount; ++var1) {
             if (var0 == inventoryItems[var1]) {
                 return true; //Вернуть истину если найден
             }
@@ -1486,43 +1486,43 @@ public final class Scripts {
         RenderEngine.sub_daf();
         switch (Bot.getBotType(RenderEngine.botIdUndercursor)) {
             case 0:
-                ++CurrentActorExpirience;
+                ++playerExp;
                 break;
             case 1:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 3);
+                playerExp = (short) (playerExp + 3);
                 break;
             case 2:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 0);
+                playerExp = (short) (playerExp + 0);
                 break;
             case 3:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 0);
+                playerExp = (short) (playerExp + 0);
                 break;
             case 4:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 5);
+                playerExp = (short) (playerExp + 5);
                 break;
             case 5:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 7);
+                playerExp = (short) (playerExp + 7);
                 break;
             case 6:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 10);
+                playerExp = (short) (playerExp + 10);
                 break;
             case 7:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 8);
+                playerExp = (short) (playerExp + 8);
                 break;
             case 8:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 10);
+                playerExp = (short) (playerExp + 10);
                 break;
             case 9:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 12);
+                playerExp = (short) (playerExp + 12);
                 break;
             case 10:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 0);
+                playerExp = (short) (playerExp + 0);
                 break;
             case 11:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 14);
+                playerExp = (short) (playerExp + 14);
                 break;
             case 12:
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 16);
+                playerExp = (short) (playerExp + 16);
         }
 
         if (RenderEngine.botsCount[RenderEngine.currentRoom] - RenderEngine.var_1fb1 == 0) {
@@ -1532,53 +1532,53 @@ public final class Scripts {
     }
 
     private static void ActorLevelUpIfItNeed() {
-        if (CurrentActorExpirience >= 150 && CurrentActorExpirience < 210) {
-            currentPlayerLevel = (short) Math.max(2, currentPlayerLevel);
-        } else if (CurrentActorExpirience >= 210 && CurrentActorExpirience < 290) {
-            currentPlayerLevel = (short) Math.max(3, currentPlayerLevel);
-        } else if (CurrentActorExpirience >= 290 && CurrentActorExpirience < 390) {
-            currentPlayerLevel = (short) Math.max(4, currentPlayerLevel);
-        } else if (CurrentActorExpirience >= 390 && CurrentActorExpirience < 530) {
-            currentPlayerLevel = (short) Math.max(5, currentPlayerLevel);
-        } else if (CurrentActorExpirience >= 530 && CurrentActorExpirience < 670) {
-            currentPlayerLevel = (short) Math.max(6, currentPlayerLevel);
-        } else if (CurrentActorExpirience >= 670 && CurrentActorExpirience < 810) {
-            currentPlayerLevel = (short) Math.max(7, currentPlayerLevel);
-        } else if (CurrentActorExpirience >= 810 && CurrentActorExpirience < 1010) {
-            currentPlayerLevel = (short) Math.max(8, currentPlayerLevel);
-        } else if (CurrentActorExpirience >= 1010 && CurrentActorExpirience < 1230) {
-            currentPlayerLevel = (short) Math.max(9, currentPlayerLevel);
-        } else if (CurrentActorExpirience >= 1230) {
-            currentPlayerLevel = (short) Math.min(10, currentPlayerLevel);
+        if (playerExp >= 150 && playerExp < 210) {
+            playerLevel = (short) Math.max(2, playerLevel);
+        } else if (playerExp >= 210 && playerExp < 290) {
+            playerLevel = (short) Math.max(3, playerLevel);
+        } else if (playerExp >= 290 && playerExp < 390) {
+            playerLevel = (short) Math.max(4, playerLevel);
+        } else if (playerExp >= 390 && playerExp < 530) {
+            playerLevel = (short) Math.max(5, playerLevel);
+        } else if (playerExp >= 530 && playerExp < 670) {
+            playerLevel = (short) Math.max(6, playerLevel);
+        } else if (playerExp >= 670 && playerExp < 810) {
+            playerLevel = (short) Math.max(7, playerLevel);
+        } else if (playerExp >= 810 && playerExp < 1010) {
+            playerLevel = (short) Math.max(8, playerLevel);
+        } else if (playerExp >= 1010 && playerExp < 1230) {
+            playerLevel = (short) Math.max(9, playerLevel);
+        } else if (playerExp >= 1230) {
+            playerLevel = (short) Math.min(10, playerLevel);
         }
     }
 
     private static void shoot(byte gun) {
         if (!var_2075 && !var_215f) {
-            if (MassiveActorAmmo[gun] > 0 || gun == 0) {
+            if (playerWeaponsAmmo[gun] > 0 || gun == 0) {
                 var_228e = true;
                 RenderEngine.var_1c84 = (int) RenderEngine.renderTimeOnly3D;
                 RenderEngine.var_1cda = true;
                 switch (gun) {
                     case 0: //Если в руках форт
                         playerAccuracy = 60; //Точность персонажа 60%
-                        --MassiveActorAmmo[0]; //Убавить боезапас на единицу
-                        if (MassiveActorAmmo[0] < 1) //Если патронов в магазине нет
+                        --playerWeaponsAmmo[0]; //Убавить боезапас на единицу
+                        if (playerWeaponsAmmo[0] < 1) //Если патронов в магазине нет
                         {
-                            MassiveActorAmmo[0] = 12; //Сразу перезарядить
+                            playerWeaponsAmmo[0] = 12; //Сразу перезарядить
                         }
                         break;
                     case 1:
                         playerAccuracy = 40;
-                        --MassiveActorAmmo[1];
+                        --playerWeaponsAmmo[1];
                         break;
                     case 2:
                         playerAccuracy = 50;
-                        --MassiveActorAmmo[2];
+                        --playerWeaponsAmmo[2];
                         break;
                     case 3:
                         playerAccuracy = 60;
-                        --MassiveActorAmmo[3];
+                        --playerWeaponsAmmo[3];
                 }
 
                 if (var_1fe2 && MathUtils.getRandomNumber(100) <= playerAccuracy) //Если ты всё-таки попал 
@@ -1595,7 +1595,7 @@ public final class Scripts {
         var_22f1 = true;
         PlayerHUD.playerDamaged = true;
         PlayerHUD.timeToDisplayDamageIndicator = (int) RenderEngine.renderTimeOnly3D + 500;
-        ActorCurrentHealth = (short) (ActorCurrentHealth - Hitpoints);
+        playerHealth = (short) (playerHealth - Hitpoints);
         SoundAndVibro.vibrate(200);
     }
 
@@ -1785,55 +1785,55 @@ public final class Scripts {
             RenderEngine.bool_massive_1st[RenderEngine.currentLocation] = !RenderEngine.bool_massive_3th[RenderEngine.currentLocation];
             if (RenderEngine.currentLocation == StoryLocationMassive[0]) {
                 rustyDialogState = 3;
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 20);
+                playerExp = (short) (playerExp + 20);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[1]) {
                 rustyDialogState = 5;
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 90);
+                playerExp = (short) (playerExp + 90);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[2]) //Задание Галоши
             {
                 galoshQuestState = 1;
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 40);
+                playerExp = (short) (playerExp + 40);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[3]) {
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 110);
+                playerExp = (short) (playerExp + 110);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[5]) {
                 haryaDialogState = 2;
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 25);
+                playerExp = (short) (playerExp + 25);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[6]) {
                 batyaDialogState = 2;
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 155);
+                playerExp = (short) (playerExp + 155);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[7]) {
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 250);
+                playerExp = (short) (playerExp + 250);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[9]) {
                 batyaDialogState = 4;
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 32);
+                playerExp = (short) (playerExp + 32);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[10]) {
                 belomorDialogState = 2;
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 135);
+                playerExp = (short) (playerExp + 135);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[11]) {
                 shlangDialogState = 2;
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 330);
+                playerExp = (short) (playerExp + 330);
             }
 
             if (RenderEngine.currentLocation == StoryLocationMassive[12]) {
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 375);
+                playerExp = (short) (playerExp + 375);
             }
 
         }
@@ -2199,7 +2199,7 @@ public final class Scripts {
                         {
                             ++currentNpcPhrase;
                             zaborDialogState = 1;
-                            CurrentActorExpirience = (short) (CurrentActorExpirience + 70);
+                            playerExp = (short) (playerExp + 70);
                             dialogCompleted = true;
                             return;
                         }
@@ -2333,7 +2333,7 @@ public final class Scripts {
 
                 if (rustyDialogState == 5) {
                     if (givenAnswersCount == 0) {
-                        if (selectedAnswer == 0 && var_2544) {
+                        if (selectedAnswer == 0 && svistunQuestCompleted) {
                             rustyDialogState = 6;
                             ++currentNpcPhrase;
                             addItemToInventary((short) 200);
@@ -2341,7 +2341,7 @@ public final class Scripts {
                             return;
                         }
 
-                        if (selectedAnswer == 1 && !var_2544) {
+                        if (selectedAnswer == 1 && !svistunQuestCompleted) {
                             givenAnswersCount = (byte) (givenAnswersCount + 2);
                             currentNpcPhrase = (byte) (currentNpcPhrase + 2);
                             return;
@@ -2422,21 +2422,21 @@ public final class Scripts {
                     } else if (givenAnswersCount == 1) {
                         if (selectedAnswer == 0) {
                             ++currentNpcPhrase;
-                            CurrentActorMoney = (short) (CurrentActorMoney - 50);
+                            playerMoney = (short) (playerMoney - 50);
                             dialogCompleted = true;
                             return;
                         }
 
                         if (selectedAnswer == 1) {
                             currentNpcPhrase = (byte) (currentNpcPhrase + 2);
-                            CurrentActorMoney = (short) (CurrentActorMoney - 50);
+                            playerMoney = (short) (playerMoney - 50);
                             dialogCompleted = true;
                             return;
                         }
 
                         if (selectedAnswer == 2) {
                             currentNpcPhrase = (byte) (currentNpcPhrase + 3);
-                            CurrentActorMoney = (short) (CurrentActorMoney - 50);
+                            playerMoney = (short) (playerMoney - 50);
                             dialogCompleted = true;
                             return;
                         }
@@ -2466,10 +2466,10 @@ public final class Scripts {
                         }
 
                         if (selectedAnswer == 1) {
-                            if (CurrentActorMoney >= 500) {
+                            if (playerMoney >= 500) {
                                 currentNpcPhrase = (byte) (currentNpcPhrase + 2);
                                 dialogCompleted = true;
-                                CurrentActorMoney = (short) (CurrentActorMoney - 500);
+                                playerMoney = (short) (playerMoney - 500);
                                 addMarkToPDA((byte) 9);
                                 batyaDialogState = 3;
                             }
@@ -2486,10 +2486,10 @@ public final class Scripts {
 
                 if (batyaDialogState == 1) {
                     if (selectedAnswer == 0) {
-                        if (CurrentActorMoney >= 500) {
+                        if (playerMoney >= 500) {
                             ++currentNpcPhrase;
                             dialogCompleted = true;
-                            CurrentActorMoney = (short) (CurrentActorMoney - 500);
+                            playerMoney = (short) (playerMoney - 500);
                             addMarkToPDA((byte) 9);
                             RenderEngine.bool_massive_1st[StoryLocationMassive[6]] = true;
                             batyaDialogState = 3;
@@ -2520,10 +2520,10 @@ public final class Scripts {
                     }
 
                     if (selectedAnswer == 1) {
-                        if (CurrentActorMoney >= 500) {
+                        if (playerMoney >= 500) {
                             currentNpcPhrase = (byte) (currentNpcPhrase + 2);
                             dialogCompleted = true;
-                            CurrentActorMoney = (short) (CurrentActorMoney - 500);
+                            playerMoney = (short) (playerMoney - 500);
                             addMarkToPDA((byte) 9);
                             batyaDialogState = 3;
                         }
@@ -2598,10 +2598,10 @@ public final class Scripts {
             case 11:
                 if (gutalinDialogState == 0) {
                     if (selectedAnswer == 0) {
-                        if (CurrentActorMoney >= 600) {
+                        if (playerMoney >= 600) {
                             ++currentNpcPhrase;
-                            CurrentActorMoney = (short) (CurrentActorMoney - 600);
-                            ++currentPlayerLevel;
+                            playerMoney = (short) (playerMoney - 600);
+                            ++playerLevel;
                             gutalinDialogState = 1;
                             dialogCompleted = true;
                         }
@@ -2650,7 +2650,7 @@ public final class Scripts {
                 if (shlangDialogState == 2) {
                     ++currentNpcPhrase;
                     dialogCompleted = true;
-                    CurrentActorMoney = (short) (CurrentActorMoney + 2000);
+                    playerMoney = (short) (playerMoney + 2000);
                     RenderEngine.setActiveObjState(var_23b6, (short) 0);
                     shlangDialogState = -1;
                 }
@@ -2697,7 +2697,7 @@ public final class Scripts {
             case 14:
                 if (kaynazovskiDialogState == 0) {
                     if (givenAnswersCount == 1) {
-                        if (selectedAnswer == 0 && !var_25bf) {
+                        if (selectedAnswer == 0 && !capItemGot) {
                             return;
                         }
 
@@ -2766,7 +2766,7 @@ public final class Scripts {
                         if (selectedAnswer == 0 && (searchItem((short) 101) || searchItem((short) 102))) {
                             ++currentNpcPhrase;
                             dialogCompleted = true;
-                            var_2544 = true;
+                            svistunQuestCompleted = true;
                             if (searchItem((short) 101)) {
                                 dropItem((short) 101);
                             } else if (searchItem((short) 102)) {
@@ -2793,7 +2793,7 @@ public final class Scripts {
             case 17:
                 RenderEngine.setActiveObjState(var_23b6, (short) 0);
                 if (selectedAnswer == 0) {
-                    var_25bf = true;
+                    capItemGot = true;
                     addItemToInventary((short) 200);
                     RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
                     return;
@@ -2801,7 +2801,7 @@ public final class Scripts {
 
                 currentNpcPhrase = (byte) (currentNpcPhrase + 2);
                 addMarkToPDA(StoryLocationMassive[8]);
-                CurrentActorExpirience = (short) (CurrentActorExpirience + 400);
+                playerExp = (short) (playerExp + 400);
                 dialogCompleted = true;
                 return;
             //Кэп

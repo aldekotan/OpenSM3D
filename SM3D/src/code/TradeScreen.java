@@ -75,7 +75,7 @@ public final class TradeScreen implements Screen
       y2 = ResourseManager.getUIElementYcoord(49, 10);
       TextCreator.FindParametersnDrawText(1, 310, x1, y2, 5);
       
-      byte[] currWeight = TextCreator.CreateTextMassiveForNumber(Scripts.ActorCurrentWeight);
+      byte[] currWeight = TextCreator.CreateTextMassiveForNumber(Scripts.playerWeight);
       byte[] kgSlash = TextCreator.CopyReplicToNewMassive(65);
       byte[] playerWeightText = TextCreator.combineTextMassives(currWeight, kgSlash);
       
@@ -107,7 +107,7 @@ public final class TradeScreen implements Screen
       TextCreator.drawReplicWithParameters(1, text, 0, text.length, x, y, 5);
       
       short[] playerMoneyText;
-      (playerMoneyText = TextCreator.surroundNumberWithChars(Scripts.CurrentActorMoney, false))[playerMoneyText.length - 1] = 106;
+      (playerMoneyText = TextCreator.surroundNumberWithChars(Scripts.playerMoney, false))[playerMoneyText.length - 1] = 106;
       x = ResourseManager.getUIElementXcoord(49, 13);
       y = ResourseManager.getUIElementYcoord(49, 13);
       TextCreator.drawColoredText(playerMoneyText, x, y, 3);
