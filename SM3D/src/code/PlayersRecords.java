@@ -12,7 +12,7 @@ public final class PlayersRecords extends ListScreen
 
    public PlayersRecords() 
    {
-      super.i_varMassive_1 = new int[3];
+      super.optionsTextId = new int[3];
    }
 
    public final boolean onShow(byte screenId) 

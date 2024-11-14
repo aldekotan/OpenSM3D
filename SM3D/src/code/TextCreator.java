@@ -574,7 +574,7 @@ public final class TextCreator
       DrawRollingReplicWithParameters(graphics, color_of_text, number_of_replic, var1, var2, x_dest, y_dest, var5);
    }
 
-   public static final void drawReplicInsideFrame(int number_of_replic, int xDest, int yDest, int var3, int color_of_text, Graphics graphics, int var6, int var7, Vector var8) 
+   public static void drawReplicInsideFrame(int number_of_replic, int xDest, int yDest, int var3, int color_of_text, Graphics graphics, int var6, int var7, Vector var8) 
    {
       if(var7 == -1) 
       {
@@ -619,7 +619,7 @@ public final class TextCreator
       return var4;
    }
 
-   public static final int sub_7eb(int var0, int var1) 
+   public static int sub_7eb(int var0, int var1) 
    {
       return sub_7ce(var0, byte_text_massive, massive_withStartnEnds[var1], massive_withStartnEnds[var1 + 1]);
    }

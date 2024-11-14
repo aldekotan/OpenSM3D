@@ -29,7 +29,7 @@ public final class AllScreens {
     //27 выход           3
    
    public static final String MORE_GAMES_URL = Main.main.getAppProperty("SiteURL");
-   public static int TEXT_LINE_HEIGHT_NOINDENT;
+   public static final int TEXT_LINE_HEIGHT_NOINDENT;
    public static int SymbolHeight;
    public static int SymbolWidth;
    public static final int var_1ec;
@@ -61,7 +61,10 @@ public final class AllScreens {
    {
       Font.getFont(0, 1, 8);
       TEXT_LINE_HEIGHT_NOINDENT = 15;
-      var_1ec = TEXT_LINE_HEIGHT_NOINDENT + -1 + 3;//17
+      
+      //no use
+      var_1ec = TEXT_LINE_HEIGHT_NOINDENT + -1 + 3;// (17)
+      
       var_231 = TEXT_LINE_HEIGHT_NOINDENT + 1 + 3;//18
       var_2a8 = MainMenuScreen.scrHeight - var_231;//320-18=302
       halfScrWidth = MainMenuScreen.scrWidth >> 1;
