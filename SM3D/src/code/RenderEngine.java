@@ -43,7 +43,7 @@ public final class RenderEngine {
     public static Camera camera;
     private static float[] cameraPos = new float[3];
     private static float[] prevCameraPos = new float[3]; //Used in cutscenes?
-    public static byte cameraDoorId;
+    public static byte currentDoorId;
     private static float cameraXRot, cameraYRot;
     private static int cameraYRotOffset;
 	
@@ -426,7 +426,7 @@ public final class RenderEngine {
         LoadingScreen.RunGarbageCollector();
         setRoomMeshes(place_number);
         LoadingScreen.RunGarbageCollector();
-        SetCameraTranslationAndOrientation(place_number, cameraDoorId);
+        SetCameraTranslationAndOrientation(place_number, currentDoorId);
         LoadingScreen.RunGarbageCollector();
     }
 
@@ -718,8 +718,8 @@ public final class RenderEngine {
             currentRoom = dis.readByte(); //limiterYrotation
             --currentRoom;
             
-            cameraDoorId = dis.readByte(); //выполнена ли 15-ая миссия
-            --cameraDoorId;
+            currentDoorId = dis.readByte(); //выполнена ли 15-ая миссия
+            --currentDoorId;
             
             roomsCount = dis.readByte();
 
@@ -1613,7 +1613,7 @@ public final class RenderEngine {
 
     public static boolean sub_a33() {
         for(byte var0 = 0; var0 < doorsCount[currentRoom]; ++var0) {
-            if(var0 != cameraDoorId && var_16a2[var0] && (doorUnlocked[var0] || isItemInList(doorKeys[currentRoom][var0], Scripts.locationExclusiveItems))) {
+            if(var0 != currentDoorId && var_16a2[var0] && (doorUnlocked[var0] || isItemInList(doorKeys[currentRoom][var0], Scripts.locationExclusiveItems))) {
                 var_17f2 = var0;
                 return true;
             }
@@ -1818,7 +1818,7 @@ public final class RenderEngine {
                 ResourceLoader.clearTextures();
                 SetTranformOfAllObjects(currentRoom);
                 setDialogWindowState((short) 2);
-                if(currentLocation == 16 && currentRoom == 6 && cameraDoorId == 0) {
+                if(currentLocation == 16 && currentRoom == 6 && currentDoorId == 0) {
                     sub_bd0();
                 }
             case -1:
@@ -1840,10 +1840,10 @@ public final class RenderEngine {
 
     public static void sub_c4f(byte var0) {
         if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
-            walkCurrentDoorId = cameraDoorId;
+            walkCurrentDoorId = currentDoorId;
             nextRoom = (byte) (loadedDoorsSettings[currentRoom][var0][0] - 1);
             if(nextRoom >= 0) {
-                cameraDoorId = (byte) (loadedDoorsSettings[currentRoom][var0][1] - 1);
+                currentDoorId = (byte) (loadedDoorsSettings[currentRoom][var0][1] - 1);
                 var_1afa = var0;
                 setDialogWindowState((short) 1);
             }
@@ -2220,7 +2220,7 @@ public final class RenderEngine {
             if(Scripts.var_2602) {
                 roomBotGroups[i].setRenderingEnable(true);
             } else {
-                if(botSettings[currentRoom][i][8] - 1 != cameraDoorId) {
+                if(botSettings[currentRoom][i][8] - 1 != currentDoorId) {
                     roomBotGroups[i].setRenderingEnable(false);
                     botActive[i] = false;
                 } else {
@@ -2447,8 +2447,8 @@ public final class RenderEngine {
 
     private static float YRotationLimit(float rotation_angle) //Влево-вправо
     {
-        float max_rotation = doorSettings[currentRoom][cameraDoorId][5]; //Справа
-        float min_rotation = doorSettings[currentRoom][cameraDoorId][6]; //Слева
+        float max_rotation = doorSettings[currentRoom][currentDoorId][5]; //Справа
+        float min_rotation = doorSettings[currentRoom][currentDoorId][6]; //Слева
         return rotation_angle <= -min_rotation ? -min_rotation : (rotation_angle >= max_rotation ? max_rotation : rotation_angle); //Если выходит за рамки обнулить
     }
 //</editor-fold>

@@ -1674,7 +1674,7 @@ public final class Scripts {
 
                     if (Keys.num0) {
                         Keys.num0 = false;
-                        sub_62f(RenderEngine.cameraDoorId);
+                        sub_62f(RenderEngine.currentDoorId);
                     }
 
                     if (Keys.rightSoft) {
