@@ -864,7 +864,7 @@ public final class PlayerHUD {
                 drawIntroText();
                 //next/дальше
                 drawSoftButtonNames(0, 1, 371, true);
-            } else if (!Scripts.var_2602) {
+            } else if (!Scripts.endingCutscene) {
                 if (RenderEngine.currentGameState == 11) {
                     drawToBeContinued();
                 } else if (RenderEngine.currentGameState == 4) {

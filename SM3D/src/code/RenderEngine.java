@@ -337,7 +337,7 @@ public final class RenderEngine {
 
     public static void init() {
         var_1e37 = 2000;
-        currentLocation = 0; //в оригинале 0
+        currentLocation = 16; //в оригинале 0
         //0 - лесная тропа
         //1 - первый лагерь сталкеров
         //2 - место, где водятся артефакты(Галош)
@@ -1526,7 +1526,7 @@ public final class RenderEngine {
         }
     }
 
-    private static void sub_844() {
+    private static void sub_844() {//дверь открыта, если враги мертвы
         PlayerHUD.doorLocked = false;
         if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
             for(byte var0 = 0; var0 < doorsCount[currentRoom]; ++var0) {
@@ -1552,7 +1552,7 @@ public final class RenderEngine {
         }
     }
 
-    private static void sub_8d1() {
+    private static void sub_8d1() {//активный объект доступен, если враги мертвы
         if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
             for(byte objId = 0; objId < activableObjsCount[currentRoom]; ++objId) {
                 if(cameraYRot > objYreachAngle[objId] - 5.0F && cameraYRot < objYreachAngle[objId] + 5.0F && cameraXRot >= objXMinReachAngle[objId] && cameraXRot <= objXMaxReachAngle[objId]) {
@@ -1638,7 +1638,7 @@ public final class RenderEngine {
         var_1e05[var0] = (int) renderTimeOnly3D + 500;
     }
 
-    public static boolean sub_acc() {
+    public static boolean sub_acc() {//доведение прицела до врага, если жив
         byte var0 = var_1eae;
         botIdUndercursor = -100;
         if(var0 < 0) {
@@ -1646,7 +1646,7 @@ public final class RenderEngine {
         } else if(var_1700[var0] && !botKilled[currentRoom][var0] && botActive[var0] && !var_84a[currentLocation][currentRoom]) {
             botIdUndercursor = var0;
             
-            if(!Scripts.var_2602) {
+            if(!Scripts.endingCutscene) {
                 if(var_1877 == -1) {
                     var_1877 = (int) renderTimeOnly3D;
                     var_18b0 = cameraYRot;
@@ -1838,7 +1838,7 @@ public final class RenderEngine {
         camera.postRotate(cameraXRot, 1.0F, 0.0F, 0.0F);
     }
 
-    public static void sub_c4f(byte var0) {
+    public static void sub_c4f(byte var0) {//переход по локации, если враги мертвы
         if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
             walkCurrentDoorId = currentDoorId;
             nextRoom = (byte) (loadedDoorsSettings[currentRoom][var0][0] - 1);
@@ -2124,14 +2124,14 @@ public final class RenderEngine {
             }
 
             if(var_1eae != -1 && !botKilled[currentRoom][var_1eae]) {
-                if(!Scripts.var_2602) {
+                if(!Scripts.endingCutscene) {
                     sub_e55(var_1eae, var_1e92[var_1eae]);
                 } else {
                     sub_e55(var_1eae, (byte) 2);
                 }
             }
 
-            if(Scripts.var_2602) {
+            if(Scripts.endingCutscene) {
                 for(botId = 0; botId < var0; ++botId) {
                     var1 = botSettings[currentRoom][botId][0];
                     var2 = botSettings[currentRoom][botId][1];
@@ -2147,7 +2147,7 @@ public final class RenderEngine {
             } else {
                 for(botId = 0; botId < var0; ++botId) {
                     //если атакует?
-                    if(Scripts.var_2602) {
+                    if(Scripts.endingCutscene) {
                         roomBotGroups[botId].setRenderingEnable(true);
                     } else {
                         //отключить отрисовку, если спрятался за укрытием
@@ -2197,7 +2197,7 @@ public final class RenderEngine {
         }
     }
 
-    private static void sub_103b() {
+    private static void sub_103b() {//проверка на то, убиты ли все враги
         if(botsCount[currentRoom] == 0) {
             var_84a[currentLocation][currentRoom] = true;
         }
@@ -2217,7 +2217,7 @@ public final class RenderEngine {
         botsAlive = 0;
 
         for(int i = 0; i < botsCount[currentRoom]; ++i) {
-            if(Scripts.var_2602) {
+            if(Scripts.endingCutscene) {
                 roomBotGroups[i].setRenderingEnable(true);
             } else {
                 if(botSettings[currentRoom][i][8] - 1 != currentDoorId) {
@@ -2304,7 +2304,7 @@ public final class RenderEngine {
 					
                     return;
                 default:
-                    if(Scripts.var_2602 && !showFinalDialog) {
+                    if(Scripts.endingCutscene && !showFinalDialog) {
                         boolean var12 = false;
                         int var13 = (int) renderTimeOnly3D - var_1a54;
                         boolean var14 = false;
@@ -2338,7 +2338,7 @@ public final class RenderEngine {
                             float var10 = var6 + (var7 - var6) * (float) var0 / (float) 5000;
                             SetCameraTranslation(var8, var9, var10);
                         } else {
-                            Scripts.var_2602 = false;
+                            Scripts.endingCutscene = false;
                             Scripts.startDialog((short) 20, (byte) 0);
                             showFinalDialog = false;
                         }

@@ -243,7 +243,7 @@ public final class Scripts {
     public static boolean dialogCompleted;
     public static boolean var_25bf;
     public static boolean ItemWalkieTalkieInInventaryBool;
-    public static boolean var_2602;
+    public static boolean endingCutscene;
     public static short[] stashItems;
     public static byte openedActivableObjId;
     public static short[] traderItems;
@@ -331,6 +331,13 @@ public final class Scripts {
         addItemToInventary((short) 115);*/
         //add weapons
         addItemToInventary((short) 116); //В оригинале выдаётся только пистолет
+        
+        addItemToInventary((short) 114);
+        for(int i = 1; i<10; i++)
+        {
+            addItemToInventary((short) 102);
+            addItemToInventary((short) 103);
+        }
         /*addItemToInventary((short) 117);
         addItemToInventary((short) 118);
         addItemToInventary((short) 119);
@@ -1605,7 +1612,7 @@ public final class Scripts {
     }
 
     private static void playerControlCheck() {
-        if (RenderEngine.currentGameState != 1 && RenderEngine.currentGameState != 4 && RenderEngine.currentGameState != 11 && !var_2602 && RenderEngine.currentGameState != 13 && RenderEngine.currentGameState != 0 && RenderEngine.currentGameState != -2) {
+        if (RenderEngine.currentGameState != 1 && RenderEngine.currentGameState != 4 && RenderEngine.currentGameState != 11 && !endingCutscene && RenderEngine.currentGameState != 13 && RenderEngine.currentGameState != 0 && RenderEngine.currentGameState != -2) {
             switch (RenderEngine.currentGameState) {
                 case 2:
                     if (RenderEngine.gamePaused) {
@@ -2851,7 +2858,7 @@ public final class Scripts {
                 if (koboldDialogState == 2) {
                     RenderEngine.setDialogWindowState((short) 2);
                     RenderEngine.setActiveObjState(var_23b6, (short) 0);
-                    var_2602 = true;
+                    endingCutscene = true;
                 }
                 break;
             //Призрак
