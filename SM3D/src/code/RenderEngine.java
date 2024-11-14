@@ -337,7 +337,7 @@ public final class RenderEngine {
 
     public static void init() {
         var_1e37 = 2000;
-        currentLocation = 16; //в оригинале 0
+        currentLocation = 0; //в оригинале 0
         //0 - лесная тропа
         //1 - первый лагерь сталкеров
         //2 - место, где водятся артефакты(Галош)

@@ -331,13 +331,6 @@ public final class Scripts {
         addItemToInventary((short) 115);*/
         //add weapons
         addItemToInventary((short) 116); //В оригинале выдаётся только пистолет
-        
-        addItemToInventary((short) 114);
-        for(int i = 1; i<10; i++)
-        {
-            addItemToInventary((short) 102);
-            addItemToInventary((short) 103);
-        }
         /*addItemToInventary((short) 117);
         addItemToInventary((short) 118);
         addItemToInventary((short) 119);
