@@ -18,15 +18,35 @@ public class ListScreen extends MenuScreen {
     public byte[] screenIdByOptionId;
     
     public static int[][] allListOptionsTextId = new int[][] {
-		null, 
-		new int[] {42, 43}, 
+		null,
+                //settings options text ids:
+                //42 sound
+                //43 vibro
+		new int[] {42, 43},
+                //pause options text ids:
+                //57 continue
+                //58 back to main menu
+                //0 
+                //50 inventory
+                //51 character
+                //56 map
+                //367 magazine(tasks)
 		new int[] {57, 58, 0, 50, 51, 56, 367}, 
 		null
 	};
 	
     public static byte[][] allListScreenIds = new byte[][] {
-		null, 
-		new byte[] {0, 0}, 
+		null,
+                //settings screen
+                //new screen Ids after choosing an option
+                //0 no change
+		new byte[] {0, 0},
+                //pause screen
+                //new screen Ids after choosing an option
+                //14 - game/map
+                //1 - main menu
+                //3 - inventory/tasks
+                //5 - character leveling
 		new byte[] {14, 1, 0, 3, 5, 14, 3}, 
 		null
 	};
