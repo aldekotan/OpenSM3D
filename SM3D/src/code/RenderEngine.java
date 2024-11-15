@@ -134,7 +134,6 @@ public final class RenderEngine {
     
     private static byte[] meshesCount = new byte[15];
     public static Mesh[] roomMeshes;
-    private static byte[] roomMeshesMdlId;
     private static float[][][] meshSettings = new float[15][32][8];
     //[roomId][mesh][settings]
     //x [0]
@@ -149,7 +148,6 @@ public final class RenderEngine {
     private static byte[] activableObjsCount = new byte[15];
     public static Mesh[] activableObjMeshes;
     public static Group[] staticBotMdlGroup;
-    private static byte[] roomActivableMeshesMdlId;
     private static float[][][] activableObjSettings = new float[15][10][8];
     //[roomId][obj][settings]
     //x [0]
@@ -292,8 +290,6 @@ public final class RenderEngine {
         roomBotGroups = new Group[10];
         bckSpritesAnimEnabled = new boolean[32];
         roomBckMeshesMdlId = new byte[32];
-        roomMeshesMdlId = new byte[32];
-        roomActivableMeshesMdlId = new byte[10];
         rotatingLightId = -1;
         var_143c = new float[5];
         var_1485 = new float[5];
@@ -974,7 +970,6 @@ public final class RenderEngine {
 
         for(int i = 0; i < activableObjsCount[roomId]; i++) {
             addObjectToGameWorld((int) activableObjSettings[roomId][i][6], i, (byte) 100);
-            roomActivableMeshesMdlId[i] = (byte) activableObjSettings[roomId][i][6];
         }
 		
         if(botsCount[roomId] == 0) {
@@ -987,7 +982,6 @@ public final class RenderEngine {
 
         for(int i = 0; i < meshesCount[roomId]; i++) {
             addObjectToGameWorld((int) meshSettings[roomId][i][6], i, (byte) 2);
-            roomMeshesMdlId[i] = (byte) meshSettings[roomId][i][6];
         }
 
         for(int i = 0; i < lightsCount[roomId]; i++) {
