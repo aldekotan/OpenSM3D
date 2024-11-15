@@ -194,7 +194,7 @@ public final class PlayerHUD {
         int x = SCREEN_WIDTH - weaponHUDImages[weapId].getWidth();
         int y = var1 - weaponHUDImages[weapId].getHeight();
         //рисуем вспышку от выстрела
-        if (RenderEngine.var_1cda || Scripts.var_228e) {
+        if (RenderEngine.shootShakeActive || Scripts.var_228e) {
             byte var4 = 0;
             byte var5 = 0;
             switch (weapId) {
@@ -218,7 +218,7 @@ public final class PlayerHUD {
         int var8;
         short var9;
         if (Scripts.var_215f) {
-            var8 = (int) RenderEngine.renderTimeOnly3D - Scripts.var_21d2;
+            var8 = (int) RenderEngine.gameTimeUnpaused - Scripts.var_21d2;
             var9 = Scripts.var_21a7;
             if (var8 <= var9) {
                 if (var8 <= var9 / 2) {
@@ -232,7 +232,7 @@ public final class PlayerHUD {
         }
 
         if (Scripts.var_2075) {
-            var8 = (int) RenderEngine.renderTimeOnly3D - Scripts.var_2108;
+            var8 = (int) RenderEngine.gameTimeUnpaused - Scripts.var_2108;
             var9 = Scripts.var_20d6;
             if (var8 <= var9) {
                 if (var8 <= var9 / 2) {
@@ -258,9 +258,9 @@ public final class PlayerHUD {
         int var1 = SCREEN_WIDTH / 2 - crosshairImages[crosshair_number].getWidth() / 2;
         int var2 = SCREEN_HEIGHT / 2 - crosshairImages[crosshair_number].getHeight() / 2;
         graphics.drawImage(crosshairImages[crosshair_number], var1, var2, 0);
-        if (RenderEngine.sub_a69() && crosshair_number == 0) {
-            short var3;
-            if ((var3 = getNPCNameTextId2(RenderEngine.SearchInteractionPoint(RenderEngine.TypeOfInteractWithObjectAhead))) == -1) {
+        if (RenderEngine.getActiveObjectIdUnderCursor() && crosshair_number == 0) {
+            int var3;
+            if ((var3 = getNPCNameTextId2(RenderEngine.getActivableObjState(RenderEngine.activableObjIdUnderCursor))) == -1) {
                 return;
             }
 
@@ -272,7 +272,7 @@ public final class PlayerHUD {
     }
     //Или замок, по ситуации
     private static void DrawLockAtCenter() {
-        if (RenderEngine.IsWayAheadLocked) {
+        if (RenderEngine.isBotDeathAnimFinished) {
             graphics.drawImage(lockImage, SCREEN_WIDTH / 2 - lockImage.getWidth() / 2, SCREEN_HEIGHT / 2 - lockImage.getHeight() / 2, 0);
         }
 
@@ -281,11 +281,11 @@ public final class PlayerHUD {
     public static void drawDamageIndicatorAndHealthBar(boolean insideInv) {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         if (playerDamaged && !insideInv) {
-            if (RenderEngine.renderTimeOnly3D >= (long) timeToDisplayDamageIndicator) {
+            if (RenderEngine.gameTimeUnpaused >= (long) timeToDisplayDamageIndicator) {
                 playerDamaged = false;
             }
 
-            if (RenderEngine.DamageEffect) {
+            if (RenderEngine.damageEffect) {
                 graphics.drawImage(damageImage, 0, SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
                 graphics.drawRegion(damageImage, 0, 0, damageImage.getWidth(), damageImage.getHeight(), 2, SCREEN_WIDTH - damageImage.getWidth(), SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
             } else if (RenderEngine.sub_911()) {
@@ -539,7 +539,7 @@ public final class PlayerHUD {
         }
     }
     //Получить имя нпс через ID диалога
-    private static short getNPCNameTextId2(short dialogId) {
+    private static short getNPCNameTextId2(int dialogId) {
         switch (dialogId) {
             case 4:
                 return (short) 340;
@@ -877,7 +877,7 @@ public final class PlayerHUD {
                     if (!RenderEngine.useThirdPerson) {
                         if (!Scripts.OpticalSight) {
                             drawWeapon(Scripts.playerActiveWeapon);
-                            if (!RenderEngine.sub_a69() && !RenderEngine.sub_a33()) {
+                            if (!RenderEngine.getActiveObjectIdUnderCursor() && !RenderEngine.getOpenDoorIdUnderCursor()) {
                                 if (doorLocked) {
                                     DrawLockAtCenter();
                                 } else {

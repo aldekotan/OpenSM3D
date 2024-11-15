@@ -23,7 +23,7 @@ public final class Scripts {
     public static short inventoryItemsCount;
 
     //Будут удалены после выхода с локации
-    public static short[] locationExclusiveItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
+    public static short[] locationInventoryItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
 
     //Набор экипировки
     public static short[] equipmentSlots = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
@@ -211,7 +211,7 @@ public final class Scripts {
     //Продолжительность действия
     public static int AntiradDuration = 20000;
 
-    private static boolean var_1fe2;
+    private static boolean botUnderCursor;
     private static boolean var_2040;
     public static boolean var_2075;
     public static short var_20d6 = 1000;
@@ -245,7 +245,7 @@ public final class Scripts {
     public static boolean ItemWalkieTalkieInInventaryBool;
     public static boolean endingCutscene;
     public static short[] stashItems;
-    public static byte openedActivableObjId;
+    public static int openedActivableObjId;
     public static short[] traderItems;
 
     private static void resetActorQuestAndDialogProgress() {
@@ -311,7 +311,7 @@ public final class Scripts {
         //*/
         inventoryItems = new short[100];
         equipmentSlots = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
-        locationExclusiveItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
+        locationInventoryItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
         inventoryItemsCount = 0;
 
         /*//add medkits
@@ -330,7 +330,7 @@ public final class Scripts {
         addItemToInventary((short) 114);
         addItemToInventary((short) 115);*/
         //add weapons
-        addItemToInventary((short) 116); //В оригинале выдаётся только пистолет
+        addItemToInventory((short) 116); //В оригинале выдаётся только пистолет
         /*addItemToInventary((short) 117);
         addItemToInventary((short) 118);
         addItemToInventary((short) 119);
@@ -493,11 +493,11 @@ public final class Scripts {
 
     private static void NPCShootPlayer() //Урон по игроку огнестрелом
     {                                    //с определённым шансом
-        if (RenderEngine.var_1db5 && RenderEngine.var_1eae != -1 && !RenderEngine.showFinalDialog && !var_22f1) {
+        if (RenderEngine.botIsShooting && RenderEngine.activeBotId != -1 && !RenderEngine.showFinalDialog && !var_22f1) {
             byte damage = 0;
             boolean hit_bool = false;
             byte var2;
-            switch (var2 = Bot.enemyDodgeLevels[RenderEngine.var_1eae]) {
+            switch (var2 = Bot.enemyWeaponType[RenderEngine.activeBotId]) {
                 case 0:
                     damage = 3;
                     hit_bool = MathUtils.getRandomNumber(100) <= 60;
@@ -538,19 +538,19 @@ public final class Scripts {
             RenderEngine.setDialogWindowState((short) 2);
         }
 
-        if (var_215f && RenderEngine.renderTimeOnly3D - (long) var_21d2 >= (long) (var_21a7 / 2) && !var_2040) {
+        if (var_215f && RenderEngine.gameTimeUnpaused - (long) var_21d2 >= (long) (var_21a7 / 2) && !var_2040) {
             SoundAndVibro.playSound(1);
             var_2040 = true;
         }
 
-        if (var_2075 && RenderEngine.renderTimeOnly3D - (long) var_2108 >= (long) (var_20d6 / 2) && !var_2040) {
+        if (var_2075 && RenderEngine.gameTimeUnpaused - (long) var_2108 >= (long) (var_20d6 / 2) && !var_2040) {
             SoundAndVibro.playSound(2);
             var_2040 = true;
         }
 
         if (RenderEngine.currentGameState == 2) {
             ActorLevelUpIfItNeed();
-            var_1fe2 = RenderEngine.sub_acc();
+            botUnderCursor = RenderEngine.processAim();
             SoundAndVibro.stopTooLongVibro();
             NPCShootPlayer();
         }
@@ -559,7 +559,7 @@ public final class Scripts {
     public static void takeGunInHands(byte var0) {
         if (!var_215f) {
             var_2075 = true;
-            var_2108 = (int) RenderEngine.renderTimeOnly3D;
+            var_2108 = (int) RenderEngine.gameTimeUnpaused;
             EncasedWeapon = playerActiveWeapon;
             playerActiveWeapon = var0;
             var_2040 = false;
@@ -614,12 +614,12 @@ public final class Scripts {
 
                 var_2040 = false;
                 var_215f = true;
-                var_21d2 = (int) RenderEngine.renderTimeOnly3D;
+                var_21d2 = (int) RenderEngine.gameTimeUnpaused;
             }
         }
     }
 
-    private static boolean tryDropOrPickupItem(short item, boolean b) {//true для попытки поднять
+    private static boolean tryDropOrPickupItem(int item, boolean b) {//true для попытки поднять
         short temporaryWeight = playerWeight;
         short coefWeight = -1;
 
@@ -940,7 +940,7 @@ public final class Scripts {
     }
 
     //Добавить предмет в слоты
-    private static void addToEquipmentSlot(short item) {
+    private static void addToEquipmentSlot(int item) {
         //Экипировка брони, основного и доп. оружия
         if (item <= 119) {
             switch (item) {
@@ -951,17 +951,17 @@ public final class Scripts {
                 case 113: //СЕВА
                 case 114: //Комбинезон сталкера
                 case 115: //СПП-9м.
-                    equipmentSlots[2] = item;
+                    equipmentSlots[2] = (short) item;
                     break;
                 //Доп.оружие (пистолет)
                 case 116: 
-                    equipmentSlots[1] = item;
+                    equipmentSlots[1] = (short) item;
                     break;
                 //Основное оружие
                 case 117: //Калаш
                 case 118: //Гроза
                 case 119: //Энфилд
-                    equipmentSlots[0] = item;
+                    equipmentSlots[0] = (short) item;
             }
         } 
         //Экипировка артефактов
@@ -970,7 +970,7 @@ public final class Scripts {
                 for (byte a = 3; a < 7; ++a) {
                     //Поставить в пустой слот
                     if (equipmentSlots[a] == -1) {
-                        equipmentSlots[a] = item;
+                        equipmentSlots[a] = (short) item;
                         return;
                     }
                 }
@@ -981,15 +981,15 @@ public final class Scripts {
         return RenderEngine.isItemInList(item, equipmentSlots);
     }
 
-    public static void addItemToInventary(short item) {
+    public static void addItemToInventory(int item) {
         if (item != 0 && item != 106) //Если предмет не равен нулю или если это не магазин для форта
         {
             if (item == 200) {
                 ItemWalkieTalkieInInventaryBool = true;
             } else if (item >= 127 && item <= 129) {
-                for (byte var1 = 0; var1 < locationExclusiveItems.length; ++var1) {
-                    if (locationExclusiveItems[var1] == -1) {
-                        locationExclusiveItems[var1] = item;
+                for (byte var1 = 0; var1 < locationInventoryItems.length; ++var1) {
+                    if (locationInventoryItems[var1] == -1) {
+                        locationInventoryItems[var1] = (short) item;
                         return;
                     }
                 }
@@ -998,20 +998,20 @@ public final class Scripts {
                 if (item >= 117 && item <= 119) {
                     switch (item) {
                         case 117:
-                            addItemToInventary((short) 107);//магазин калаша
+                            addItemToInventory((short) 107);//магазин калаша
                             useItem((short) 107);
                             break;
                         case 118:
-                            addItemToInventary((short) 108);//магазин грозы
+                            addItemToInventory((short) 108);//магазин грозы
                             useItem((short) 108);
                             break;
                         case 119:
-                            addItemToInventary((short) 109);//магазин энфилда
+                            addItemToInventory((short) 109);//магазин энфилда
                             useItem((short) 109);
                     }
                 }
 
-                inventoryItems[inventoryItemsCount] = item;
+                inventoryItems[inventoryItemsCount] = (short) item;
                 ++inventoryItemsCount;
                 if (item >= 140 && item <= 148 || item == 100) //Если подняты деньги - сразу использовать
                 {
@@ -1027,7 +1027,7 @@ public final class Scripts {
         playerAnomalyResistance = (byte) Math.max(0, playerAnomalyResistance + anom * multip);
     }
 
-    public static void useItem(short i) {
+    public static void useItem(int i) {
         //bugfix коэффициенты брони неправильно считаются
         //Если надевается броня
         if(i>109&&i<116)
@@ -1279,7 +1279,7 @@ public final class Scripts {
     }
 
     //Экипировка брони и артефактов
-    private static void changePlayerStatsByItem(short item, int multip) {
+    private static void changePlayerStatsByItem(int item, int multip) {
         switch (item) {
             //  БРОНЯ
             case 110:
@@ -1403,7 +1403,7 @@ public final class Scripts {
 
     public static void buyItem(short item) {
         if (tryTrade(item, true)) {
-            addItemToInventary(item);
+            addItemToInventory(item);
         }
     }
 
@@ -1425,7 +1425,7 @@ public final class Scripts {
         playerRadiationResistance = (byte) Math.max(0, playerRadiationResistance);
     }
 
-    public static void dropItem(short item) {
+    public static void dropItem(int item) {
         if (item != 116) //Любой предмет кроме пистолета форт
         {
             short var1 = 0;
@@ -1462,9 +1462,9 @@ public final class Scripts {
         return false;
     }
 
-    private static void sub_62f(byte var0) {
-        if (RenderEngine.var_1d93 == -1) {
-            RenderEngine.sub_c4f(var0);
+    private static void openDoor(int doorId) {
+        if (RenderEngine.dyingBotId == -1) {
+            RenderEngine.sub_c4f(doorId);
         }
     }
 
@@ -1472,18 +1472,20 @@ public final class Scripts {
         for (int i = 0; i < RenderEngine.itemsForKillingAllCount[RenderEngine.currentRoom]; i++) {
             short itemId = RenderEngine.itemsForKillingAll[RenderEngine.currentRoom][i];
             if (itemId != 0) {
-                addItemToInventary(itemId);
+                addItemToInventory(itemId);
                 RenderEngine.itemsForKillingAll[RenderEngine.currentRoom][i] = 0;
             }
         }
 
     }
 
-    private static void GetExperienceForKill() {
+    private static void killBot() {
         RenderEngine.botKilled[RenderEngine.currentRoom][RenderEngine.botIdUndercursor] = true;
-        ++RenderEngine.var_1fb1;
-        RenderEngine.sub_ab1(RenderEngine.botIdUndercursor);
+        RenderEngine.botsKilledCount++;
+		
+        RenderEngine.playBotDieAnimation(RenderEngine.botIdUndercursor);
         RenderEngine.sub_daf();
+		
         switch (Bot.getBotType(RenderEngine.botIdUndercursor)) {
             case 0:
                 ++playerExp;
@@ -1525,7 +1527,7 @@ public final class Scripts {
                 playerExp = (short) (playerExp + 16);
         }
 
-        if (RenderEngine.botsCount[RenderEngine.currentRoom] - RenderEngine.var_1fb1 == 0) {
+        if (RenderEngine.botsCount[RenderEngine.currentRoom] - RenderEngine.botsKilledCount == 0) {
             giveItemsForKillingAll();
         }
 
@@ -1557,8 +1559,8 @@ public final class Scripts {
         if (!var_2075 && !var_215f) {
             if (playerWeaponsAmmo[gun] > 0 || gun == 0) {
                 var_228e = true;
-                RenderEngine.var_1c84 = (int) RenderEngine.renderTimeOnly3D;
-                RenderEngine.var_1cda = true;
+                RenderEngine.shootStartTime = (int) RenderEngine.gameTimeUnpaused;
+                RenderEngine.shootShakeActive = true;
                 switch (gun) {
                     case 0: //Если в руках форт
                         playerAccuracy = 60; //Точность персонажа 60%
@@ -1581,9 +1583,9 @@ public final class Scripts {
                         --playerWeaponsAmmo[3];
                 }
 
-                if (var_1fe2 && MathUtils.getRandomNumber(100) <= playerAccuracy) //Если ты всё-таки попал 
+                if (botUnderCursor && MathUtils.getRandomNumber(100) <= playerAccuracy) //Если ты всё-таки попал 
                 {
-                    GetExperienceForKill();
+                    killBot();
                 }
 
             }
@@ -1594,7 +1596,7 @@ public final class Scripts {
     {
         var_22f1 = true;
         PlayerHUD.playerDamaged = true;
-        PlayerHUD.timeToDisplayDamageIndicator = (int) RenderEngine.renderTimeOnly3D + 500;
+        PlayerHUD.timeToDisplayDamageIndicator = (int) RenderEngine.gameTimeUnpaused + 500;
         playerHealth = (short) (playerHealth - Hitpoints);
         SoundAndVibro.vibrate(200);
     }
@@ -1619,12 +1621,12 @@ public final class Scripts {
                     if (Keys.fire || Keys.num5) {
                         Keys.fire = false;
                         Keys.num5 = false;
-                        if (RenderEngine.sub_a33()) {
-                            sub_62f(RenderEngine.var_17f2);
-                        } else if (!RenderEngine.sub_a69()) {
+                        if (RenderEngine.getOpenDoorIdUnderCursor()) {
+                            openDoor(RenderEngine.openDoorIdUnderCursor);
+                        } else if (!RenderEngine.getActiveObjectIdUnderCursor()) {
                             shoot(playerActiveWeapon);
                         } else {
-                            InteractionWith(RenderEngine.TypeOfInteractWithObjectAhead);
+                            InteractionWith(RenderEngine.activableObjIdUnderCursor);
                         }
                     }
 
@@ -1674,7 +1676,7 @@ public final class Scripts {
 
                     if (Keys.num0) {
                         Keys.num0 = false;
-                        sub_62f(RenderEngine.currentDoorId);
+                        openDoor(RenderEngine.currentDoorId);
                     }
 
                     if (Keys.rightSoft) {
@@ -1848,7 +1850,7 @@ public final class Scripts {
                 return;
             }
 
-            if (RenderEngine.nextLocation == RenderEngine.currentLocation && !RenderEngine.var_20a4) { //Если локация перехода равна прежней, вернуться
+            if (RenderEngine.nextLocation == RenderEngine.currentLocation && !RenderEngine.notInRoom) { //Если локация перехода равна прежней, вернуться
                 RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
                 RenderEngine.gamePaused = false;
                 return;
@@ -1859,7 +1861,7 @@ public final class Scripts {
             }
 
             PlayerHUD.ActivateTransitAnimation();
-            RenderEngine.var_7ee = RenderEngine.currentRoom;
+            RenderEngine.currentRoomPdawtf = RenderEngine.currentRoom;
             RenderEngine.currentLocation = RenderEngine.nextLocation;
         }
 
@@ -1919,9 +1921,9 @@ public final class Scripts {
         return false;
     }
 
-    public static void startDialog(short id, byte var1) {
-        currentDialogId = id; //
-        var_23b6 = var1; //
+    public static void startDialog(int id, int var1) {
+        currentDialogId = (short) id; //
+        var_23b6 = (byte) var1; //
         givenAnswersCount = 0;
         selectedAnswer = 0;
         currentNpcPhrase = 0;
@@ -2307,7 +2309,7 @@ public final class Scripts {
                             rustyDialogState = 6;
                             currentNpcPhrase = (byte) (currentNpcPhrase + 4);
                             dialogCompleted = true;
-                            addItemToInventary((short) 200);
+                            addItemToInventory((short) 200);
                             return;
                         }
 
@@ -2336,7 +2338,7 @@ public final class Scripts {
                         if (selectedAnswer == 0 && svistunQuestCompleted) {
                             rustyDialogState = 6;
                             ++currentNpcPhrase;
-                            addItemToInventary((short) 200);
+                            addItemToInventory((short) 200);
                             dialogCompleted = true;
                             return;
                         }
@@ -2356,7 +2358,7 @@ public final class Scripts {
                             }
 
                             dropItem((short) 124);
-                            addItemToInventary((short) 200);
+                            addItemToInventory((short) 200);
                             dialogCompleted = true;
                             ++currentNpcPhrase;
                             return;
@@ -2364,7 +2366,7 @@ public final class Scripts {
 
                         if (selectedAnswer == 1) {
                             rustyDialogState = 6;
-                            addItemToInventary((short) 200);
+                            addItemToInventory((short) 200);
                             currentNpcPhrase = (byte) (currentNpcPhrase + 2);
                             dialogCompleted = true;
                             return;
@@ -2584,7 +2586,7 @@ public final class Scripts {
 
                 if (haryaDialogState == 2) {
                     haryaDialogState = 3;
-                    addItemToInventary((short) 112);
+                    addItemToInventory((short) 112);
                     RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
                     return;
                 }
@@ -2734,7 +2736,7 @@ public final class Scripts {
                     RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
                     RenderEngine.setActiveObjState(var_23b6, (short) 0);
                     koboldDialogState = 2;
-                    addItemToInventary((short) 128);
+                    addItemToInventory((short) 128);
                 }
                 break;
             //Трус. По заданию с рации
@@ -2781,8 +2783,8 @@ public final class Scripts {
                         if (selectedAnswer == 1) {
                             currentNpcPhrase = (byte) (currentNpcPhrase + 2);
                             dialogCompleted = true;
-                            addItemToInventary((short) 141);
-                            addItemToInventary((short) 124);
+                            addItemToInventory((short) 141);
+                            addItemToInventory((short) 124);
                             RenderEngine.setActiveObjState(var_23b6, (short) 0);
                             var_2204 = true;
                         }
@@ -2794,7 +2796,7 @@ public final class Scripts {
                 RenderEngine.setActiveObjState(var_23b6, (short) 0);
                 if (selectedAnswer == 0) {
                     capItemGot = true;
-                    addItemToInventary((short) 200);
+                    addItemToInventory((short) 200);
                     RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
                     return;
                 }
@@ -2822,7 +2824,7 @@ public final class Scripts {
                     if (givenAnswersCount == 1) {
                         RenderEngine.setActiveObjState(var_23b6, (short) 0);
                         RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
-                        addItemToInventary((short) 127);
+                        addItemToInventory((short) 127);
                         kaynazovskiDialogState = 2;
                         return;
                     }
@@ -2835,7 +2837,7 @@ public final class Scripts {
                 if (koboldDialogState == 1) {
                     if (givenAnswersCount == 3) {
                         koboldDialogState = 0;
-                        RenderEngine.var_7ee = RenderEngine.currentRoom;
+                        RenderEngine.currentRoomPdawtf = RenderEngine.currentRoom;
                         RenderEngine.currentLocation = 16;
                         RenderEngine.locationCampMark[RenderEngine.currentLocation] = RenderEngine.currentLocation == 1 || RenderEngine.currentLocation == 6 || RenderEngine.currentLocation == 12;
                         RenderEngine.locationCompleted[RenderEngine.currentLocation] = !RenderEngine.locationCampMark[RenderEngine.currentLocation];
@@ -2937,11 +2939,11 @@ public final class Scripts {
         Main.main.repaint();
     }
 
-    private static void InteractionWith(byte type) //Interaction - взаимодействие; 1 деньги, 2 тайник, 3 - торговец, 0 - диалог
+    private static void InteractionWith(int type) //Interaction - взаимодействие; 1 деньги, 2 тайник, 3 - торговец, 0 - диалог
     {
         openedActivableObjId = type;
-        short number;
-        if ((number = RenderEngine.SearchInteractionPoint(type)) != 0 && number > 21) //что там находится?
+        int number;
+        if ((number = RenderEngine.getActivableObjState(type)) != 0 && number > 21) //что там находится?
         {
             if (number < 50 || number > 58) {
                 if (number <= 126 && number != 100) {
@@ -2952,18 +2954,18 @@ public final class Scripts {
                     }
 
                     if (number == 26) {
-                        addItemToInventary((short) 127);
-                        addItemToInventary((short) 140);
+                        addItemToInventory((short) 127);
+                        addItemToInventory((short) 140);
                         RenderEngine.setActiveObjState(type, (short) 0);
                         return;
                     }
 
-                    stashItems = new short[]{number};
+                    stashItems = new short[]{(short) number};
                     sub_99d();
                     return;
                 }
 
-                addItemToInventary(number);
+                addItemToInventory(number);
                 RenderEngine.setActiveObjState(type, (short) 0);
                 return;
             }
@@ -2975,13 +2977,13 @@ public final class Scripts {
             }
 
             if (number == 51) {
-                addItemToInventary((short) 140);
-                addItemToInventary((short) 128);
+                addItemToInventory((short) 140);
+                addItemToInventory((short) 128);
                 RenderEngine.setActiveObjState(type, (short) 0);
             }
 
             if (number == 52) {
-                addItemToInventary((short) 127);
+                addItemToInventory((short) 127);
                 stashItems = new short[]{(short) 123};
                 sub_99d();
             }

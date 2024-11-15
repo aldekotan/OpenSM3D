@@ -22,20 +22,22 @@ import javax.microedition.m3g.World;
 import javax.microedition.m3g.Image2D;
 
 public final class RenderEngine {
+    
+    public static final byte[] levelUseThirdperson;
 
     public static int currentLocation;
     public static int nextLocation;
     
-    public static byte currentRoom;
-    private static byte nextRoom;
-    
+    public static int currentRoom;
+    public static int currentRoomPdawtf; //unused //remove?
+    private static int nextRoom;
+	
     public static boolean[] locationCompleted = new boolean[17];
     public static boolean[] locationTaskMark = new boolean[17];
     public static boolean[] locationCampMark = new boolean[17];
     public static boolean gamePaused;
     public static Graphics3D graphics3D;
     public static World gameWorld = new World();
-    private static float[][] float_doublemassive_1st;
     public static short currentGameState;
     public static short prevGameState;
     
@@ -43,13 +45,13 @@ public final class RenderEngine {
     public static Camera camera;
     private static float[] cameraPos = new float[3];
     private static float[] prevCameraPos = new float[3]; //Used in cutscenes?
-    public static byte currentDoorId;
+    public static int currentDoorId;
     private static float cameraXRot, cameraYRot;
     private static int cameraYRotOffset;
 	
     private static Group playerModel;
 
-    public static byte roomsCount;
+    public static int roomsCount;
     private static float[][] roomSettings = new float[15][8];
     //[roomId][setting]
     
@@ -83,9 +85,13 @@ public final class RenderEngine {
     //[roomId][doorId]
     //item to unlock door
     private static boolean[] doorUnlocked = new boolean[5];
+    public static boolean[] doorIsUnderCursor;
+    public static int openDoorIdUnderCursor;
+    public static float[] doorYAngle, doorMaxXAngle, doorMinXAngle;
+    private static int nextDoorId;
     
     private static int walkAnimStartTime;
-    public static byte walkCurrentDoorId;
+    public static int walkCurrentDoorId;
     public static int walkNextDoorId;
     private static float walkPointTargetX;
     private static float walkPointTargetZ;
@@ -158,8 +164,13 @@ public final class RenderEngine {
     //?? unused [5]
     //model id [6]
     //activable object id (0 is unusable) [7]
+    public static boolean[] activableObjIsUnderCursor;
+    public static int activableObjIdUnderCursor;
+    public static float[] activObjYAngle, activObjMaxXAngle, activObjMinXAngle;
     
     public static byte[] botsCount = new byte[15];
+    private static byte botsAlive;
+    public static byte botsKilledCount;
     public static Group[] roomBotGroups;
     private static float[][][] botSettings = new float[15][10][15];
     //[roomId][bot][settings]
@@ -173,6 +184,27 @@ public final class RenderEngine {
     //[roomId][bot]
     private static float[][] botPositions = new float[10][3];
     //[bot][x, y, z]
+    public static int dyingBotId;
+    private static int[] botDeadAnimEndTime;
+    public static boolean[] botActive;
+    public static boolean isBotDeathAnimFinished; //makes no sense todo remove ???
+	
+	//something bot related too
+    private static int[] var_1dce; 
+    private static int botsStateChangeTime;
+    private static float[][] botCenterStatePos; //used for hide/look out position interpolation??
+	
+    public static boolean[] botIsUnderCursor;
+    public static float[] botYAngle, botMaxXAngle, botMinXAngle;
+    public static int activeBotId;
+    private static boolean activeBotHiding;
+    public static int botIdUndercursor; //not sure
+    private static byte[] botCurrentPosState;
+	
+    public static boolean botIsShooting;
+	
+    private static Sprite3D bloodSprite;
+    private static Sprite3D muzzleFlashSprite;
     
     public static byte[] itemsForKillingAllCount = new byte[15];
     public static short[][] itemsForKillingAll = new short[15][10];
@@ -182,9 +214,9 @@ public final class RenderEngine {
     //[roomId]
     private static byte[] damageZonesUnused = new byte[15];
     //unused ??
+    private static int lastTerrainDamageTime;
     
-    public static byte var_7ee;
-    public static boolean[][] var_84a;
+    public static boolean[][] allBotsKilledInRoom; //useless? todo remove? not sure
 	
 	//Objects data
     public static boolean objectsDataLoaded;
@@ -199,74 +231,48 @@ public final class RenderEngine {
     public static byte[] objectStaticBotAnimTime;
 	
     public static float[] tmpMehsScale;
+    public static Transform tmpTrans;
+    public static float[] tmpTransArr;
     private static boolean resetCachedAssetsArrays;
-    public static boolean showIntro;
-	
-    private static Sprite3D bloodSprite;
-    private static Sprite3D muzzleFlashSprite;
 	
     public static World persWorld;
 	
-    public static float[] var_143c;
-    public static float[] var_1485;
-    public static float[] var_14de;
-    public static float[] var_1539;
-    public static float[] var_156e;
-    public static float[] var_157d;
-    public static float[] objYreachAngle;
-    public static float[] objXMaxReachAngle;
-    public static float[] objXMinReachAngle;
-    private static boolean var_1669;
-    public static boolean[] var_16a2;
-    public static boolean[] var_1700;
-    public static boolean[] activableObjsStatus;
-    public static boolean DamageEffect;
-    public static byte var_17f2;
-    public static byte botIdUndercursor; //not sure
-    public static byte TypeOfInteractWithObjectAhead;
-    private static int var_185a;
-    private static int var_1877;
-    private static float var_18b0;
-    private static float var_18bf;
-    private static boolean CameraMovementDeactive;
+    private static boolean aimAssistActive;
+    private static int aimAssistStartTime;
+    private static float aimAssistOrigYRot;
+    private static float aimAssistOrigXRot;
+	
+    public static boolean damageEffect;
+	
+    public static int shootStartTime;
+    public static boolean shootShakeActive;
+	
     public static boolean useThirdPerson;
-    public static final byte[] levelUseThirdperson;
-    private static int var_1a13;
-    private static int var_1a54;
-    private static int var_1ab8;
     public static boolean showFinalDialog;
-    private static byte var_1afa;
-    private static final int screen_width;
-    private static final int screen_height;
-    public static long var_1bb1;
-    public static long renderTimeOnly3D;
-    public static long currentTimeMill;
-    private static int TickDurationMills;
-    public static int var_1c84;
-    public static boolean var_1cda;
-    public static Transform transform;
-    public static float[] var_1d3c;
-    public static boolean IsWayAheadLocked;
-    public static byte var_1d93;
-    public static boolean var_1db5;
-    private static int[] var_1dce;
-    private static int[] var_1e05;
-    private static int var_1e37;
-    private static byte[] var_1e92;
-    public static byte var_1eae;
-    private static boolean var_1ec4;
-    public static byte var_1fb1;
-    public static boolean[] botActive;
-    private static byte botsAlive;
-    public static boolean var_20a4;
+    public static boolean showIntro;
+    private static final int screenWidth; //todo remove?
+    private static final int screenHeight; //todo remove?
+	
+    public static long currentTime;
+    public static long gameTime; //unused todo remove?
+    public static long gameTimeUnpaused; //prev renderTimeOnly3D
+    private static int tickDuration;
    //Возвращаю старый дебаггер
     private static int fpsCounterEnabled;
+	
+	//some timers ?
+    private static int timeToEndGame;
+    private static int koboldCutsceneStartTime;
+    private static int finalDialogStartTime;
+	
+    private static boolean onlyOneBotLeft; //todo remove?
+    public static boolean notInRoom;
 
     static {
-        float_doublemassive_1st = new float[10][3];
+        botCenterStatePos = new float[10][3];
         currentGameState = -2;
         
-        var_84a = new boolean[17][15];
+        allBotsKilledInRoom = new boolean[17][15];
         objectModelSource = new byte[127];
         objectUnusedField = new byte[127];
 
@@ -291,35 +297,35 @@ public final class RenderEngine {
         bckSpritesAnimEnabled = new boolean[32];
         roomBckMeshesMdlId = new byte[32];
         rotatingLightId = -1;
-        var_143c = new float[5];
-        var_1485 = new float[5];
-        var_14de = new float[5];
-        var_1539 = new float[10];
-        var_156e = new float[10];
-        var_157d = new float[10];
-        objYreachAngle = new float[10];
-        objXMaxReachAngle = new float[10];
-        objXMinReachAngle = new float[10];
-        var_16a2 = new boolean[5];
-        var_1700 = new boolean[10];
-        activableObjsStatus = new boolean[10];
-        var_1877 = -1;
+        doorYAngle = new float[5];
+        doorMaxXAngle = new float[5];
+        doorMinXAngle = new float[5];
+        botYAngle = new float[10];
+        botMaxXAngle = new float[10];
+        botMinXAngle = new float[10];
+        activObjYAngle = new float[10];
+        activObjMaxXAngle = new float[10];
+        activObjMinXAngle = new float[10];
+        doorIsUnderCursor = new boolean[5];
+        botIsUnderCursor = new boolean[10];
+        activableObjIsUnderCursor = new boolean[10];
+        aimAssistStartTime = -1;
         levelUseThirdperson = new byte[]{0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0};
-        screen_width = MainMenuScreen.scrWidth;
-        screen_height = MainMenuScreen.scrHeight;
-        transform = new Transform();
-        var_1d3c = new float[16];
-        IsWayAheadLocked = true;
-        var_1d93 = -1;
+        screenWidth = MainMenuScreen.scrWidth;
+        screenHeight = MainMenuScreen.scrHeight;
+        tmpTrans = new Transform();
+        tmpTransArr = new float[16];
+        isBotDeathAnimFinished = true;
+        dyingBotId = -1;
         var_1dce = new int[10];
-        var_1e05 = new int[10];
-        var_1e37 = 2000;
-        var_1e92 = new byte[10];
-        var_1eae = -1;
+        botDeadAnimEndTime = new int[10];
+        botsStateChangeTime = 2000;
+        botCurrentPosState = new byte[10];
+        activeBotId = -1;
         bckSpritesW = new int[32];
         bckSpritesH = new int[32];
         botActive = new boolean[10];
-        var_20a4 = true;
+        notInRoom = true;
 
         try {
         fpsCounterEnabled = Integer.parseInt(Main.main.getAppProperty("ShowFPS"));
@@ -331,7 +337,7 @@ public final class RenderEngine {
     }
 
     public static void init() {
-        var_1e37 = 2000;
+        botsStateChangeTime = 2000;
         currentLocation = 0; //в оригинале 0
         //0 - лесная тропа
         //1 - первый лагерь сталкеров
@@ -353,15 +359,15 @@ public final class RenderEngine {
         locationTaskMark = new boolean[17];
         locationCampMark = new boolean[17];
         locationCampMark[1] = true;
-        var_16a2 = new boolean[5];
-        activableObjsStatus = new boolean[10];
-        var_1700 = new boolean[10];
+        doorIsUnderCursor = new boolean[5];
+        activableObjIsUnderCursor = new boolean[10];
+        botIsUnderCursor = new boolean[10];
         Scripts.setAllActorStatsToDefault();
     }
 
     private static void resetLocation() {
         Scripts.var_2204 = false;
-        Scripts.locationExclusiveItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
+        Scripts.locationInventoryItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
         botActive = new boolean[10];
         botKilled = new boolean[15][10];
     }
@@ -369,7 +375,6 @@ public final class RenderEngine {
     private static void loadLocation(int levelId) {//что-то с загрузкой локации
         resetLocation();
         loadLocationData(levelId);
-        LoadingScreen.RunGarbageCollector();
         nextRoom = currentRoom;
         ConfigureAndActivateCamera();
         if(resetCachedAssetsArrays) {
@@ -404,25 +409,19 @@ public final class RenderEngine {
         }
 
         ResourceLoader.clearTextures();
-        SetTranformOfAllObjects(currentRoom);
+        setupAllObjects(currentRoom);
         gamePaused = false;
     }
 
-    private static void SetTranformOfAllObjects(byte place_number) {
-        setRoomEnvironment(place_number);
-        LoadingScreen.RunGarbageCollector();
-        setRoomLights(place_number);
-        LoadingScreen.RunGarbageCollector();
-        setRoomBckMeshes(place_number);
-        LoadingScreen.RunGarbageCollector();
-        setRoomBots(place_number);
-        LoadingScreen.RunGarbageCollector();
-        setRoomActivableObjs(place_number); //настраивает группы или меши в дополнительной базе
-        LoadingScreen.RunGarbageCollector();
-        setRoomMeshes(place_number);
-        LoadingScreen.RunGarbageCollector();
-        SetCameraTranslationAndOrientation(place_number, currentDoorId);
-        LoadingScreen.RunGarbageCollector();
+    private static void setupAllObjects(int roomId) {
+        setRoomEnvironment(roomId);
+        setRoomLights(roomId);
+        setRoomBckMeshes(roomId);
+        setRoomBots(roomId);
+        setRoomActivableObjs(roomId);
+        setRoomMeshes(roomId);
+        setCamera(roomId, currentDoorId);
+		setObjAngles(roomId);
     }
 
     public static byte sub_165(byte var0, byte[] var1) {
@@ -444,12 +443,11 @@ public final class RenderEngine {
         return false;
     }
 
-    public static short SearchInteractionPoint(byte type) //
-    {
-        return (short) ((int) activableObjSettings[currentRoom][type][7]);
+    public static int getActivableObjState(int id) {
+        return (int) activableObjSettings[currentRoom][id][7];
     }
 
-    public static void setActiveObjState(byte id, short state) {
+    public static void setActiveObjState(int id, int state) {
         activableObjSettings[currentRoom][id][7] = (float) state;
     }
 
@@ -988,7 +986,7 @@ public final class RenderEngine {
             addObjectToGameWorld((int) lightSettings[roomId][i][4], i, (byte) 3);
         }
 		
-        var_20a4 = false;
+        notInRoom = false;
     }
 
     private static void loadSprites() {
@@ -1110,13 +1108,13 @@ public final class RenderEngine {
     }
 
     private static void setRoomBots(int roomId) {
-        var_1eae = -1;
-        var_1fb1 = 0;
+        activeBotId = -1;
+        botsKilledCount = 0;
 
         for(int i = 0; i < botsCount[roomId]; i++) {
-            var_1dce[i] = (int) renderTimeOnly3D + var_1e37;
-            var_1e05[i] = (int) renderTimeOnly3D + 500;
-            var_1e92[i] = 2;
+            var_1dce[i] = (int) gameTimeUnpaused + botsStateChangeTime;
+            botDeadAnimEndTime[i] = (int) gameTimeUnpaused + 500;
+            botCurrentPosState[i] = 2;
 			
             roomBotGroups[i].setOrientation(botSettings[roomId][i][7], 0.0F, 1.0F, 0.0F);
             setBotPosition(
@@ -1225,34 +1223,34 @@ public final class RenderEngine {
 
     private static void ConfigureAndActivateCamera() {
         byte var0;
-        for(var0 = 0; var0 < var_16a2.length; ++var0) {
-            var_16a2[var0] = false;
+        for(var0 = 0; var0 < doorIsUnderCursor.length; ++var0) {
+            doorIsUnderCursor[var0] = false;
         }
 
         for(var0 = 0; var0 < 10; ++var0) {
-            var_1700[var0] = false;
+            botIsUnderCursor[var0] = false;
         }
 
         cameraYRot = 0.0F;
         cameraXRot = 0.0F;
         bckSpritesAnimEnabled = new boolean[32];
-        var_185a = (int) renderTimeOnly3D;
-        var_1cda = false;
-        CameraMovementDeactive = false;
+        lastTerrainDamageTime = (int) gameTimeUnpaused;
+        shootShakeActive = false;
+        aimAssistActive = false;
         doorUnlocked = new boolean[doorsCount[currentRoom]];
-        var_16a2 = new boolean[5];
-        activableObjsStatus = new boolean[10];
-        var_1700 = new boolean[10];
+        doorIsUnderCursor = new boolean[5];
+        activableObjIsUnderCursor = new boolean[10];
+        botIsUnderCursor = new boolean[10];
 
         for(var0 = 0; var0 < doorUnlocked.length; ++var0) {
             doorUnlocked[var0] = doorSettings[currentRoom][var0][7] == 0.0F;
         }
 
-        var_1d93 = -1;
+        dyingBotId = -1;
         Scripts.sub_8b();
     }
 
-    private static void SetCameraTranslationAndOrientation(byte roomId, byte doorId) {
+    private static void setCamera(int roomId, int doorId) {
         gameWorld.removeChild(camera);
         camera = null; //useless
         camera = new Camera();
@@ -1270,6 +1268,9 @@ public final class RenderEngine {
         cameraPos[1] = doorSettings[roomId][doorId][1];
         cameraPos[2] = doorSettings[roomId][doorId][2];
         
+        setCameraPos(cameraPos[0], cameraPos[1], cameraPos[2]);
+        backupCameraPos();
+        
         float camX = cameraPos[0];
         float camZ = cameraPos[2];
         
@@ -1278,27 +1279,25 @@ public final class RenderEngine {
         
         float[] vec1 = getVectorForCrossProduct(camX, camZ, camX, camZ - 10.0F);
         float[] vec2 = getVectorForCrossProduct(camX, camZ, lookAtX, lookAtZ);
-        
+		
         cameraYRotOffset = getCrossProductSign(vec1, vec2) *
                 (int) getCamToRoomCenterAngle(roomId);
-        SetCameraTranslation(cameraPos[0], cameraPos[1], cameraPos[2]);
-        backupCameraPos();
         camera.setOrientation((float) cameraYRotOffset, 0.0F, 1.0F, 0.0F); //задаёт направление камеры
-
-        byte objId;
-        for(objId = 0; objId < doorsCount[roomId]; ++objId) {
-            sub_79c(objId, roomId);
-        }
-
-        for(objId = 0; objId < botsCount[roomId]; ++objId) {
-            sub_775(objId, roomId, var_1e92[objId]);
-        }
-
-        for(objId = 0; objId < activableObjsCount[roomId]; ++objId) {
-            sub_825(objId, roomId);
-        }
-
     }
+	
+	private static void setObjAngles(int roomId) {
+        for(int objId = 0; objId < doorsCount[roomId]; ++objId) {
+            setDoorAngles(objId, roomId);
+        }
+
+        for(int objId = 0; objId < botsCount[roomId]; ++objId) {
+            setBotAngles(objId, roomId, botCurrentPosState[objId]);
+        }
+
+        for(int objId = 0; objId < activableObjsCount[roomId]; ++objId) {
+            setActivableObjAngles(objId, roomId);
+        }
+	}
 
     //генерирует вектора для cross productа
     private static float[] getVectorForCrossProduct(float x1, float y1, 
@@ -1329,78 +1328,78 @@ public final class RenderEngine {
         return (float) MathUtils.acos(cos);
     }
 
-    private static void sub_775(byte var0, byte var1, byte var2) {
-        float var3 = roomSettings[var1][0];
-        float var4 = roomSettings[var1][2];
+    private static void setBotAngles(int botId, int roomId, int botPosId) {
+        float var3 = roomSettings[roomId][0];
+        float var4 = roomSettings[roomId][2];
         float var5 = cameraPos[0];
         float var6 = cameraPos[1];
         float var7 = cameraPos[2];
         float var9 = cameraPos[1] - 1.6F;
-        var_1669 = var2 == 0 || var2 == 4;
+        activeBotHiding = botPosId == 0 || botPosId == 4;
         float var11 = 0.0F;
-        float var12 = botSettings[var1][var0][6] + (var_1669 ? 1.0999999F : 1.8F);
-        float var13 = var_1669 ? botSettings[var1][var0][6] : botSettings[var1][var0][6] + 0.9F;
+        float var12 = botSettings[roomId][botId][6] + (activeBotHiding ? 1.0999999F : 1.8F);
+        float var13 = activeBotHiding ? botSettings[roomId][botId][6] : botSettings[roomId][botId][6] + 0.9F;
         float var14 = 0.0F;
-        switch(var2) {
+        switch(botPosId) {
             case 0:
             case 1:
-                var11 = botSettings[var1][var0][2];
-                var14 = botSettings[var1][var0][3];
+                var11 = botSettings[roomId][botId][2];
+                var14 = botSettings[roomId][botId][3];
                 break;
             case 2:
-                var11 = botSettings[var1][var0][0];
-                var14 = botSettings[var1][var0][1];
+                var11 = botSettings[roomId][botId][0];
+                var14 = botSettings[roomId][botId][1];
                 break;
             case 3:
             case 4:
-                var11 = botSettings[var1][var0][4];
-                var14 = botSettings[var1][var0][5];
+                var11 = botSettings[roomId][botId][4];
+                var14 = botSettings[roomId][botId][5];
         }
 
-        var_1539[var0] = sub_5d9(var5, var7, var11, var14, var3, var4);
+        botYAngle[botId] = sub_5d9(var5, var7, var11, var14, var3, var4);
         float[] var15 = getVectorForCrossProduct(var5, var7, var3, var4);
         float[] var16 = getVectorForCrossProduct(var5, var7, var11, var14);
         byte var17 = getCrossProductSign(var15, var16);
-        var_1539[var0] *= (float) var17;
+        botYAngle[botId] *= (float) var17;
         if(var12 <= var6) {
-            var_156e[var0] = -(90.0F - sub_5e5(var5, var6, var7, var11, var12, var14, var5, var9, var7));
-            var_157d[var0] = -(90.0F - sub_5e5(var5, var6, var7, var11, var13, var14, var5, var9, var7));
+            botMaxXAngle[botId] = -(90.0F - sub_5e5(var5, var6, var7, var11, var12, var14, var5, var9, var7));
+            botMinXAngle[botId] = -(90.0F - sub_5e5(var5, var6, var7, var11, var13, var14, var5, var9, var7));
         } else {
-            var_156e[var0] = sub_5e5(var5, var6, var7, var11, var12, var14, var5, var9, var7) - 90.0F;
-            var_157d[var0] = sub_5e5(var5, var6, var7, var11, var13, var14, var5, var9, var7) - 90.0F;
+            botMaxXAngle[botId] = sub_5e5(var5, var6, var7, var11, var12, var14, var5, var9, var7) - 90.0F;
+            botMinXAngle[botId] = sub_5e5(var5, var6, var7, var11, var13, var14, var5, var9, var7) - 90.0F;
         }
     }
 
-    private static void sub_79c(byte var0, byte var1) {
-        float var2 = roomSettings[var1][0];
-        float var3 = roomSettings[var1][2];
+    private static void setDoorAngles(int doorId, int roomId) {
+        float var2 = roomSettings[roomId][0];
+        float var3 = roomSettings[roomId][2];
         float var4 = cameraPos[0];
         float var5 = cameraPos[1];
         float var6 = cameraPos[2];
-        float var7 = doorSettings[var1][var0][0];
+        float var7 = doorSettings[roomId][doorId][0];
         float var8;
-        float var9 = (var8 = doorSettings[var1][var0][1] + 0.4F) - 2.0F;
-        float var10 = doorSettings[var1][var0][2];
+        float var9 = (var8 = doorSettings[roomId][doorId][1] + 0.4F) - 2.0F;
+        float var10 = doorSettings[roomId][doorId][2];
         float var12 = cameraPos[1] - 1.6F;
-        var_143c[var0] = sub_5d9(var4, var6, var7, var10, var2, var3);
+        doorYAngle[doorId] = sub_5d9(var4, var6, var7, var10, var2, var3);
         float[] var14 = getVectorForCrossProduct(var4, var6, var2, var3);
         float[] var15 = getVectorForCrossProduct(var4, var6, var7, var10);
         byte var16 = getCrossProductSign(var14, var15);
-        var_143c[var0] *= (float) var16;
-        if(loadedDoorsSettings[currentRoom][var0][0] - 1 < 0) {
-            var_143c[var0] = -500.0F;
+        doorYAngle[doorId] *= (float) var16;
+        if(loadedDoorsSettings[currentRoom][doorId][0] - 1 < 0) {
+            doorYAngle[doorId] = -500.0F;
         }
 
         if(var8 <= var5) {
-            var_1485[var0] = -(90.0F - sub_5e5(var4, var5, var6, var7, var8, var10, var4, var12, var6));
-            var_14de[var0] = -(90.0F - sub_5e5(var4, var5, var6, var7, var9, var10, var4, var12, var6));
+            doorMaxXAngle[doorId] = -(90.0F - sub_5e5(var4, var5, var6, var7, var8, var10, var4, var12, var6));
+            doorMinXAngle[doorId] = -(90.0F - sub_5e5(var4, var5, var6, var7, var9, var10, var4, var12, var6));
         } else {
-            var_1485[var0] = sub_5e5(var4, var5, var6, var7, var8, var10, var4, var12, var6) - 90.0F;
-            var_14de[var0] = sub_5e5(var4, var5, var6, var7, var9, var10, var4, var12, var6) - 90.0F;
+            doorMaxXAngle[doorId] = sub_5e5(var4, var5, var6, var7, var8, var10, var4, var12, var6) - 90.0F;
+            doorMinXAngle[doorId] = sub_5e5(var4, var5, var6, var7, var9, var10, var4, var12, var6) - 90.0F;
         }
     }
 
-    private static float[] sub_7cb(byte walkCurrentDoorId, boolean var1) {
+    private static float[] sub_7cb(int walkCurrentDoorId, boolean thirdPerson) {
         float var2 = roomSettings[currentRoom][0];
         float var3 = roomSettings[currentRoom][2];
         float var4 = cameraPos[0];
@@ -1411,7 +1410,7 @@ public final class RenderEngine {
         float var9 = doorSettings[currentRoom][walkCurrentDoorId][2];
         float var10 = doorSettings[currentRoom][walkNextDoorId - 1][0];
         float var11 = doorSettings[currentRoom][walkNextDoorId - 1][2];
-        useThirdPerson = var1;
+        useThirdPerson = thirdPerson;
         float var12 = sub_5d9(var4, var5, var6, var7, var2, var3);
         float[] var13 = getVectorForCrossProduct(var4, var5, var2, var3);
         float[] var14 = getVectorForCrossProduct(var4, var5, var6, var7);
@@ -1423,7 +1422,7 @@ public final class RenderEngine {
         return new float[]{var12 * (float) var15, (180.0F - var16) * (float) var17};
     }
 
-    private static void sub_825(byte objId, byte roomId) {//wip
+    private static void setActivableObjAngles(int objId, int roomId) {//wip
         float xRoomPos = roomSettings[roomId][0];
         float zRoomPos = roomSettings[roomId][2];
         float xCamPos = cameraPos[0];
@@ -1434,29 +1433,30 @@ public final class RenderEngine {
         float yObjMinPos = (yObjMaxPos = activableObjSettings[roomId][objId][1] + 1.5F) - 1.5F;
         float zObjPos = activableObjSettings[roomId][objId][2];
         float yCamMinPos = cameraPos[1] - 1.6F;
-        objYreachAngle[objId] = sub_5d9(xCamPos, zCamPos, xObjPos, zObjPos, xRoomPos, zRoomPos);//2d distance acos
+        activObjYAngle[objId] = sub_5d9(xCamPos, zCamPos, xObjPos, zObjPos, xRoomPos, zRoomPos);//2d distance acos
         float[] var14 = getVectorForCrossProduct(xCamPos, zCamPos, xRoomPos, zRoomPos);//3d distance acos
         float[] var15 = getVectorForCrossProduct(xCamPos, zCamPos, xObjPos, zObjPos);//3d distance acos
         byte var16 = getCrossProductSign(var14, var15);
-        objYreachAngle[objId] *= (float) var16;
+        activObjYAngle[objId] *= (float) var16;
         if(yCamPos <= yObjMaxPos) {
-            objXMaxReachAngle[objId] = -(90.0F - sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMaxPos, zObjPos, xCamPos, yCamMinPos, zCamPos));
-            objXMinReachAngle[objId] = -(90.0F - sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMinPos, zObjPos, xCamPos, yCamMinPos, zCamPos));
+            activObjMaxXAngle[objId] = -(90.0F - sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMaxPos, zObjPos, xCamPos, yCamMinPos, zCamPos));
+            activObjMinXAngle[objId] = -(90.0F - sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMinPos, zObjPos, xCamPos, yCamMinPos, zCamPos));
         } else {
-            objXMaxReachAngle[objId] = sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMaxPos, zObjPos, xCamPos, yCamMinPos, zCamPos) - 90.0F;
-            objXMinReachAngle[objId] = sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMinPos, zObjPos, xCamPos, yCamMinPos, zCamPos) - 90.0F;
+            activObjMaxXAngle[objId] = sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMaxPos, zObjPos, xCamPos, yCamMinPos, zCamPos) - 90.0F;
+            activObjMinXAngle[objId] = sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMinPos, zObjPos, xCamPos, yCamMinPos, zCamPos) - 90.0F;
         }
     }
 
-    private static void sub_844() {//дверь открыта, если враги мертвы
+    private static void checkDoorAngles() {//дверь открыта, если враги мертвы
         PlayerHUD.doorLocked = false;
-        if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
-            for(byte var0 = 0; var0 < doorsCount[currentRoom]; ++var0) {
-                if(cameraYRot > (float) ((int) var_143c[var0] - 10) && cameraYRot < (float) ((int) var_143c[var0] + 10) && cameraXRot >= var_14de[var0] && cameraXRot <= var_1485[var0]) {
-                    var_16a2[var0] = true;
-                    PlayerHUD.doorLocked = !doorUnlocked[var0];
+		
+        if(allBotsKilledInRoom[currentLocation][currentRoom] || botsAlive == 0) {
+            for(int doorId = 0; doorId < doorsCount[currentRoom]; doorId++) {
+                if(cameraYRot > (float) ((int) doorYAngle[doorId] - 10) && cameraYRot < (float) ((int) doorYAngle[doorId] + 10) && cameraXRot >= doorMinXAngle[doorId] && cameraXRot <= doorMaxXAngle[doorId]) {
+                    doorIsUnderCursor[doorId] = true;
+                    PlayerHUD.doorLocked = !doorUnlocked[doorId];
                 } else {
-                    var_16a2[var0] = false;
+                    doorIsUnderCursor[doorId] = false;
                 }
             }
 
@@ -1464,23 +1464,23 @@ public final class RenderEngine {
     }
 
     private static void sub_86e() {
-        byte var0 = var_1eae;
-        if(var_1eae >= 0) {
-            if(cameraYRot > var_1539[var0] - 10.0F && cameraYRot < var_1539[var0] + 10.0F && cameraXRot >= var_157d[var0] - 5.0F && cameraXRot <= var_156e[var0] + 5.0F) {
-                var_1700[var0] = var_1e92[var_1eae] != -1;
+        int botId = activeBotId;
+        if(activeBotId >= 0) {
+            if(cameraYRot > botYAngle[botId] - 10.0F && cameraYRot < botYAngle[botId] + 10.0F && cameraXRot >= botMinXAngle[botId] - 5.0F && cameraXRot <= botMaxXAngle[botId] + 5.0F) {
+                botIsUnderCursor[botId] = botCurrentPosState[activeBotId] != -1;
             } else {
-                var_1700[var0] = false;
+                botIsUnderCursor[botId] = false;
             }
         }
     }
 
-    private static void sub_8d1() {//активный объект доступен, если враги мертвы
-        if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
-            for(byte objId = 0; objId < activableObjsCount[currentRoom]; ++objId) {
-                if(cameraYRot > objYreachAngle[objId] - 5.0F && cameraYRot < objYreachAngle[objId] + 5.0F && cameraXRot >= objXMinReachAngle[objId] && cameraXRot <= objXMaxReachAngle[objId]) {
-                    activableObjsStatus[objId] = true;
+    private static void checkActiveObjsAngles() {//активный объект доступен, если враги мертвы
+        if(allBotsKilledInRoom[currentLocation][currentRoom] || botsAlive == 0) {
+            for(int objId = 0; objId < activableObjsCount[currentRoom]; objId++) {
+                if(cameraYRot > activObjYAngle[objId] - 5.0F && cameraYRot < activObjYAngle[objId] + 5.0F && cameraXRot >= activObjMinXAngle[objId] && cameraXRot <= activObjMaxXAngle[objId]) {
+                    activableObjIsUnderCursor[objId] = true;
                 } else {
-                    activableObjsStatus[objId] = false;
+                    activableObjIsUnderCursor[objId] = false;
                 }
             }
 
@@ -1488,12 +1488,12 @@ public final class RenderEngine {
     }
 
     public static boolean sub_911() {
-        return var_1eae >= 0 && var_1539[var_1eae] - cameraYRot >= 0.0F;
+        return activeBotId >= 0 && botYAngle[activeBotId] - cameraYRot >= 0.0F;
     }
 
-    private static boolean sub_966() {
-        if((int) renderTimeOnly3D - var_185a >= 1000) {
-            var_185a = (int) renderTimeOnly3D;
+    private static boolean terrainDamageTimer() {
+        if((int) gameTimeUnpaused - lastTerrainDamageTime >= 1000) {
+            lastTerrainDamageTime = (int) gameTimeUnpaused;
             return true;
         } else {
             return false;
@@ -1502,7 +1502,7 @@ public final class RenderEngine {
 
     private static void antiradTimer() {
         if(Scripts.IsAntiradIsUsed) {
-            Scripts.AntiradDuration -= TickDurationMills;
+            Scripts.AntiradDuration -= tickDuration;
             if(Scripts.AntiradDuration <= 0) {
                 Scripts.IsAntiradIsUsed = false;
                 Scripts.AntiradDuration = 20000;
@@ -1510,12 +1510,12 @@ public final class RenderEngine {
         }
 
         if(damageZonesTypes[currentRoom] == -1) {
-            StopDamageEffect();
-        } else if(sub_966()) {
+            disableDamageEffect();
+        } else if(terrainDamageTimer()) {
             DealTerrainDamageThroughArmor();
         } else {
-            if(renderTimeOnly3D - (long) var_185a >= 500L) {
-                StopDamageEffect();
+            if(gameTimeUnpaused - (long) lastTerrainDamageTime >= 500L) {
+                disableDamageEffect();
             }
 
         }
@@ -1524,19 +1524,19 @@ public final class RenderEngine {
     private static void DealTerrainDamageThroughArmor() {
         if(!Scripts.IsAntiradIsUsed) {
             int hitpoints = damageZonesTypes[currentRoom] > 0 ? 7 : 4;//Радиация или аномалия, сильный или слабый урон. Что есть что?
-            DamageEffect = true;
+            damageEffect = true;
             Scripts.CauseDamageToActor(hitpoints - hitpoints * ((Scripts.playerAnomalyResistance + Scripts.playerRadiationResistance) / 2) / 100);
         }
     }
 
-    private static void StopDamageEffect() {
-        DamageEffect = false;
+    private static void disableDamageEffect() {
+        damageEffect = false;
     }
 
-    public static boolean sub_a33() {
-        for(byte var0 = 0; var0 < doorsCount[currentRoom]; ++var0) {
-            if(var0 != currentDoorId && var_16a2[var0] && (doorUnlocked[var0] || isItemInList(doorKeys[currentRoom][var0], Scripts.locationExclusiveItems))) {
-                var_17f2 = var0;
+    public static boolean getOpenDoorIdUnderCursor() {
+        for(int i = 0; i < doorsCount[currentRoom]; i++) {
+            if(i != currentDoorId && doorIsUnderCursor[i] && (doorUnlocked[i] || isItemInList(doorKeys[currentRoom][i], Scripts.locationInventoryItems))) {
+                openDoorIdUnderCursor = (byte) i;
                 return true;
             }
         }
@@ -1544,10 +1544,10 @@ public final class RenderEngine {
         return false;
     }
 
-    public static boolean sub_a69() {
-        for(byte var0 = 0; var0 < activableObjsCount[currentRoom]; ++var0) {
-            if(activableObjsStatus[var0] && SearchInteractionPoint(var0) != 0) {
-                TypeOfInteractWithObjectAhead = var0;
+    public static boolean getActiveObjectIdUnderCursor() {
+        for(int i = 0; i < activableObjsCount[currentRoom]; i++) {
+            if(activableObjIsUnderCursor[i] && getActivableObjState(i) != 0) {
+                activableObjIdUnderCursor = i;
                 return true;
             }
         }
@@ -1555,41 +1555,41 @@ public final class RenderEngine {
         return false;
     }
 
-    public static void sub_ab1(byte var0) {
-        var_1d93 = var0;
-        var_1e05[var0] = (int) renderTimeOnly3D + 500;
+    public static void playBotDieAnimation(int botId) {
+        dyingBotId = botId;
+        botDeadAnimEndTime[botId] = (int) gameTimeUnpaused + 500;
     }
 
-    public static boolean sub_acc() {//доведение прицела до врага, если жив
-        byte var0 = var_1eae;
+    public static boolean processAim() {//доведение прицела до врага, если жив
         botIdUndercursor = -100;
-        if(var0 < 0) {
-            return false;
-        } else if(var_1700[var0] && !botKilled[currentRoom][var0] && botActive[var0] && !var_84a[currentLocation][currentRoom]) {
-            botIdUndercursor = var0;
+        if(activeBotId < 0) return false;
+		
+        if(botIsUnderCursor[activeBotId] && !botKilled[currentRoom][activeBotId] && botActive[activeBotId] && !allBotsKilledInRoom[currentLocation][currentRoom]) {
+            botIdUndercursor = activeBotId;
             
             if(!Scripts.endingCutscene) {
-                if(var_1877 == -1) {
-                    var_1877 = (int) renderTimeOnly3D;
-                    var_18b0 = cameraYRot;
-                    var_18bf = cameraXRot;
+                if(aimAssistStartTime == -1) {
+                    aimAssistStartTime = (int) gameTimeUnpaused;
+                    aimAssistOrigYRot = cameraYRot;
+                    aimAssistOrigXRot = cameraXRot;
                 }
 
-                if(renderTimeOnly3D - (long) var_1877 < 300L) {
-                    cameraYRot = var_18b0 + (var_1539[var0] - var_18b0) * (float) (renderTimeOnly3D - (long) var_1877) / 300.0F;
-                    float var1 = var_156e[var0] - (var_156e[var0] - var_157d[var0]) / (float) (var_1669 ? 4 : 2);
-                    cameraXRot = var_18bf + (var1 - var_18bf) * (float) (renderTimeOnly3D - (long) var_1877) / 300.0F;
+                if(gameTimeUnpaused - (long) aimAssistStartTime < 300L) {
+					//interpolate to bot angle
+                    cameraYRot = aimAssistOrigYRot + (botYAngle[activeBotId] - aimAssistOrigYRot) * (gameTimeUnpaused - aimAssistStartTime) / 300.0F;
+                    float newXRot = botMaxXAngle[activeBotId] - (botMaxXAngle[activeBotId] - botMinXAngle[activeBotId]) / (float) (activeBotHiding ? 4 : 2);
+                    cameraXRot = aimAssistOrigXRot + (newXRot - aimAssistOrigXRot) * (gameTimeUnpaused - aimAssistStartTime) / 300.0F;
                 } else {
-                    var_1877 = -1;
+                    aimAssistStartTime = -1;
                 }
             }
 
-            CameraMovementDeactive = true;
-            return true;
+            aimAssistActive = true;
         } else {
-            CameraMovementDeactive = false;
-            return false;
+            aimAssistActive = false;
         }
+		
+		return aimAssistActive;
     }
 
     public static void setDialogWindowState(short state) {
@@ -1608,14 +1608,14 @@ public final class RenderEngine {
                 }
                 break;
             case 1:
-                if(var_1afa == walkCurrentDoorId) {
+                if(nextDoorId == walkCurrentDoorId) {
                     return;
                 }
 
                 for(int i = 0; i < walkPointsCount[currentRoom]; ++i) {
                     walkNextDoorId = ((int) walkPoints[currentRoom][i][0]) - 1 - walkCurrentDoorId;
 					
-                    if(walkNextDoorId == var_1afa + 1) {
+                    if(walkNextDoorId == nextDoorId + 1) {
                         walkPointTargetX = walkPoints[currentRoom][i][1];
                         walkPointTargetZ = walkPoints[currentRoom][i][2];
 						
@@ -1634,7 +1634,7 @@ public final class RenderEngine {
                 float[] var3 = sub_7cb(walkCurrentDoorId, levelUseThirdperson[currentLocation] == 1);
                 walkStartYRot = var3[0] != 180.0F ? var3[0] : 0.0F;
                 walkPointYRot = walkStartYRot + var3[1];
-                walkAnimStartTime = (int) renderTimeOnly3D;
+                walkAnimStartTime = (int) gameTimeUnpaused;
                 backupCameraPos();
                 if(useThirdPerson) {
                     preparePlayerModel(Scripts.playerActiveWeapon);
@@ -1663,13 +1663,13 @@ public final class RenderEngine {
     }
 
     public static void endGame(short var0, int var1) {//11 - прод. след., 4 - конец игры
-        var_1a13 = (int) renderTimeOnly3D + var1;
+        timeToEndGame = (int) gameTimeUnpaused + var1;
         prevGameState = currentGameState;
         currentGameState = var0;
     }
 
     private static void sub_b67() {
-        if(renderTimeOnly3D >= (long) var_1a13) {
+        if(gameTimeUnpaused >= (long) timeToEndGame) {
             switch(currentGameState) {
                 case 4:
                     sub_b83();
@@ -1690,8 +1690,8 @@ public final class RenderEngine {
         loadPlayerModel();
         preparePlayerModel(Scripts.playerActiveWeapon);
         Scripts.startDialog((short) 19, (byte) 0);
-        var_1e37 = 500;
-        var_1a54 = (int) renderTimeOnly3D;
+        botsStateChangeTime = 500;
+        koboldCutsceneStartTime = (int) gameTimeUnpaused;
     }
 
     private static void updateGameState() {
@@ -1710,7 +1710,7 @@ public final class RenderEngine {
                 setDialogWindowState((short) 2);
                 return;
             case 1://переход между уровнями?
-                if(var_1afa == walkCurrentDoorId) {
+                if(nextDoorId == walkCurrentDoorId) {
                     PlayerHUD.garbageCollected = 0;
                     sub_115f();
                     return;
@@ -1722,8 +1722,8 @@ public final class RenderEngine {
                 sub_103b();//подсчёт мёртвых и живых
                 sub_1072();//рендер неписей
                 sub_86e();//??
-                sub_844();//doors obj status
-                sub_8d1();//activable obj status
+                checkDoorAngles();//doors obj status
+                checkActiveObjsAngles();//activable obj status
                 antiradTimer();
                 if(Scripts.playerHealth <= 0) {
                     endGame((short) 4, 3000);
@@ -1738,7 +1738,7 @@ public final class RenderEngine {
             case 13:
                 loadRoom(currentRoom);
                 ResourceLoader.clearTextures();
-                SetTranformOfAllObjects(currentRoom);
+                setupAllObjects(currentRoom);
                 setDialogWindowState((short) 2);
                 if(currentLocation == 16 && currentRoom == 6 && currentDoorId == 0) {
                     sub_bd0();
@@ -1760,42 +1760,39 @@ public final class RenderEngine {
         camera.postRotate(cameraXRot, 1.0F, 0.0F, 0.0F);
     }
 
-    public static void sub_c4f(byte var0) {//переход по локации, если враги мертвы
-        if(var_84a[currentLocation][currentRoom] || botsAlive == 0) {
+    public static void sub_c4f(int doorId) {//переход по локации, если враги мертвы
+        if(allBotsKilledInRoom[currentLocation][currentRoom] || botsAlive == 0) {
             walkCurrentDoorId = currentDoorId;
-            nextRoom = (byte) (loadedDoorsSettings[currentRoom][var0][0] - 1);
+            nextRoom = (byte) (loadedDoorsSettings[currentRoom][doorId][0] - 1);
             if(nextRoom >= 0) {
-                currentDoorId = (byte) (loadedDoorsSettings[currentRoom][var0][1] - 1);
-                var_1afa = var0;
+                currentDoorId = (byte) (loadedDoorsSettings[currentRoom][doorId][1] - 1);
+                nextDoorId = doorId;
                 setDialogWindowState((short) 1);
             }
         }
     }
 
-    private static void SetCameraTranslation(float x, float y, float z) {
+    private static void setCameraPos(float x, float y, float z) {
         camera.setTranslation(x, y, z);
     }
 
     private static void sub_d23() {
-        long curr_time = System.currentTimeMillis();
-        TickDurationMills = Math.min(250, (int) (curr_time - currentTimeMill));
-        if(TickDurationMills < 0) {
-            TickDurationMills = 0;
-        }
+        long time = System.currentTimeMillis();
+		
+        tickDuration = Math.min(250, (int) (time - currentTime));
+        if(tickDuration < 0) tickDuration = 0;
 
-        var_1bb1 += (long) TickDurationMills;
-        currentTimeMill = curr_time;
-        if(!gamePaused) {
-            renderTimeOnly3D += (long) TickDurationMills;
-        }
+        currentTime = time;
+        gameTime += tickDuration;
+        if(!gamePaused) gameTimeUnpaused += tickDuration;
 
     }
 
     private static void sub_d9f() {
-        if(var_1cda) {
+        if(shootShakeActive) {
             boolean var0 = MathUtils.fps < 10;
             int var1;
-            if((var1 = (int) renderTimeOnly3D - var_1c84) <= 200) {
+            if((var1 = (int) gameTimeUnpaused - shootStartTime) <= 200) {
                 if(!var0) {
                     float x_angle;
                     float y_angle;
@@ -1817,7 +1814,7 @@ public final class RenderEngine {
             } else {
                 camera.setOrientation((float) cameraYRotOffset + cameraYRot, 0.0F, 1.0F, 0.0F);
                 camera.postRotate(cameraXRot, 1.0F, 0.0F, 0.0F);
-                var_1cda = false;
+                shootShakeActive = false;
                 bloodSprite.setRenderingEnable(false);
             }
 
@@ -1826,21 +1823,21 @@ public final class RenderEngine {
 
     public static void sub_daf() {
 		Mesh var_e6b;
-        switch(var_1e92[botIdUndercursor]) {
+        switch(botCurrentPosState[botIdUndercursor]) {
             case 0:
             case 4:
                 var_e6b = (Mesh) roomBotGroups[botIdUndercursor].find(30);
-                var_e6b.getTransformTo(gameWorld, transform);
-                transform.get(var_1d3c);
-                bloodSprite.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
+                var_e6b.getTransformTo(gameWorld, tmpTrans);
+                tmpTrans.get(tmpTransArr);
+                bloodSprite.setTranslation(tmpTransArr[3], tmpTransArr[7], tmpTransArr[11]);
                 break;
             case 1:
             case 2:
             case 3:
                 var_e6b = (Mesh) roomBotGroups[botIdUndercursor].find(31);
-                var_e6b.getTransformTo(gameWorld, transform);
-                transform.get(var_1d3c);
-                bloodSprite.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
+                var_e6b.getTransformTo(gameWorld, tmpTrans);
+                tmpTrans.get(tmpTransArr);
+                bloodSprite.setTranslation(tmpTransArr[3], tmpTransArr[7], tmpTransArr[11]);
         }
 
         bloodSprite.setRenderingEnable(true);
@@ -1848,7 +1845,7 @@ public final class RenderEngine {
 
     private static void CameraXPostRotate() {
         int current_time;
-        if((current_time = (int) renderTimeOnly3D & 1000) <= 1000) {
+        if((current_time = (int) gameTimeUnpaused & 1000) <= 1000) {
             float angle;
             if(current_time <= 500) {
                 angle = cameraXRot + 2.0F * (float) current_time / 1000.0F;
@@ -1862,38 +1859,34 @@ public final class RenderEngine {
         }
     }
 
-    private static void sub_e34(byte var0, byte var1) {
-        int var2 = 500 - (var_1e05[var0] - (int) renderTimeOnly3D);
-        short var3 = 0;
-        short var4 = 0;
-        switch(var1) {
-            case 0:
-            case 4:
-                var3 = 1500;
-                var4 = 2000;
-                break;
-            case 1:
-            case 2:
-            case 3:
-                var3 = 1700;
-                var4 = 2000;
-        }
+    private static void playBotDeadAnim(int botId, int botPosState) {
+        int timeElapsed = (int) (gameTimeUnpaused - (botDeadAnimEndTime[botId] - 500));
+		
+        int startFrame, endFrame;
+		
+		if(botPosState == 0 || botPosState == 4) {
+			startFrame = 1500;
+            endFrame = 2000;
+		} else {
+			startFrame = 1700;
+			endFrame = 2000;
+		}
 
-        if(var2 <= 500) {
-            int var5 = var3 + (var4 - var3) * var2 / 500;
-            roomBotGroups[var0].animate(var5);
-            IsWayAheadLocked = false;
+        if(timeElapsed <= 500) {
+            int frame = startFrame + (endFrame - startFrame) * timeElapsed / 500;
+            roomBotGroups[botId].animate(frame);
+            isBotDeathAnimFinished = false;
         } else {
-            var_1d93 = -1;
-            IsWayAheadLocked = true;
+            dyingBotId = -1;
+            isBotDeathAnimFinished = true;
             bloodSprite.setRenderingEnable(false);
         }
     }
 
-    private static void sub_e55(byte var0, byte var1) {
+    private static void sub_e55(int botId, int botPosState) {
         short var2 = 0;
         short var3 = 0;
-        switch(var1) {
+        switch(botPosState) {
             case 0:
                 var2 = 300;
                 var3 = 500;
@@ -1915,60 +1908,62 @@ public final class RenderEngine {
                 var3 = 800;
         }
 
-        int var4 = var_1e37 - (var_1dce[var0] - (int) renderTimeOnly3D);
-        int var5 = var_1e37;
+        int var4 = (int) (gameTimeUnpaused - var_1dce[botId] + botsStateChangeTime);
+        int var5 = botsStateChangeTime;
         muzzleFlashSprite.setRenderingEnable(false);
         if(var4 > var5 / 2 - 750 && var4 < var5 / 2 + 750) {
-            var_1db5 = true;
-            roomBotGroups[var0].animate(var3);
+            botIsShooting = true;
+            roomBotGroups[botId].animate(var3);
             if(var4 % 300 <= 150) {
-                Light light = (Light) roomBotGroups[var_1eae].find(50);
-                light.getTransformTo(gameWorld, transform);
-                transform.get(var_1d3c);
-                muzzleFlashSprite.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
+                Light light = (Light) roomBotGroups[activeBotId].find(50);
+                light.getTransformTo(gameWorld, tmpTrans);
+                tmpTrans.get(tmpTransArr);
+                muzzleFlashSprite.setTranslation(tmpTransArr[3], tmpTransArr[7], tmpTransArr[11]);
                 muzzleFlashSprite.setRenderingEnable(true);
             } else {
                 muzzleFlashSprite.setRenderingEnable(false);
             }
         } else {
-            var_1db5 = false;
-            float var7 = botPositions[var0][0] - float_doublemassive_1st[var0][0];
-            float var8 = botPositions[var0][2] - float_doublemassive_1st[var0][2];
+            botIsShooting = false;
+            float var7 = botPositions[botId][0] - botCenterStatePos[botId][0];
+            float var8 = botPositions[botId][2] - botCenterStatePos[botId][2];
             float var9 = 0.0F;
-            float var10 = botSettings[currentRoom][var0][6];
+            float var10 = botSettings[currentRoom][botId][6];
             float var11 = 0.0F;
             if(var4 <= var5) {
                 int var6;
                 int var13;
+				
+				//interpolation ?
                 if(var4 <= var5 / 2 - 750) {
-                    var9 = float_doublemassive_1st[var0][0] + var7 * (float) var4 / (float) (var_1e37 / 2 - 750);
-                    var11 = float_doublemassive_1st[var0][2] + var8 * (float) var4 / (float) (var_1e37 / 2 - 750);
-                    var13 = (var3 - var2) * var4 / (var_1e37 / 2 - 750);
+                    var9 = botCenterStatePos[botId][0] + var7 * (float) var4 / (float) (botsStateChangeTime / 2 - 750);
+                    var11 = botCenterStatePos[botId][2] + var8 * (float) var4 / (float) (botsStateChangeTime / 2 - 750);
+                    var13 = (var3 - var2) * var4 / (botsStateChangeTime / 2 - 750);
                     var6 = var2 + var13;
-                    roomBotGroups[var0].animate(var6);
+                    roomBotGroups[botId].animate(var6);
                 }
 
                 if(var4 >= var5 / 2 + 750) {
-                    var9 = float_doublemassive_1st[var0][0] + var7 * (float) (var5 - var4) / (float) (var_1e37 / 2 - 750);
-                    var11 = float_doublemassive_1st[var0][2] + var8 * (float) (var5 - var4) / (float) (var_1e37 / 2 - 750);
-                    var13 = (var3 - var2) * (var5 - var4) / (var_1e37 / 2 - 750);
+                    var9 = botCenterStatePos[botId][0] + var7 * (float) (var5 - var4) / (float) (botsStateChangeTime / 2 - 750);
+                    var11 = botCenterStatePos[botId][2] + var8 * (float) (var5 - var4) / (float) (botsStateChangeTime / 2 - 750);
+                    var13 = (var3 - var2) * (var5 - var4) / (botsStateChangeTime / 2 - 750);
                     var6 = var2 + var13;
-                    roomBotGroups[var0].animate(var6);
+                    roomBotGroups[botId].animate(var6);
                 }
 
-                roomBotGroups[var0].setTranslation(var9, var10, var11);
+                roomBotGroups[botId].setTranslation(var9, var10, var11);
             } else {
-                var_1e92[var0] = -1;
+                botCurrentPosState[botId] = -1;
             }
         }
     }
 
-    private static boolean sub_e95(byte var0) {
-        return var0 == -1 ? true : (botsCount[currentRoom] - var_1fb1 == 1 ? renderTimeOnly3D >= (long) (var_1dce[var0] + 2000) : renderTimeOnly3D >= (long) var_1dce[var0]);
+    private static boolean sub_e95(int botId) {
+        return botId == -1 ? true : (botsCount[currentRoom] - botsKilledCount == 1 ? gameTimeUnpaused >= (long) (var_1dce[botId] + 2000) : gameTimeUnpaused >= (long) var_1dce[botId]);
     }
 
-    private static boolean sub_eee(byte var0) {
-        return botActive[var0] && !botKilled[currentRoom][var0] && sub_e95(var_1eae);
+    private static boolean sub_eee(int botId) {
+        return botActive[botId] && !botKilled[currentRoom][botId] && sub_e95(activeBotId);
     }
 
     private static void sub_f2e() {
@@ -1978,23 +1973,23 @@ public final class RenderEngine {
             float var2 = 0.0F;
             byte var3 = (byte) MathUtils.getRandomNumber(var0);
             float var4 = botSettings[currentRoom][var3][6];
-            if(var3 == var_1eae) {
+            if(var3 == activeBotId) {
                 var3 = (byte) MathUtils.getRandomNumber(var0);
             }
 
-            if(var0 - var_1fb1 == 0) {
-                CameraMovementDeactive = false;
+            if(var0 - botsKilledCount == 0) {
+                aimAssistActive = false;
                 muzzleFlashSprite.setRenderingEnable(false);
-                if(var_1d93 != -1) {
-                    sub_e34(var_1d93, var_1e92[var_1eae]);
+                if(dyingBotId != -1) {
+                    playBotDeadAnim(dyingBotId, botCurrentPosState[activeBotId]);
                     return;
                 }
             }
 
             byte var5 = (byte) MathUtils.getRandomNumber(4);
-            var_1ec4 = var0 - var_1fb1 == 1;
+            onlyOneBotLeft = var0 - botsKilledCount == 1;
             byte botId;
-            if(var_1ec4) {
+            if(onlyOneBotLeft) {
                 for(botId = 0; botId < var0; ++botId) {
                     if(!botKilled[currentRoom][botId]) {
                         var3 = botId;
@@ -2003,7 +1998,7 @@ public final class RenderEngine {
                 }
             }
 
-            if(botSettings[currentRoom][var3][9 + var5] != 0.0F && sub_eee(var3) && var_1d93 == -1) {
+            if(botSettings[currentRoom][var3][9 + var5] != 0.0F && sub_eee(var3) && dyingBotId == -1) {
                 switch(var5) {
                     case 0:
                     case 1:
@@ -2021,21 +2016,21 @@ public final class RenderEngine {
                 }
 
                 Scripts.var_22f1 = false;
-                var_1e92[var3] = var5;
-                sub_775(var3, currentRoom, var5);
-                var_1eae = var3;
+                botCurrentPosState[var3] = var5;
+                setBotAngles(var3, currentRoom, var5);
+                activeBotId = var3;
                 setBotPosition(var3, var1, var4, var2);
-                float_doublemassive_1st[var3][0] = botSettings[currentRoom][var3][0];
-                float_doublemassive_1st[var3][1] = botSettings[currentRoom][var3][6];
-                float_doublemassive_1st[var3][2] = botSettings[currentRoom][var3][1];
-                var_1dce[var3] = (int) renderTimeOnly3D + var_1e37;
+                botCenterStatePos[var3][0] = botSettings[currentRoom][var3][0];
+                botCenterStatePos[var3][1] = botSettings[currentRoom][var3][6];
+                botCenterStatePos[var3][2] = botSettings[currentRoom][var3][1];
+                var_1dce[var3] = (int) gameTimeUnpaused + botsStateChangeTime;
             }
 
-            if(var_1eae != -1 && !botKilled[currentRoom][var_1eae]) {
+            if(activeBotId != -1 && !botKilled[currentRoom][activeBotId]) {
                 if(!Scripts.endingCutscene) {
-                    sub_e55(var_1eae, var_1e92[var_1eae]);
+                    sub_e55(activeBotId, botCurrentPosState[activeBotId]);
                 } else {
-                    sub_e55(var_1eae, (byte) 2);
+                    sub_e55(activeBotId, (byte) 2);
                 }
             }
 
@@ -2049,9 +2044,9 @@ public final class RenderEngine {
                 }
             }
 
-            if(var_1d93 != -1 && var_1eae != -1) {
+            if(dyingBotId != -1 && activeBotId != -1) {
                 muzzleFlashSprite.setRenderingEnable(false);
-                sub_e34(var_1d93, var_1e92[var_1eae]);
+                playBotDeadAnim(dyingBotId, botCurrentPosState[activeBotId]);
             } else {
                 for(botId = 0; botId < var0; ++botId) {
                     //если атакует?
@@ -2059,7 +2054,7 @@ public final class RenderEngine {
                         roomBotGroups[botId].setRenderingEnable(true);
                     } else {
                         //отключить отрисовку, если спрятался за укрытием
-                        if(!botKilled[currentRoom][botId] && botId != var_1eae) {
+                        if(!botKilled[currentRoom][botId] && botId != activeBotId) {
                             roomBotGroups[botId].setRenderingEnable(false);
                         }
 
@@ -2076,7 +2071,7 @@ public final class RenderEngine {
 
     private static void animateRotatingLight() {
         if(rotatingLightId != -1) {
-            int time = (int) renderTimeOnly3D & 1000;
+            int time = (int) gameTimeUnpaused & 1000;
             roomLights[rotatingLightId].animate(time);
         }
     }
@@ -2087,7 +2082,7 @@ public final class RenderEngine {
                 int w = RenderEngine.bckSpritesW[i] / 8;
 				int h = bckSpritesH[i];
 				
-                int frameTime = (int) (renderTimeOnly3D + (long) (i * 300)) % 1000 / 200;
+                int frameTime = (int) (gameTimeUnpaused + (long) (i * 300)) % 1000 / 200;
                 int x = w * frameTime;
 				
                 bckSprites[i].setCrop(x, 0, w, h);
@@ -2113,18 +2108,17 @@ public final class RenderEngine {
 
     private static void sub_103b() {//проверка на то, убиты ли все враги
         if(botsCount[currentRoom] == 0) {
-            var_84a[currentLocation][currentRoom] = true;
+            allBotsKilledInRoom[currentLocation][currentRoom] = true;
+			return;
         }
 
-        byte var0 = 0;
+        int botsDead = 0;
 
-        for(int bot = 0; bot < botsCount[currentRoom]; ++bot) {
-            if(botKilled[currentRoom][bot]) {
-                ++var0;
-            }
+        for(int botId = 0; botId < botsCount[currentRoom]; botId++) {
+            if(botKilled[currentRoom][botId]) botsDead++;
         }
 
-        var_84a[currentLocation][currentRoom] = var0 == botsCount[currentRoom];
+        allBotsKilledInRoom[currentLocation][currentRoom] = botsDead == botsCount[currentRoom];
     }
 
     private static void sub_1072() {//выглядывание ботов
@@ -2146,7 +2140,7 @@ public final class RenderEngine {
                     }
                 }
 
-                if(var_84a[currentLocation][currentRoom] || botKilled[currentRoom][i]) {
+                if(allBotsKilledInRoom[currentLocation][currentRoom] || botKilled[currentRoom][i]) {
                     roomBotGroups[i].setRenderingEnable(true);
                 }
             }
@@ -2156,7 +2150,7 @@ public final class RenderEngine {
     }
 
     private static void updateWalkAnimation(Node node) {
-        int timeElapsed = (int) renderTimeOnly3D - walkAnimStartTime;
+        int timeElapsed = (int) gameTimeUnpaused - walkAnimStartTime;
 		
         if(timeElapsed <= 500) {
 			//Rotate camera first
@@ -2196,7 +2190,7 @@ public final class RenderEngine {
             }
 
             if(useThirdPerson) {
-                int playerModelAnimTime = 2400 + 390 * (int) (renderTimeOnly3D & 1000L) / 1000;
+                int playerModelAnimTime = 2400 + 390 * (int) (gameTimeUnpaused & 1000L) / 1000;
                 node.animate(playerModelAnimTime);
             } else {
                 CameraXPostRotate();
@@ -2220,9 +2214,9 @@ public final class RenderEngine {
                 default:
                     if(Scripts.endingCutscene && !showFinalDialog) {
                         boolean var12 = false;
-                        int var13 = (int) renderTimeOnly3D - var_1a54;
+                        int var13 = (int) gameTimeUnpaused - koboldCutsceneStartTime;
                         boolean var14 = false;
-                        SetCameraTranslation(61.5F, 3.0F, 134.0F);
+                        setCameraPos(61.5F, 3.0F, 134.0F);
                         playerModel.setTranslation(75.2F, 0.0F, 130.0F);
                         playerModel.setOrientation((float) (cameraYRotOffset + 180), 0.0F, 1.0F, 0.0F);
                         if(var13 <= 6000) {
@@ -2236,11 +2230,11 @@ public final class RenderEngine {
                                 playerModel.animate(200);
                             }
                         } else {
-                            var_1ab8 = (int) renderTimeOnly3D;
+                            finalDialogStartTime = (int) gameTimeUnpaused;
                             showFinalDialog = true;
                         }
                     } else if(showFinalDialog) {
-                        int var0 = (int) renderTimeOnly3D - var_1ab8;
+                        int var0 = (int) gameTimeUnpaused - finalDialogStartTime;
                         float var2 = 61.5F;
                         float var3 = 75.2F;
                         float var4 = 3.0F;
@@ -2250,7 +2244,7 @@ public final class RenderEngine {
                             float var8 = var2 + (var3 - var2) * (float) var0 / (float) 5000;
                             float var9 = var4 + 0.0F * (float) var0 / (float) 5000;
                             float var10 = var6 + (var7 - var6) * (float) var0 / (float) 5000;
-                            SetCameraTranslation(var8, var9, var10);
+                            setCameraPos(var8, var9, var10);
                         } else {
                             Scripts.endingCutscene = false;
                             Scripts.startDialog((short) 20, (byte) 0);
@@ -2258,7 +2252,7 @@ public final class RenderEngine {
                         }
                     } else {
                         SetCameraOrientAndPostRotate();
-                        SetCameraTranslation(cameraPos[0], cameraPos[1], cameraPos[2]);
+                        setCameraPos(cameraPos[0], cameraPos[1], cameraPos[2]);
                         sub_d9f();
                     }
 
@@ -2321,7 +2315,7 @@ public final class RenderEngine {
         gameWorld.removeChild(ambientLight);
         ambientLight = null;
         System.gc();
-        var_20a4 = true;
+        notInRoom = true;
     }
 
     private static void sub_115f() {
@@ -2369,14 +2363,14 @@ public final class RenderEngine {
 //<editor-fold defaultstate="collapsed" desc="Поворот влево-вправо">
 
     public static void TurnLeftTheCamera() {
-        if(!CameraMovementDeactive) {
+        if(!aimAssistActive) {
             cameraYRot += Keys.leftAccelerate ? 8.0F : 2.0F;
             cameraYRot = YRotationLimit(cameraYRot);
         }
     }
 
     public static void TurnRightTheCamera() {
-        if(!CameraMovementDeactive) {
+        if(!aimAssistActive) {
             cameraYRot -= Keys.rightAccelerate ? 8.0F : 2.0F;
             cameraYRot = YRotationLimit(cameraYRot);
         }
@@ -2385,7 +2379,7 @@ public final class RenderEngine {
 //<editor-fold defaultstate="collapsed" desc="Поворот вверх или вниз">
 
     public static void RaiseTheCamera() {
-        if(!CameraMovementDeactive) {
+        if(!aimAssistActive) {
             float float_num = Keys.upAccelerate ? 8.0F : 2.0F; //Если клавиша нажата равно 8
             cameraXRot += float_num;
             cameraXRot = XRotationLimit(cameraXRot);
@@ -2393,7 +2387,7 @@ public final class RenderEngine {
     }
 
     public static void LowerTheCamera() {
-        if(!CameraMovementDeactive) {
+        if(!aimAssistActive) {
             float float_num = Keys.downAccelerate ? 10.0F : 2.0F;
             cameraXRot -= float_num;
             cameraXRot = XRotationLimit(cameraXRot);

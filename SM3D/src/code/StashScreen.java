@@ -138,7 +138,7 @@ public final class StashScreen implements Screen
       case 8://взять предмет себе/дропнуть из инвентаря
          if(this.screen == this.masterInvScreen.topAreaItemsZone && Scripts.stashItems[ItemsInteraction.selectedTopAreaItem] != -1) 
          {
-            Scripts.addItemToInventary(Scripts.stashItems[ItemsInteraction.selectedTopAreaItem]);
+            Scripts.addItemToInventory(Scripts.stashItems[ItemsInteraction.selectedTopAreaItem]);
             Scripts.stashItems = MathUtils.removeItemFromList(Scripts.stashItems, ItemsInteraction.selectedTopAreaItem);
             this.masterInvScreen.topAreaItemsZone.onShow((byte)4);
             this.masterInvScreen.playerItemsZone.onShow((byte)3);

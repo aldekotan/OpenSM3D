@@ -82,7 +82,7 @@ public class ModChanges //Здесь буду размещать внесённ�
 
     public static void NewStartItems() {
         if(ModChanges_Active == true) {
-            Scripts.addItemToInventary((short) 300);
+            Scripts.addItemToInventory((short) 300);
         }
     }
 

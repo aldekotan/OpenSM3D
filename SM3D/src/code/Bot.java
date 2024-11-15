@@ -14,11 +14,10 @@ import javax.microedition.m3g.World;
 
 public final class Bot //Персонажи, модели, освещение, спрайты...
 {
-	//Уровень уворотов для каждого врага, от 0 до 3. 
+	//Вид оружия для каждого врага, от 0 до 3. 
 	//Сами вероятности см. в NPCShootPlayer
-
-	public static byte[] enemyDodgeLevels = new byte[10];
-	//Уровень опытности каждого добавленного на уровень противника (от 0 до 12)
+	public static byte[] enemyWeaponType = new byte[10];
+	//Тип каждого добавленного на уровень противника (от 0 до 12)
 	//По нему вычисляется количество получаемого опыта за убийство
 	private static final byte[] botTypes = new byte[10];
 
@@ -87,23 +86,23 @@ public final class Bot //Персонажи, модели, освещение, �
 		if(botType == 0) {
 			//tutorial bandits
 			weaponId = 22;
-			enemyDodgeLevels[botId] = (byte) (botType - 0);
+			enemyWeaponType[botId] = (byte) (botType - 0);
 		} else if(botType >= 1 && botType < 4) {
 			//bandit
 			weaponId = botType + 22 - 1;
-			enemyDodgeLevels[botId] = (byte) (botType - 0);
+			enemyWeaponType[botId] = (byte) (botType - 0);
 		} else if(botType >= 4 && botType < 7) {
 			//killer
 			weaponId = botType + 22 - 4;
-			enemyDodgeLevels[botId] = (byte) (botType - 3);
+			enemyWeaponType[botId] = (byte) (botType - 3);
 		} else if(botType >= 7 && botType < 10) {
 			//stalker
 			weaponId = botType + 22 - 7;
-			enemyDodgeLevels[botId] = (byte) (botType - 6);
+			enemyWeaponType[botId] = (byte) (botType - 6);
 		} else {
 			//soldier
 			weaponId = botType + 22 - 10;
-			enemyDodgeLevels[botId] = (byte) (botType - 9);
+			enemyWeaponType[botId] = (byte) (botType - 9);
 		}
 
 		Mesh weaponMesh = (Mesh) RenderEngine.persWorld.find(weaponId);
