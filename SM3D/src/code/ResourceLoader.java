@@ -14,9 +14,6 @@ public final class ResourceLoader {
     private static String[] texturesNames;
     public static boolean[] texturesUsedTwice;
 
-    public static int spriteWidth;
-    public static int spriteHeight;
-
     public static void clearTextures() {
         for(byte i = 0; i < 100; ++i) {
             if(!texturesUsedTwice[i]) {
@@ -373,20 +370,7 @@ public final class ResourceLoader {
         //STALKER MOBILE HD
         //if(path.indexOf("glare") > -1) spr.scale(1.3f, 1.3f, 1.3f);
 
-        if(spriteId != -100) {
-            spriteWidth = ap.getTexture(0).getImage().getWidth();
-            spriteHeight = ap.getTexture(0).getImage().getHeight();
-        }
-
         System.gc();
         return spr;
-    }
-
-    public static int getSpriteWidth() {
-        return spriteWidth;
-    }
-
-    public static int getSpriteHeight() {
-        return spriteHeight;
     }
 }

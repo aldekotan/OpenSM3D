@@ -19,7 +19,7 @@ import javax.microedition.m3g.Object3D;
 import javax.microedition.m3g.Sprite3D;
 import javax.microedition.m3g.Transform;
 import javax.microedition.m3g.World;
-import java.lang.Integer;
+import javax.microedition.m3g.Image2D;
 
 public final class RenderEngine {
 
@@ -104,8 +104,13 @@ public final class RenderEngine {
     //walk to time
     //walk from time
     
-    public static Mesh[] bckMeshes;
     private static byte[] bckMeshesCount = new byte[15];
+    public static Mesh[] bckMeshes;
+    public static Sprite3D[] bckSprites;
+    public static boolean[] bckSpritesAnimEnabled;
+    private static int[] bckSpritesW;
+    private static int[] bckSpritesH;
+    private static byte[] roomBckMeshesMdlId;
     private static float[][][] bckMeshSettings = new float[15][32][6];
     //[roomId][mesh][settings]
     //x [0]
@@ -115,10 +120,10 @@ public final class RenderEngine {
     //model id [4]
     //scale [5]
     
+    private static byte[] lightsCount = new byte[15];
     public static Light[] roomLights;
     private static Light ambientLight;
     private static int rotatingLightId;
-    private static byte[] lightsCount = new byte[15];
     private static float[][][] lightSettings = new float[15][32][5];
     //[roomId][mesh][settings]
     //x [0]
@@ -127,9 +132,9 @@ public final class RenderEngine {
     //rotation y [3]
     //light id [4]
     
-    public static Mesh[] roomMeshes;
-    public static Sprite3D[] bckMeshesSprites;
     private static byte[] meshesCount = new byte[15];
+    public static Mesh[] roomMeshes;
+    private static byte[] roomMeshesMdlId;
     private static float[][][] meshSettings = new float[15][32][8];
     //[roomId][mesh][settings]
     //x [0]
@@ -141,9 +146,10 @@ public final class RenderEngine {
     //model id [6]
     //scale [7]
     
+    private static byte[] activableObjsCount = new byte[15];
     public static Mesh[] activableObjMeshes;
     public static Group[] staticBotMdlGroup;
-    private static byte[] activableObjsCount = new byte[15];
+    private static byte[] roomActivableMeshesMdlId;
     private static float[][][] activableObjSettings = new float[15][10][8];
     //[roomId][obj][settings]
     //x [0]
@@ -155,8 +161,8 @@ public final class RenderEngine {
     //model id [6]
     //activable object id (0 is unusable) [7]
     
-    public static Group[] roomBotGroups;
     public static byte[] botsCount = new byte[15];
+    public static Group[] roomBotGroups;
     private static float[][][] botSettings = new float[15][10][15];
     //[roomId][bot][settings]
     //x, z [0,1] [2,3] [4,5]
@@ -182,31 +188,27 @@ public final class RenderEngine {
     public static byte var_7ee;
     public static boolean[][] var_84a;
 	
+	//Objects data
     public static boolean objectsDataLoaded;
     public static byte[] objectModelSource;
     public static byte[] objectUnusedField;
     public static String[] objectModelName;
     public static String[] objectTextureName;
     public static byte[] objectLighstBlendMode;
-    public static byte[] objectLightsId;
+    public static byte[] objectM3GId;
     public static float[] objectScale;
     public static byte[] objectStaticBotWeaponId;
     public static byte[] objectStaticBotAnimTime;
 	
     public static float[] tmpMehsScale;
-    private static boolean isTexture_n_AdressMassivesFull;
+    private static boolean resetCachedAssetsArrays;
     public static boolean showIntro;
 	
     private static Sprite3D bloodSprite;
-    private static Sprite3D var_e59;
-    private static Light var_ea6;
-    private static boolean needToLoadPersM3G;
+    private static Sprite3D muzzleFlashSprite;
+	
     public static World persWorld;
-    public static World lightsWorld;
-    public static boolean[] FireAnimActiveFrames;
-    private static byte[] byte_massive_1st;
-    private static byte[] var_12f0;
-    private static byte[] var_1310;
+	
     public static float[] var_143c;
     public static float[] var_1485;
     public static float[] var_14de;
@@ -255,8 +257,6 @@ public final class RenderEngine {
     private static byte[] var_1e92;
     public static byte var_1eae;
     private static boolean var_1ec4;
-    private static int[] cropWidth;
-    private static int[] cropHeight;
     public static byte var_1fb1;
     public static boolean[] botActive;
     private static byte botsAlive;
@@ -276,25 +276,24 @@ public final class RenderEngine {
         objectTextureName = new String[127];
 
         objectLighstBlendMode = new byte[127];
-        objectLightsId = new byte[127];
+        objectM3GId = new byte[127];
         objectScale = new float[127];
         objectStaticBotWeaponId = new byte[100];
         objectStaticBotAnimTime = new byte[100];
 		
         tmpMehsScale = new float[]{1.0F, 1.0F, 1.0F};
-        isTexture_n_AdressMassivesFull = true;
+        resetCachedAssetsArrays = true;
         bckMeshes = new Mesh[32];
         roomMeshes = new Mesh[32];
         activableObjMeshes = new Mesh[10];
         roomLights = new Light[32];
-        bckMeshesSprites = new Sprite3D[32];
-        lightsWorld = null;
+        bckSprites = new Sprite3D[32];
         staticBotMdlGroup = new Group[10];
         roomBotGroups = new Group[10];
-        FireAnimActiveFrames = new boolean[32];
-        byte_massive_1st = new byte[32];
-        var_12f0 = new byte[32];
-        var_1310 = new byte[10];
+        bckSpritesAnimEnabled = new boolean[32];
+        roomBckMeshesMdlId = new byte[32];
+        roomMeshesMdlId = new byte[32];
+        roomActivableMeshesMdlId = new byte[10];
         rotatingLightId = -1;
         var_143c = new float[5];
         var_1485 = new float[5];
@@ -321,8 +320,8 @@ public final class RenderEngine {
         var_1e37 = 2000;
         var_1e92 = new byte[10];
         var_1eae = -1;
-        cropWidth = new int[32];
-        cropHeight = new int[32];
+        bckSpritesW = new int[32];
+        bckSpritesH = new int[32];
         botActive = new boolean[10];
         var_20a4 = true;
 
@@ -377,16 +376,16 @@ public final class RenderEngine {
         LoadingScreen.RunGarbageCollector();
         nextRoom = currentRoom;
         ConfigureAndActivateCamera();
-        if(isTexture_n_AdressMassivesFull) {
+        if(resetCachedAssetsArrays) {
             ResourceLoader.initTexturesMassive();//Инициализация пустых массивов
 
-            for(byte var1 = 0; var1 < byte_massive_1st.length; ++var1) {
-                byte_massive_1st[var1] = -1;
+            for(int i = 0; i < 32; i++) {
+                roomBckMeshesMdlId[i] = -1;
             }
 
-            isTexture_n_AdressMassivesFull = false;
+            resetCachedAssetsArrays = false;
         } else {
-            sub_328();
+            prepareObjectArraysForNextRoom();
         }
 
         loadObjectsData();
@@ -399,7 +398,7 @@ public final class RenderEngine {
             Bot.loadBot((byte) 1, (byte) 0);
         }
 
-        sub_360(currentRoom);
+        loadRoom(currentRoom);
 		
         if(levelUseThirdperson[levelId] == 1 && roomsCount > 1) {
             loadPlayerModel();
@@ -420,7 +419,7 @@ public final class RenderEngine {
         LoadingScreen.RunGarbageCollector();
         setRoomBckMeshes(place_number);
         LoadingScreen.RunGarbageCollector();
-        seRoomBots(place_number);
+        setRoomBots(place_number);
         LoadingScreen.RunGarbageCollector();
         setRoomActivableObjs(place_number); //настраивает группы или меши в дополнительной базе
         LoadingScreen.RunGarbageCollector();
@@ -458,202 +457,133 @@ public final class RenderEngine {
         activableObjSettings[currentRoom][id][7] = (float) state;
     }
 
-    private static void addObjectToGameWorld(byte objId, byte gameObjId, byte var2) {
+    private static void addObjectToGameWorld(int objMdlId, int roomObjId, int objType) {
         try {
-            if(needToLoadPersM3G) {
-                try {
-                    Bot.loadBot(objId, gameObjId);
-                    return;
-                } catch (Exception ex) {
-                    System.out.println("error enemy-model loading");
-                    ex.printStackTrace();
-                    return;
-                }
-            }
-
-            System.gc();
-			
-            byte mdlSource = objectModelSource[objId];
+            int mdlSource = objectModelSource[objMdlId];
             if(mdlSource == -1) return;
 
-            String adress = "/" + objectModelName[objId];
-            float scale = objectScale[objId];
+            String mdlPath = "/" + objectModelName[objMdlId];
+            float mdlScale = objectScale[objMdlId];
 			
-            int c;
-            label155:
-            switch(mdlSource) {
-                case 0:
-                case 4:
-                    switch(var2) {
-                        case 0:
-                        default:
-                            break label155;
-                        case 1:
-                            if(bckMeshes[gameObjId] == null) {
-                                bckMeshes[gameObjId] = ResourceLoader.loadZ1Model(adress);
-                                System.gc();
-                                gameWorld.addChild(bckMeshes[gameObjId]);
-                                bckMeshes[gameObjId].getScale(tmpMehsScale);
+			if(mdlSource == 0 || mdlSource == 4) {
+				//mdlSource 0 - z1 (for bck and room meshes)
+				//mdlSource 4 - bot for activable objects, z1 for bck and room meshes (why ???)
+				//split mdlSource into another if else ?
+				
+				if(objType == 1 || objType == 2) {
+					//Background and room mesh obj types
+					
+					if(objType == 2 || bckMeshes[roomObjId] == null) {
+						//Load new mesh if isn't reused from previous room
+						Mesh mesh = ResourceLoader.loadZ1Model(mdlPath);
+						
+						if(objType == 1) bckMeshes[roomObjId] = mesh;
+						else roomMeshes[roomObjId] = mesh;
+						
+						mesh.getScale(tmpMehsScale);
+						mesh.setScale(
+							tmpMehsScale[0] * mdlScale, 
+							tmpMehsScale[1] * mdlScale, 
+							tmpMehsScale[2] * mdlScale
+						);
+						
+						mesh.setRenderingEnable(true);
+						gameWorld.addChild(mesh);
+					} else {
+						//Bck mesh is reused from previous room
+						//Revert original game object scale since
+						//scale will be applied again in setRoomBckMeshes 
+						float tmpScale = 0.1f * mdlScale; //just 0.1f in original
+						bckMeshes[roomObjId].setScale(tmpScale, tmpScale, tmpScale);
+						
+						gameWorld.addChild(bckMeshes[roomObjId]);
+					}
+				} else if(objType == 100) {
+					//Activable obj mesh type
+					
+					if(mdlSource == 4) {
+						Bot.loadStaticBot(roomObjId, objMdlId);
+					} else if(activableObjMeshes[roomObjId] == null) {
+						activableObjMeshes[roomObjId] = ResourceLoader.loadZ1Model(mdlPath);
+						gameWorld.addChild(activableObjMeshes[roomObjId]);
+					} /*else {
+						//Copied from bck mesh loading code? useless?
+						activableObjMeshes[roomObjId].setScale(0.1F, 0.1F, 0.1F);
+						gameWorld.addChild(activableObjMeshes[roomObjId]);
+					}*/
+				}
+			} else if(mdlSource == 1) {
+				//mdlSource 1 - sprite (only for background meshes)
+				bckMeshes[roomObjId] = null;
+				
+				Sprite3D spr = ResourceLoader.getSprite(objMdlId);
+				bckSprites[roomObjId] = spr;
+				
+				if(spr != null) {
+					if(objectTextureName[objMdlId].equals("sfire1.png")) {
+						bckSpritesAnimEnabled[roomObjId] = true;
+						
+						Image2D fireImg = spr.getAppearance().getTexture(0).getImage();
+						
+						bckSpritesW[roomObjId] = fireImg.getWidth();
+						bckSpritesH[roomObjId] = fireImg.getHeight();
+						
+						animateBckSprites();
+					}
 
-                                for(int i = 0; i < 3; ++i) {
-                                    tmpMehsScale[i] *= scale;
-                                }
+					spr.getScale(tmpMehsScale);
+					spr.setScale(
+						tmpMehsScale[0] * mdlScale, 
+						tmpMehsScale[1] * mdlScale, 
+						tmpMehsScale[2] * mdlScale
+					);
+					
+					spr.setRenderingEnable(true);
+					gameWorld.addChild(spr);
+				}
+			} else if(mdlSource == 2 || mdlSource == 3) {
+				//mdlSource 2 - m3g lights (only for light object type)
+				//mdlSource 3 - m3g meshes (only for bck and room meshes)
+				
+				Object3D[] objs = Loader.load("/gamedata/meshes/m3g" + mdlPath);
+				ModChanges.updateM3DModels(objs, "/gamedata/meshes/m3g" + mdlPath);
 
-                                bckMeshes[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                                bckMeshes[gameObjId].setRenderingEnable(true);
-                            } else {
-                                gameWorld.addChild(bckMeshes[gameObjId]);
-                                bckMeshes[gameObjId].setScale(0.1F, 0.1F, 0.1F);
-                            }
-                            break label155;
-                        case 2:
-                            roomMeshes[gameObjId] = ResourceLoader.loadZ1Model(adress);
-                            System.gc();
-                            gameWorld.addChild(roomMeshes[gameObjId]);
-                            roomMeshes[gameObjId].getScale(tmpMehsScale);
+				World m3gWorld = null;
 
-                            for(int i = 0; i < 3; ++i) {
-                                tmpMehsScale[i] *= scale;
-                            }
+				for(int i = 0; i < objs.length; i++) {
+					if(objs[i] instanceof World) {
+						m3gWorld = (World) objs[i];
+						break;
+					}
+				}
+				
+				Node node = (Node) m3gWorld.find(objectM3GId[objMdlId]).duplicate();
+				
+				if(objType == 1 || objType == 2) {
+					Mesh mesh = (Mesh) node;
+					
+					if(objType == 1) bckMeshes[roomObjId] = mesh;
+					else roomMeshes[roomObjId] = mesh;
+					
+					mesh.getScale(tmpMehsScale);
+					mesh.setScale(
+						tmpMehsScale[0] * mdlScale, 
+						tmpMehsScale[1] * mdlScale, 
+						tmpMehsScale[2] * mdlScale
+					);
+				} else if(objType == 3) {
+					roomLights[roomObjId] = (Light) node;
+				}
 
-                            roomMeshes[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                            roomMeshes[gameObjId].setRenderingEnable(true);
-                            break label155;
-                        case 100:
-                            if(mdlSource == 4) {
-                                Bot.loadStaticBot(gameObjId, objId);
-                            } else if(activableObjMeshes[gameObjId] == null) {
-                                activableObjMeshes[gameObjId] = ResourceLoader.loadZ1Model(adress);
-                                System.gc();
-                                gameWorld.addChild(activableObjMeshes[gameObjId]);
-                            } else {
-                                gameWorld.addChild(activableObjMeshes[gameObjId]);
-                                activableObjMeshes[gameObjId].setScale(0.1F, 0.1F, 0.1F);
-                            }
-                            break label155;
-                    }
-                case 1:
-                    bckMeshes[gameObjId] = null;
-                    bckMeshesSprites[gameObjId] = ResourceLoader.getSprite(objId);
-                    if(bckMeshesSprites[gameObjId] != null) {
-                        if(objectTextureName[objId].equals("sfire1.png")) {
-                            FireAnimActiveFrames[gameObjId] = true;
-                            cropWidth[gameObjId] = ResourceLoader.getSpriteWidth();
-                            cropHeight[gameObjId] = ResourceLoader.getSpriteHeight();
-                            AnimateFire();
-                        }
-
-                        gameWorld.addChild(bckMeshesSprites[gameObjId]);
-                        bckMeshesSprites[gameObjId].getScale(tmpMehsScale);
-
-                        for(int i = 0; i < 3; ++i) {
-                            tmpMehsScale[i] *= scale;
-                        }
-
-                        bckMeshesSprites[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                        bckMeshesSprites[gameObjId].setRenderingEnable(true);
-                    }
-                    break;
-                case 2:
-                    try {
-						//light???
-                        Object3D[] obj = Loader.load("/gamedata/meshes/m3g" + adress);
-                        ModChanges.updateM3DModels(obj, "/gamedata/meshes/m3g" + adress);
-                        
-
-                        for(c = 0; c < obj.length; ++c) {
-                            if(obj[c] instanceof World) {
-                                lightsWorld = (World) obj[c];
-                            }
-                        }
-
-                        var_ea6 = (Light) lightsWorld.find(objectLightsId[objId]);
-                        roomLights[gameObjId] = (Light) var_ea6.duplicate();
-                        var_ea6 = null;
-                        System.gc();
-                        gameWorld.addChild(roomLights[gameObjId]);
-                        roomLights[gameObjId].setRenderingEnable(true);
-                    } catch (Exception var9) {
-                        System.out.println("error light loading" + var9);
-
-                        var9.printStackTrace();
-                        System.out.println(var9.getMessage());
-                    }
-                    break;
-                case 3:
-                    switch(var2) {
-                        case 0:
-                        case 3:
-                        case 4:
-                        default:
-                            break;
-                        case 1:
-                            try {
-                                Object3D[] obj = Loader.load(adress); //в оригинале просто adress
-                                ModChanges.updateM3DModels(obj, adress);
-
-                                for(c = 0; c < obj.length; ++c) {
-                                    if(obj[c] instanceof World) {
-                                        lightsWorld = (World) obj[c];
-                                    }
-                                }
-                            } catch (Exception var11) {
-                                System.out.println("error m3g-model loading case1");
-                                var11.printStackTrace();
-                            }
-
-                            Mesh var_e6b = (Mesh) lightsWorld.find(objectLightsId[objId]);
-                            bckMeshes[gameObjId] = (Mesh) var_e6b.duplicate();
-                            System.gc();
-                            gameWorld.addChild(bckMeshes[gameObjId]);
-                            bckMeshes[gameObjId].getScale(tmpMehsScale);
-
-                            for(int i = 0; i < 3; ++i) {
-                                tmpMehsScale[i] *= scale;
-                            }
-
-                            bckMeshes[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                            bckMeshes[gameObjId].setRenderingEnable(true);
-                            break;
-                        case 2:
-                            try {
-                                Object3D[] obj = Loader.load(adress);
-                                ModChanges.updateM3DModels(obj, adress);
-
-                                for(c = 0; c < obj.length; ++c) {
-                                    if(obj[c] instanceof World) {
-                                        lightsWorld = (World) obj[c];
-                                    }
-                                }
-                            } catch (Exception var10) {
-                                System.out.println("error m3g-model loading case2");
-                                var10.printStackTrace();
-                            }
-
-                            var_e6b = (Mesh) lightsWorld.find(objectLightsId[objId]);
-                            roomMeshes[gameObjId] = (Mesh) var_e6b.duplicate();
-                            var_e6b = null;
-                            System.gc();
-                            gameWorld.addChild(roomMeshes[gameObjId]);
-                            roomMeshes[gameObjId].getScale(tmpMehsScale);
-
-                            for(int i = 0; i < 3; ++i) {
-                                tmpMehsScale[i] *= scale;
-                            }
-
-                            roomMeshes[gameObjId].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
-                            roomMeshes[gameObjId].setRenderingEnable(true);
-                    }
-            }
-
-            lightsWorld = null;
-        } catch (Exception ex) {
-            System.out.println("Error type= " + objectModelSource[objId]);
-            System.out.println(objectModelName[objId]);
-            ex.printStackTrace();
+				node.setRenderingEnable(true);
+				gameWorld.addChild(node);
+			}
+        } catch (Exception e) {
+            System.out.println("Error type= " + objectModelSource[objMdlId]);
+            System.out.println(objectModelName[objMdlId]);
+			
+            e.printStackTrace();
         }
-
-        System.gc();
     }
 
     private static String readStringFromDis(DataInputStream dis) {
@@ -695,7 +625,7 @@ public final class RenderEngine {
                     } else {
 						//load from lights??
                         objectLighstBlendMode[objId] = dis.readByte();
-                        objectLightsId[objId] = dis.readByte();
+                        objectM3GId[objId] = dis.readByte();
                     }
 
                     objectScale[objId] = (float) dis.readInt() / 100.0F;
@@ -716,10 +646,10 @@ public final class RenderEngine {
             dis.readByte();
 
             currentRoom = dis.readByte(); //limiterYrotation
-            --currentRoom;
+            currentRoom--;
             
             currentDoorId = dis.readByte(); //выполнена ли 15-ая миссия
-            --currentDoorId;
+            currentDoorId--;
             
             roomsCount = dis.readByte();
 
@@ -947,29 +877,30 @@ public final class RenderEngine {
 
     }
 
-    private static void sub_328() {
+    private static void prepareObjectArraysForNextRoom() {
         Mesh[] var0 = new Mesh[32];
         byte[] var1 = new byte[64];
         byte[] var2 = new byte[64];
         byte var3 = 0;
-
+		
         byte var5;
         for(var5 = 0; var5 < var1.length; ++var5) {
             var1[var5] = var2[var5] = -1;
         }
 
         try {
+			//reuse meshes from previous room in next room
             byte var4;
             for(var4 = 0; var4 < 32; ++var4) {
                 for(var5 = 0; var5 < bckMeshesCount[nextRoom]; ++var5) {
-                    if((float) byte_massive_1st[var4] == bckMeshSettings[nextRoom][var5][4]) {
+                    if(roomBckMeshesMdlId[var4] == (byte) bckMeshSettings[nextRoom][var5][4]) {
                         var1[var3] = var4;
                         var2[var3] = var5;
                         ++var3;
-                    }
-                }
-            }
-
+					}
+				}
+			}
+                
             for(var4 = 0; var4 < var1.length; ++var4) {
                 if(var1[var4] != -1 && bckMeshes[var1[var4]] != null && var0[var2[var4]] == null) {
                     var0[var2[var4]] = (Mesh) bckMeshes[var1[var4]].duplicate();
@@ -979,8 +910,8 @@ public final class RenderEngine {
             for(var4 = 0; var4 < 32; ++var4) {
                 gameWorld.removeChild(bckMeshes[var4]);
                 bckMeshes[var4] = null;
-                gameWorld.removeChild(bckMeshesSprites[var4]);
-                bckMeshesSprites[var4] = null;
+                gameWorld.removeChild(bckSprites[var4]);
+                bckSprites[var4] = null;
             }
 
             for(var4 = 0; var4 < 32; ++var4) {
@@ -1033,75 +964,55 @@ public final class RenderEngine {
         }
     }
 
-    private static void sub_360(int var0) {
-        try {
-            System.gc();
-            Thread.sleep(2000L);
-        } catch (InterruptedException var2) {
-            var2.printStackTrace();
+    private static void loadRoom(int roomId) {
+        loadSprites();
+
+        for(int i = 0; i < bckMeshesCount[roomId]; i++) {
+            addObjectToGameWorld((int) bckMeshSettings[roomId][i][4], i, (byte) 1);
+            roomBckMeshesMdlId[i] = (byte) bckMeshSettings[roomId][i][4];
         }
 
-        LoadingScreen.RunGarbageCollector();
-        sub_387();
-        LoadingScreen.RunGarbageCollector();
-
-        byte var1;
-        for(var1 = 0; var1 < bckMeshesCount[var0]; ++var1) {
-            addObjectToGameWorld((byte) ((int) bckMeshSettings[var0][var1][4]), var1, (byte) 1);
-            byte_massive_1st[var1] = (byte) ((int) bckMeshSettings[var0][var1][4]);
+        for(int i = 0; i < activableObjsCount[roomId]; i++) {
+            addObjectToGameWorld((int) activableObjSettings[roomId][i][6], i, (byte) 100);
+            roomActivableMeshesMdlId[i] = (byte) activableObjSettings[roomId][i][6];
         }
-
-        LoadingScreen.RunGarbageCollector();
-
-        for(var1 = 0; var1 < activableObjsCount[var0]; ++var1) {
-            addObjectToGameWorld((byte) ((int) activableObjSettings[var0][var1][6]), var1, (byte) 100);
-            var_1310[var1] = (byte) ((int) activableObjSettings[var0][var1][6]);
-        }
-
-        LoadingScreen.RunGarbageCollector();
-        needToLoadPersM3G = true;
-        if(botsCount[var0] == 0) {
+		
+        if(botsCount[roomId] == 0) {
             roomBotGroups[0].setRenderingEnable(false);
         }
 
-        for(var1 = 0; var1 < botsCount[var0]; ++var1) {
-            addObjectToGameWorld((byte) ((int) botSettings[var0][var1][14]), var1, (byte) 4);
+        for(int i = 0; i < botsCount[roomId]; i++) {
+			Bot.loadBot((int) botSettings[roomId][i][14], i);
         }
 
-        needToLoadPersM3G = false;
-        LoadingScreen.RunGarbageCollector();
-
-        for(var1 = 0; var1 < meshesCount[var0]; ++var1) {
-            addObjectToGameWorld((byte) ((int) meshSettings[var0][var1][6]), var1, (byte) 2);
-            var_12f0[var1] = (byte) ((int) meshSettings[var0][var1][6]);
+        for(int i = 0; i < meshesCount[roomId]; i++) {
+            addObjectToGameWorld((int) meshSettings[roomId][i][6], i, (byte) 2);
+            roomMeshesMdlId[i] = (byte) meshSettings[roomId][i][6];
         }
 
-        LoadingScreen.RunGarbageCollector();
-
-        for(var1 = 0; var1 < lightsCount[var0]; ++var1) {
-            addObjectToGameWorld((byte) ((int) lightSettings[var0][var1][4]), var1, (byte) 3);
+        for(int i = 0; i < lightsCount[roomId]; i++) {
+            addObjectToGameWorld((int) lightSettings[roomId][i][4], i, (byte) 3);
         }
-
-        LoadingScreen.RunGarbageCollector();
-        LoadingScreen.RunGarbageCollector();
+		
         var_20a4 = false;
     }
 
-    private static void sub_387() {
+    private static void loadSprites() {
         if(bloodSprite == null) {
             bloodSprite = ResourceLoader.getSprite(-100);
             bloodSprite.setScale(0.6F, 0.6F, 0.6F);
+			
             gameWorld.addChild(bloodSprite);
         }
 
         bloodSprite.setRenderingEnable(false);
-        LoadingScreen.RunGarbageCollector();
-        if(var_e59 == null) {
-            var_e59 = ResourceLoader.getSprite(-101);
-            gameWorld.addChild(var_e59);
+		
+        if(muzzleFlashSprite == null) {
+            muzzleFlashSprite = ResourceLoader.getSprite(-101);
+            gameWorld.addChild(muzzleFlashSprite);
         }
 
-        var_e59.setRenderingEnable(false);
+        muzzleFlashSprite.setRenderingEnable(false);
     }
 
     private static void loadPlayerModel() {
@@ -1196,7 +1107,15 @@ public final class RenderEngine {
         }
     }
 
-    private static void seRoomBots(int roomId) {
+    private static void setBotPosition(int botId, float x, float y, float z) {
+        botPositions[botId][0] = x;
+        botPositions[botId][1] = y;
+        botPositions[botId][2] = z;
+		
+        roomBotGroups[botId].setTranslation(x, y, z);
+    }
+
+    private static void setRoomBots(int roomId) {
         var_1eae = -1;
         var_1fb1 = 0;
 
@@ -1206,7 +1125,12 @@ public final class RenderEngine {
             var_1e92[i] = 2;
 			
             roomBotGroups[i].setOrientation(botSettings[roomId][i][7], 0.0F, 1.0F, 0.0F);
-            setBotPosition(i, botSettings[roomId][i][0], botSettings[roomId][i][6], botSettings[roomId][i][1]);
+            setBotPosition(
+				i, 
+				botSettings[roomId][i][0], 
+				botSettings[roomId][i][6], 
+				botSettings[roomId][i][1]
+			);
         }
 
         if(botsCount[roomId] == 0) {
@@ -1225,19 +1149,23 @@ public final class RenderEngine {
             float scale = bckMeshSettings[roomId][i][5];
 			
             if(bckMeshes[i] != null) {
-                bckMeshes[i].getScale(tmpMehsScale);
-
-                for(byte var6 = 0; var6 < 3; ++var6) {
-                    tmpMehsScale[var6] *= scale;
-                }
-
-                bckMeshes[i].setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+				Mesh bckMesh = bckMeshes[i];
 				
-                bckMeshes[i].setOrientation(bckMeshSettings[roomId][i][3], 0.0F, 1.0F, 0.0F);
-                bckMeshes[i].setTranslation(x, y, z);
-            } else if(bckMeshesSprites[i] != null) {
-                bckMeshesSprites[i].setScale(scale, scale, scale);
-                bckMeshesSprites[i].setTranslation(x, y, z);
+                bckMesh.getScale(tmpMehsScale);
+
+                bckMesh.setScale(
+						tmpMehsScale[0] * scale, 
+						tmpMehsScale[1] * scale, 
+						tmpMehsScale[2] * scale
+				);
+				
+                bckMesh.setOrientation(bckMeshSettings[roomId][i][3], 0.0F, 1.0F, 0.0F);
+                bckMesh.setTranslation(x, y, z);
+            } else if(bckSprites[i] != null) {
+				Sprite3D bckSpr = bckSprites[i];
+				
+                bckSpr.setScale(scale, scale, scale);
+                bckSpr.setTranslation(x, y, z);
             }
         }
     }
@@ -1250,11 +1178,11 @@ public final class RenderEngine {
 			float scale = meshSettings[roomId][i][7];
 			mesh.getScale(tmpMehsScale);
 
-			for(int t = 0; t < 3; ++t) {
-				tmpMehsScale[t] *= scale;
-			}
-			
-			mesh.setScale(tmpMehsScale[0], tmpMehsScale[1], tmpMehsScale[2]);
+			mesh.setScale(
+					tmpMehsScale[0] * scale, 
+					tmpMehsScale[1] * scale, 
+					tmpMehsScale[2] * scale
+			);
 			
 			float x = meshSettings[roomId][i][0];
 			float y = meshSettings[roomId][i][1];
@@ -1313,7 +1241,7 @@ public final class RenderEngine {
 
         cameraYRot = 0.0F;
         cameraXRot = 0.0F;
-        FireAnimActiveFrames = new boolean[32];
+        bckSpritesAnimEnabled = new boolean[32];
         var_185a = (int) renderTimeOnly3D;
         var_1cda = false;
         CameraMovementDeactive = false;
@@ -1814,7 +1742,7 @@ public final class RenderEngine {
             case 5:
                 return;
             case 13:
-                sub_360(currentRoom);
+                loadRoom(currentRoom);
                 ResourceLoader.clearTextures();
                 SetTranformOfAllObjects(currentRoom);
                 setDialogWindowState((short) 2);
@@ -1865,19 +1793,6 @@ public final class RenderEngine {
         currentTimeMill = curr_time;
         if(!gamePaused) {
             renderTimeOnly3D += (long) TickDurationMills;
-        }
-
-    }
-
-    private static void AnimateFireAndLight() {
-        AnimateLight();
-        AnimateFire();
-    }
-
-    private static void AnimateLight() {
-        if(rotatingLightId != -1) {
-            int time = (int) renderTimeOnly3D & 1000;
-            roomLights[rotatingLightId].animate(time);
         }
 
     }
@@ -2008,19 +1923,18 @@ public final class RenderEngine {
 
         int var4 = var_1e37 - (var_1dce[var0] - (int) renderTimeOnly3D);
         int var5 = var_1e37;
-        var_e59.setRenderingEnable(false);
+        muzzleFlashSprite.setRenderingEnable(false);
         if(var4 > var5 / 2 - 750 && var4 < var5 / 2 + 750) {
             var_1db5 = true;
             roomBotGroups[var0].animate(var3);
             if(var4 % 300 <= 150) {
-                var_ea6 = (Light) roomBotGroups[var_1eae].find(50);
-                var_ea6.getTransformTo(gameWorld, transform);
+                Light light = (Light) roomBotGroups[var_1eae].find(50);
+                light.getTransformTo(gameWorld, transform);
                 transform.get(var_1d3c);
-                var_e59.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
-                var_ea6 = null;
-                var_e59.setRenderingEnable(true);
+                muzzleFlashSprite.setTranslation(var_1d3c[3], var_1d3c[7], var_1d3c[11]);
+                muzzleFlashSprite.setRenderingEnable(true);
             } else {
-                var_e59.setRenderingEnable(false);
+                muzzleFlashSprite.setRenderingEnable(false);
             }
         } else {
             var_1db5 = false;
@@ -2076,7 +1990,7 @@ public final class RenderEngine {
 
             if(var0 - var_1fb1 == 0) {
                 CameraMovementDeactive = false;
-                var_e59.setRenderingEnable(false);
+                muzzleFlashSprite.setRenderingEnable(false);
                 if(var_1d93 != -1) {
                     sub_e34(var_1d93, var_1e92[var_1eae]);
                     return;
@@ -2142,7 +2056,7 @@ public final class RenderEngine {
             }
 
             if(var_1d93 != -1 && var_1eae != -1) {
-                var_e59.setRenderingEnable(false);
+                muzzleFlashSprite.setRenderingEnable(false);
                 sub_e34(var_1d93, var_1e92[var_1eae]);
             } else {
                 for(botId = 0; botId < var0; ++botId) {
@@ -2166,30 +2080,36 @@ public final class RenderEngine {
         }
     }
 
-    private static void setBotPosition(int botId, float x, float y, float z) {
-        botPositions[botId][0] = x;
-        botPositions[botId][1] = y;
-        botPositions[botId][2] = z;
-		
-        roomBotGroups[botId].setTranslation(x, y, z);
+    private static void animateRotatingLight() {
+        if(rotatingLightId != -1) {
+            int time = (int) renderTimeOnly3D & 1000;
+            roomLights[rotatingLightId].animate(time);
+        }
     }
 
-    private static void AnimateFire() {
-        for(byte FrameNumber = 0; FrameNumber < 32; ++FrameNumber) {
-            if(FireAnimActiveFrames[FrameNumber]) {
-                int cropWidth = RenderEngine.cropWidth[FrameNumber] / 8;
-                int frame_to_time = (int) (renderTimeOnly3D + (long) (FrameNumber * 300)) % 1000 / 200;
-                int cropX = cropWidth * frame_to_time;
-                bckMeshesSprites[FrameNumber].setCrop(cropX, 0, cropWidth, cropHeight[FrameNumber]);
+    private static void animateBckSprites() {
+        for(int i = 0; i < 32; i++) {
+            if(bckSpritesAnimEnabled[i]) {
+                int w = RenderEngine.bckSpritesW[i] / 8;
+				int h = bckSpritesH[i];
+				
+                int frameTime = (int) (renderTimeOnly3D + (long) (i * 300)) % 1000 / 200;
+                int x = w * frameTime;
+				
+                bckSprites[i].setCrop(x, 0, w, h);
             }
         }
+    }
 
+    private static void animateSpritesAndLights() {
+        animateRotatingLight();
+        animateBckSprites();
     }
 
     public static void updateGameTime() {
         if(currentGameState != 0 && currentGameState != 13 && currentGameState != -2) {
             sub_d23();
-            AnimateFireAndLight();
+            animateSpritesAndLights();
             updateGameState();
             sub_b67();
         } else {
@@ -2361,8 +2281,8 @@ public final class RenderEngine {
         for(number = 0; number < 32; ++number) {
             gameWorld.removeChild(bckMeshes[number]);
             bckMeshes[number] = null;
-            gameWorld.removeChild(bckMeshesSprites[number]);
-            bckMeshesSprites[number] = null;
+            gameWorld.removeChild(bckSprites[number]);
+            bckSprites[number] = null;
         }
 
         System.gc();
@@ -2411,7 +2331,7 @@ public final class RenderEngine {
     }
 
     private static void sub_115f() {
-        sub_328();
+        prepareObjectArraysForNextRoom();
         useThirdPerson = false;
         currentRoom = nextRoom;
         ConfigureAndActivateCamera();

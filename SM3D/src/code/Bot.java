@@ -22,10 +22,10 @@ public final class Bot //Персонажи, модели, освещение, �
 	//По нему вычисляется количество получаемого опыта за убийство
 	private static final byte[] botTypes = new byte[10];
 
-	public static void loadBot(byte botType, int botId) {
+	public static void loadBot(int botType, int botId) {
 		if(RenderEngine.persWorld == null) {
 			try {
-				String path = "/pers.m3g";
+				String path = "/gamedata/meshes/m3g/pers.m3g";
 				
 				Object3D[] objs = Loader.load(path);
 				ModChanges.updateM3DModels(objs, path);
@@ -111,7 +111,7 @@ public final class Bot //Персонажи, модели, освещение, �
 		RenderEngine.roomBotGroups[botId].addChild(weaponCopy);
 	}
 
-	private static void setBotAppearance(byte botType, int botId) {
+	private static void setBotAppearance(int botType, int botId) {
 		String textureName;
 		
 		if(botType >= 0 && botType < 4) {
@@ -145,7 +145,7 @@ public final class Bot //Персонажи, модели, освещение, �
 		return botTypes[botId];
 	}
 
-	public static void loadStaticBot(byte botId, byte persId) { 
+	public static void loadStaticBot(int botId, int persId) { 
 		if(RenderEngine.roomBotGroups[0] != null) {	
 			Group botMdlCopy = (Group) RenderEngine.roomBotGroups[0].duplicate();
 			RenderEngine.staticBotMdlGroup[botId] = botMdlCopy;
@@ -167,7 +167,7 @@ public final class Bot //Персонажи, модели, освещение, �
 		RenderEngine.staticBotMdlGroup[botId].animate(time);
 	}
 
-	private static void setStaticBotAppearance(byte botId, int textureId) {
+	private static void setStaticBotAppearance(int botId, int textureId) {
 		Appearance ap = new Appearance();
 		
 		String textureName = RenderEngine.objectTextureName[textureId];
