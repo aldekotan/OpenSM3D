@@ -127,8 +127,8 @@ public final class LoadingScreen implements Screen {
                 ResourseManager.removeLogoImageFromMemory();
                 break;
             case 11: //начало новой игры
-                RenderEngine.setDialogWindowState((short) -2);
-                RenderEngine.init();
+                GameScene.setDialogWindowState((short) -2);
+                GameScene.init();
                 break;
             case 12: //загрузка сохранённой игры
                 ResourseManager.loadGameSave();

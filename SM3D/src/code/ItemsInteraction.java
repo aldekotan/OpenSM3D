@@ -346,7 +346,7 @@ public final class ItemsInteraction implements Screen
             Main.main.reloadCurrentScreen();
          } else {
             Main.main.setScreen(AllScreens.menu, (byte)14);
-            RenderEngine.setActiveObjState(Scripts.openedActivableObjId, (short)0);
+            GameScene.setActiveObjState(Scripts.openedActivableObjId, (short)0);
          }
       case 4:
       //выбрать следующий предмет

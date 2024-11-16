@@ -85,18 +85,18 @@ public final class ResourseManager {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             DataOutputStream dis = new DataOutputStream(baos);
 			
-            dis.writeInt(RenderEngine.currentLocation);
+            dis.writeInt(GameScene.currentLocation);
 
-            for(int i = 0; i < RenderEngine.locationCompleted.length; i++) {
-                dis.writeBoolean(RenderEngine.locationCompleted[i]);
+            for(int i = 0; i < GameScene.locationCompleted.length; i++) {
+                dis.writeBoolean(GameScene.locationCompleted[i]);
             }
 
-            for(int i = 0; i < RenderEngine.locationTaskMark.length; i++) {
-                dis.writeBoolean(RenderEngine.locationTaskMark[i]);
+            for(int i = 0; i < GameScene.locationTaskMark.length; i++) {
+                dis.writeBoolean(GameScene.locationTaskMark[i]);
             }
 
-            for(int i = 0; i < RenderEngine.locationCampMark.length; i++) {
-                dis.writeBoolean(RenderEngine.locationCampMark[i]);
+            for(int i = 0; i < GameScene.locationCampMark.length; i++) {
+                dis.writeBoolean(GameScene.locationCampMark[i]);
             }
 
             dis.writeShort(Scripts.inventoryItemsCount);
@@ -199,18 +199,18 @@ public final class ResourseManager {
             DataInputStream dis = new DataInputStream(new ByteArrayInputStream(rs.getRecord(1)));
 
             try {
-                RenderEngine.currentLocation = dis.readInt();
+                GameScene.currentLocation = dis.readInt();
 
-                for(int i = 0; i < RenderEngine.locationCompleted.length; i++) {
-                    RenderEngine.locationCompleted[i] = dis.readBoolean();
+                for(int i = 0; i < GameScene.locationCompleted.length; i++) {
+                    GameScene.locationCompleted[i] = dis.readBoolean();
                 }
 
-                for(int i = 0; i < RenderEngine.locationTaskMark.length; i++) {
-                    RenderEngine.locationTaskMark[i] = dis.readBoolean();
+                for(int i = 0; i < GameScene.locationTaskMark.length; i++) {
+                    GameScene.locationTaskMark[i] = dis.readBoolean();
                 }
 
-                for(int i = 0; i < RenderEngine.locationCampMark.length; i++) {
-                    RenderEngine.locationCampMark[i] = dis.readBoolean();
+                for(int i = 0; i < GameScene.locationCampMark.length; i++) {
+                    GameScene.locationCampMark[i] = dis.readBoolean();
                 }
 
                 Scripts.inventoryItemsCount = dis.readShort();

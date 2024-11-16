@@ -70,7 +70,7 @@ public class Main extends MIDlet
       {
          MasterCanvas.paused2 = false;
          MasterCanvas.paused = false;
-         RenderEngine.gamePaused = false;
+         GameScene.gamePaused = false;
          System.gc();
          main.repaint();
       }
@@ -82,7 +82,7 @@ public class Main extends MIDlet
       if(!MasterCanvas.paused2) 
       {
          MasterCanvas.paused = true;
-         RenderEngine.gamePaused = true;
+         GameScene.gamePaused = true;
          SoundAndVibro.stopPlayingSound();
          MasterCanvas.paused2 = true;
          System.gc();

@@ -17,7 +17,7 @@ public final class MasterCanvas extends Canvas { //Общий канвас дл�
     public MasterCanvas() {
         instance = this;
         setFullScreenMode(true);
-        RenderEngine.graphics3D = Graphics3D.getInstance();
+        GameScene.graphics3D = Graphics3D.getInstance();
         SoundAndVibro.prefetchSounds();
     }
 
@@ -69,7 +69,7 @@ public final class MasterCanvas extends Canvas { //Общий канвас дл�
     public final void hideNotify() {
         if(!paused2) {
             paused = true;
-            RenderEngine.gamePaused = true;
+            GameScene.gamePaused = true;
             
             //Если звук влючён - остановить воспроизведение
             if(SoundAndVibro.soundsEnabled) SoundAndVibro.stopPlayingSound();
@@ -86,7 +86,7 @@ public final class MasterCanvas extends Canvas { //Общий канвас дл�
     //Canvas shown on display
     public final void showNotify() {
         paused2 = false;
-        RenderEngine.gamePaused = false;
+        GameScene.gamePaused = false;
         paused = false;
         System.gc();
         super.showNotify();

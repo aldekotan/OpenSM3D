@@ -284,13 +284,13 @@ public class ListScreen extends MenuScreen {
                         return;
                     } else {
                         if (super.drawingScreenId == 2 && this.selectedIndex == 1) {
-                            RenderEngine.SetToNullAllWorldnMeshMassives();
+                            GameScene.SetToNullAllWorldnMeshMassives();
                             ResourseManager.loadInterfaceImage(2);
                         }
 
                         switch (this.selectedIndex) {
                             case 0:
-                                RenderEngine.gamePaused = false;
+                                GameScene.gamePaused = false;
                                 Main.main.setScreen(this.screenByOptionId[this.selectedIndex], this.screenIdByOptionId[this.selectedIndex]);
                                 ResourseManager.runGarbageCollector();
                                 return;

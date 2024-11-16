@@ -194,7 +194,7 @@ public final class PlayerHUD {
         int x = SCREEN_WIDTH - weaponHUDImages[weapId].getWidth();
         int y = var1 - weaponHUDImages[weapId].getHeight();
         //рисуем вспышку от выстрела
-        if (RenderEngine.shootShakeActive || Scripts.var_228e) {
+        if (GameScene.shootShakeActive || Scripts.var_228e) {
             byte var4 = 0;
             byte var5 = 0;
             switch (weapId) {
@@ -218,7 +218,7 @@ public final class PlayerHUD {
         int var8;
         short var9;
         if (Scripts.var_215f) {
-            var8 = (int) RenderEngine.gameTimeUnpaused - Scripts.var_21d2;
+            var8 = (int) GameScene.gameTimeUnpaused - Scripts.var_21d2;
             var9 = Scripts.var_21a7;
             if (var8 <= var9) {
                 if (var8 <= var9 / 2) {
@@ -232,7 +232,7 @@ public final class PlayerHUD {
         }
 
         if (Scripts.var_2075) {
-            var8 = (int) RenderEngine.gameTimeUnpaused - Scripts.var_2108;
+            var8 = (int) GameScene.gameTimeUnpaused - Scripts.var_2108;
             var9 = Scripts.var_20d6;
             if (var8 <= var9) {
                 if (var8 <= var9 / 2) {
@@ -258,9 +258,9 @@ public final class PlayerHUD {
         int var1 = SCREEN_WIDTH / 2 - crosshairImages[crosshair_number].getWidth() / 2;
         int var2 = SCREEN_HEIGHT / 2 - crosshairImages[crosshair_number].getHeight() / 2;
         graphics.drawImage(crosshairImages[crosshair_number], var1, var2, 0);
-        if (RenderEngine.getActiveObjectIdUnderCursor() && crosshair_number == 0) {
+        if (GameScene.getActiveObjectIdUnderCursor() && crosshair_number == 0) {
             int var3;
-            if ((var3 = getNPCNameTextId2(RenderEngine.getActivableObjState(RenderEngine.activableObjIdUnderCursor))) == -1) {
+            if ((var3 = getNPCNameTextId2(GameScene.getActivableObjState(GameScene.activableObjIdUnderCursor))) == -1) {
                 return;
             }
 
@@ -272,7 +272,7 @@ public final class PlayerHUD {
     }
     //Или замок, по ситуации
     private static void DrawLockAtCenter() {
-        if (RenderEngine.isBotDeathAnimFinished) {
+        if (GameScene.isBotDeathAnimFinished) {
             graphics.drawImage(lockImage, SCREEN_WIDTH / 2 - lockImage.getWidth() / 2, SCREEN_HEIGHT / 2 - lockImage.getHeight() / 2, 0);
         }
 
@@ -281,14 +281,14 @@ public final class PlayerHUD {
     public static void drawDamageIndicatorAndHealthBar(boolean insideInv) {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         if (playerDamaged && !insideInv) {
-            if (RenderEngine.gameTimeUnpaused >= (long) timeToDisplayDamageIndicator) {
+            if (GameScene.gameTimeUnpaused >= (long) timeToDisplayDamageIndicator) {
                 playerDamaged = false;
             }
 
-            if (RenderEngine.damageEffect) {
+            if (GameScene.damageEffect) {
                 graphics.drawImage(damageImage, 0, SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
                 graphics.drawRegion(damageImage, 0, 0, damageImage.getWidth(), damageImage.getHeight(), 2, SCREEN_WIDTH - damageImage.getWidth(), SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
-            } else if (RenderEngine.sub_911()) {
+            } else if (GameScene.sub_911()) {
                 graphics.drawImage(damageImage, 0, SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
             } else {
                 graphics.drawRegion(damageImage, 0, 0, damageImage.getWidth(), damageImage.getHeight(), 2, SCREEN_WIDTH - damageImage.getWidth(), SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
@@ -622,7 +622,7 @@ public final class PlayerHUD {
             }
 
             if (textId != -1) {
-                if (RenderEngine.currentGameState == 1) {
+                if (GameScene.currentGameState == 1) {
                     TextCreator.FindParametersnDrawText(1, textId, width, height, 0);
                     return;
                 }
@@ -641,7 +641,7 @@ public final class PlayerHUD {
 
             if (textId != -1) {
                 //id 389: оружие
-                if (textId == 389 && !Scripts.isItemEquipped((short) 117) && !Scripts.isItemEquipped((short) 118) && !Scripts.isItemEquipped((short) 119) || RenderEngine.currentGameState == 1) {
+                if (textId == 389 && !Scripts.isItemEquipped((short) 117) && !Scripts.isItemEquipped((short) 118) && !Scripts.isItemEquipped((short) 119) || GameScene.currentGameState == 1) {
                     TextCreator.FindParametersnDrawText(1, textId, width, height, 0);
                     return;
                 }
@@ -664,8 +664,8 @@ public final class PlayerHUD {
         graphics.setColor(16711680); 
 
         for (byte locId = 0; locId < 17; ++locId) {
-            if (Scripts.sub_819(locId) || locId == RenderEngine.currentLocation || locId == previousLocation) {
-                if (!RenderEngine.locationCampMark[locId] && locId != 0) {
+            if (Scripts.sub_819(locId) || locId == GameScene.currentLocation || locId == previousLocation) {
+                if (!GameScene.locationCampMark[locId] && locId != 0) {
                     ResourseManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
                 } else {
                     ResourseManager.DrawInterfaceImageToSelectedRegion(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
@@ -680,7 +680,7 @@ public final class PlayerHUD {
     //Анимируем переход по карте
     public static void ActivateTransitAnimation() {
         transitStartTime = (int) System.currentTimeMillis();
-        previousLocation = (byte) RenderEngine.currentLocation;
+        previousLocation = (byte) GameScene.currentLocation;
         IsTransitActive = true;
     }
     //Рисуем линии, указывающие на нужную нам позицию
@@ -694,8 +694,8 @@ public final class PlayerHUD {
             x_start = (int) System.currentTimeMillis() - transitStartTime;
             y_start = locationsCoordinates[previousLocation][0];
             x_end = locationsCoordinates[previousLocation][1];
-            y_end = locationsCoordinates[RenderEngine.nextLocation][0];
-            int y_second_start = locationsCoordinates[RenderEngine.nextLocation][1];
+            y_end = locationsCoordinates[GameScene.nextLocation][0];
+            int y_second_start = locationsCoordinates[GameScene.nextLocation][1];
             int var5 = (int) Math.sqrt((double) ((y_end - y_start) * (y_end - y_start) + (y_second_start - x_end) * (y_second_start - x_end)));
             int var6 = 1000 * var5 / 30;
             int x_second_end;
@@ -706,15 +706,15 @@ public final class PlayerHUD {
                 ResourseManager.DrawInterfaceImageToSelectedRegion(graphics, 61, x_second_end, y_second_end, 0);
             } else {
                 //вертикальная линия
-                y_end = locationsCoordinates[RenderEngine.nextLocation][0];
-                x_second_end = locationsCoordinates[RenderEngine.nextLocation][0];
+                y_end = locationsCoordinates[GameScene.nextLocation][0];
+                x_second_end = locationsCoordinates[GameScene.nextLocation][0];
                 y_second_end = SCREEN_HEIGHT;
                 graphics.drawLine(y_end, 0, x_second_end, y_second_end);
                 
                 //горизонтальная линия
-                y_second_start = locationsCoordinates[RenderEngine.nextLocation][1];
+                y_second_start = locationsCoordinates[GameScene.nextLocation][1];
                 x_second_end = SCREEN_WIDTH;
-                y_second_end = locationsCoordinates[RenderEngine.nextLocation][1];
+                y_second_end = locationsCoordinates[GameScene.nextLocation][1];
                 graphics.drawLine(0, y_second_start, x_second_end, y_second_end);
                 
                 IsTransitActive = false;
@@ -723,13 +723,13 @@ public final class PlayerHUD {
             }
         }
 
-        x_start = locationsCoordinates[RenderEngine.nextLocation][0];
-        x_end = locationsCoordinates[RenderEngine.nextLocation][0];
+        x_start = locationsCoordinates[GameScene.nextLocation][0];
+        x_end = locationsCoordinates[GameScene.nextLocation][0];
         y_end = SCREEN_HEIGHT;
         graphics.drawLine(x_start, 0, x_end, y_end);
-        y_start = locationsCoordinates[RenderEngine.nextLocation][1];
+        y_start = locationsCoordinates[GameScene.nextLocation][1];
         x_end = SCREEN_WIDTH;
-        y_end = locationsCoordinates[RenderEngine.nextLocation][1];
+        y_end = locationsCoordinates[GameScene.nextLocation][1];
         graphics.drawLine(0, y_start, x_end, y_end);
     }
     //Рисуем название выделенной локации
@@ -738,9 +738,9 @@ public final class PlayerHUD {
                 - TextCreator.getHeightFromTextParamMassive(0) 
                 * (textLinesPos.size() + 1);
         //Названия сюж.локаций начинаются с 354 индекса
-        int locationName = Scripts.getLocationNameId((byte) RenderEngine.nextLocation) + 354;
+        int locationName = Scripts.getLocationNameId((byte) GameScene.nextLocation) + 354;
         //Если мы ещё не покинули место крушения вертолёта
-        if (RenderEngine.nextLocation == 0) {
+        if (GameScene.nextLocation == 0) {
             //385 = Место крушения
             textLinesPos = TextCreator.splitOnLines(385, TEXT_TARGET_WIDTH, 0);
             TextCreator.drawReplicInsideFrame(385, 
@@ -753,9 +753,9 @@ public final class PlayerHUD {
         } 
         //По сути-то, костыль для названия первого лагеря, 
         //срабатывающий из всех трёх
-        else if (RenderEngine.nextLocation == 1 
-                || RenderEngine.nextLocation == 6 
-                || RenderEngine.nextLocation == 12) {
+        else if (GameScene.nextLocation == 1 
+                || GameScene.nextLocation == 6 
+                || GameScene.nextLocation == 12) {
             //386 id: Лагерь
             textLinesSpecial = TextCreator.splitOnLines(386, TEXT_TARGET_WIDTH, 0);
             TextCreator.drawReplicInsideFrame(386, 
@@ -859,25 +859,25 @@ public final class PlayerHUD {
     }
 
     public static void updatePlayerHUDState() {
-        if (RenderEngine.currentGameState != 0 && RenderEngine.currentGameState != 13 && RenderEngine.currentGameState != -2) {
-            if (RenderEngine.currentGameState == 14) {
+        if (GameScene.currentGameState != 0 && GameScene.currentGameState != 13 && GameScene.currentGameState != -2) {
+            if (GameScene.currentGameState == 14) {
                 drawIntroText();
                 //next/дальше
                 drawSoftButtonNames(0, 1, 371, true);
             } else if (!Scripts.endingCutscene) {
-                if (RenderEngine.currentGameState == 11) {
+                if (GameScene.currentGameState == 11) {
                     drawToBeContinued();
-                } else if (RenderEngine.currentGameState == 4) {
+                } else if (GameScene.currentGameState == 4) {
                     drawGameOver();
-                } else if (RenderEngine.currentGameState == 5) {
+                } else if (GameScene.currentGameState == 5) {
                     drawPDA();
-                } else if (RenderEngine.currentGameState == 9) {
+                } else if (GameScene.currentGameState == 9) {
                     drawDialogUI();
                 } else {
-                    if (!RenderEngine.useThirdPerson) {
+                    if (!GameScene.useThirdPerson) {
                         if (!Scripts.OpticalSight) {
                             drawWeapon(Scripts.playerActiveWeapon);
-                            if (!RenderEngine.getActiveObjectIdUnderCursor() && !RenderEngine.getOpenDoorIdUnderCursor()) {
+                            if (!GameScene.getActiveObjectIdUnderCursor() && !GameScene.getOpenDoorIdUnderCursor()) {
                                 if (doorLocked) {
                                     DrawLockAtCenter();
                                 } else {

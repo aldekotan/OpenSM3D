@@ -132,7 +132,7 @@ public final class StashScreen implements Screen
       case 3:
          ResourseManager.runGarbageCollector();
          Main.main.setScreen(AllScreens.menu, (byte)14);
-         RenderEngine.setActiveObjState(Scripts.openedActivableObjId, (short)0);
+         GameScene.setActiveObjState(Scripts.openedActivableObjId, (short)0);
          break;
       case 4:
       case 8://взять предмет себе/дропнуть из инвентаря
@@ -143,7 +143,7 @@ public final class StashScreen implements Screen
             this.masterInvScreen.topAreaItemsZone.onShow((byte)4);
             this.masterInvScreen.playerItemsZone.onShow((byte)3);
             if(Scripts.stashItems.length == 0) {
-               RenderEngine.setActiveObjState(Scripts.openedActivableObjId, (short)0);
+               GameScene.setActiveObjState(Scripts.openedActivableObjId, (short)0);
                ResourseManager.runGarbageCollector();
                Main.main.setScreen(AllScreens.menu, (byte)14);
                break;

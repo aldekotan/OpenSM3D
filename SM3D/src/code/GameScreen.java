@@ -29,7 +29,7 @@ public final class GameScreen implements Screen {
 
     //Здесь происходит переход от состояния игрового мира к просмотру UI
     public static void clearMemoryAndLoadUIImages() {
-        RenderEngine.SetToNullAllWorldnMeshMassives();
+        GameScene.SetToNullAllWorldnMeshMassives();
         ResourseManager.loadAllInterfaceImages();
         Main.main.setScreen(AllScreens.menu, (byte) 1);
         Main.main.repaint();
@@ -40,15 +40,15 @@ public final class GameScreen implements Screen {
             try {
                 Scripts.checkPlayerAndSaveGame();
                 //Если мы в окне игры-исследования, обновить время
-                if (RenderEngine.currentGameState == 2
-                        || RenderEngine.currentGameState == 1
-                        || RenderEngine.currentGameState == 0
-                        || RenderEngine.currentGameState == -2
-                        || RenderEngine.currentGameState == 13
-                        || RenderEngine.currentGameState == 11
-                        || RenderEngine.currentGameState == 4) {
-                    RenderEngine.updateGameTime();
-                    RenderEngine.renderWorld(MasterCanvas.graphics);
+                if (GameScene.currentGameState == 2
+                        || GameScene.currentGameState == 1
+                        || GameScene.currentGameState == 0
+                        || GameScene.currentGameState == -2
+                        || GameScene.currentGameState == 13
+                        || GameScene.currentGameState == 11
+                        || GameScene.currentGameState == 4) {
+                    GameScene.updateGameTime();
+                    GameScene.renderWorld(MasterCanvas.graphics);
                 }
 
                 PlayerHUD.updatePlayerHUDState();

@@ -308,7 +308,7 @@ public final class ResourceLoader {
         Image img;
         Image2D img2D = null;
         Texture2D tex = null;
-        String path = spriteId > -100 ? RenderEngine.objectTextureName[spriteId] : "blood.png";
+        String path = spriteId > -100 ? GameScene.objectTextureName[spriteId] : "blood.png";
         if(spriteId == -101) path = ""; // -101 is weapon fire
         
         int textureId = findTextureId(path);
@@ -343,7 +343,7 @@ public final class ResourceLoader {
         } else if(spriteId == -101) {
             cm.setBlending(CompositingMode.ALPHA_ADD);
         } else {
-            cm.setBlending(RenderEngine.objectLighstBlendMode[spriteId]);
+            cm.setBlending(GameScene.objectLighstBlendMode[spriteId]);
         }
 
         if(spriteId != -101) {

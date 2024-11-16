@@ -21,7 +21,7 @@ import javax.microedition.m3g.Transform;
 import javax.microedition.m3g.World;
 import javax.microedition.m3g.Image2D;
 
-public final class RenderEngine {
+public final class GameScene {
     
     public static final byte[] levelUseThirdperson;
 
@@ -2079,7 +2079,7 @@ public final class RenderEngine {
     private static void animateBckSprites() {
         for(int i = 0; i < 32; i++) {
             if(bckSpritesAnimEnabled[i]) {
-                int w = RenderEngine.bckSpritesW[i] / 8;
+                int w = GameScene.bckSpritesW[i] / 8;
 				int h = bckSpritesH[i];
 				
                 int frameTime = (int) (gameTimeUnpaused + (long) (i * 300)) % 1000 / 200;

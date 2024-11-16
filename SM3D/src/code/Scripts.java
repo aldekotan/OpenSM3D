@@ -493,11 +493,11 @@ public final class Scripts {
 
     private static void NPCShootPlayer() //Урон по игроку огнестрелом
     {                                    //с определённым шансом
-        if (RenderEngine.botIsShooting && RenderEngine.activeBotId != -1 && !RenderEngine.showFinalDialog && !var_22f1) {
+        if (GameScene.botIsShooting && GameScene.activeBotId != -1 && !GameScene.showFinalDialog && !var_22f1) {
             byte damage = 0;
             boolean hit_bool = false;
             byte var2;
-            switch (var2 = Bot.enemyWeaponType[RenderEngine.activeBotId]) {
+            switch (var2 = Bot.enemyWeaponType[GameScene.activeBotId]) {
                 case 0:
                     damage = 3;
                     hit_bool = MathUtils.getRandomNumber(100) <= 60;
@@ -529,28 +529,28 @@ public final class Scripts {
         {
             PlayerHUD.IsTransitWasCompleted = false; //Включение ожидания перехода
             ResourseManager.saveGame(); //Провести сохранение
-            RenderEngine.setDialogWindowState((short) -2);
+            GameScene.setDialogWindowState((short) -2);
         }
 
-        if (RenderEngine.showIntro && PlayerHUD.introRolledFully) {
+        if (GameScene.showIntro && PlayerHUD.introRolledFully) {
             PlayerHUD.introRolledFully = false;
-            RenderEngine.showIntro = false;
-            RenderEngine.setDialogWindowState((short) 2);
+            GameScene.showIntro = false;
+            GameScene.setDialogWindowState((short) 2);
         }
 
-        if (var_215f && RenderEngine.gameTimeUnpaused - (long) var_21d2 >= (long) (var_21a7 / 2) && !var_2040) {
+        if (var_215f && GameScene.gameTimeUnpaused - (long) var_21d2 >= (long) (var_21a7 / 2) && !var_2040) {
             SoundAndVibro.playSound(1);
             var_2040 = true;
         }
 
-        if (var_2075 && RenderEngine.gameTimeUnpaused - (long) var_2108 >= (long) (var_20d6 / 2) && !var_2040) {
+        if (var_2075 && GameScene.gameTimeUnpaused - (long) var_2108 >= (long) (var_20d6 / 2) && !var_2040) {
             SoundAndVibro.playSound(2);
             var_2040 = true;
         }
 
-        if (RenderEngine.currentGameState == 2) {
+        if (GameScene.currentGameState == 2) {
             ActorLevelUpIfItNeed();
-            botUnderCursor = RenderEngine.processAim();
+            botUnderCursor = GameScene.processAim();
             SoundAndVibro.stopTooLongVibro();
             NPCShootPlayer();
         }
@@ -559,13 +559,13 @@ public final class Scripts {
     public static void takeGunInHands(byte var0) {
         if (!var_215f) {
             var_2075 = true;
-            var_2108 = (int) RenderEngine.gameTimeUnpaused;
+            var_2108 = (int) GameScene.gameTimeUnpaused;
             EncasedWeapon = playerActiveWeapon;
             playerActiveWeapon = var0;
             var_2040 = false;
             if (OpticalSight) {
                 OpticalSight = false;
-                RenderEngine.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
+                GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
             }
         }
     }
@@ -581,14 +581,14 @@ public final class Scripts {
 
         useItem(var0);
         OpticalSight = false;
-        RenderEngine.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
+        GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
     }
 
     private static void ReloadThisGun(byte var0) {
         if (var0 != 0) {
             if (!var_2075) {
                 OpticalSight = false;
-                RenderEngine.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
+                GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
                 switch (var0) {
                     case 1:
                         if (!searchItem((short) 107)) {
@@ -614,7 +614,7 @@ public final class Scripts {
 
                 var_2040 = false;
                 var_215f = true;
-                var_21d2 = (int) RenderEngine.gameTimeUnpaused;
+                var_21d2 = (int) GameScene.gameTimeUnpaused;
             }
         }
     }
@@ -978,7 +978,7 @@ public final class Scripts {
     }
 
     public static boolean isItemEquipped(short item) {//Надет ли предмет на персонажа
-        return RenderEngine.isItemInList(item, equipmentSlots);
+        return GameScene.isItemInList(item, equipmentSlots);
     }
 
     public static void addItemToInventory(int item) {
@@ -1042,7 +1042,7 @@ public final class Scripts {
         addToEquipmentSlot(i);
         switch (i) {
             case 100:
-                if (RenderEngine.currentLocation == 10) {
+                if (GameScene.currentLocation == 10) {
                     ItemWalkieTalkieInInventaryBool = true;
                     dropItem(i);
                 } else {
@@ -1463,30 +1463,30 @@ public final class Scripts {
     }
 
     private static void openDoor(int doorId) {
-        if (RenderEngine.dyingBotId == -1) {
-            RenderEngine.sub_c4f(doorId);
+        if (GameScene.dyingBotId == -1) {
+            GameScene.sub_c4f(doorId);
         }
     }
 
     public static void giveItemsForKillingAll() {
-        for (int i = 0; i < RenderEngine.itemsForKillingAllCount[RenderEngine.currentRoom]; i++) {
-            short itemId = RenderEngine.itemsForKillingAll[RenderEngine.currentRoom][i];
+        for (int i = 0; i < GameScene.itemsForKillingAllCount[GameScene.currentRoom]; i++) {
+            short itemId = GameScene.itemsForKillingAll[GameScene.currentRoom][i];
             if (itemId != 0) {
                 addItemToInventory(itemId);
-                RenderEngine.itemsForKillingAll[RenderEngine.currentRoom][i] = 0;
+                GameScene.itemsForKillingAll[GameScene.currentRoom][i] = 0;
             }
         }
 
     }
 
     private static void killBot() {
-        RenderEngine.botKilled[RenderEngine.currentRoom][RenderEngine.botIdUndercursor] = true;
-        RenderEngine.botsKilledCount++;
+        GameScene.botKilled[GameScene.currentRoom][GameScene.botIdUndercursor] = true;
+        GameScene.botsKilledCount++;
 		
-        RenderEngine.playBotDieAnimation(RenderEngine.botIdUndercursor);
-        RenderEngine.sub_daf();
+        GameScene.playBotDieAnimation(GameScene.botIdUndercursor);
+        GameScene.sub_daf();
 		
-        switch (Bot.getBotType(RenderEngine.botIdUndercursor)) {
+        switch (Bot.getBotType(GameScene.botIdUndercursor)) {
             case 0:
                 ++playerExp;
                 break;
@@ -1527,7 +1527,7 @@ public final class Scripts {
                 playerExp = (short) (playerExp + 16);
         }
 
-        if (RenderEngine.botsCount[RenderEngine.currentRoom] - RenderEngine.botsKilledCount == 0) {
+        if (GameScene.botsCount[GameScene.currentRoom] - GameScene.botsKilledCount == 0) {
             giveItemsForKillingAll();
         }
 
@@ -1559,8 +1559,8 @@ public final class Scripts {
         if (!var_2075 && !var_215f) {
             if (playerWeaponsAmmo[gun] > 0 || gun == 0) {
                 var_228e = true;
-                RenderEngine.shootStartTime = (int) RenderEngine.gameTimeUnpaused;
-                RenderEngine.shootShakeActive = true;
+                GameScene.shootStartTime = (int) GameScene.gameTimeUnpaused;
+                GameScene.shootShakeActive = true;
                 switch (gun) {
                     case 0: //Если в руках форт
                         playerAccuracy = 60; //Точность персонажа 60%
@@ -1596,21 +1596,21 @@ public final class Scripts {
     {
         var_22f1 = true;
         PlayerHUD.playerDamaged = true;
-        PlayerHUD.timeToDisplayDamageIndicator = (int) RenderEngine.gameTimeUnpaused + 500;
+        PlayerHUD.timeToDisplayDamageIndicator = (int) GameScene.gameTimeUnpaused + 500;
         playerHealth = (short) (playerHealth - Hitpoints);
         SoundAndVibro.vibrate(200);
     }
 
     public static void sub_72f() {
-        RenderEngine.setDialogWindowState((short) 5);
+        GameScene.setDialogWindowState((short) 5);
         GoToNextLocation();
     }
 
     private static void playerControlCheck() {
-        if (RenderEngine.currentGameState != 1 && RenderEngine.currentGameState != 4 && RenderEngine.currentGameState != 11 && !endingCutscene && RenderEngine.currentGameState != 13 && RenderEngine.currentGameState != 0 && RenderEngine.currentGameState != -2) {
-            switch (RenderEngine.currentGameState) {
+        if (GameScene.currentGameState != 1 && GameScene.currentGameState != 4 && GameScene.currentGameState != 11 && !endingCutscene && GameScene.currentGameState != 13 && GameScene.currentGameState != 0 && GameScene.currentGameState != -2) {
+            switch (GameScene.currentGameState) {
                 case 2:
-                    if (RenderEngine.gamePaused) {
+                    if (GameScene.gamePaused) {
                         return;
                     }
 
@@ -1621,29 +1621,29 @@ public final class Scripts {
                     if (Keys.fire || Keys.num5) {
                         Keys.fire = false;
                         Keys.num5 = false;
-                        if (RenderEngine.getOpenDoorIdUnderCursor()) {
-                            openDoor(RenderEngine.openDoorIdUnderCursor);
-                        } else if (!RenderEngine.getActiveObjectIdUnderCursor()) {
+                        if (GameScene.getOpenDoorIdUnderCursor()) {
+                            openDoor(GameScene.openDoorIdUnderCursor);
+                        } else if (!GameScene.getActiveObjectIdUnderCursor()) {
                             shoot(playerActiveWeapon);
                         } else {
-                            InteractionWith(RenderEngine.activableObjIdUnderCursor);
+                            InteractionWith(GameScene.activableObjIdUnderCursor);
                         }
                     }
 
                     if (Keys.left || Keys.num4) {
-                        RenderEngine.TurnLeftTheCamera();
+                        GameScene.TurnLeftTheCamera();
                     }
 
                     if (Keys.right || Keys.num6) {
-                        RenderEngine.TurnRightTheCamera();
+                        GameScene.TurnRightTheCamera();
                     }
 
                     if (Keys.up || Keys.num2) {
-                        RenderEngine.RaiseTheCamera();
+                        GameScene.RaiseTheCamera();
                     }
 
                     if (Keys.down || Keys.num8) {
-                        RenderEngine.LowerTheCamera();
+                        GameScene.LowerTheCamera();
                     }
 
                     if (Keys.num1) {
@@ -1657,9 +1657,9 @@ public final class Scripts {
                         {
                             OpticalSight = !OpticalSight; //поменять значение активности
                             if (OpticalSight) {
-                                RenderEngine.camera.setPerspective(30.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
+                                GameScene.camera.setPerspective(30.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
                             } else {
-                                RenderEngine.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
+                                GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
                             }
                         }
                     }
@@ -1676,7 +1676,7 @@ public final class Scripts {
 
                     if (Keys.num0) {
                         Keys.num0 = false;
-                        openDoor(RenderEngine.currentDoorId);
+                        openDoor(GameScene.currentDoorId);
                     }
 
                     if (Keys.rightSoft) {
@@ -1699,7 +1699,7 @@ public final class Scripts {
 
                     if (Keys.leftSoft) {
                         Keys.leftSoft = false;
-                        RenderEngine.gamePaused = true;
+                        GameScene.gamePaused = true;
                         sub_7cd();
                         AllScreens.masterInventory = new MasterInventoryScreen();
                         Main.main.setScreen(AllScreens.pauseScreen, (byte) 2);
@@ -1741,8 +1741,8 @@ public final class Scripts {
                     if (Keys.rightSoft) {
                         Keys.rightSoft = false;
                         ResourseManager.runGarbageCollector();
-                        RenderEngine.setDialogWindowState((short) 2);//закрыть диалоговое окно
-                        RenderEngine.showIntro = false;
+                        GameScene.setDialogWindowState((short) 2);//закрыть диалоговое окно
+                        GameScene.showIntro = false;
                         PlayerHUD.introRolledFully = false;
                     }
             }
@@ -1752,11 +1752,11 @@ public final class Scripts {
 
     private static void addMarkToPDA(byte var0) {
         var_2204 = true;
-        RenderEngine.locationTaskMark[var0] = true;
+        GameScene.locationTaskMark[var0] = true;
     }
 
     public static byte getLocationNameId(byte var0) {
-        return RenderEngine.sub_165(var0, StoryLocationMassive);
+        return GameScene.sub_165(var0, StoryLocationMassive);
     }
 
     private static void sub_7cd() {
@@ -1776,65 +1776,65 @@ public final class Scripts {
     }
 
     public static boolean sub_819(int var0) {
-        return !RenderEngine.locationCompleted[var0] && (RenderEngine.locationCampMark[var0] || RenderEngine.locationTaskMark[var0]) || RenderEngine.currentLocation == var0;
+        return !GameScene.locationCompleted[var0] && (GameScene.locationCampMark[var0] || GameScene.locationTaskMark[var0]) || GameScene.currentLocation == var0;
     }
 
     private static void GoToNextLocation() {
-        PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) RenderEngine.currentLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
-        RenderEngine.nextLocation = RenderEngine.currentLocation;
+        PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.currentLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
+        GameScene.nextLocation = GameScene.currentLocation;
         if (var_2204) {
-            RenderEngine.locationCampMark[RenderEngine.currentLocation] = RenderEngine.currentLocation == 1 || RenderEngine.currentLocation == 6 || RenderEngine.currentLocation == 12;
-            RenderEngine.locationCompleted[RenderEngine.currentLocation] = !RenderEngine.locationCampMark[RenderEngine.currentLocation];
-            if (RenderEngine.currentLocation == StoryLocationMassive[0]) {
+            GameScene.locationCampMark[GameScene.currentLocation] = GameScene.currentLocation == 1 || GameScene.currentLocation == 6 || GameScene.currentLocation == 12;
+            GameScene.locationCompleted[GameScene.currentLocation] = !GameScene.locationCampMark[GameScene.currentLocation];
+            if (GameScene.currentLocation == StoryLocationMassive[0]) {
                 rustyDialogState = 3;
                 playerExp = (short) (playerExp + 20);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[1]) {
+            if (GameScene.currentLocation == StoryLocationMassive[1]) {
                 rustyDialogState = 5;
                 playerExp = (short) (playerExp + 90);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[2]) //Задание Галоши
+            if (GameScene.currentLocation == StoryLocationMassive[2]) //Задание Галоши
             {
                 galoshQuestState = 1;
                 playerExp = (short) (playerExp + 40);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[3]) {
+            if (GameScene.currentLocation == StoryLocationMassive[3]) {
                 playerExp = (short) (playerExp + 110);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[5]) {
+            if (GameScene.currentLocation == StoryLocationMassive[5]) {
                 haryaDialogState = 2;
                 playerExp = (short) (playerExp + 25);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[6]) {
+            if (GameScene.currentLocation == StoryLocationMassive[6]) {
                 batyaDialogState = 2;
                 playerExp = (short) (playerExp + 155);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[7]) {
+            if (GameScene.currentLocation == StoryLocationMassive[7]) {
                 playerExp = (short) (playerExp + 250);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[9]) {
+            if (GameScene.currentLocation == StoryLocationMassive[9]) {
                 batyaDialogState = 4;
                 playerExp = (short) (playerExp + 32);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[10]) {
+            if (GameScene.currentLocation == StoryLocationMassive[10]) {
                 belomorDialogState = 2;
                 playerExp = (short) (playerExp + 135);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[11]) {
+            if (GameScene.currentLocation == StoryLocationMassive[11]) {
                 shlangDialogState = 2;
                 playerExp = (short) (playerExp + 330);
             }
 
-            if (RenderEngine.currentLocation == StoryLocationMassive[12]) {
+            if (GameScene.currentLocation == StoryLocationMassive[12]) {
                 playerExp = (short) (playerExp + 375);
             }
 
@@ -1850,19 +1850,19 @@ public final class Scripts {
                 return;
             }
 
-            if (RenderEngine.nextLocation == RenderEngine.currentLocation && !RenderEngine.notInRoom) { //Если локация перехода равна прежней, вернуться
-                RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
-                RenderEngine.gamePaused = false;
+            if (GameScene.nextLocation == GameScene.currentLocation && !GameScene.notInRoom) { //Если локация перехода равна прежней, вернуться
+                GameScene.setDialogWindowState(GameScene.prevGameState);
+                GameScene.gamePaused = false;
                 return;
             }
 
-            if (!sub_819(RenderEngine.nextLocation)) {
+            if (!sub_819(GameScene.nextLocation)) {
                 return;
             }
 
             PlayerHUD.ActivateTransitAnimation();
-            RenderEngine.currentRoomPdawtf = RenderEngine.currentRoom;
-            RenderEngine.currentLocation = RenderEngine.nextLocation;
+            GameScene.currentRoomPdawtf = GameScene.currentRoom;
+            GameScene.currentLocation = GameScene.nextLocation;
         }
 
         if (Keys.left || Keys.up || Keys.num2 || Keys.num4) { //Нажать клавишу влево или вверх
@@ -1872,22 +1872,22 @@ public final class Scripts {
             Keys.left = false;
             if (sub_8da()) {
                 while (true) {
-                    ++RenderEngine.nextLocation;
-                    if (RenderEngine.nextLocation > 16) {
-                        RenderEngine.nextLocation = 1;
+                    ++GameScene.nextLocation;
+                    if (GameScene.nextLocation > 16) {
+                        GameScene.nextLocation = 1;
                     }
 
-                    if (sub_819(RenderEngine.nextLocation)) {
+                    if (sub_819(GameScene.nextLocation)) {
                         break;
                     }
 
-                    if (RenderEngine.nextLocation == 16) {
-                        RenderEngine.nextLocation = 0;
+                    if (GameScene.nextLocation == 16) {
+                        GameScene.nextLocation = 0;
                     }
                 }
             }
 
-            PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) RenderEngine.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
+            PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
         }
 
         if (Keys.right || Keys.down || Keys.num8 || Keys.num6) { //нажать клавишу вправо или вниз
@@ -1895,25 +1895,25 @@ public final class Scripts {
             Keys.num8 = false;
             Keys.down = false;
             Keys.right = false;
-            boolean var0 = RenderEngine.currentLocation == 0;
+            boolean var0 = GameScene.currentLocation == 0;
             if (sub_8da()) {
                 do {
-                    --RenderEngine.nextLocation;
+                    --GameScene.nextLocation;
                     byte var1 = (byte) (var0 ? 0 : 1);
-                    if (RenderEngine.nextLocation < var1) {
-                        RenderEngine.nextLocation = 16;
+                    if (GameScene.nextLocation < var1) {
+                        GameScene.nextLocation = 16;
                     }
-                } while ((!var0 || RenderEngine.nextLocation != 0) && !sub_819(RenderEngine.nextLocation));
+                } while ((!var0 || GameScene.nextLocation != 0) && !sub_819(GameScene.nextLocation));
             }
 
-            PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) RenderEngine.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
+            PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
         }
 
     }
 
     private static boolean sub_8da() {
         for (byte var0 = 1; var0 < 17; ++var0) {
-            if (var0 != RenderEngine.currentLocation && sub_819(var0)) {
+            if (var0 != GameScene.currentLocation && sub_819(var0)) {
                 return true;
             }
         }
@@ -2161,7 +2161,7 @@ public final class Scripts {
         if (phracesIdArray != null) {
             PlayerHUD.splitNPCPhraseToLines();
             PlayerHUD.resetNPCPhraseOffsetByTime();
-            RenderEngine.setDialogWindowState((short) 9);
+            GameScene.setDialogWindowState((short) 9);
         }
 
     }
@@ -2208,14 +2208,14 @@ public final class Scripts {
 
                         if (selectedAnswer == 1) //если выбран второй вариант ответа
                         {
-                            RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                            GameScene.setDialogWindowState(GameScene.prevGameState);
                             return;
                         }
                     }
                 }
 
                 if (zaborDialogState == 1) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                 }
                 break;
             //Ржавый
@@ -2259,7 +2259,7 @@ public final class Scripts {
                         }
 
                         givenAnswersCount = 0;
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
 
@@ -2287,7 +2287,7 @@ public final class Scripts {
                 }
 
                 if (rustyDialogState == 2) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                     return;
                 }
 
@@ -2323,13 +2323,13 @@ public final class Scripts {
                     if (givenAnswersCount == 3 && (selectedAnswer == 0 || selectedAnswer == 1)) {
                         rustyDialogState = 4;
                         addMarkToPDA(StoryLocationMassive[1]);
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
                 }
 
                 if (rustyDialogState == 4) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                     return;
                 }
 
@@ -2375,7 +2375,7 @@ public final class Scripts {
                 }
 
                 if (rustyDialogState == 6) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                 }
                 break;
             //Галош
@@ -2383,7 +2383,7 @@ public final class Scripts {
                 if (galoshQuestState == 0) {
                     //А как насчёт артефактов? Получение квеста
                     if (selectedAnswer == 4) {
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
 
@@ -2419,7 +2419,7 @@ public final class Scripts {
                         }
 
                         if (selectedAnswer == 2) {
-                            RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                            GameScene.setDialogWindowState(GameScene.prevGameState);
                         }
                     } else if (givenAnswersCount == 1) {
                         if (selectedAnswer == 0) {
@@ -2444,7 +2444,7 @@ public final class Scripts {
                         }
 
                         if (selectedAnswer == 3) {
-                            RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                            GameScene.setDialogWindowState(GameScene.prevGameState);
                         }
                     }
                 }
@@ -2493,14 +2493,14 @@ public final class Scripts {
                             dialogCompleted = true;
                             playerMoney = (short) (playerMoney - 500);
                             addMarkToPDA((byte) 9);
-                            RenderEngine.locationCompleted[StoryLocationMassive[6]] = true;
+                            GameScene.locationCompleted[StoryLocationMassive[6]] = true;
                             batyaDialogState = 3;
                         }
                         break;
                     }
 
                     if (selectedAnswer == 1) {
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
                 }
@@ -2533,21 +2533,21 @@ public final class Scripts {
                     }
 
                     if (selectedAnswer == 2) {
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
                 }
 
                 if (batyaDialogState == 3) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                     return;
                 }
 
                 if (batyaDialogState == 4) {
                     if (givenAnswersCount == 1) {
                         addMarkToPDA(StoryLocationMassive[8]);
-                        RenderEngine.setActiveObjState(var_23b6, (short) 0);
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setActiveObjState(var_23b6, (short) 0);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
 
@@ -2573,7 +2573,7 @@ public final class Scripts {
                     }
 
                     if (selectedAnswer == 2) {
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
                 }
@@ -2587,12 +2587,12 @@ public final class Scripts {
                 if (haryaDialogState == 2) {
                     haryaDialogState = 3;
                     addItemToInventory((short) 112);
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                     return;
                 }
 
                 if (haryaDialogState == 3) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                 }
                 break;
             //Третий лагерь
@@ -2617,7 +2617,7 @@ public final class Scripts {
                 }
 
                 if (gutalinDialogState == 1) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                 }
                 break;
             //Шланг
@@ -2645,7 +2645,7 @@ public final class Scripts {
                 }
 
                 if (shlangDialogState == 1) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                     return;
                 }
 
@@ -2653,7 +2653,7 @@ public final class Scripts {
                     ++currentNpcPhrase;
                     dialogCompleted = true;
                     playerMoney = (short) (playerMoney + 2000);
-                    RenderEngine.setActiveObjState(var_23b6, (short) 0);
+                    GameScene.setActiveObjState(var_23b6, (short) 0);
                     shlangDialogState = -1;
                 }
                 break;
@@ -2669,25 +2669,25 @@ public final class Scripts {
                     if (selectedAnswer == 0) {
                         addMarkToPDA(StoryLocationMassive[10]);
                         belomorDialogState = 1;
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
 
                     if (selectedAnswer == 1) {
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
                 }
 
                 if (belomorDialogState == 1 || belomorDialogState == 3) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                     return;
                 }
 
                 if (belomorDialogState == 2) {
                     if (givenAnswersCount == 1) {
                         belomorDialogState = 3;
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
 
@@ -2709,7 +2709,7 @@ public final class Scripts {
                     }
 
                     if (givenAnswersCount == 6) {
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         addMarkToPDA(StoryLocationMassive[12]);
                         kaynazovskiDialogState = 1;
                         return;
@@ -2722,7 +2722,7 @@ public final class Scripts {
 
                 if (kaynazovskiDialogState == 1) {
                     if (givenAnswersCount == 1) {
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         addMarkToPDA(StoryLocationMassive[12]);
                         kaynazovskiDialogState = 1;
                         return;
@@ -2733,8 +2733,8 @@ public final class Scripts {
                 }
 
                 if (kaynazovskiDialogState == 2) {
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
-                    RenderEngine.setActiveObjState(var_23b6, (short) 0);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
+                    GameScene.setActiveObjState(var_23b6, (short) 0);
                     koboldDialogState = 2;
                     addItemToInventory((short) 128);
                 }
@@ -2750,8 +2750,8 @@ public final class Scripts {
 
                     if (givenAnswersCount == 1) {
                         addMarkToPDA(StoryLocationMassive[4]);
-                        RenderEngine.setActiveObjState(var_23b6, (short) 0);
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setActiveObjState(var_23b6, (short) 0);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                     }
                 }
                 break;
@@ -2775,7 +2775,7 @@ public final class Scripts {
                                 dropItem((short) 102);
                             }
 
-                            RenderEngine.setActiveObjState(var_23b6, (short) 0);
+                            GameScene.setActiveObjState(var_23b6, (short) 0);
                             var_2204 = true;
                             return;
                         }
@@ -2785,7 +2785,7 @@ public final class Scripts {
                             dialogCompleted = true;
                             addItemToInventory((short) 141);
                             addItemToInventory((short) 124);
-                            RenderEngine.setActiveObjState(var_23b6, (short) 0);
+                            GameScene.setActiveObjState(var_23b6, (short) 0);
                             var_2204 = true;
                         }
                     }
@@ -2793,11 +2793,11 @@ public final class Scripts {
                 break;
             //Маниковский, по заданию Кэпа
             case 17:
-                RenderEngine.setActiveObjState(var_23b6, (short) 0);
+                GameScene.setActiveObjState(var_23b6, (short) 0);
                 if (selectedAnswer == 0) {
                     capItemGot = true;
                     addItemToInventory((short) 200);
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                     return;
                 }
 
@@ -2810,8 +2810,8 @@ public final class Scripts {
             case 18:
                 if (givenAnswersCount == 2) {
                     addMarkToPDA(StoryLocationMassive[7]);
-                    RenderEngine.setActiveObjState(var_23b6, (short) 0);
-                    RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                    GameScene.setActiveObjState(var_23b6, (short) 0);
+                    GameScene.setDialogWindowState(GameScene.prevGameState);
                 }
 
                 ++currentNpcPhrase;
@@ -2822,8 +2822,8 @@ public final class Scripts {
                 //Перед посещением третьего лагеря
                 if (koboldDialogState == 0) {
                     if (givenAnswersCount == 1) {
-                        RenderEngine.setActiveObjState(var_23b6, (short) 0);
-                        RenderEngine.setDialogWindowState(RenderEngine.prevGameState);
+                        GameScene.setActiveObjState(var_23b6, (short) 0);
+                        GameScene.setDialogWindowState(GameScene.prevGameState);
                         addItemToInventory((short) 127);
                         kaynazovskiDialogState = 2;
                         return;
@@ -2837,12 +2837,12 @@ public final class Scripts {
                 if (koboldDialogState == 1) {
                     if (givenAnswersCount == 3) {
                         koboldDialogState = 0;
-                        RenderEngine.currentRoomPdawtf = RenderEngine.currentRoom;
-                        RenderEngine.currentLocation = 16;
-                        RenderEngine.locationCampMark[RenderEngine.currentLocation] = RenderEngine.currentLocation == 1 || RenderEngine.currentLocation == 6 || RenderEngine.currentLocation == 12;
-                        RenderEngine.locationCompleted[RenderEngine.currentLocation] = !RenderEngine.locationCampMark[RenderEngine.currentLocation];
-                        RenderEngine.setDialogWindowState((short) -2);
-                        RenderEngine.setActiveObjState(var_23b6, (short) 0);
+                        GameScene.currentRoomPdawtf = GameScene.currentRoom;
+                        GameScene.currentLocation = 16;
+                        GameScene.locationCampMark[GameScene.currentLocation] = GameScene.currentLocation == 1 || GameScene.currentLocation == 6 || GameScene.currentLocation == 12;
+                        GameScene.locationCompleted[GameScene.currentLocation] = !GameScene.locationCampMark[GameScene.currentLocation];
+                        GameScene.setDialogWindowState((short) -2);
+                        GameScene.setActiveObjState(var_23b6, (short) 0);
                         return;
                     }
 
@@ -2851,8 +2851,8 @@ public final class Scripts {
                 }
 
                 if (koboldDialogState == 2) {
-                    RenderEngine.setDialogWindowState((short) 2);
-                    RenderEngine.setActiveObjState(var_23b6, (short) 0);
+                    GameScene.setDialogWindowState((short) 2);
+                    GameScene.setActiveObjState(var_23b6, (short) 0);
                     endingCutscene = true;
                 }
                 break;
@@ -2860,7 +2860,7 @@ public final class Scripts {
             case 20:
                 if (givenAnswersCount == 4) {
                     Main.main.numberOfPlayers = 0;
-                    RenderEngine.endGame((short) 11, 5000);//финал игры?
+                    GameScene.endGame((short) 11, 5000);//финал игры?
                     return;
                 }
 
@@ -2918,7 +2918,7 @@ public final class Scripts {
             Keys.rightSoft = false;
             Keys.fire = false;
             if (dialogCompleted) {
-                RenderEngine.setDialogWindowState(RenderEngine.prevGameState);//выполнить действие?
+                GameScene.setDialogWindowState(GameScene.prevGameState);//выполнить действие?
                 return;
             }
 
@@ -2943,7 +2943,7 @@ public final class Scripts {
     {
         openedActivableObjId = type;
         int number;
-        if ((number = RenderEngine.getActivableObjState(type)) != 0 && number > 21) //что там находится?
+        if ((number = GameScene.getActivableObjState(type)) != 0 && number > 21) //что там находится?
         {
             if (number < 50 || number > 58) {
                 if (number <= 126 && number != 100) {
@@ -2956,7 +2956,7 @@ public final class Scripts {
                     if (number == 26) {
                         addItemToInventory((short) 127);
                         addItemToInventory((short) 140);
-                        RenderEngine.setActiveObjState(type, (short) 0);
+                        GameScene.setActiveObjState(type, (short) 0);
                         return;
                     }
 
@@ -2966,7 +2966,7 @@ public final class Scripts {
                 }
 
                 addItemToInventory(number);
-                RenderEngine.setActiveObjState(type, (short) 0);
+                GameScene.setActiveObjState(type, (short) 0);
                 return;
             }
 
@@ -2979,7 +2979,7 @@ public final class Scripts {
             if (number == 51) {
                 addItemToInventory((short) 140);
                 addItemToInventory((short) 128);
-                RenderEngine.setActiveObjState(type, (short) 0);
+                GameScene.setActiveObjState(type, (short) 0);
             }
 
             if (number == 52) {
@@ -3016,7 +3016,7 @@ public final class Scripts {
 
             if (number == 58) {
                 var_2204 = true;
-                RenderEngine.setActiveObjState(type, (short) 0);
+                GameScene.setActiveObjState(type, (short) 0);
             }
         } else {
             if (number == 1) { //Ассортимент первого торговца в деревне (п. аптечка, антирад, магазин ак, сам калаш и два броника)
