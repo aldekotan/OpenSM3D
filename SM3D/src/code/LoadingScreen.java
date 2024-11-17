@@ -40,7 +40,7 @@ public final class LoadingScreen implements Screen {
     }
 
     public static void RunGarbageCollector() {
-        System.gc();
+        //System.gc();
         ++PlayerHUD.garbageCollected;
     }
 
