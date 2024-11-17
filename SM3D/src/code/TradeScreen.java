@@ -107,7 +107,7 @@ public final class TradeScreen implements Screen
       TextCreator.drawReplicWithParameters(1, text, 0, text.length, x, y, 5);
       
       short[] playerMoneyText;
-      (playerMoneyText = TextCreator.surroundNumberWithChars(Scripts.playerMoney, false))[playerMoneyText.length - 1] = 106;
+      (playerMoneyText = TextCreator.makeColoredTextFromNumber(Scripts.playerMoney, false))[playerMoneyText.length - 1] = 106;
       x = ResourseManager.getUIElementXcoord(49, 13);
       y = ResourseManager.getUIElementYcoord(49, 13);
       TextCreator.drawColoredText(playerMoneyText, x, y, 3);

@@ -59,7 +59,7 @@ public final class InventoryScreen implements Screen
       
       short[] moneyText;
       //106 - символ доллара
-      (moneyText = TextCreator.surroundNumberWithChars(Scripts.playerMoney,
+      (moneyText = TextCreator.makeColoredTextFromNumber(Scripts.playerMoney,
               false))[moneyText.length - 1] = 106;
       x_dest = ResourseManager.getUIElementXcoord(39, 21);
       y_dest = ResourseManager.getUIElementYcoord(39, 21);

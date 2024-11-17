@@ -94,7 +94,7 @@ public final class PlayerStatsScreen implements Screen {
         //Отрисовка характеристик игрока, цветным текстом
         short[] statValue;
         //здоровье
-        (statValue = TextCreator.surroundNumberWithChars(statsValues[0], 
+        (statValue = TextCreator.makeColoredTextFromNumber(statsValues[0], 
                 true))[statValue.length - 1] = 
                 (short) (statsValues[0] < 0 ? 157 : 105);
         TextCreator.drawColoredText(statValue, 
@@ -102,28 +102,28 @@ public final class PlayerStatsScreen implements Screen {
                 ResourseManager.getUIElementYcoord(43, 14), 10);
         
         //точность
-        (statValue = TextCreator.surroundNumberWithChars(statsValues[1], 
+        (statValue = TextCreator.makeColoredTextFromNumber(statsValues[1], 
                 true))[statValue.length - 1] = -2;
         TextCreator.drawColoredText(statValue, 
                 ResourseManager.getUIElementXcoord(43, 15), 
                 ResourseManager.getUIElementYcoord(43, 15), 10);
         
         //пулестойкость
-        (statValue = TextCreator.surroundNumberWithChars(statsValues[2], 
+        (statValue = TextCreator.makeColoredTextFromNumber(statsValues[2], 
                 true))[statValue.length - 1] = (short) (statsValues[2] < 0 ? 157 : 105);
         TextCreator.drawColoredText(statValue, 
                 ResourseManager.getUIElementXcoord(43, 16), 
                 ResourseManager.getUIElementYcoord(43, 16), 10);
         
         //устойчивость к радиации
-        (statValue = TextCreator.surroundNumberWithChars(statsValues[3], 
+        (statValue = TextCreator.makeColoredTextFromNumber(statsValues[3], 
                 true))[statValue.length - 1] = (short) (statsValues[3] < 0 ? 157 : 105);
         TextCreator.drawColoredText(statValue, 
                 ResourseManager.getUIElementXcoord(43, 17), 
                 ResourseManager.getUIElementYcoord(43, 17), 10);
         
         //защита от аномалий
-        (statValue = TextCreator.surroundNumberWithChars(statsValues[4], 
+        (statValue = TextCreator.makeColoredTextFromNumber(statsValues[4], 
                 true))[statValue.length - 1] = (short) (statsValues[4] < 0 ? 157 : 105);
         TextCreator.drawColoredText(statValue, 
                 ResourseManager.getUIElementXcoord(43, 18), 

@@ -11,7 +11,7 @@ import javax.microedition.lcdui.Image;
 public final class TextCreator 
 {
 
-   public static short[] massive_withStartnEnds;
+   public static short[] massive_withStartnEnds;//адреса текстовых строк в массиве
    public static byte[] byte_text_massive;
    public static final byte[][] x_src_TextImageMassive = new byte[2][];
    public static final byte[][] y_src_TextImageMassive = new byte[2][];
@@ -19,10 +19,10 @@ public final class TextCreator
    public static final byte[] height_TextImageMassive = new byte[2];
    public static final byte[] spaceWidth = new byte[2];
    public static final byte[] perLetterInterval = new byte[2];
-   public static final Image[] MassiveWithTwoTextImages = new Image[2];
+   public static final Image[] MassiveWithTwoTextImages = new Image[2]; //глифы 
    private static final int[] var_23a = new int[]{31, 1, 0};
-   public static short[] var_273;
-   public static short[] var_295;
+   public static short[] greenSymbolIds; //адреса?
+   public static short[] redSymbolIds; //адреса
    
    private static Image CreateTextImageFromDataInputStream(DataInputStream object_D, int color_of_text) throws IOException 
    { //класс переделан для упрощения изменения текста
@@ -425,63 +425,64 @@ public final class TextCreator
 
    public static void sub_607() 
    {
-      var_273 = new short[10];
-      var_273[0] = 95;
-      var_273[1] = 96;
-      var_273[2] = 97;
-      var_273[3] = 98;
-      var_273[4] = 99;
-      var_273[5] = 100;
-      var_273[6] = 101;
-      var_273[7] = 102;
-      var_273[8] = 103;
-      var_273[9] = 104;
-      var_295 = new short[10];
-      var_295[0] = 147;
-      var_295[1] = 148;
-      var_295[2] = 149;
-      var_295[3] = 150;
-      var_295[4] = 151;
-      var_295[5] = 152;
-      var_295[6] = 153;
-      var_295[7] = 154;
-      var_295[8] = 155;
-      var_295[9] = 156;
+      greenSymbolIds = new short[10];
+      greenSymbolIds[0] = 95;
+      greenSymbolIds[1] = 96;
+      greenSymbolIds[2] = 97;
+      greenSymbolIds[3] = 98;
+      greenSymbolIds[4] = 99;
+      greenSymbolIds[5] = 100;
+      greenSymbolIds[6] = 101;
+      greenSymbolIds[7] = 102;
+      greenSymbolIds[8] = 103;
+      greenSymbolIds[9] = 104;
+      redSymbolIds = new short[10];
+      redSymbolIds[0] = 147;
+      redSymbolIds[1] = 148;
+      redSymbolIds[2] = 149;
+      redSymbolIds[3] = 150;
+      redSymbolIds[4] = 151;
+      redSymbolIds[5] = 152;
+      redSymbolIds[6] = 153;
+      redSymbolIds[7] = 154;
+      redSymbolIds[8] = 155;
+      redSymbolIds[9] = 156;
    }
 
-   public static short[] surroundNumberWithChars(int number, boolean var1) 
+   public static short[] makeColoredTextFromNumber(int number, boolean addSign) 
    {
-      short[] new_short_first_massive = new short[10];
-      int var5 = 9;
-      short[] new_short_second_massive;
-      short var4;
+      short[] symbolArray = new short[10];
+      int digitsCount = 9;
+      short[] coloredSymbols;
+      short signId;
       if(number < 0) 
       {
-         new_short_second_massive = var_295;
-         var4 = 159;
+         coloredSymbols = redSymbolIds;
+         signId = 159;// minus
       } 
       else 
       {
-         new_short_second_massive = var_273;
-         var4 = 146;
+         coloredSymbols = greenSymbolIds;
+         signId = 146;// plus
       }
 
       number = Math.abs(number);
 
       do 
       {
-         new_short_first_massive[var5--] = new_short_second_massive[number % 10];
+         symbolArray[digitsCount--] = coloredSymbols[number % 10];
       } 
       while((number /= 10) > 0);
 
-      short[] var6 = new short[9 - var5 + (var1?2:1)];
-      System.arraycopy(new_short_first_massive, var5 + 1, var6, var1?1:0, 9 - var5);
-      if(var1) 
+      short[] finalText = new short[9 - digitsCount + (addSign?2:1)];
+      System.arraycopy(symbolArray, digitsCount + 1, 
+              finalText, addSign?1:0, 9 - digitsCount);
+      if(addSign) 
       {
-         var6[0] = var4;
+         finalText[0] = signId;
       }
-
-      return var6;
+      
+      return finalText;
    }
 
     public static Vector splitOnLines(int textId, int targetWidth, int var2) {
