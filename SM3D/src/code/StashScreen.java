@@ -60,7 +60,7 @@ public final class StashScreen implements Screen
       PlayerHUD.drawSoftButtonNames(0, 1, 6, true);
       int x_dest = ResourseManager.getUIElementXcoord(47, 6);
       int y_dest = ResourseManager.getUIElementYcoord(47, 6);
-      TextCreator.FindParametersnDrawText(1, 309, x_dest, y_dest, 5);
+      TextCreator.drawLineByAnchor(1, 309, x_dest, y_dest, 5);
       
       byte[] currWeight = TextCreator.CreateTextMassiveForNumber(Scripts.playerWeight);
       byte[] kgSlash = TextCreator.CopyReplicToNewMassive(65);
@@ -72,12 +72,12 @@ public final class StashScreen implements Screen
       byte[] text = TextCreator.combineTextMassives(playerWeightText, playerMaxWeightText);
       int x_coord = ResourseManager.getUIElementXcoord(47, 10);
       int y_coord = ResourseManager.getUIElementYcoord(47, 10);
-      TextCreator.DrawTextMassiveWithAnchor(1, text, 0, text.length, x_coord, y_coord, 5);
+      TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x_coord, y_coord, 5);
       
       text = TextCreator.combineTextMassives(TextCreator.CreateTextMassiveForNumber(Scripts.getItemWeight(items[selectedItem])), TextCreator.CopyReplicToNewMassive(64));
       x_coord = ResourseManager.getUIElementXcoord(47, 7);
       y_coord = ResourseManager.getUIElementYcoord(47, 7);
-      TextCreator.DrawTextMassiveWithAnchor(1, text, 0, text.length, x_coord, y_coord, 5);
+      TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x_coord, y_coord, 5);
       
       ItemsInteraction.drawOrder = 3;
       this.masterInvScreen.playerItemsZone.paint(graphics);

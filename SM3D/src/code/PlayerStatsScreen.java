@@ -31,7 +31,7 @@ public final class PlayerStatsScreen implements Screen {
                         TextCreator.CreateMassiveWithRankLength(Scripts.playerLevel));
         int x_start = ResourseManager.getUIElementXcoord(43, 0);
         int y_start = ResourseManager.getUIElementYcoord(43, 0);
-        TextCreator.drawReplicWithParameters(0, currentValueText, 0, currentValueText.length, x_start, y_start, 4);
+        TextCreator.drawTextByAnchor(0, currentValueText, 0, currentValueText.length, x_start, y_start, 4);
 
         //сохраняем характеристики персонажа и вкаченные уровни в массив
         byte[] statsLevels = getPlayerStatsLevel();
@@ -42,51 +42,51 @@ public final class PlayerStatsScreen implements Screen {
         
         //Поле слева вверху. Отрисовка названия уровней для поднятия
         //id 68: ТОЧНОСТЬ: 
-        TextCreator.FindParametersnDrawText(color = this.selectedStat == 0 ? 0 : 1, 
+        TextCreator.drawLineByAnchor(color = this.selectedStat == 0 ? 0 : 1, 
                 68, ResourseManager.getUIElementXcoord(43, 2), 
                 ResourseManager.getUIElementYcoord(43, 2), 4);
         x_start = ResourseManager.getUIElementXcoord(43, 3);
         y_start = ResourseManager.getUIElementYcoord(43, 3);
         byte[] currentPlayerLevelText = TextCreator.CreateMassiveWithRankLength(statsLevels[0]);
-        TextCreator.drawReplicWithParameters(color, 
+        TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
                 x_start, y_start, 6);
 
         //67 id text: "+"
         if (this.selectedStat == 0) {
-            TextCreator.FindParametersnDrawText(color, 67, 
+            TextCreator.drawLineByAnchor(color, 67, 
                     x_start + 10, y_start, 5);
         }
 
         //id 74: ЗДОРОВЬЕ:
-        TextCreator.FindParametersnDrawText(color = this.selectedStat == 1 ? 0 : 1,
+        TextCreator.drawLineByAnchor(color = this.selectedStat == 1 ? 0 : 1,
                 74, ResourseManager.getUIElementXcoord(43, 4), 
                 ResourseManager.getUIElementYcoord(43, 4), 4);
         x_start = ResourseManager.getUIElementXcoord(43, 5);
         y_start = ResourseManager.getUIElementYcoord(43, 5);
         currentPlayerLevelText = TextCreator.CreateMassiveWithRankLength(statsLevels[1]);
-        TextCreator.drawReplicWithParameters(color, 
+        TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
                 x_start, y_start, 6);
         
         if (this.selectedStat == 1) {
-            TextCreator.FindParametersnDrawText(color, 67, 
+            TextCreator.drawLineByAnchor(color, 67, 
                     x_start + 10, y_start, 5);
         }
 
         //id 75: СИЛА:
-        TextCreator.FindParametersnDrawText(color = this.selectedStat == 2 ? 0 : 1, 
+        TextCreator.drawLineByAnchor(color = this.selectedStat == 2 ? 0 : 1, 
                 75, ResourseManager.getUIElementXcoord(43, 6), 
                 ResourseManager.getUIElementYcoord(43, 6), 4);
         x_start = ResourseManager.getUIElementXcoord(43, 7);
         y_start = ResourseManager.getUIElementYcoord(43, 7);
         currentPlayerLevelText = TextCreator.CreateMassiveWithRankLength(statsLevels[2]);
-        TextCreator.drawReplicWithParameters(color, 
+        TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
                 x_start, y_start, 6);
         
         if (this.selectedStat == 2) {
-            TextCreator.FindParametersnDrawText(color, 67, 
+            TextCreator.drawLineByAnchor(color, 67, 
                     x_start + 10, y_start, 5);
         }
 
@@ -134,7 +134,7 @@ public final class PlayerStatsScreen implements Screen {
         byte[] sparePointsText = 
                 TextCreator.combineTextMassives(TextCreator.CopyReplicToNewMassive(77), 
                         TextCreator.CreateMassiveWithRankLength(statsLevels[4]));
-        TextCreator.drawReplicWithParameters(1, sparePointsText, 
+        TextCreator.drawTextByAnchor(1, sparePointsText, 
                 0, sparePointsText.length, 
                 ResourseManager.getUIElementXcoord(43, 12), 
                 ResourseManager.getUIElementYcoord(43, 12), 4);
@@ -145,7 +145,7 @@ public final class PlayerStatsScreen implements Screen {
                         TextCreator.CopyReplicToNewMassive(64));
         x_start = ResourseManager.getUIElementXcoord(43, 13);
         y_start = ResourseManager.getUIElementYcoord(43, 13);
-        TextCreator.drawReplicWithParameters(0, currentValueText, 
+        TextCreator.drawTextByAnchor(0, currentValueText, 
                 0, currentValueText.length, x_start, y_start, 5);
 
         //Отрисовка полоски опыта

@@ -145,7 +145,7 @@ public class ListScreen extends MenuScreen {
                 var2 = 1;
             }
 
-            TextCreator.FindParametersnDrawText(var2, this.optionsTextId[item], AllScreens.var_4ba + 2, MenuScreen.textClipY + this.i_var_3 + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + 20, 0);
+            TextCreator.drawLineByAnchor(var2, this.optionsTextId[item], AllScreens.var_4ba + 2, MenuScreen.textClipY + this.i_var_3 + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + 20, 0);
         }
     }
 

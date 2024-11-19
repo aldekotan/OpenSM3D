@@ -46,14 +46,14 @@ public final class InventoryScreen implements Screen
       byte[] finalText = TextCreator.combineTextMassives(leftPartText, rightPartText);
       int x_dest = ResourseManager.getUIElementXcoord(39, 20);
       int y_dest = ResourseManager.getUIElementYcoord(39, 20);
-      TextCreator.DrawTextMassiveWithAnchor(1, finalText, 
+      TextCreator.drawWeightTextByAnchor(1, finalText, 
               0, finalText.length, x_dest, y_dest, 5);
 
       //Поле с весом выбранного предмета (дописываем КГ в конце)
       finalText = TextCreator.combineTextMassives(TextCreator.CreateTextMassiveForNumber(Scripts.getItemWeight(Scripts.inventoryItems[ItemsInteraction.selectedInventoryItem])), TextCreator.CopyReplicToNewMassive(64));
       x_dest = ResourseManager.getUIElementXcoord(39, 19);
       y_dest = ResourseManager.getUIElementYcoord(39, 19);
-      TextCreator.DrawTextMassiveWithAnchor(1, finalText, 
+      TextCreator.drawWeightTextByAnchor(1, finalText, 
               0, finalText.length, x_dest, y_dest, 5);
       
       

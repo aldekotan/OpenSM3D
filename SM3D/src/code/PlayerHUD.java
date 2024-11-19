@@ -266,7 +266,7 @@ public final class PlayerHUD {
 
             var1 = SCREEN_WIDTH / 2 - TextCreator.getWideLineWidth(0, var3) / 2 + 5;
             var2 -= TextCreator.getSymbolHeight(0);
-            TextCreator.FindParametersnDrawText(0, var3, var1, var2, 0);//check var3
+            TextCreator.drawLineByAnchor(0, var3, var1, var2, 0);//check var3
         }
 
     }
@@ -369,9 +369,9 @@ public final class PlayerHUD {
         int var3 = TextCreator.getWideLineWidth(1, 377); //символ /
         int var4 = var0 + 24 - (Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon] / 10 > 0 ? var3 * 2 : var3 + 1);
         int var5 = var1 + ResourseManager.getRectangleHeight(13) / 2 - TextCreator.getSymbolHeight(1) / 2;
-        TextCreator.drawNumbers(1, Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon], var4, var5, 0);
+        TextCreator.drawNumber(1, Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon], var4, var5, 0);
         int var6 = var0 + 24;
-        TextCreator.FindParametersnDrawText(1, 377, var6, var5, 0);// символ /
+        TextCreator.drawLineByAnchor(1, 377, var6, var5, 0);// символ /
         int var8 = var0 + 24 + var3;
         byte var10;
         switch (Scripts.playerActiveWeapon) {
@@ -391,7 +391,7 @@ public final class PlayerHUD {
                 var10 = 0;
         }
 
-        TextCreator.drawNumbers(1, var10, var8, var5, 0);
+        TextCreator.drawNumber(1, var10, var8, var5, 0);
     }
 
     //  ДИАЛОГОВАЯ СИСТЕМА
@@ -598,7 +598,7 @@ public final class PlayerHUD {
                         + ResourseManager.getRectangleParams(2, 10, 0)[3] - 12);
             }
 
-            TextCreator.FindParametersnDrawText(0, nameId, 15, yDest, 0);
+            TextCreator.drawLineByAnchor(0, nameId, 15, yDest, 0);
             drawSoftButtonNames(0, 1, 371, true);
             drawNPCcurrentPhrase();
             drawPlayerAnswers();
@@ -623,11 +623,11 @@ public final class PlayerHUD {
 
             if (textId != -1) {
                 if (GameScene.currentGameState == 1) {
-                    TextCreator.FindParametersnDrawText(1, textId, width, height, 0);
+                    TextCreator.drawLineByAnchor(1, textId, width, height, 0);
                     return;
                 }
 
-                TextCreator.FindParametersnDrawText(0, textId, width, height, 0);
+                TextCreator.drawLineByAnchor(0, textId, width, height, 0);
             }
         } else if (left0right1 == 1) {
             if (!uiAlreadyDrawn) {
@@ -642,11 +642,11 @@ public final class PlayerHUD {
             if (textId != -1) {
                 //id 389: оружие
                 if (textId == 389 && !Scripts.isItemEquipped((short) 117) && !Scripts.isItemEquipped((short) 118) && !Scripts.isItemEquipped((short) 119) || GameScene.currentGameState == 1) {
-                    TextCreator.FindParametersnDrawText(1, textId, width, height, 0);
+                    TextCreator.drawLineByAnchor(1, textId, width, height, 0);
                     return;
                 }
 
-                TextCreator.FindParametersnDrawText(0, textId, width, height, 0);
+                TextCreator.drawLineByAnchor(0, textId, width, height, 0);
             }
         }
 
@@ -769,21 +769,21 @@ public final class PlayerHUD {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        TextCreator.FindParametersnDrawText(0, 368, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 11 / 2 - 5, SCREEN_HEIGHT / 2 - TextCreator.symbolHeight[0], 0);
-        TextCreator.FindParametersnDrawText(0, 369, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 7 / 2 - 5, SCREEN_HEIGHT / 2 + TextCreator.symbolHeight[0], 0);
+        TextCreator.drawLineByAnchor(0, 368, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 11 / 2 - 5, SCREEN_HEIGHT / 2 - TextCreator.symbolHeight[0], 0);
+        TextCreator.drawLineByAnchor(0, 369, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 7 / 2 - 5, SCREEN_HEIGHT / 2 + TextCreator.symbolHeight[0], 0);
     }
     //ИГРА ОКОНЧЕНА
     private static void drawGameOver() {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        TextCreator.FindParametersnDrawText(0, 370, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 9 / 2, SCREEN_HEIGHT / 2, 0);
+        TextCreator.drawLineByAnchor(0, 370, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 9 / 2, SCREEN_HEIGHT / 2, 0);
     }
     //ЗАГРУЗКА
     private static void drawLoadingText() {
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        TextCreator.FindParametersnDrawText(0, 41, SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2 - TextCreator.getSymbolHeight(0) / 2, 0);
+        TextCreator.drawLineByAnchor(0, 41, SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2 - TextCreator.getSymbolHeight(0) / 2, 0);
     }
 
     //  ИНТРО
@@ -850,8 +850,8 @@ public final class PlayerHUD {
             int textWidth = 6 * timeToShow;
             int x = SCREEN_WIDTH - textWidth;
             int y = SCREEN_HEIGHT / 2;
-            TextCreator.drawNumbers(0, Scripts.MoneyTaken, x, y, 0);
-            TextCreator.FindParametersnDrawText(0, 66, SCREEN_WIDTH - 6, y, 0);
+            TextCreator.drawNumber(0, Scripts.MoneyTaken, x, y, 0);
+            TextCreator.drawLineByAnchor(0, 66, SCREEN_WIDTH - 6, y, 0);
         } else {
             moneyTakenCount = 0;
             showMoneyTaken = false;

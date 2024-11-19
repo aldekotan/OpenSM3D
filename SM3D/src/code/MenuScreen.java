@@ -62,15 +62,15 @@ public class MenuScreen implements Screen
        graphics.setColor(15637809);
        
        //Надписи "Настройки", "Помощь", "Об игре", "Меню" слева вверху
-       TextCreator.FindParametersnDrawText(0, this.menuNameTextId,
+       TextCreator.drawLineByAnchor(0, this.menuNameTextId,
        AllScreens.menuNameXCoord, AllScreens.menuNameYCoord, 9);
        
        //"Нет" в меню звука, слева.
-       TextCreator.FindParametersnDrawText(0, this.leftSoftTextId,
+       TextCreator.drawLineByAnchor(0, this.leftSoftTextId,
        AllScreens.leftSoftTextXCoord, AllScreens.leftSoftTextYCoord, 5);
        
        //"Да" в меню звука, справа. "Выбор", "Меню"
-       TextCreator.FindParametersnDrawText(0, this.rightSoftTextId,
+       TextCreator.drawLineByAnchor(0, this.rightSoftTextId,
        AllScreens.rightSoftTextXCoord, AllScreens.rightsoftTextYCoord, 5);
    }
 

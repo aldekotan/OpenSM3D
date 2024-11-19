@@ -67,7 +67,7 @@ public final class SettingsScreen extends ListScreen
       if(this.settings[settingsId] != -1) 
       {
          //textId: 61 on; 62 off;
-         TextCreator.FindParametersnDrawText(1, 
+         TextCreator.drawLineByAnchor(1, 
                  this.settings[settingsId] == 0?62:61, 
                  MenuScreen.textClipX + MenuScreen.textClipWidth, 
                  MenuScreen.textClipY + 20 + 

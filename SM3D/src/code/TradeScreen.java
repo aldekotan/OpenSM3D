@@ -69,11 +69,11 @@ public final class TradeScreen implements Screen
       PlayerHUD.drawSoftButtonNames(0, 1, 6, true);//назад
       int x1 = ResourseManager.getUIElementXcoord(49, 6);
       int y2 = ResourseManager.getUIElementYcoord(49, 6);
-      TextCreator.FindParametersnDrawText(1, 309, x1, y2, 5);
+      TextCreator.drawLineByAnchor(1, 309, x1, y2, 5);
       
       x1 = ResourseManager.getUIElementXcoord(49, 10);
       y2 = ResourseManager.getUIElementYcoord(49, 10);
-      TextCreator.FindParametersnDrawText(1, 310, x1, y2, 5);
+      TextCreator.drawLineByAnchor(1, 310, x1, y2, 5);
       
       byte[] currWeight = TextCreator.CreateTextMassiveForNumber(Scripts.playerWeight);
       byte[] kgSlash = TextCreator.CopyReplicToNewMassive(65);
@@ -85,12 +85,12 @@ public final class TradeScreen implements Screen
       byte[] text = TextCreator.combineTextMassives(playerWeightText, playerMaxWeightText);
       int x = ResourseManager.getUIElementXcoord(49, 12);
       int y = ResourseManager.getUIElementYcoord(49, 12);
-      TextCreator.DrawTextMassiveWithAnchor(1, text, 0, text.length, x, y, 5);
+      TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x, y, 5);
       
       text = TextCreator.combineTextMassives(TextCreator.CreateTextMassiveForNumber(Scripts.getItemWeight(items[selectedItem])), TextCreator.CopyReplicToNewMassive(64));
       x = ResourseManager.getUIElementXcoord(49, 7);
       y = ResourseManager.getUIElementYcoord(49, 7);
-      TextCreator.DrawTextMassiveWithAnchor(1, text, 0, text.length, x, y, 5);
+      TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x, y, 5);
       
       int price;
       if(this.screen == this.masterInvScreen.playerItemsZone) {
@@ -104,7 +104,7 @@ public final class TradeScreen implements Screen
       text = TextCreator.combineTextMassives(TextCreator.CreateMassiveWithRankLength(price), TextCreator.CopyReplicToNewMassive(66));
       x = ResourseManager.getUIElementXcoord(49, 11);
       y = ResourseManager.getUIElementYcoord(49, 11);
-      TextCreator.drawReplicWithParameters(1, text, 0, text.length, x, y, 5);
+      TextCreator.drawTextByAnchor(1, text, 0, text.length, x, y, 5);
       
       short[] playerMoneyText;
       (playerMoneyText = TextCreator.makeColoredTextFromNumber(Scripts.playerMoney, false))[playerMoneyText.length - 1] = 106;

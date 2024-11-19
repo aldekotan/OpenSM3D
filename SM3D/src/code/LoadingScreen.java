@@ -66,7 +66,7 @@ public final class LoadingScreen implements Screen {
                         MainMenuScreen.scrHeight
                 );
                 
-                TextCreator.FindParametersnDrawText(0, 41, MainMenuScreen.scrWidth / 2 - 20, MainMenuScreen.scrHeight / 2 - TextCreator.getSymbolHeight(0) / 2, 0);
+                TextCreator.drawLineByAnchor(0, 41, MainMenuScreen.scrWidth / 2 - 20, MainMenuScreen.scrHeight / 2 - TextCreator.getSymbolHeight(0) / 2, 0);
 
                 framesDrawn++;
                 if(framesDrawn > 2) {

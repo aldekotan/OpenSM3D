@@ -23,7 +23,8 @@ public final class TextCreator {
     public static final byte[] intercharacterSpace = new byte[2];
     //наборы глифов для жёлтого (0) и серого (1) текста
     public static final Image[] textSymbolsImages = new Image[2];
-    private static final int[] var_23a = new int[]{31, 1, 0};
+    //Константы якорей
+    private static final int[] anchorConstants = new int[]{31, 1, 0};
     //id глифов для символов, берущихся из интерфейсного набора
     public static short[] greenDigitsIds;
     public static short[] redDigitsIds;
@@ -48,8 +49,8 @@ public final class TextCreator {
 
     //Загрузка текстовых строк и их адресов
     public static void loadTextLines(DataInputStream dataInput) throws IOException {   //длина первого массива 396, длина второго 25996, ниже оригинал
-        textLinesAdress = ReadShortMassiveFromDataInput(dataInput, dataInput.readUnsignedShort());
-        textLinesSymbols = ReadByteMassiveFromDataInput(dataInput, dataInput.readUnsignedShort());
+        textLinesAdress = getLinesAdresses(dataInput, dataInput.readUnsignedShort());
+        textLinesSymbols = getLinesSymbols(dataInput, dataInput.readUnsignedShort());
 
 
         //ModChanges:
@@ -64,9 +65,9 @@ public final class TextCreator {
     public static void loadTextSymbols(DataInputStream dataInput, int textColor) throws IOException {
         if (textSymbolsImages[textColor] == null) {
             int symbolsCount = dataInput.readUnsignedByte();
-            symbolXcoord[textColor] = ReadByteMassiveFromDataInput(dataInput, symbolsCount); //икс начальная
-            symbolYcoord[textColor] = ReadByteMassiveFromDataInput(dataInput, symbolsCount); //игрек начальная
-            symbolWidth[textColor] = ReadByteMassiveFromDataInput(dataInput, symbolsCount); //ширина символа
+            symbolXcoord[textColor] = getLinesSymbols(dataInput, symbolsCount); //икс начальная
+            symbolYcoord[textColor] = getLinesSymbols(dataInput, symbolsCount); //игрек начальная
+            symbolWidth[textColor] = getLinesSymbols(dataInput, symbolsCount); //ширина символа
             symbolHeight[textColor] = dataInput.readByte(); //высота символа
             spaceWidth[textColor] = dataInput.readByte(); //4
             intercharacterSpace[textColor] = dataInput.readByte(); //2 расстояние между символами, может быть
@@ -75,29 +76,31 @@ public final class TextCreator {
         }
     }
 
-    private static int sub_8a(int var0, int var1) {
-        return -(var1 >>> var_23a[var0]);
+    //Получить расстояние в пикселях по якорю
+    private static int getAnchorOffset(int anchor, int i) {
+        return -(i >>> anchorConstants[anchor]);
     }
 
-    private static int HowManyRanksInNumber(byte[] symbol_massive, int number) //Сколько разрядов в числе?
+    //Посчитать сколько цифр в числе
+    private static int makeTextFromNumber(byte[] text, int number)
     {
-        int end_of_replic_in_massive = 0;
-        int number_ = number;
+        int digitCount = 0;
+        int tempNumber = number;
 
         do {
-            ++end_of_replic_in_massive;
-        } while ((number_ /= 10) != 0);// сколько там разрядов
+            ++digitCount;
+        } while ((tempNumber /= 10) != 0);// сколько там разрядов
 
-        int var4 = end_of_replic_in_massive;
-        number_ = number;
+        int tempDigitCount = digitCount;
+        tempNumber = number;
 
         do {
-            --var4;
-            symbol_massive[var4] = (byte) (number_ % 10);
-            number_ /= 10;
-        } while (var4 > 0);
+            --tempDigitCount;
+            text[tempDigitCount] = (byte) (tempNumber % 10);
+            tempNumber /= 10;
+        } while (tempDigitCount > 0);
 
-        return end_of_replic_in_massive;
+        return digitCount;
     }
 
     //Нарисовать один символ. 0 - оранжевый цвет, 1 - серый
@@ -130,70 +133,76 @@ public final class TextCreator {
         return symbolHeight[color];
     }
 
-    public static void FindParametersnDrawText(int type_of_text, int number_of_replic, int x_dest, int y_dest, int var4) //отрисовка однострочной реплики
+    //Нарисовать строку текста по якорю
+    public static void drawLineByAnchor(int color, int adress, int x, int y, int anchor) //отрисовка однострочной реплики
     { // тип текста - основной 0, дополнительный 1/ массив с всеми текстами/ массив с репликами(название реплики) //расположение по иксу и игреку
        /*if (number_of_replic==377)
          {
          number_of_replic=513;
          }*/
         //System.out.println("DrawReplic: " + number_of_replic + " " + massive_withStartnEnds[number_of_replic-2] + " " + massive_withStartnEnds[number_of_replic-1] + " " + massive_withStartnEnds[number_of_replic] + " " + massive_withStartnEnds[number_of_replic+1]);
-        drawReplicWithParameters(type_of_text, textLinesSymbols, textLinesAdress[number_of_replic], textLinesAdress[number_of_replic + 1], x_dest, y_dest, var4);
+        drawTextByAnchor(color, textLinesSymbols, textLinesAdress[adress], textLinesAdress[adress + 1], x, y, anchor);
     }
 
-    public static void drawReplicWithParameters(int number_of_image, byte[] symbolMassive, int numberOfMassiveStart, int numberOfMassiveEnd, int x_dest, int y_dest, int var6) {
-        if ((var6 & 3) != 0) {
-            x_dest += sub_8a(var6 & 3, getTextWidthMinusInterspace(number_of_image, symbolMassive, numberOfMassiveStart, numberOfMassiveEnd));
-        }
-
-        if (var6 > 3) {
-            y_dest += sub_8a(var6 >>> 2, getSymbolHeight(number_of_image));
-        }
-
-        for (int symbolNumberInMassive = numberOfMassiveStart; symbolNumberInMassive < numberOfMassiveEnd; ++symbolNumberInMassive) {
-            x_dest += drawSymbol(number_of_image, symbolMassive[symbolNumberInMassive], x_dest, y_dest);
-        }
-
-    }
-
-    public static void DrawTextMassiveWithAnchor(int number_of_image, byte[] symbolMassive, int numberOfMassiveStart, int numberOfMassiveEnd, int x_dest, int y_dest, int anchor) {
+    //Отрисовка текста по якорю
+    public static void drawTextByAnchor(int color, byte[] text, int firstSymbol, int lastSymbol, int x, int y, int anchor) {
         if ((anchor & 3) != 0) {
-            x_dest += sub_8a(anchor & 3, getTextWidthMinusInterspace(number_of_image, symbolMassive, numberOfMassiveStart, numberOfMassiveEnd));
+            x += getAnchorOffset(anchor & 3, getTextWidthMinusInterspace(color, text, firstSymbol, lastSymbol));
         }
 
         if (anchor > 3) {
-            y_dest += sub_8a(anchor >>> 2, getSymbolHeight(number_of_image));
+            y += getAnchorOffset(anchor >>> 2, getSymbolHeight(color));
         }
 
-        for (int symbolsNymberInMassive = numberOfMassiveStart; symbolsNymberInMassive < numberOfMassiveEnd; ++symbolsNymberInMassive) {
-            if (symbolMassive[symbolsNymberInMassive] == -1) //если -1, то поставить точку
-            {
-                x_dest += drawSymbol(number_of_image, 63, x_dest, y_dest); //нарисовать символ, затем прибавить его ширину
+        for (int symbolCount = firstSymbol; symbolCount < lastSymbol; ++symbolCount) {
+            x += drawSymbol(color, text[symbolCount], x, y);
+        }
+
+    }
+
+    //Рисует текст, заменяя все пробелы на запятые
+    public static void drawWeightTextByAnchor(int color, byte[] text, int firstSymbol, int lastSymbol, int x, int y, int anchor) {
+        if ((anchor & 3) != 0) {
+            x += getAnchorOffset(anchor & 3, getTextWidthMinusInterspace(color, text, firstSymbol, lastSymbol));
+        }
+
+        if (anchor > 3) {
+            y += getAnchorOffset(anchor >>> 2, getSymbolHeight(color));
+        }
+
+        for (int symbolCount = firstSymbol; symbolCount < lastSymbol; ++symbolCount) {
+            if (text[symbolCount] == -1) //заменить пробел на запятую
+            {//63 id= ","
+                x += drawSymbol(color, 63, x, y);
             } else {
-                x_dest += drawSymbol(number_of_image, symbolMassive[symbolsNymberInMassive], x_dest, y_dest);
+                x += drawSymbol(color, text[symbolCount], x, y);
             }
         }
 
     }
 
-    public static void drawNumbers(int type_of_text, int length, int x_dest, int y_dest, int var4) {
-        byte[] symbol_massive = new byte[10];
-        drawReplicWithParameters(type_of_text, symbol_massive, 0, HowManyRanksInNumber(symbol_massive, length), x_dest, y_dest, var4);
+    //Рисует число
+    public static void drawNumber(int color, int number, int x, int y, int anchor) {
+        byte[] text = new byte[10];
+        drawTextByAnchor(color, text, 0, makeTextFromNumber(text, number), x, y, anchor);
     }
 
-    private static short[] ReadShortMassiveFromDataInput(DataInputStream datainputstream, int short_massive_length) throws IOException {
-        short[] short_massive = new short[short_massive_length];
+    //Добыть адреса строк текста
+    private static short[] getLinesAdresses(DataInputStream data, int adressLength) throws IOException {
+        short[] adressess = new short[adressLength];
 
-        for (int var3 = 0; var3 < short_massive_length; ++var3) {
-            short_massive[var3] = datainputstream.readShort();
+        for (int count = 0; count < adressLength; ++count) {
+            adressess[count] = data.readShort();
         }
 
-        return short_massive;
+        return adressess;
     }
 
-    private static byte[] ReadByteMassiveFromDataInput(DataInputStream datainputstream_object_D, int byte_massive_length) throws IOException {
-        byte[] byte_massive = new byte[byte_massive_length];
-        datainputstream_object_D.read(byte_massive);
-        return byte_massive;
+    //Добыть символы строк текста
+    private static byte[] getLinesSymbols(DataInputStream data, int symbolsLength) throws IOException {
+        byte[] symbols = new byte[symbolsLength];
+        data.read(symbols);
+        return symbols;
     }
 
     //Какие-то операции по созданию пнгшки из сжатого состояния
@@ -218,15 +227,15 @@ public final class TextCreator {
         return (symbolId < 0 ? spaceWidth[color] : symbolWidth[color][symbolId]) + intercharacterSpace[color];
     }
 
-    //Получить ширину строки в пикселях
+    //Получить ширину текста в пикселях
     public static int getTextWidth(int color, byte[] text, int first, int last) {
-        int lineWidth = 0;
+        int textWidth = 0;
 
         for (int symbolCount = first; symbolCount < last; ++symbolCount) {
-            lineWidth += getSymbolWidth(color, text[symbolCount]);
+            textWidth += getSymbolWidth(color, text[symbolCount]);
         }
 
-        return lineWidth;
+        return textWidth;
     }
 
     //Получить длину строки в символах
@@ -249,13 +258,14 @@ public final class TextCreator {
         return lineLength;
     }
 
-    public static int ReturnLengthOfReplic(int number_of_replic) {
-        return textLinesAdress[number_of_replic + 1] - textLinesAdress[number_of_replic];
+    public static int ReturnLengthOfReplic(int line) {
+        return textLinesAdress[line + 1] - textLinesAdress[line];
     }
 
-    public static byte ReturnSymbolOfReplic(int number_of_replic, int symbol_in_replic) {
-        short number = textLinesAdress[number_of_replic];
-        return textLinesSymbols[number + symbol_in_replic];
+    //Получить один символ из строки
+    public static byte getSymbolFromLine(int line, int symbol) {
+        short firstSymbolOfLine = textLinesAdress[line];
+        return textLinesSymbols[firstSymbolOfLine + symbol];
     }
 
     public static int sub_44a(int replicId, byte var1, int var2) {
@@ -318,7 +328,7 @@ public final class TextCreator {
     public static byte[] CreateMassiveWithRankLength(int number) {
         byte[] first_byte_massive; //создание массива длиной в количество разрядов у числа
         int massive_length;
-        byte[] second_byte_massive = new byte[massive_length = HowManyRanksInNumber(first_byte_massive = new byte[10], number)];
+        byte[] second_byte_massive = new byte[massive_length = makeTextFromNumber(first_byte_massive = new byte[10], number)];
         System.arraycopy(first_byte_massive, 0, second_byte_massive, 0, massive_length);
         return second_byte_massive;
     }
@@ -326,7 +336,7 @@ public final class TextCreator {
     public static byte[] CreateTextMassiveForNumber(int number) {
         byte[] empty_massive;
         int ranksInNumber;
-        byte[] text_massive = new byte[(ranksInNumber = HowManyRanksInNumber(empty_massive = new byte[10], number)) == 1 ? ranksInNumber + 2 : ranksInNumber + 1];
+        byte[] text_massive = new byte[(ranksInNumber = makeTextFromNumber(empty_massive = new byte[10], number)) == 1 ? ranksInNumber + 2 : ranksInNumber + 1];
         System.arraycopy(empty_massive, 0, text_massive, 0, ranksInNumber);
         if (ranksInNumber == 1) {
             text_massive[ranksInNumber + 1] = text_massive[0]; //1

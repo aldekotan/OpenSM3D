@@ -219,7 +219,7 @@ public final class MainMenuScreen implements Screen
       drawMainMenuLogo(graphics);
       //жёлтый цвет текста. Когда-то использовался для отрисовки в меню?
       graphics.setColor(15637809);
-      TextCreator.FindParametersnDrawText(0, AllScreens.mainMenuTextIds[this.menuOptionId], AllScreens.halfScrWidth, AllScreens.textY, 9);
+      TextCreator.drawLineByAnchor(0, AllScreens.mainMenuTextIds[this.menuOptionId], AllScreens.halfScrWidth, AllScreens.textY, 9);
    }
 
    private void moveTextLeft(Graphics graphics) 
@@ -230,8 +230,8 @@ public final class MainMenuScreen implements Screen
       drawMainMenuLogo(graphics);
       graphics.setClip(0, AllScreens.var_2a8, scrWidth, AllScreens.var_231);
       graphics.setColor(15637809);
-      TextCreator.FindParametersnDrawText(0, AllScreens.mainMenuTextIds[this.menuOptionId], this.newTextX, AllScreens.textY, 9);
-      TextCreator.FindParametersnDrawText(0, AllScreens.mainMenuTextIds[this.prevMenuOptionId], this.prevTextX, AllScreens.textY, 9);
+      TextCreator.drawLineByAnchor(0, AllScreens.mainMenuTextIds[this.menuOptionId], this.newTextX, AllScreens.textY, 9);
+      TextCreator.drawLineByAnchor(0, AllScreens.mainMenuTextIds[this.prevMenuOptionId], this.prevTextX, AllScreens.textY, 9);
       graphics.setClip(0, 0, scrWidth, scrHeight);
       if(this.newTextX > AllScreens.halfScrWidth) 
       {
@@ -254,8 +254,8 @@ public final class MainMenuScreen implements Screen
       graphics.setClip(0, AllScreens.var_2a8, scrWidth, AllScreens.var_231);
       //cнова задаём жёлтый цвет, который не используется для текста
       graphics.setColor(15637809);
-      TextCreator.FindParametersnDrawText(0, AllScreens.mainMenuTextIds[this.menuOptionId], this.newTextX, AllScreens.textY, 9);
-      TextCreator.FindParametersnDrawText(0, AllScreens.mainMenuTextIds[this.prevMenuOptionId], this.prevTextX, AllScreens.textY, 9);
+      TextCreator.drawLineByAnchor(0, AllScreens.mainMenuTextIds[this.menuOptionId], this.newTextX, AllScreens.textY, 9);
+      TextCreator.drawLineByAnchor(0, AllScreens.mainMenuTextIds[this.prevMenuOptionId], this.prevTextX, AllScreens.textY, 9);
       graphics.setClip(0, 0, scrWidth, scrHeight);
       if(this.newTextX < AllScreens.halfScrWidth) 
       {

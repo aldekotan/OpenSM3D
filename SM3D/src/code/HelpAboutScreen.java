@@ -79,7 +79,7 @@ public final class HelpAboutScreen extends MenuScreen {
       {
          int x = MainMenuScreen.scrWidth / 
                  2 - TextCreator.getWideLineWidth(1, ABOUT_TEXT_IDS[id]) / 2;
-         TextCreator.FindParametersnDrawText(1, ABOUT_TEXT_IDS[id], 
+         TextCreator.drawLineByAnchor(1, ABOUT_TEXT_IDS[id], 
                  x, MenuScreen.textClipY + 
                          AllScreens.TEXT_LINE_HEIGHT_NOINDENT * id + 20, 0);
       }

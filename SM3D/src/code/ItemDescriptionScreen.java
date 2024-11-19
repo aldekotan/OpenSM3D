@@ -128,7 +128,7 @@ public final class ItemDescriptionScreen implements Screen {
             int numberOfMassive_start = 0;
             boolean var6 = false;
             this.linesCounter = 0;
-            byte var7 = TextCreator.ReturnSymbolOfReplic(63, 0);
+            byte var7 = TextCreator.getSymbolFromLine(63, 0);
             int[] linesHeights = new int[2];
 
             int numberOfMassive_end;
@@ -139,7 +139,7 @@ public final class ItemDescriptionScreen implements Screen {
                     numberOfMassive_end = (var9 = TextCreator.sub_4a3(textArray, var7, numberOfMassive_end)) != -1 && var9 != numberOfMassive_start ? var9 : numberOfMassive_end;
                 }
 
-                TextCreator.drawReplicWithParameters(color, textArray, numberOfMassive_start, numberOfMassive_end + 1, fromLeftToRight ? this.xStart : this.xStart + this.frameWidth, this.yStart + yOffset + this.linesCounter * this.singleLineHeight + this.oldYoffset, fromLeftToRight ? 0 : 10);
+                TextCreator.drawTextByAnchor(color, textArray, numberOfMassive_start, numberOfMassive_end + 1, fromLeftToRight ? this.xStart : this.xStart + this.frameWidth, this.yStart + yOffset + this.linesCounter * this.singleLineHeight + this.oldYoffset, fromLeftToRight ? 0 : 10);
                 if (numberOfMassive_end == textArray.length - 1) {
                     linesHeights[1] = TextCreator.getTextWidth(color, textArray, numberOfMassive_start, numberOfMassive_end);
                 }
@@ -175,7 +175,7 @@ public final class ItemDescriptionScreen implements Screen {
             int lineNumber = 0;
             boolean var5 = false;
             int HeightOfText = 0;
-            byte var7 = TextCreator.ReturnSymbolOfReplic(63, 0);
+            byte var7 = TextCreator.getSymbolFromLine(63, 0);
 
             int numberOfMassive_end;
             do //считать высоту текста
@@ -186,7 +186,7 @@ public final class ItemDescriptionScreen implements Screen {
                     numberOfMassive_end = (var8 = TextCreator.sub_44a(replicNumber, var7, numberOfMassive_end)) == -1 ? numberOfMassive_end : var8;
                 }
 
-                TextCreator.drawReplicWithParameters(color, symbolMassive, lineNumber, numberOfMassive_end + 1, this.nameFrameXstart, this.nameFrameYstart + HeightOfText * (TextCreator.getSymbolHeight(color) + 0), 0);
+                TextCreator.drawTextByAnchor(color, symbolMassive, lineNumber, numberOfMassive_end + 1, this.nameFrameXstart, this.nameFrameYstart + HeightOfText * (TextCreator.getSymbolHeight(color) + 0), 0);
                 ++HeightOfText;
                 lineNumber = numberOfMassive_end;
             } while (numberOfMassive_end < symbolMassive.length - 1);

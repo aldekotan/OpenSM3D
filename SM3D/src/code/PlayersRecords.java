@@ -24,7 +24,7 @@ public final class PlayersRecords extends ListScreen
 
    public final void drawItem(int item) 
    {
-      TextCreator.drawReplicWithParameters(0, this.var_56[item], 0, this.var_56[item].length, AllScreens.var_4ba + 2, MenuScreen.textClipY + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3, 0);
+      TextCreator.drawTextByAnchor(0, this.var_56[item], 0, this.var_56[item].length, AllScreens.var_4ba + 2, MenuScreen.textClipY + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3, 0);
    }
 
    public final void addNewPlayerRecord(byte[] recordData) 
