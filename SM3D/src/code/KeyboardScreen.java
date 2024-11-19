@@ -33,12 +33,12 @@ public final class KeyboardScreen extends CentralText {
         TextCreator.drawReplicWithParameters(0, this.var_8c, 0, this.var_12b, MenuScreen.textClipX + (MenuScreen.textClipWidth >> 1), MenuScreen.textClipY, 9);
         graphics.setColor(0);
         graphics.fillRect(MainMenuScreen.scrWidth / 4, MainMenuScreen.scrHeight / 4 - 5, 2 * MainMenuScreen.scrWidth / 4, 2 * MainMenuScreen.scrHeight / 4 + 5);
-        short var2 = TextCreator.massive_withStartnEnds[60];
+        short var2 = TextCreator.textLinesAdress[60];
 
         for (int var3 = 0; var3 < TextCreator.ReturnLengthOfReplic(60); ++var3) {
             int var4 = MenuScreen.textClipX + var3 % 5 * (MenuScreen.textClipWidth / 5) + 3;
             int var5 = MenuScreen.textClipY + var3 / 5 * var_36 + 3;
-            TextCreator.drawReplicWithParameters(0, TextCreator.byte_text_massive, var2 + var3, var2 + var3 + 1, var4, var5, 0);
+            TextCreator.drawReplicWithParameters(0, TextCreator.textLinesSymbols, var2 + var3, var2 + var3 + 1, var4, var5, 0);
         }
 
         graphics.setColor(8421504);
@@ -65,8 +65,8 @@ public final class KeyboardScreen extends CentralText {
                     return;
                 }
 
-                short var2 = TextCreator.massive_withStartnEnds[60];
-                byte var3 = TextCreator.byte_text_massive[var2 + this.var_18a];
+                short var2 = TextCreator.textLinesAdress[60];
+                byte var3 = TextCreator.textLinesSymbols[var2 + this.var_18a];
                 this.var_8c[this.var_12b++] = var3;
                 break;
             case -4:

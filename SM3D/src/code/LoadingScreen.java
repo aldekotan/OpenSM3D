@@ -66,7 +66,7 @@ public final class LoadingScreen implements Screen {
                         MainMenuScreen.scrHeight
                 );
                 
-                TextCreator.FindParametersnDrawText(0, 41, MainMenuScreen.scrWidth / 2 - 20, MainMenuScreen.scrHeight / 2 - TextCreator.getHeightFromTextParamMassive(0) / 2, 0);
+                TextCreator.FindParametersnDrawText(0, 41, MainMenuScreen.scrWidth / 2 - 20, MainMenuScreen.scrHeight / 2 - TextCreator.getSymbolHeight(0) / 2, 0);
 
                 framesDrawn++;
                 if(framesDrawn > 2) {
@@ -143,17 +143,17 @@ public final class LoadingScreen implements Screen {
         ResourseManager.var_e6 = 1;
         if(ResourseManager.var_e6 == 1) {
             try {
-                TextCreator.LoadImageAndTextParameters(ResourseManager.DataInputStream_Object_D, 0); //загрузка параметров
-                TextCreator.LoadImageAndTextParameters(ResourseManager.DataInputStream_Object_D, 1); //загрузка параметров
-                TextCreator.ReadUnsignedByteAndShortMassivesForText(ResourseManager.DataInputStream_Object_D); //загрузка текста и его параметров
+                TextCreator.loadTextSymbols(ResourseManager.DataInputStream_Object_D, 0); //загрузка параметров
+                TextCreator.loadTextSymbols(ResourseManager.DataInputStream_Object_D, 1); //загрузка параметров
+                TextCreator.loadTextLines(ResourseManager.DataInputStream_Object_D); //загрузка текста и его параметров
                 ResourseManager.ReadDataFromFile_D(ResourseManager.DataInputStream_Object_D);
-                AllScreens.SymbolHeight = TextCreator.getHeightFromTextParamMassive(1);
-                AllScreens.SymbolWidth = TextCreator.GetWidthOfSymbol(1, 10);
+                AllScreens.SymbolHeight = TextCreator.getSymbolHeight(1);
+                AllScreens.SymbolWidth = TextCreator.getSymbolWidth(1, 10);
             } catch (Exception var2) {
                 var2.printStackTrace();
             }
 
-            TextCreator.sub_607();
+            TextCreator.setColoredDigitsId();
             Main.main.sub_2c();
             ResourseManager.loadAllInterfaceImages();
             ResourseManager.loadSettings();

@@ -94,7 +94,7 @@ public class ListScreen extends MenuScreen {
         this.by_var_1 = 0;
         int var2;
         if (screenId == 3) {
-            var2 = TextCreator.getHeightFromTextParamMassive(0) * 3;
+            var2 = TextCreator.getSymbolHeight(0) * 3;
         } else {
             var2 = 0;
         }
@@ -121,12 +121,12 @@ public class ListScreen extends MenuScreen {
         for (byte var1 = 0; var1 < Scripts.var_2367; ++var1) {
             this.obj_vectorMassive[var1] = TextCreator.splitOnLines(this.optionsTextId[var1], 80, 0);
             if (var1 > 0) {
-                this.i_varMassive_2[var1] = this.i_varMassive_2[var1 - 1] + TextCreator.getHeightFromTextParamMassive(0) * (this.obj_vectorMassive[var1].size() - 1);
+                this.i_varMassive_2[var1] = this.i_varMassive_2[var1 - 1] + TextCreator.getSymbolHeight(0) * (this.obj_vectorMassive[var1].size() - 1);
             } else {
-                this.i_varMassive_2[var1] = TextCreator.getHeightFromTextParamMassive(0) * (this.obj_vectorMassive[var1].size() - 1);
+                this.i_varMassive_2[var1] = TextCreator.getSymbolHeight(0) * (this.obj_vectorMassive[var1].size() - 1);
             }
 
-            this.i_varMassive_3[var1] = TextCreator.getHeightFromTextParamMassive(0) * (this.obj_vectorMassive[var1].size() - 1);
+            this.i_varMassive_3[var1] = TextCreator.getSymbolHeight(0) * (this.obj_vectorMassive[var1].size() - 1);
             this.var_57e += this.i_varMassive_2[var1];
             this.var_588 += this.obj_vectorMassive[var1].size();
         }
@@ -258,7 +258,7 @@ public class ListScreen extends MenuScreen {
 
                     this.by_var_1 = (byte) Math.max(this.selectedIndex - this.by_var_2, 0);
                     if (super.drawingScreenId == 3) {
-                        var8 = TextCreator.getHeightFromTextParamMassive(0) * 3;
+                        var8 = TextCreator.getSymbolHeight(0) * 3;
                     } else {
                         var8 = 0;
                     }

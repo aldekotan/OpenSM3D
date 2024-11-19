@@ -78,7 +78,7 @@ public final class HelpAboutScreen extends MenuScreen {
       for(byte id = 0; id < 8; ++id) 
       {
          int x = MainMenuScreen.scrWidth / 
-                 2 - TextCreator.sub_7eb(1, ABOUT_TEXT_IDS[id]) / 2;
+                 2 - TextCreator.getWideLineWidth(1, ABOUT_TEXT_IDS[id]) / 2;
          TextCreator.FindParametersnDrawText(1, ABOUT_TEXT_IDS[id], 
                  x, MenuScreen.textClipY + 
                          AllScreens.TEXT_LINE_HEIGHT_NOINDENT * id + 20, 0);
@@ -117,7 +117,7 @@ public final class HelpAboutScreen extends MenuScreen {
    private void drawScrollbar() 
    {
       int splitVertical = (this.textTotalHeight + 1) * 
-              TextCreator.getHeightFromTextParamMassive(1) 
+              TextCreator.getSymbolHeight(1) 
               - MenuScreen.textClipHeight;
       int currentYpos = Math.abs(this.yStart - MenuScreen.textClipY);
       int x = MenuScreen.textClipX + MenuScreen.textClipWidth + 20;
@@ -127,7 +127,7 @@ public final class HelpAboutScreen extends MenuScreen {
       MasterCanvas.graphics.setColor(8421504);
       //Колба снаружи
       MasterCanvas.graphics.drawRect(x, yOuter, 5, heightOuter);
-      int height = heightOuter * TextCreator.getHeightFromTextParamMassive(1) 
+      int height = heightOuter * TextCreator.getSymbolHeight(1) 
               / splitVertical;
       int yInner = yOuter + heightOuter * currentYpos / splitVertical;
       //Водка внутри
@@ -139,7 +139,7 @@ public final class HelpAboutScreen extends MenuScreen {
             //Промотка текста вниз
             case 1:
                 if (this.yStart < MenuScreen.textClipY) {
-                    this.yStart += TextCreator.getHeightFromTextParamMassive(1);
+                    this.yStart += TextCreator.getSymbolHeight(1);
                 }
                 Main.main.repaint();
                 return;
@@ -149,9 +149,9 @@ public final class HelpAboutScreen extends MenuScreen {
             //Промотка текста вверх
             case 6:
                 if (this.yStart + this.textTotalHeight
-                        * TextCreator.getHeightFromTextParamMassive(1) > MenuScreen.textClipY
+                        * TextCreator.getSymbolHeight(1) > MenuScreen.textClipY
                         + MenuScreen.textClipHeight) {
-                    this.yStart -= TextCreator.getHeightFromTextParamMassive(1);
+                    this.yStart -= TextCreator.getSymbolHeight(1);
                 }
                 Main.main.repaint();
             default:

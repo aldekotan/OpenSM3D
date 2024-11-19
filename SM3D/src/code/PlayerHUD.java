@@ -264,8 +264,8 @@ public final class PlayerHUD {
                 return;
             }
 
-            var1 = SCREEN_WIDTH / 2 - TextCreator.sub_7eb(0, var3) / 2 + 5;
-            var2 -= TextCreator.getHeightFromTextParamMassive(0);
+            var1 = SCREEN_WIDTH / 2 - TextCreator.getWideLineWidth(0, var3) / 2 + 5;
+            var2 -= TextCreator.getSymbolHeight(0);
             TextCreator.FindParametersnDrawText(0, var3, var1, var2, 0);//check var3
         }
 
@@ -366,9 +366,9 @@ public final class PlayerHUD {
 
         drawSoftButtonNames(1, 0, 1, true);
         drawSoftButtonNames(0, 1, rightSoftText, true);
-        int var3 = TextCreator.sub_7eb(1, 377); //символ /
+        int var3 = TextCreator.getWideLineWidth(1, 377); //символ /
         int var4 = var0 + 24 - (Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon] / 10 > 0 ? var3 * 2 : var3 + 1);
-        int var5 = var1 + ResourseManager.getRectangleHeight(13) / 2 - TextCreator.getHeightFromTextParamMassive(1) / 2;
+        int var5 = var1 + ResourseManager.getRectangleHeight(13) / 2 - TextCreator.getSymbolHeight(1) / 2;
         TextCreator.drawNumbers(1, Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon], var4, var5, 0);
         int var6 = var0 + 24;
         TextCreator.FindParametersnDrawText(1, 377, var6, var5, 0);// символ /
@@ -416,9 +416,9 @@ public final class PlayerHUD {
     }
     //Рисуем текущую реплику нпс в диалоге с ним
     private static void drawNPCcurrentPhrase() {
-        int var0 = TextCreator.getHeightFromTextParamMassive(0);
+        int var0 = TextCreator.getSymbolHeight(0);
         int var1 = 92 / var0;
-        int var2 = TextCreator.getHeightFromTextParamMassive(0) * npcPhraseLines[Scripts.currentNpcPhrase * 2].size();
+        int var2 = TextCreator.getSymbolHeight(0) * npcPhraseLines[Scripts.currentNpcPhrase * 2].size();
         if (npcPhraseLines[Scripts.currentNpcPhrase * 2].size() > var1) {
             int timePassed;
             if ((timePassed = (int) (System.currentTimeMillis() - (long) refTime)) >= 4000 && timePassed - npcPhrasesTimePassed >= 200) {
@@ -452,7 +452,7 @@ public final class PlayerHUD {
                 byte var8 = Scripts.givenAnswersCount + 1 + var1 > Scripts.dialogStructure.length - 1 ? 0 : Scripts.dialogStructure[Scripts.givenAnswersCount + 1 + var1];
                 var1 += var8 > 1 ? var8 + 1 : var8;
                 npcPhraseLines[var7] = TextCreator.splitOnLines(Scripts.phracesIdArray[var7], ModChanges.dialogDrawWidth, var6);
-                int var9 = TextCreator.getHeightFromTextParamMassive(var6);
+                int var9 = TextCreator.getSymbolHeight(var6);
                 int var10 = var3;
                 boolean var11 = Scripts.selectedAnswer != var_ae7;
                 var_ae7 = Scripts.selectedAnswer;
@@ -735,7 +735,7 @@ public final class PlayerHUD {
     //Рисуем название выделенной локации
     private static void drawLocationName() {
         int y = SCREEN_HEIGHT - 2 * ResourseManager.getRectangleHeight(8) 
-                - TextCreator.getHeightFromTextParamMassive(0) 
+                - TextCreator.getSymbolHeight(0) 
                 * (textLinesPos.size() + 1);
         //Названия сюж.локаций начинаются с 354 индекса
         int locationName = Scripts.getLocationNameId((byte) GameScene.nextLocation) + 354;
@@ -769,21 +769,21 @@ public final class PlayerHUD {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        TextCreator.FindParametersnDrawText(0, 368, SCREEN_WIDTH / 2 - TextCreator.width_TextImageMassive[0][10] * 11 / 2 - 5, SCREEN_HEIGHT / 2 - TextCreator.height_TextImageMassive[0], 0);
-        TextCreator.FindParametersnDrawText(0, 369, SCREEN_WIDTH / 2 - TextCreator.width_TextImageMassive[0][10] * 7 / 2 - 5, SCREEN_HEIGHT / 2 + TextCreator.height_TextImageMassive[0], 0);
+        TextCreator.FindParametersnDrawText(0, 368, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 11 / 2 - 5, SCREEN_HEIGHT / 2 - TextCreator.symbolHeight[0], 0);
+        TextCreator.FindParametersnDrawText(0, 369, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 7 / 2 - 5, SCREEN_HEIGHT / 2 + TextCreator.symbolHeight[0], 0);
     }
     //ИГРА ОКОНЧЕНА
     private static void drawGameOver() {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        TextCreator.FindParametersnDrawText(0, 370, SCREEN_WIDTH / 2 - TextCreator.width_TextImageMassive[0][10] * 9 / 2, SCREEN_HEIGHT / 2, 0);
+        TextCreator.FindParametersnDrawText(0, 370, SCREEN_WIDTH / 2 - TextCreator.symbolWidth[0][10] * 9 / 2, SCREEN_HEIGHT / 2, 0);
     }
     //ЗАГРУЗКА
     private static void drawLoadingText() {
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        TextCreator.FindParametersnDrawText(0, 41, SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2 - TextCreator.getHeightFromTextParamMassive(0) / 2, 0);
+        TextCreator.FindParametersnDrawText(0, 41, SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT / 2 - TextCreator.getSymbolHeight(0) / 2, 0);
     }
 
     //  ИНТРО
@@ -795,7 +795,7 @@ public final class PlayerHUD {
     }
     //Отрисовка
     private static void drawIntroText() {
-        int textHeight = introTextLines.size() * TextCreator.getHeightFromTextParamMassive(0);
+        int textHeight = introTextLines.size() * TextCreator.getSymbolHeight(0);
         int y = 70;
         int time = (int) (System.currentTimeMillis() - (long) textRollsInterval);
         boolean timeRanOut = false;
