@@ -26,7 +26,7 @@ public final class ResourseManager {
     public static short[] rectangleAdrForInterfaceMassive;
     public static short[] MassiveX_startOfInterfaceImage;
     public static short[] MassiveY_startOfInterfaceImage;
-    public static short[] var_419;
+    public static short[] interfacePackIds;
 
     public static void saveSettings() {
         byte[] settings = new byte[3];
@@ -338,22 +338,34 @@ public final class ResourseManager {
         }
     }
 
-    public static void drawUserInterfaceItems(Graphics graphics, int var1, int x_start_dest, int y_start_dest) {//Отрисовка конкретного набора элементов!
-        if (var1 >= 300) {
-            ModChanges.DrawModIcon(graphics, var1, x_start_dest, y_start_dest);
-        } else {
-            short var5 = rectangleAdrForInterfaceMassive[var1 + 1];
+    public static void drawUserInterfaceItems(Graphics graphics, int itemId, int x, int y) {//Отрисовка конкретного набора элементов!
+        //if (item >= 300) {
+        //    ModChanges.DrawModIcon(graphics, item, x_start_dest, y_start_dest);
+        //} else {
+            short lastId = rectangleAdrForInterfaceMassive[itemId + 1];
 
-            for (int var6 = rectangleAdrForInterfaceMassive[var1]; var6 < var5; ++var6) {
-                short element_number;
-                if ((element_number = var_419[var6]) < 0) {
-                    drawUserInterfaceItems(graphics, element_number & 32767, x_start_dest + MassiveX_startOfInterfaceImage[var6], y_start_dest + MassiveY_startOfInterfaceImage[var6]);
+            for (int firstId = rectangleAdrForInterfaceMassive[itemId]; firstId < lastId; ++firstId) {
+                short unpackedItem;
+                //Если часть интерфейса сборная - она будет меньше нуля.
+                if ((unpackedItem = interfacePackIds[firstId]) < 0) {
+                    //Возвращаемся и рисуем уже готовый распакованный элемент
+                    drawUserInterfaceItems(graphics, unpackedItem & 32767, 
+                            x + MassiveX_startOfInterfaceImage[firstId], 
+                            y + MassiveY_startOfInterfaceImage[firstId]);
+                    //System.out.println("ElementNumber: "+unpackedItem+ "&32767"+ " .UI element ID:"+ (unpackedItem & 32767));
                 } else {
-                    graphics.drawRegion(interfaceImages[MassiveWithInterfaceImagesAdress[element_number]], MassiveXsrcOfInterfaceImage[element_number], MassiveYsrcOfInterfaceImage[element_number], MassiveWidthOfInterfaceImage[element_number], MassiveHeightOfInterfaceImage[element_number], MassiveTransfOfInterfaceImage[element_number], x_start_dest + MassiveX_startOfInterfaceImage[var6], y_start_dest + MassiveY_startOfInterfaceImage[var6], 0);
+                    //Отрисовка распакованного элемента
+                    graphics.drawRegion(interfaceImages[MassiveWithInterfaceImagesAdress[unpackedItem]], 
+                            MassiveXsrcOfInterfaceImage[unpackedItem], 
+                            MassiveYsrcOfInterfaceImage[unpackedItem], 
+                            MassiveWidthOfInterfaceImage[unpackedItem], 
+                            MassiveHeightOfInterfaceImage[unpackedItem], 
+                            MassiveTransfOfInterfaceImage[unpackedItem], 
+                            x + MassiveX_startOfInterfaceImage[firstId], 
+                            y + MassiveY_startOfInterfaceImage[firstId], 0);
                 }
             }
-        }
-
+        //}
     }
 
     public static void ReadDataFromFile_D(DataInputStream datainputstream) {
@@ -402,7 +414,7 @@ public final class ResourseManager {
             //}
             //System.out.println();
             rectangleAdrForInterfaceMassive = GetFromFileMassiveOfShortsThatLength(datainputstream.readShort());
-            var_419 = GetFromFileMassiveOfShortsThatLength(var1 = datainputstream.readShort());
+            interfacePackIds = GetFromFileMassiveOfShortsThatLength(var1 = datainputstream.readShort());
             MassiveX_startOfInterfaceImage = GetFromFileMassiveOfShortsThatLength(var1);
             MassiveY_startOfInterfaceImage = GetFromFileMassiveOfShortsThatLength(var1);
             int[] var2 = getRectangleParams(50, 2, 10);
@@ -432,7 +444,7 @@ public final class ResourseManager {
             if (image_id >= 300) {
                 return ModChanges.NewItemsWidthOfRectangle((short) image_id);
             } else {
-                return MassiveWidthOfInterfaceImage[var_419[rectangleAdrForInterfaceMassive[image_id]]];
+                return MassiveWidthOfInterfaceImage[interfacePackIds[rectangleAdrForInterfaceMassive[image_id]]];
             }
         } catch (Exception var1) {
             return 35;
@@ -443,7 +455,7 @@ public final class ResourseManager {
         if (image_id >= 300) {
             return ModChanges.NewItemsHeightOfRectangle((short) image_id);
         } else {
-            return MassiveHeightOfInterfaceImage[var_419[rectangleAdrForInterfaceMassive[image_id]]];
+            return MassiveHeightOfInterfaceImage[interfacePackIds[rectangleAdrForInterfaceMassive[image_id]]];
         }
     }
 
@@ -454,7 +466,7 @@ public final class ResourseManager {
         rectangleParamsMassive[0] = MassiveX_startOfInterfaceImage[rectangleNumber];
         rectangleParamsMassive[1] = MassiveY_startOfInterfaceImage[rectangleNumber];
         short var6;
-        if ((var6 = var_419[rectangleNumber]) < 0) {
+        if ((var6 = interfacePackIds[rectangleNumber]) < 0) {
             tempMassive = getRectangleParams(var6 & 127, var2, 0);
         } else {
             rectangleParamsMassive[2] = MassiveWidthOfInterfaceImage[var6];
