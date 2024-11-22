@@ -31,7 +31,7 @@ public final class StashScreen implements Screen
          selectedItem = ItemsInteraction.selectedInventoryItem;
       }
 
-      //ResourseManager.drawUserInterfaceItems(graphics, 46, 0, 0); //отрисовка UI
+      ResourseManager.drawUserInterfaceItems(graphics, 46, 0, 0); //отрисовка UI
       graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
       if(this.screen instanceof ItemsInteraction) 
       {

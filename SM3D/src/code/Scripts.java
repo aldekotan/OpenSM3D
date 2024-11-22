@@ -568,6 +568,7 @@ public final class Scripts {
                 GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
             }
         }
+        recalcAccuracy();
     }
 
     private static void recalcAccuracy() {
@@ -616,7 +617,8 @@ public final class Scripts {
         }
         
         //Считаем финальную точность
-        playerAccuracy = (byte) (playerAccuracy * weapAccuracy);
+        playerAccuracy = (byte) (playerAccuracy * weapAccuracy / 100);
+        System.out.println("final acc"+ playerAccuracy);
     }
    
     private static void TakeUpGun() {
