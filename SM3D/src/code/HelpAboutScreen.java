@@ -6,7 +6,7 @@ import javax.microedition.lcdui.Graphics;
 public final class HelpAboutScreen extends MenuScreen {
 
    public short textId;
-   private static final short[] ABOUT_TEXT_IDS = new short[]{(short)392, (short)393, (short)379, (short)380, (short)381, (short)382, (short)383, (short)384};
+   private static final short[] ABOUT_TEXT_IDS = new short[]{(short)392, (short)393, (short)379, (short)380, (short)381, (short)382, (short)383, (short)384, (short)395, (short)396, (short)397};
    //id     text
    //392    S.T.A.L.K.E.R.
    //393    Version 1.1.0
@@ -75,7 +75,7 @@ public final class HelpAboutScreen extends MenuScreen {
 
    private static void drawAboutText() 
    {
-      for(byte id = 0; id < 8; ++id) 
+      for(byte id = 0; id < 11; ++id) 
       {
          int x = MainMenuScreen.scrWidth / 
                  2 - TextCreator.getWideLineWidth(1, ABOUT_TEXT_IDS[id]) / 2;

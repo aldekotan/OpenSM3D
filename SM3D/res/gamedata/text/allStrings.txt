@@ -522,3 +522,6 @@ Bec: о,5.>
 [393]=<S.T.A.L.K.E.R.>
 [394]=<Bepcия 1.2.1>
 [395]=<-Пapдон, кaжeтcя, я дypaк.>
+[396]=<(C) OpenSM3D>
+[397]=<https://github.com/>
+[398]=<aldekotan/OpenSM3D>
