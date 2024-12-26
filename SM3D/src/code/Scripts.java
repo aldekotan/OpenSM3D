@@ -568,59 +568,8 @@ public final class Scripts {
                 GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
             }
         }
-        recalcAccuracy();
     }
 
-    private static void recalcAccuracy() {
-        byte curWeapon = (byte) (playerActiveWeapon+116);
-        byte weapAccuracy = 60;
-        byte baseAccuracy = 50;
-        
-        //Считаем точность оружия
-        switch (curWeapon) {
-            case 116: //Если в руках форт
-                weapAccuracy = 60;
-                break;
-            case 117: //Калаш
-                weapAccuracy = 40;
-                break;
-            case 118: //Гроза
-                weapAccuracy = 50;
-                break;
-            case 119: //Энфилд
-                weapAccuracy = 60;
-        }
-
-        //Считаем бонусы от артефактов
-        //обнуляем все бафы
-        for (byte eq = 3; eq<7; eq++)
-        {
-            if(equipmentSlots[eq] != -1)
-            {
-                changePlayerStatsByItem(equipmentSlots[eq], -1);
-            }
-        }
-        //Обнуляем точность игрока до базового значения
-        playerAccuracy = baseAccuracy;
-        //Теперь вновь прибавляем бафы от артефактов
-        for (byte eq = 3; eq<7; eq++)
-        {
-            if(equipmentSlots[eq] != -1)
-            {
-                changePlayerStatsByItem(equipmentSlots[eq], 1);
-            }
-        }
-        //Считаем бонусы от прокачки
-        for (byte lv = 0; lv<playerStatLevel[0]; lv++)
-        {
-            playerAccuracy = (byte) (playerAccuracy + playerAccuracy * 10 / 100);
-        }
-        
-        //Считаем финальную точность
-        playerAccuracy = (byte) (playerAccuracy * weapAccuracy / 100);
-        System.out.println("final acc"+ playerAccuracy);
-    }
-   
     private static void TakeUpGun() {
         short var0;
         if (playerActiveWeapon == 0) //Если в руках ничего
@@ -631,8 +580,6 @@ public final class Scripts {
         }
 
         useItem(var0);
-        
-        recalcAccuracy();
         OpticalSight = false;
         GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
     }
@@ -1616,7 +1563,7 @@ public final class Scripts {
                 GameScene.shootShakeActive = true;
                 switch (gun) {
                     case 0: //Если в руках форт
-                        //playerAccuracy = 60; //Точность персонажа 60%
+                        playerAccuracy = 60; //Точность персонажа 60%
                         --playerWeaponsAmmo[0]; //Убавить боезапас на единицу
                         if (playerWeaponsAmmo[0] < 1) //Если патронов в магазине нет
                         {
@@ -1624,15 +1571,15 @@ public final class Scripts {
                         }
                         break;
                     case 1:
-                        //playerAccuracy = 40;
+                        playerAccuracy = 40;
                         --playerWeaponsAmmo[1];
                         break;
                     case 2:
-                        //playerAccuracy = 50;
+                        playerAccuracy = 50;
                         --playerWeaponsAmmo[2];
                         break;
                     case 3:
-                        //playerAccuracy = 60;
+                        playerAccuracy = 60;
                         --playerWeaponsAmmo[3];
                 }
 
