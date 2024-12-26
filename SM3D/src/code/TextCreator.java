@@ -50,8 +50,10 @@ public final class TextCreator {
     //Загрузка текстовых строк и их адресов
     public static void loadTextLines(DataInputStream dataInput) throws IOException {   //длина первого массива 396, длина второго 25996, ниже оригинал
         textLinesAdress = getLinesAdresses(dataInput, dataInput.readUnsignedShort());
-        textLinesSymbols = getLinesSymbols(dataInput, dataInput.readUnsignedShort());
+        textLinesSymbols = readBytes(dataInput, dataInput.readUnsignedShort());
 
+        ModChanges.parseText();
+        //System.out.println("Happy fox");
 
         //ModChanges:
         //short[] new_massive_wsne = ModChanges.AddNewTextAdress();
@@ -65,9 +67,9 @@ public final class TextCreator {
     public static void loadTextSymbols(DataInputStream dataInput, int textColor) throws IOException {
         if (textSymbolsImages[textColor] == null) {
             int symbolsCount = dataInput.readUnsignedByte();
-            symbolXcoord[textColor] = getLinesSymbols(dataInput, symbolsCount); //икс начальная
-            symbolYcoord[textColor] = getLinesSymbols(dataInput, symbolsCount); //игрек начальная
-            symbolWidth[textColor] = getLinesSymbols(dataInput, symbolsCount); //ширина символа
+            symbolXcoord[textColor] = readBytes(dataInput, symbolsCount); //икс начальная
+            symbolYcoord[textColor] = readBytes(dataInput, symbolsCount); //игрек начальная
+            symbolWidth[textColor] = readBytes(dataInput, symbolsCount); //ширина символа
             symbolHeight[textColor] = dataInput.readByte(); //высота символа
             spaceWidth[textColor] = dataInput.readByte(); //4
             intercharacterSpace[textColor] = dataInput.readByte(); //2 расстояние между символами, может быть
@@ -199,7 +201,7 @@ public final class TextCreator {
     }
 
     //Добыть символы строк текста
-    private static byte[] getLinesSymbols(DataInputStream data, int symbolsLength) throws IOException {
+    private static byte[] readBytes(DataInputStream data, int symbolsLength) throws IOException {
         byte[] symbols = new byte[symbolsLength];
         data.read(symbols);
         return symbols;

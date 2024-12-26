@@ -1,5 +1,6 @@
 package code;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.microedition.lcdui.Graphics;
@@ -30,7 +31,7 @@ public class ModChanges //Здесь буду размещать внесённ�
     public static final String gameAlphabet = 
         "0123456789" +
                 
-        "ABCDEFGHI" +
+        "ABCDEFGHIJ" +
         "KLMNOPQRST" +
         "UVWXYZ" +
         "abcdefghij" +
@@ -44,6 +45,207 @@ public class ModChanges //Здесь буду размещать внесённ�
         "ФЦЧЩЪЫЬЭЮЯ" + 
         "бгдёжзийлт" + 
         "фцчщъыьэюя";
+    
+    public static final String gameAlphabetRu =
+        "о123456789" +
+                
+        "АВСDEFGНIJ" +
+        "КLМNОРQRSТ" +
+        "UVШХУZ" +
+        "авсdеfgнij" +
+        "кlмпрqrt" +
+        "uvшхуz" +
+                
+        "=:.,!?+-#/" +
+        "\\\'\"()$*%" +
+                
+        "БГДЁЖЗИЙЛП" + 
+        "ФЦЧЩЪЫЬЭЮЯ" + 
+        "бгдёжзийлт" + 
+        "фцчщъыьэюя";
+    
+    //Добываем текст из txt
+    public static void parseText() throws IOException {
+        DataInputStream inputText = new DataInputStream(
+                Main.main.getClass().getResourceAsStream("/gamedata/text/allStrings.txt"));
+        byte[] tempByteArray = new byte[1];
+        //inputText.readFully(byteArray);
+        //String tempStr = new String(tempByteArray, "UTF-8");
+        
+        //Чтение каждого бита вплоть до конца
+        int inputLength = 0;
+        
+        while (inputText.read(tempByteArray)!=-1)
+        {
+            inputLength++;
+        }
+        System.out.println("End of the file, bytes readed:"+inputLength);
+        byte byteText[] = new byte[inputLength];
+        inputText.close();
+        inputText = new DataInputStream(
+                Main.main.getClass().getResourceAsStream("/gamedata/text/allStrings.txt"));
+        inputText.read(byteText);
+        
+        
+        //найти первый символ строки, записать
+        //найти последний символ строки, записать
+            //преобразовать байты в строку
+            //найти в строке номер, содержимое
+            //
+        
+        
+        //String tempStr = new String(byteText);
+        String tempStr = new String(byteText, "UTF-8");
+        
+
+        System.out.println("tempStr length: "+tempStr.length());
+
+        //Узнаем количество строк в массиве
+        int lastNumberStart = tempStr.lastIndexOf('[')+1;
+        int lastNumberEnd = tempStr.lastIndexOf(']');
+        String intStr = tempStr.substring(lastNumberStart, lastNumberEnd);
+        int totalLineCount = Integer.parseInt(intStr);
+        System.out.println("Total lines count:"+totalLineCount);
+        
+        
+        
+        //Узнаём содержимое для каждой строки массива
+        int numberStart = 0;
+        int numberEnd = 0;
+        int prevNumberStart = 0;
+        int prevNumberEnd = 0;
+        
+        int textStart = 0;
+        int textEnd = 0;
+        int prevTextStart = 0;
+        int prevTextEnd = 0;
+        
+        int prevLineAdress = 0;
+        int lineAdress = 0;
+        
+        String textStr;
+        byte[] trsStr = new byte[inputLength];
+        short[] adrLine = new short[totalLineCount+1];
+        for (int i=0;i<=totalLineCount;i++)
+        {
+            prevNumberStart = numberStart;
+            prevNumberEnd = numberEnd;
+            numberStart = tempStr.indexOf("[", prevNumberStart)+1;
+            numberEnd = tempStr.indexOf("]", prevNumberEnd)+1;
+            
+            intStr = tempStr.substring(numberStart, numberEnd-1);
+            
+            
+            prevTextStart = textStart;
+            prevTextEnd = textEnd;
+            textStart = tempStr.indexOf("<", prevTextStart)+1;
+            textEnd = tempStr.indexOf(">", prevTextEnd)+1;
+            
+            textStr = tempStr.substring(textStart, textEnd-1);
+            
+            System.out.println("Line number:"+intStr+" with text:"+textStr+".");
+            
+            //Кладём набор символов в байт формате
+            //translateText(textStr)
+            byte[] translatedBytes = translateText(textStr);
+            int translatedLength = translatedBytes.length;
+            //trsStr = new byte[trsStr.length+translatedLength];
+            
+            System.arraycopy(translatedBytes, 0, trsStr, prevLineAdress, translatedLength);
+            
+            //Добавляем адрес к байтам в массив
+            
+            prevLineAdress = prevLineAdress+translatedLength;
+            adrLine[Integer.parseInt(intStr)] = (short)prevLineAdress;
+            
+            //System.arraycopy(translateText(textStr), 0, trsStr, prevLineAdress, translateText(textStr).length);
+            //lineAdress = trsStr.length;
+            
+        }
+        
+        //Создание массива со строками
+        //Создание массива с адресами строк
+        TextCreator.textLinesAdress = adrLine;
+        TextCreator.textLinesSymbols = trsStr;
+        
+        byte[] testmassive;
+        testmassive = new byte[15];
+        testmassive = new byte[30];
+
+        
+        //System.out.println("First line starts at " + tempStr.indexOf("[", 0)+" and ends at "+tempStr.indexOf(">",0));
+        //System.out.println("First line starts at" + tempStr.indexOf("[", 0)+"and ends at "+tempStr.indexOf("]",0));
+        
+
+        
+        //byteEncodedText = translateText(tempStr);
+    }
+    
+    //Ищет в строке первый номер, обозначенный спецсимволами
+    private static int getLineNumber(String string)
+    {
+        int lineNumber = -1;
+        int numberStart = 0;
+        int numberEnd = 0;
+        
+        boolean gettingNumber = false;
+        
+        for(int i=0;i<string.length();i++)
+        {
+            char ch = string.charAt(i);
+            
+            if(ch=='[') {
+                gettingNumber = false;
+                numberStart = i+1;
+                continue;
+            }
+            if(ch==']') {
+                numberEnd = i;
+                gettingNumber = true;
+                break;
+            }
+            
+        }
+        if(gettingNumber)
+        {
+            String intStr = string.substring(numberStart, numberEnd);
+            lineNumber = Integer.parseInt(intStr);
+        }
+        
+        
+        return lineNumber;
+    }
+    
+    //Ищет в строке содержимое линии, обозначенное спецсимволами
+    private static String getLineText(String string)
+    {
+        String finalString = "";
+        int numberStart = 0;
+        int numberEnd = 0;
+        boolean gettingLine = false;
+        
+        for(int i=0;i<string.length();i++)
+        {
+            char ch = string.charAt(i);
+            
+            if(ch=='<') {
+                gettingLine = false;
+                numberStart = i+1;
+                continue;
+            }
+            if(ch=='>') {
+                numberEnd = i;
+                gettingLine = true;
+                break;
+            }
+        }
+        if(gettingLine)
+        {
+            finalString = string.substring(numberStart, numberEnd);
+        }
+        
+        return finalString;
+    }
 
     private static void NewWeapons() throws IOException {
         ModWeapons[0] = Image.createImage("/gamedata/textures/w1.png");
@@ -145,18 +347,38 @@ public class ModChanges //Здесь буду размещать внесённ�
     
     public static byte[] translateText(String string) {
         byte[] bytes = new byte[string.length()];
+        int sizeDiff = 0;
         
         for(int i=0;i<bytes.length;i++) {
             char ch = string.charAt(i);
             
             if(ch==' ') {
-                bytes[i] = -1; continue;
+                bytes[i+sizeDiff] = -1; continue;
+            }
+            if(ch=='\n') {
+                bytes[i+sizeDiff] = -2; 
+                continue;
+            }
+            if(ch=='\r') {
+                sizeDiff--;
+                continue;
+            }
+            if(ch=='О'||ch=='o'||ch=='O') {
+                bytes[i+sizeDiff] = 0; continue;
             }
             
-            bytes[i] = (byte) gameAlphabet.indexOf(ch);
+            bytes[i+sizeDiff] = (byte) gameAlphabet.indexOf(ch);
+            if(bytes[i+sizeDiff]==-1){
+                bytes[i+sizeDiff] = (byte) gameAlphabetRu.indexOf(ch);
+            }
+            
+        
         }
         
-        return bytes;
+        byte[] finalBytes = new byte[bytes.length+sizeDiff];
+        System.arraycopy(bytes, 0, finalBytes, 0, bytes.length+sizeDiff);
+        //
+        return finalBytes;
     }
     
     public static void updateZ1Models(Mesh mesh, String path) {
