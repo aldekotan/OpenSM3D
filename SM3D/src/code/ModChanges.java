@@ -274,7 +274,8 @@ public class ModChanges //Здесь буду размещать внесённ�
                 sizeDiff--;
                 continue;
             }
-            if(ch=='О'||ch=='o'||ch=='O') {
+            //if(ch=='О'||ch=='o'||ch=='O') {
+            if(ch=='o') {
                 bytes[i+sizeDiff] = 0; continue;
             }
             
