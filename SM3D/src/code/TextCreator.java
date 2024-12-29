@@ -54,7 +54,7 @@ public final class TextCreator {
 
         //Замена текста на данные из файла
         ModChanges.parseText();
-        System.out.println("Happy fox");
+        //System.out.println("Happy fox");
 
         //ModChanges:
         //short[] new_massive_wsne = ModChanges.AddNewTextAdress();

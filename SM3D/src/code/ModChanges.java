@@ -49,7 +49,7 @@ public class ModChanges //Здесь буду размещать внесённ�
     public static final String gameAlphabetRu =
         "о123456789" +
                 
-        "АВСDEFGНIJ" +
+        "АВСDЕFGНIJ" +
         "КLМNОРQRSТ" +
         "UVШХУZ" +
         "авсdеfgнij" +
@@ -76,7 +76,7 @@ public class ModChanges //Здесь буду размещать внесённ�
         while (inputText.read(tempByteArray) != -1) {
             inputLength++;
         }
-        System.out.println("End of the file, bytes readed:" + inputLength);
+        //System.out.println("End of the file, bytes readed:" + inputLength);
         byte byteText[] = new byte[inputLength];
         inputText.close();
         inputText = new DataInputStream(
@@ -86,14 +86,14 @@ public class ModChanges //Здесь буду размещать внесённ�
         String tempStr = new String(byteText, "UTF-8");
 
 
-        System.out.println("tempStr length: " + tempStr.length());
+        //System.out.println("tempStr length: " + tempStr.length());
 
         //Узнаем количество строк в массиве
         int lastNumberStart = tempStr.lastIndexOf('[') + 1;
         int lastNumberEnd = tempStr.lastIndexOf(']');
         String intStr = tempStr.substring(lastNumberStart, lastNumberEnd);
         int totalLineCount = Integer.parseInt(intStr);
-        System.out.println("Total lines count:" + totalLineCount);
+        //System.out.println("Total lines count:" + totalLineCount);
 
         //Узнаём содержимое для каждой строки массива
         int numberStart = 0;
@@ -110,7 +110,8 @@ public class ModChanges //Здесь буду размещать внесённ�
         int lineAdress = 0;
 
         String textStr;
-        byte[] trsStr = new byte[inputLength];
+        byte[] trsStr = new byte[0];
+        //byte[] trsStr = new byte[inputLength];
         short[] adrLine = new short[totalLineCount + 1];
         for (int i = 0; i <= totalLineCount; i++) {
             prevNumberStart = numberStart;
@@ -128,12 +129,17 @@ public class ModChanges //Здесь буду размещать внесённ�
 
             textStr = tempStr.substring(textStart, textEnd - 1);
 
-            System.out.println("Line number:" + intStr + " with text:" + textStr + ".");
+            //System.out.println("Line number:" + intStr + " with text:" + textStr + ".");
 
             //Кладём набор символов в байт формате
             byte[] translatedBytes = translateText(textStr);
             int translatedLength = translatedBytes.length;
-
+            
+            //Динамический размер массива
+            byte[] prevBytes = trsStr;
+            trsStr = new byte[prevBytes.length+translatedBytes.length];
+            System.arraycopy(prevBytes, 0, trsStr, 0, prevBytes.length);
+            
             System.arraycopy(translatedBytes, 0, trsStr, prevLineAdress, translatedLength);
 
             //Добавляем адрес к байтам в массив
