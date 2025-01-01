@@ -271,14 +271,16 @@ public final class TextCreator {
         return textLinesSymbols[firstSymbolOfLine + symbol];
     }
 
-    public static int sub_44a(int replicId, byte var1, int var2) {
-        short number_of_start = textLinesAdress[replicId];
-        if (textLinesAdress[replicId + 1] <= number_of_start + var2) {
+    public static int getDistanceToFirstSymbolFromEnd(int replicId, byte symbolId, int textLength) {
+        short symbolStartAdress = textLinesAdress[replicId];
+        //Если адрес последнего символа меньше или равен адресу первого, плюс длина текста
+        if (textLinesAdress[replicId + 1] <= symbolStartAdress + textLength) {
             return -1;
         } else {
-            for (int var4 = number_of_start + var2; var4 > number_of_start; --var4) {
-                if (var1 == textLinesSymbols[var4]) {
-                    return var4 - number_of_start;
+            //Ищем первое появление символа с конца строки
+            for (int i = symbolStartAdress + textLength; i > symbolStartAdress; --i) {
+                if (symbolId == textLinesSymbols[i]) {
+                    return i - symbolStartAdress;
                 }
             }
 
@@ -286,10 +288,13 @@ public final class TextCreator {
         }
     }
 
-    public static int sub_4a3(byte[] var0, byte var1, int var2) {
-        for (int var3 = var2; var3 > 0; --var3) {
-            if (var1 == var0[var3]) {
-                return var3;
+    //Посчитать длину текста, за вычетом какого-то символа (используется только
+    //для удаления пробела
+    public static int getTextLengthWithoutSymbol(byte[] text, byte symbolId, 
+            int textLength) {
+        for (int i = textLength; i > 0; --i) {
+            if (symbolId == text[i]) {
+                return i;
             }
         }
 
@@ -454,8 +459,8 @@ public final class TextCreator {
         boolean var10 = false;
 
         while (true) {
-            int var6 = sub_689(textId, -1, textWidth);
-            int var7 = sub_689(textId, -2, textWidth);
+            int var6 = getDistanceToFirstSymbol(textId, -1, textWidth);
+            int var7 = getDistanceToFirstSymbol(textId, -2, textWidth);
             int lastChar = ReturnLengthOfReplic(textId);
             if (var7 > 0) {
                 lastChar = Math.min(var6, var7);
@@ -499,47 +504,61 @@ public final class TextCreator {
         }
     }
 
-    private static int sub_689(int adress, int var1, int var2) {
-        for (int newAdress = textLinesAdress[adress] + var2; newAdress < textLinesAdress[adress + 1]; ++newAdress) {
-            if (textLinesSymbols[newAdress] == var1) {
-                return newAdress - textLinesAdress[adress];
+    //Поиск первого символа с заданным кодом
+    private static int getDistanceToFirstSymbol(int lineId, int symbolId, int textLength) {
+        for (int symbolNumber = textLinesAdress[lineId] + textLength; symbolNumber < textLinesAdress[lineId + 1]; ++symbolNumber) {
+            if (textLinesSymbols[symbolNumber] == symbolId) {
+                return symbolNumber - textLinesAdress[lineId];
             }
         }
 
         return -1;
     }
 
-    private static void sub_6c6(int color, byte[] text, int firstSymbol, int lastSymbol, int x, int y, int var6) {//прокручиваемый текст
-        int var7 = getWideTextWidth(color, text, firstSymbol, lastSymbol);
-        x += sub_8ac(var7, var6);
-        int height = getSymbolHeight(color);
-        y += sub_8bb(height, var6);
+    //Отрисовка текста по якорю 2. С такими же аргументами
+    private static void drawTextByAnchor2(int color, byte[] text, int firstSymbol, int lastSymbol, int x, int y, int anchor) {//прокручиваемый текст
+        //Положение первого символа по горизонтали, согласно якорю
+        int textWidth = getWideTextWidth(color, text, firstSymbol, lastSymbol);
+        x += getWidthAnchorOffset(textWidth, anchor);
+        //Положение первого символа по вертикали
+        int textHeight = getSymbolHeight(color);
+        y += getHeightAnchorOffset(textHeight, anchor);
 
+        //Рисуем текст слева направо
         for (int symbolCount = firstSymbol; symbolCount < lastSymbol; ++symbolCount) {
             x += drawSymbol(color, text[symbolCount], x, y);
         }
 
     }
 
-    private static void DrawRollingReplicWithParameters(Graphics var0, int color, int lineId, int var3, int var4, int x_dest, int y_dest, int var7) {
-        sub_6c6(color, textLinesSymbols, textLinesAdress[lineId] + var3, textLinesAdress[lineId] + var3 + var4, x_dest, y_dest, var7);
+    //Рисуем конкретные символы из строки
+    private static void drawPartOfTextByAnchor(Graphics graph, int color, 
+            int lineId, int startSymbolOffset, int endSymbolOffset, 
+            int x, int y, int anchor) {
+        drawTextByAnchor2(color, textLinesSymbols, 
+                textLinesAdress[lineId] + startSymbolOffset, 
+                textLinesAdress[lineId] + startSymbolOffset + endSymbolOffset, 
+                x, y, anchor);
     }
 
-    private static void sub_731(int number_of_replic, int var1, int var2, int x_dest, int y_dest, int var5, int color_of_text, Graphics graphics) {
-        DrawRollingReplicWithParameters(graphics, color_of_text, number_of_replic, var1, var2, x_dest, y_dest, var5);
+    //Меняем местами набор аргументов???
+    private static void drawPartOfTextByAnchorWrapper(int lineId, int startOffset, 
+            int endOffset, int x, int y, int anchor, int color, Graphics graphics) {
+        drawPartOfTextByAnchor(graphics, color, lineId, startOffset, endOffset, 
+                x, y, anchor);
     }
 
-    public static void drawReplicInsideFrame(int number_of_replic, int xDest, int yDest, int var3, int color_of_text, Graphics graphics, int var6, int var7, Vector var8) {
+    public static void drawReplicInsideFrame(int lineId, int x, int y, int anchor, int color, Graphics graph, int var6, int var7, Vector var8) {
         if (var7 == -1) {
             var7 = var8.size();
         }
 
-        int x_dest = xDest;
-        int y_dest = yDest;
-        if ((var3 & 32) == 32) {
-            y_dest = yDest - var8.size() * getSymbolHeight(color_of_text);
-        } else if ((var3 & 2) == 2) {
-            y_dest = yDest - var8.size() * getSymbolHeight(color_of_text) / 2;
+        int xFinal = x;
+        int yFinal = y;
+        if ((anchor & 32) == 32) {
+            yFinal = y - var8.size() * getSymbolHeight(color);
+        } else if ((anchor & 2) == 2) {
+            yFinal = y - var8.size() * getSymbolHeight(color) / 2;
         }
 
         Object var11 = null;
@@ -549,9 +568,9 @@ public final class TextCreator {
         }
 
         for (int var13 = var6; var13 < var12; ++var13) {
-            int[] var14 = (int[]) var8.elementAt(var13);
-            sub_731(number_of_replic, var14[0], var14[1], x_dest, y_dest, var3, color_of_text, graphics);
-            y_dest += getSymbolHeight(color_of_text);
+            int[] lineSymbolOffset = (int[]) var8.elementAt(var13);
+            drawPartOfTextByAnchorWrapper(lineId, lineSymbolOffset[0], lineSymbolOffset[1], xFinal, yFinal, anchor, color, graph);
+            yFinal += getSymbolHeight(color);
         }
 
     }
@@ -569,19 +588,23 @@ public final class TextCreator {
 
     //Получить ширину строки с +1 расстоянием между символами, по номеру строки
     public static int getWideLineWidth(int color, int adress) {
-        return getWideTextWidth(color, textLinesSymbols, textLinesAdress[adress], textLinesAdress[adress + 1]);
+        return getWideTextWidth(color, textLinesSymbols, 
+                textLinesAdress[adress], textLinesAdress[adress + 1]);
     }
 
     //Получить ширину части строки по её адресу
     private static int getWideLinePartWidth(int color, int adress, int firstSymbol, int lastSymbol) {
-        return getWideTextWidth(color, textLinesSymbols, textLinesAdress[adress] + firstSymbol, textLinesAdress[adress] + lastSymbol);
+        return getWideTextWidth(color, textLinesSymbols, 
+                textLinesAdress[adress] + firstSymbol, textLinesAdress[adress] + lastSymbol);
     }
 
-    private static int sub_8ac(int var0, int var1) {
-        return (var1 & 1) == 1 ? -(var0 >>> 1) : ((var1 & 8) == 8 ? -var0 : 0);
+    //Оффсет положения первого символа по якорю, по горизонтали
+    private static int getWidthAnchorOffset(int textWidth, int anchor) {
+        return (anchor & 1) == 1 ? -(textWidth >>> 1) : ((anchor & 8) == 8 ? -textWidth : 0);
     }
 
-    private static int sub_8bb(int var0, int var1) {
-        return (var1 & 2) == 2 ? -(var0 >>> 1) : ((var1 & 32) == 32 ? -var0 : 0);
+    //Оффсет положения первого символа по якорю, по вертикали
+    private static int getHeightAnchorOffset(int textHeight, int anchor) {
+        return (anchor & 2) == 2 ? -(textHeight >>> 1) : ((anchor & 32) == 32 ? -textHeight : 0);
     }
 }

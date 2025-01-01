@@ -128,25 +128,25 @@ public final class ItemDescriptionScreen implements Screen {
             int numberOfMassive_start = 0;
             boolean var6 = false;
             this.linesCounter = 0;
-            byte var7 = TextCreator.getSymbolFromLine(63, 0);
+            byte emptySpaceSymbolId = TextCreator.getSymbolFromLine(63, 0);
             int[] linesHeights = new int[2];
 
-            int numberOfMassive_end;
+            int textLength;
             do {
-                numberOfMassive_end = TextCreator.getTextLength(color, textArray, numberOfMassive_start, this.frameWidth);
-                if (textArray[numberOfMassive_end] != var7 && numberOfMassive_end < textArray.length - 1) {
+                textLength = TextCreator.getTextLength(color, textArray, numberOfMassive_start, this.frameWidth);
+                if (textArray[textLength] != emptySpaceSymbolId && textLength < textArray.length - 1) {
                     int var9;
-                    numberOfMassive_end = (var9 = TextCreator.sub_4a3(textArray, var7, numberOfMassive_end)) != -1 && var9 != numberOfMassive_start ? var9 : numberOfMassive_end;
+                    textLength = (var9 = TextCreator.getTextLengthWithoutSymbol(textArray, emptySpaceSymbolId, textLength)) != -1 && var9 != numberOfMassive_start ? var9 : textLength;
                 }
 
-                TextCreator.drawTextByAnchor(color, textArray, numberOfMassive_start, numberOfMassive_end + 1, fromLeftToRight ? this.xStart : this.xStart + this.frameWidth, this.yStart + yOffset + this.linesCounter * this.singleLineHeight + this.oldYoffset, fromLeftToRight ? 0 : 10);
-                if (numberOfMassive_end == textArray.length - 1) {
-                    linesHeights[1] = TextCreator.getTextWidth(color, textArray, numberOfMassive_start, numberOfMassive_end);
+                TextCreator.drawTextByAnchor(color, textArray, numberOfMassive_start, textLength + 1, fromLeftToRight ? this.xStart : this.xStart + this.frameWidth, this.yStart + yOffset + this.linesCounter * this.singleLineHeight + this.oldYoffset, fromLeftToRight ? 0 : 10);
+                if (textLength == textArray.length - 1) {
+                    linesHeights[1] = TextCreator.getTextWidth(color, textArray, numberOfMassive_start, textLength);
                 }
 
                 ++this.linesCounter;
-                numberOfMassive_start = numberOfMassive_end;
-            } while (numberOfMassive_end < textArray.length - 1);
+                numberOfMassive_start = textLength;
+            } while (textLength < textArray.length - 1);
 
             linesHeights[0] = this.singleLineHeight * this.linesCounter;
             return linesHeights;
@@ -172,24 +172,24 @@ public final class ItemDescriptionScreen implements Screen {
             return 0;
         } else {
             byte[] symbolMassive = TextCreator.CopyReplicToNewMassive(replicNumber);
-            int lineNumber = 0;
+            int firstSymbol = 0;
             boolean var5 = false;
             int HeightOfText = 0;
-            byte var7 = TextCreator.getSymbolFromLine(63, 0);
+            byte emptySpaceSymbolId = TextCreator.getSymbolFromLine(63, 0);
 
-            int numberOfMassive_end;
+            int lastSymbol;
             do //считать высоту текста
             {
-                numberOfMassive_end = TextCreator.getTextLength(color, symbolMassive, lineNumber, this.nameFrameXend - this.nameFrameXstart);
-                if (symbolMassive[numberOfMassive_end] != var7 && numberOfMassive_end < symbolMassive.length - 1) {
+                lastSymbol = TextCreator.getTextLength(color, symbolMassive, firstSymbol, this.nameFrameXend - this.nameFrameXstart);
+                if (symbolMassive[lastSymbol] != emptySpaceSymbolId && lastSymbol < symbolMassive.length - 1) {
                     int var8;
-                    numberOfMassive_end = (var8 = TextCreator.sub_44a(replicNumber, var7, numberOfMassive_end)) == -1 ? numberOfMassive_end : var8;
+                    lastSymbol = (var8 = TextCreator.getDistanceToFirstSymbolFromEnd(replicNumber, emptySpaceSymbolId, lastSymbol)) == -1 ? lastSymbol : var8;
                 }
 
-                TextCreator.drawTextByAnchor(color, symbolMassive, lineNumber, numberOfMassive_end + 1, this.nameFrameXstart, this.nameFrameYstart + HeightOfText * (TextCreator.getSymbolHeight(color) + 0), 0);
+                TextCreator.drawTextByAnchor(color, symbolMassive, firstSymbol, lastSymbol + 1, this.nameFrameXstart, this.nameFrameYstart + HeightOfText * (TextCreator.getSymbolHeight(color) + 0), 0);
                 ++HeightOfText;
-                lineNumber = numberOfMassive_end;
-            } while (numberOfMassive_end < symbolMassive.length - 1);
+                firstSymbol = lastSymbol;
+            } while (lastSymbol < symbolMassive.length - 1);
 
             return HeightOfText * (TextCreator.getSymbolHeight(color) + 0);
         }
