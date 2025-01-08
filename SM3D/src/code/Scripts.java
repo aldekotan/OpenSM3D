@@ -1655,12 +1655,12 @@ public final class Scripts {
                         Keys.pound = false;
                         if (playerActiveWeapon == 3) //Если в руках в текущий момент Энфилд
                         {
-                            OpticalSight = !OpticalSight; //поменять значение активности
-                            if (OpticalSight) {
-                                GameScene.camera.setPerspective(30.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
-                            } else {
-                                GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
-                            }
+                            OpticalSight = !OpticalSight; //9.01.25 перенёс фов в GameScene
+                            /*if (OpticalSight) {
+                             * GameScene.camera.setPerspective(30.0F, (float) PlayerHUD.crosshairImages[2].getWidth() / (float) PlayerHUD.crosshairImages[2].getHeight(), 0.1F, 10000.0F);
+                             * } else {
+                             * GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
+                             * }*/
                         }
                     }
 

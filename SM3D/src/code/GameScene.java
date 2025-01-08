@@ -2330,6 +2330,23 @@ public final class GameScene {
         try {
             if(currentGameState != -2 && currentGameState != 0 && currentGameState != 13 && currentGameState != 14) {
                 graphics3D.bindTarget(graphics, true, Graphics3D.OVERWRITE);
+                
+                //9.01.25 Меняем размер области отрисовки при прицеливании
+                if (Scripts.OpticalSight) {
+                    int w1 = (MainMenuScreen.scrWidth - PlayerHUD.crosshairImages[2].getWidth()) / 2;
+                    int h1 = (MainMenuScreen.scrHeight - PlayerHUD.crosshairImages[2].getHeight()) / 2;
+                    graphics3D.setViewport(w1, h1,
+                            PlayerHUD.crosshairImages[2].getWidth(),
+                            PlayerHUD.crosshairImages[2].getHeight());
+                    
+                    camera.setPerspective(30.0F, (float) PlayerHUD.crosshairImages[2].getWidth() / (float) PlayerHUD.crosshairImages[2].getHeight(), 0.1F, 10000.0F);
+                } else {
+                    graphics3D.setViewport(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
+                    
+                    camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
+                }
+                //
+                
                 graphics3D.render(gameWorld);
                 graphics3D.releaseTarget();
                 

@@ -254,19 +254,36 @@ public final class PlayerHUD {
         graphics.drawImage(weaponHUDImages[weapId], x, y, 0);
     }
     //Прицел
-    private static void DrawCrosshairAtCenter(byte crosshair_number) {
-        int var1 = SCREEN_WIDTH / 2 - crosshairImages[crosshair_number].getWidth() / 2;
-        int var2 = SCREEN_HEIGHT / 2 - crosshairImages[crosshair_number].getHeight() / 2;
-        graphics.drawImage(crosshairImages[crosshair_number], var1, var2, 0);
-        if (GameScene.getActiveObjectIdUnderCursor() && crosshair_number == 0) {
+    private static void drawCrosshair(byte type) {
+        int x = SCREEN_WIDTH / 2 - crosshairImages[type].getWidth() / 2;
+        int y = SCREEN_HEIGHT / 2 - crosshairImages[type].getHeight() / 2;
+        graphics.drawImage(crosshairImages[type], x, y, 0);
+        //9.01.25 Добавлены чёрные области по краям от опт. прицела
+        if (type == 2) {//Если используется оптический прицел
+            //Заливаем окружение прицела чёрным цветом
+            graphics.setColor(0, 0, 0);
+            int w1 = (SCREEN_WIDTH - crosshairImages[type].getWidth()) / 2;
+            //Левый край
+            graphics.fillRect(0, 0, w1, SCREEN_HEIGHT);
+            int h1 = (SCREEN_HEIGHT - crosshairImages[type].getHeight()) / 2;
+            //Верхний центр и вправо
+            graphics.fillRect(w1, 0, crosshairImages[type].getWidth() + w1, h1);
+            //Правый край и вниз
+            graphics.fillRect(SCREEN_WIDTH - w1, h1, w1, SCREEN_HEIGHT - h1);
+            //Нижний центр
+            graphics.fillRect(w1, SCREEN_HEIGHT - h1,
+                    crosshairImages[type].getWidth(), h1);
+        }
+        //9.01.25
+        if (GameScene.getActiveObjectIdUnderCursor() && type == 0) {
             int var3;
             if ((var3 = getNPCNameTextId2(GameScene.getActivableObjState(GameScene.activableObjIdUnderCursor))) == -1) {
                 return;
             }
 
-            var1 = SCREEN_WIDTH / 2 - TextCreator.getWideLineWidth(0, var3) / 2 + 5;
-            var2 -= TextCreator.getSymbolHeight(0);
-            TextCreator.drawLineByAnchor(0, var3, var1, var2, 0);//check var3
+            x = SCREEN_WIDTH / 2 - TextCreator.getWideLineWidth(0, var3) / 2 + 5;
+            y -= TextCreator.getSymbolHeight(0);
+            TextCreator.drawLineByAnchor(0, var3, x, y, 0);//check var3
         }
 
     }
@@ -881,13 +898,13 @@ public final class PlayerHUD {
                                 if (doorLocked) {
                                     DrawLockAtCenter();
                                 } else {
-                                    DrawCrosshairAtCenter((byte) 1);
+                                    drawCrosshair((byte) 1);
                                 }
                             } else {
-                                DrawCrosshairAtCenter((byte) 0);
+                                drawCrosshair((byte) 0);
                             }
                         } else {
-                            DrawCrosshairAtCenter((byte) 2);
+                            drawCrosshair((byte) 2);
                         }
                     }
 
