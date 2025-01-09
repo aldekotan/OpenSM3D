@@ -35,22 +35,22 @@ public final class InventoryScreen implements Screen
       ResourseManager.drawUserInterfaceItems(MasterCanvas.graphics, 80, 0, 0);
 
       //Рисуем поле с текущим/максимальным переносимым весом
-      byte[] currentPlayerWeight = TextCreator.CreateTextMassiveForNumber(Scripts.playerWeight);
+      byte[] currentPlayerWeight = TextCreator.createTextFromNumberSeparated(Scripts.playerWeight);
       //"кг/"
-      byte[] kgSlash = TextCreator.CopyReplicToNewMassive(65);
-      byte[] leftPartText = TextCreator.combineTextMassives(currentPlayerWeight, kgSlash);
-      byte[] maxPlayerWeight = TextCreator.CreateMassiveWithRankLength(Scripts.playerMaxWeight / 10);
+      byte[] kgSlash = TextCreator.createTextFromLine(65);
+      byte[] leftPartText = TextCreator.combineText(currentPlayerWeight, kgSlash);
+      byte[] maxPlayerWeight = TextCreator.createTextFromNumber(Scripts.playerMaxWeight / 10);
       //"кг"
-      byte[] kg = TextCreator.CopyReplicToNewMassive(64); 
-      byte[] rightPartText = TextCreator.combineTextMassives(maxPlayerWeight, kg);
-      byte[] finalText = TextCreator.combineTextMassives(leftPartText, rightPartText);
+      byte[] kg = TextCreator.createTextFromLine(64); 
+      byte[] rightPartText = TextCreator.combineText(maxPlayerWeight, kg);
+      byte[] finalText = TextCreator.combineText(leftPartText, rightPartText);
       int x_dest = ResourseManager.getUIElementXcoord(39, 20);
       int y_dest = ResourseManager.getUIElementYcoord(39, 20);
       TextCreator.drawWeightTextByAnchor(1, finalText, 
               0, finalText.length, x_dest, y_dest, 5);
 
       //Поле с весом выбранного предмета (дописываем КГ в конце)
-      finalText = TextCreator.combineTextMassives(TextCreator.CreateTextMassiveForNumber(Scripts.getItemWeight(Scripts.inventoryItems[ItemsInteraction.selectedInventoryItem])), TextCreator.CopyReplicToNewMassive(64));
+      finalText = TextCreator.combineText(TextCreator.createTextFromNumberSeparated(Scripts.getItemWeight(Scripts.inventoryItems[ItemsInteraction.selectedInventoryItem])), TextCreator.createTextFromLine(64));
       x_dest = ResourseManager.getUIElementXcoord(39, 19);
       y_dest = ResourseManager.getUIElementYcoord(39, 19);
       TextCreator.drawWeightTextByAnchor(1, finalText, 

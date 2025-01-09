@@ -104,7 +104,7 @@ public final class ItemDescriptionScreen implements Screen {
                 if (text[i] != -1) {
                     int[] var5 = this.getTotalTextHeight(1, this.statsTextAndValues[i], totalTextBlockHeight, true);
                     totalTextBlockHeight += var5[0];
-                    byte[] textArray = TextCreator.combineTextMassives(TextCreator.CreateMassiveWithRankLength(text[i]), this.statsClosingCharacters[i]);
+                    byte[] textArray = TextCreator.combineText(TextCreator.createTextFromNumber(text[i]), this.statsClosingCharacters[i]);
                     int var7 = TextCreator.getTextWidth(1, textArray, 0, textArray.length);
                     if (this.frameWidth - var5[1] <= var7) {
                         totalTextBlockHeight += textHeight;
@@ -171,7 +171,7 @@ public final class ItemDescriptionScreen implements Screen {
         if (replicNumber == -1) {
             return 0;
         } else {
-            byte[] symbolMassive = TextCreator.CopyReplicToNewMassive(replicNumber);
+            byte[] symbolMassive = TextCreator.createTextFromLine(replicNumber);
             int firstSymbol = 0;
             boolean var5 = false;
             int HeightOfText = 0;

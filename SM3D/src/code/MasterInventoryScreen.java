@@ -40,19 +40,19 @@ public final class MasterInventoryScreen implements Screen
       //Окно описания предметов
       this.itemDscrScreen = new ItemDescriptionScreen();
       //Окно характеристик игрока
-      this.itemDscrScreen.statsTextAndValues = new byte[][]{TextCreator.CopyReplicToNewMassive(68), TextCreator.CopyReplicToNewMassive(69), TextCreator.CopyReplicToNewMassive(70), TextCreator.CopyReplicToNewMassive(71), TextCreator.CopyReplicToNewMassive(72), TextCreator.CopyReplicToNewMassive(73), TextCreator.CopyReplicToNewMassive(74), TextCreator.CopyReplicToNewMassive(75)};
+      this.itemDscrScreen.statsTextAndValues = new byte[][]{TextCreator.createTextFromLine(68), TextCreator.createTextFromLine(69), TextCreator.createTextFromLine(70), TextCreator.createTextFromLine(71), TextCreator.createTextFromLine(72), TextCreator.createTextFromLine(73), TextCreator.createTextFromLine(74), TextCreator.createTextFromLine(75)};
       //id text: Пауза?
       short textStartId = TextCreator.textLinesAdress[60];
       //id text: Меню?
       byte[] var6 = new byte[]{TextCreator.textLinesSymbols[textStartId + 18]};
       //76 id: "%"; 63 id: " "
-      this.itemDscrScreen.statsClosingCharacters = new byte[][]{TextCreator.CopyReplicToNewMassive(76), 
-          TextCreator.CopyReplicToNewMassive(76), var6, 
-          TextCreator.CopyReplicToNewMassive(76), 
-          TextCreator.CopyReplicToNewMassive(76), 
-          TextCreator.CopyReplicToNewMassive(76), 
-          TextCreator.CopyReplicToNewMassive(63), 
-          TextCreator.CopyReplicToNewMassive(63)};
+      this.itemDscrScreen.statsClosingCharacters = new byte[][]{TextCreator.createTextFromLine(76), 
+          TextCreator.createTextFromLine(76), var6, 
+          TextCreator.createTextFromLine(76), 
+          TextCreator.createTextFromLine(76), 
+          TextCreator.createTextFromLine(76), 
+          TextCreator.createTextFromLine(63), 
+          TextCreator.createTextFromLine(63)};
    }
 
    //В каждом есть графический отдел и контроль над клавишами

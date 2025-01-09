@@ -27,8 +27,8 @@ public final class PlayerStatsScreen implements Screen {
         //отрисовка текущего уровня игрока
         //id 39: УРОВЕНЬ:__
         byte[] currentValueText = 
-                TextCreator.combineTextMassives(TextCreator.CopyReplicToNewMassive(39), 
-                        TextCreator.CreateMassiveWithRankLength(Scripts.playerLevel));
+                TextCreator.combineText(TextCreator.createTextFromLine(39), 
+                        TextCreator.createTextFromNumber(Scripts.playerLevel));
         int x_start = ResourseManager.getUIElementXcoord(43, 0);
         int y_start = ResourseManager.getUIElementYcoord(43, 0);
         TextCreator.drawTextByAnchor(0, currentValueText, 0, currentValueText.length, x_start, y_start, 4);
@@ -47,7 +47,7 @@ public final class PlayerStatsScreen implements Screen {
                 ResourseManager.getUIElementYcoord(43, 2), 4);
         x_start = ResourseManager.getUIElementXcoord(43, 3);
         y_start = ResourseManager.getUIElementYcoord(43, 3);
-        byte[] currentPlayerLevelText = TextCreator.CreateMassiveWithRankLength(statsLevels[0]);
+        byte[] currentPlayerLevelText = TextCreator.createTextFromNumber(statsLevels[0]);
         TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
                 x_start, y_start, 6);
@@ -64,7 +64,7 @@ public final class PlayerStatsScreen implements Screen {
                 ResourseManager.getUIElementYcoord(43, 4), 4);
         x_start = ResourseManager.getUIElementXcoord(43, 5);
         y_start = ResourseManager.getUIElementYcoord(43, 5);
-        currentPlayerLevelText = TextCreator.CreateMassiveWithRankLength(statsLevels[1]);
+        currentPlayerLevelText = TextCreator.createTextFromNumber(statsLevels[1]);
         TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
                 x_start, y_start, 6);
@@ -80,7 +80,7 @@ public final class PlayerStatsScreen implements Screen {
                 ResourseManager.getUIElementYcoord(43, 6), 4);
         x_start = ResourseManager.getUIElementXcoord(43, 7);
         y_start = ResourseManager.getUIElementYcoord(43, 7);
-        currentPlayerLevelText = TextCreator.CreateMassiveWithRankLength(statsLevels[2]);
+        currentPlayerLevelText = TextCreator.createTextFromNumber(statsLevels[2]);
         TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
                 x_start, y_start, 6);
@@ -132,8 +132,8 @@ public final class PlayerStatsScreen implements Screen {
         //Поле внизу, слева. Свободные очки прокачки
         //id text: ОЧКИ: 
         byte[] sparePointsText = 
-                TextCreator.combineTextMassives(TextCreator.CopyReplicToNewMassive(77), 
-                        TextCreator.CreateMassiveWithRankLength(statsLevels[4]));
+                TextCreator.combineText(TextCreator.createTextFromLine(77), 
+                        TextCreator.createTextFromNumber(statsLevels[4]));
         TextCreator.drawTextByAnchor(1, sparePointsText, 
                 0, sparePointsText.length, 
                 ResourseManager.getUIElementXcoord(43, 12), 
@@ -141,8 +141,8 @@ public final class PlayerStatsScreen implements Screen {
 
         //Отрисовка веса, справа внизу
         currentValueText = 
-                TextCreator.combineTextMassives(TextCreator.CreateMassiveWithRankLength(Scripts.playerMaxWeight / 10), 
-                        TextCreator.CopyReplicToNewMassive(64));
+                TextCreator.combineText(TextCreator.createTextFromNumber(Scripts.playerMaxWeight / 10), 
+                        TextCreator.createTextFromLine(64));
         x_start = ResourseManager.getUIElementXcoord(43, 13);
         y_start = ResourseManager.getUIElementYcoord(43, 13);
         TextCreator.drawTextByAnchor(0, currentValueText, 

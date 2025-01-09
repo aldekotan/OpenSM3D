@@ -85,7 +85,7 @@ public final class TextCreator {
     }
 
     //Посчитать сколько цифр в числе
-    private static int makeTextFromNumber(byte[] text, int number)
+    private static int getDigitsCount(byte[] text, int number)
     {
         int digitCount = 0;
         int tempNumber = number;
@@ -187,7 +187,7 @@ public final class TextCreator {
     //Рисует число
     public static void drawNumber(int color, int number, int x, int y, int anchor) {
         byte[] text = new byte[10];
-        drawTextByAnchor(color, text, 0, makeTextFromNumber(text, number), x, y, anchor);
+        drawTextByAnchor(color, text, 0, getDigitsCount(text, number), x, y, anchor);
     }
 
     //Добыть адреса строк текста
@@ -261,8 +261,8 @@ public final class TextCreator {
         return lineLength;
     }
 
-    public static int ReturnLengthOfReplic(int line) {
-        return textLinesAdress[line + 1] - textLinesAdress[line];
+    public static int getLineLength(int lineId) {
+        return textLinesAdress[lineId + 1] - textLinesAdress[lineId];
     }
 
     //Получить один символ из строки
@@ -301,61 +301,64 @@ public final class TextCreator {
         return -1;
     }
 
-    public static byte[] CopyReplicToNewMassive(int number_of_replic) {
-        if (number_of_replic == -1) {
+    /**Переносит текст нужной линии из общего массива в только созданный*/
+    public static byte[] createTextFromLine(int lineId) {
+        if (lineId == -1) {
             return null;
         } else {
-            short number_of_start = textLinesAdress[number_of_replic];
-            byte[] new_textMassive = new byte[textLinesAdress[number_of_replic + 1] - number_of_start];
+            short symbolId = textLinesAdress[lineId];
+            byte[] text = new byte[textLinesAdress[lineId + 1] - symbolId];
 
-            for (int var4 = 0; var4 < new_textMassive.length; ++var4) {
-                new_textMassive[var4] = textLinesSymbols[number_of_start + var4];
+            for (int i = 0; i < text.length; ++i) {
+                text[i] = textLinesSymbols[symbolId + i];
             }
 
-            return new_textMassive;
+            return text;
         }
     }
 
-    public static byte[] combineTextMassives(byte[] first_text_massive, byte[] second_text_massive) {
-        byte[] new_text_massive = new byte[first_text_massive.length + second_text_massive.length];
+    public static byte[] combineText(byte[] firstText, byte[] secondText) {
+        byte[] finalText = new byte[firstText.length + secondText.length];
 
-        int var3;
-        for (var3 = 0; var3 < first_text_massive.length; ++var3) {
-            new_text_massive[var3] = first_text_massive[var3];
+        int symbolCount;
+        for (symbolCount = 0; symbolCount < firstText.length; ++symbolCount) {
+            finalText[symbolCount] = firstText[symbolCount];
         }
 
-        var3 = first_text_massive.length;
+        symbolCount = firstText.length;
 
-        for (int var4 = first_text_massive.length; var3 < new_text_massive.length; ++var3) {
-            new_text_massive[var3] = second_text_massive[var3 - var4];
+        for (int i = firstText.length; symbolCount < finalText.length; ++symbolCount) {
+            finalText[symbolCount] = secondText[symbolCount - i];
         }
 
-        return new_text_massive;
+        return finalText;
     }
 
-    public static byte[] CreateMassiveWithRankLength(int number) {
-        byte[] first_byte_massive; //создание массива длиной в количество разрядов у числа
-        int massive_length;
-        byte[] second_byte_massive = new byte[massive_length = makeTextFromNumber(first_byte_massive = new byte[10], number)];
-        System.arraycopy(first_byte_massive, 0, second_byte_massive, 0, massive_length);
-        return second_byte_massive;
+    public static byte[] createTextFromNumber(int number) {
+        byte[] tempText; //создание массива длиной в количество разрядов у числа
+        int arrayLength;
+        byte[] finalText = new byte[arrayLength = getDigitsCount(tempText = new byte[10], number)];
+        System.arraycopy(tempText, 0, finalText, 0, arrayLength);
+        return finalText;
     }
 
-    public static byte[] CreateTextMassiveForNumber(int number) {
-        byte[] empty_massive;
-        int ranksInNumber;
-        byte[] text_massive = new byte[(ranksInNumber = makeTextFromNumber(empty_massive = new byte[10], number)) == 1 ? ranksInNumber + 2 : ranksInNumber + 1];
-        System.arraycopy(empty_massive, 0, text_massive, 0, ranksInNumber);
-        if (ranksInNumber == 1) {
-            text_massive[ranksInNumber + 1] = text_massive[0]; //1
-            text_massive[ranksInNumber] = -1;                  //-1 (если символ - точка)
-            text_massive[ranksInNumber - 1] = 0;               //0
+    /**В отличие от createTextFromNumber(int number), между последним и предпоследним
+     * символами добавляется запятая-разделитель */
+    public static byte[] createTextFromNumberSeparated(int number) {
+        byte[] tempText;
+        int textLength;
+        byte[] finalText = new byte[(textLength = getDigitsCount(tempText = new byte[10], number)) == 1 ? textLength + 2 : textLength + 1];
+        System.arraycopy(tempText, 0, finalText, 0, textLength);
+        if (textLength == 1) {
+            finalText[textLength + 1] = finalText[0]; //1
+            finalText[textLength] = -1;                  //-1 (если символ - точка)
+            finalText[textLength - 1] = 0;               //0
         } else {
-            text_massive[ranksInNumber] = text_massive[ranksInNumber - 1];
-            text_massive[ranksInNumber - 1] = -1;
+            finalText[textLength] = finalText[textLength - 1];
+            finalText[textLength - 1] = -1;
         }
 
-        return text_massive;
+        return finalText;
     }
 
     public static int drawColoredText(short[] symbol_massive, int x_dest, int y_dest, int anchor) {
@@ -451,30 +454,30 @@ public final class TextCreator {
         return finalText;
     }
 
-    public static Vector splitOnLines(int textId, int targetWidth, int var2) {
+    public static Vector splitOnLines(int lineId, int targetWidth, int color) {
         Vector lines = new Vector();
-        boolean var5 = false;
+        //boolean var5 = false;
         int textWidth = 1;
         int firstChar = 0;
         boolean var10 = false;
 
         while (true) {
-            int var6 = getDistanceToFirstSymbol(textId, -1, textWidth);
-            int var7 = getDistanceToFirstSymbol(textId, -2, textWidth);
-            int lastChar = ReturnLengthOfReplic(textId);
-            if (var7 > 0) {
-                lastChar = Math.min(var6, var7);
-            } else if (var6 > 0) {
-                lastChar = var6;
+            int distToSpace = getDistanceToFirstSymbol(lineId, -1, textWidth);
+            int distToLineBreak = getDistanceToFirstSymbol(lineId, -2, textWidth);
+            int distBeforeInterrupt = getLineLength(lineId);
+            if (distToLineBreak > 0) {
+                distBeforeInterrupt = Math.min(distToSpace, distToLineBreak);
+            } else if (distToSpace > 0) {
+                distBeforeInterrupt = distToSpace;
             }
 
             if (textWidth == firstChar + 1) {
-                textWidth = lastChar;
+                textWidth = distBeforeInterrupt;
             }
 
             int[] var9;
-            if (!var10 && getWideLinePartWidth(var2, textId, firstChar, lastChar - 1) <= targetWidth) {
-                textWidth = lastChar + 1;
+            if (!var10 && getWideLinePartWidth(color, lineId, firstChar, distBeforeInterrupt - 1) <= targetWidth) {
+                textWidth = distBeforeInterrupt + 1;
             } else {
                 var9 = new int[2];
                 var9[0] = firstChar;
@@ -482,23 +485,23 @@ public final class TextCreator {
                 lines.addElement(var9);
                 firstChar = textWidth++;
                 if (var10) {
-                    textWidth = lastChar + 1;
+                    textWidth = distBeforeInterrupt + 1;
                 }
 
                 var10 = false;
             }
 
-            if (lastChar == ReturnLengthOfReplic(textId)) {
-                if (lastChar - firstChar > 0) {
+            if (distBeforeInterrupt == getLineLength(lineId)) {
+                if (distBeforeInterrupt - firstChar > 0) {
                     (var9 = new int[2])[0] = firstChar;
-                    var9[1] = lastChar - firstChar;
+                    var9[1] = distBeforeInterrupt - firstChar;
                     lines.addElement(var9);
                 }
 
                 return lines;
             }
 
-            if (var7 > 0 && var7 < var6) {
+            if (distToLineBreak > 0 && distToLineBreak < distToSpace) {
                 var10 = true;
             }
         }
@@ -548,27 +551,27 @@ public final class TextCreator {
                 x, y, anchor);
     }
 
-    public static void drawReplicInsideFrame(int lineId, int x, int y, int anchor, int color, Graphics graph, int var6, int var7, Vector var8) {
-        if (var7 == -1) {
-            var7 = var8.size();
+    public static void drawReplicInsideFrame(int lineId, int x, int y, int anchor, int color, Graphics graph, int startLine, int lineCount, Vector linesPos) {
+        if (lineCount == -1) {
+            lineCount = linesPos.size();
         }
 
         int xFinal = x;
         int yFinal = y;
         if ((anchor & 32) == 32) {
-            yFinal = y - var8.size() * getSymbolHeight(color);
+            yFinal = y - linesPos.size() * getSymbolHeight(color);
         } else if ((anchor & 2) == 2) {
-            yFinal = y - var8.size() * getSymbolHeight(color) / 2;
+            yFinal = y - linesPos.size() * getSymbolHeight(color) / 2;
         }
 
         Object var11 = null;
         int var12;
-        if ((var12 = var6 + var7) > var8.size()) {
-            var12 = var8.size();
+        if ((var12 = startLine + lineCount) > linesPos.size()) {
+            var12 = linesPos.size();
         }
 
-        for (int var13 = var6; var13 < var12; ++var13) {
-            int[] lineSymbolOffset = (int[]) var8.elementAt(var13);
+        for (int var13 = startLine; var13 < var12; ++var13) {
+            int[] lineSymbolOffset = (int[]) linesPos.elementAt(var13);
             drawPartOfTextByAnchorWrapper(lineId, lineSymbolOffset[0], lineSymbolOffset[1], xFinal, yFinal, anchor, color, graph);
             yFinal += getSymbolHeight(color);
         }

@@ -62,19 +62,19 @@ public final class StashScreen implements Screen
       int y_dest = ResourseManager.getUIElementYcoord(47, 6);
       TextCreator.drawLineByAnchor(1, 309, x_dest, y_dest, 5);
       
-      byte[] currWeight = TextCreator.CreateTextMassiveForNumber(Scripts.playerWeight);
-      byte[] kgSlash = TextCreator.CopyReplicToNewMassive(65);
-      byte[] playerWeightText = TextCreator.combineTextMassives(currWeight, kgSlash);
+      byte[] currWeight = TextCreator.createTextFromNumberSeparated(Scripts.playerWeight);
+      byte[] kgSlash = TextCreator.createTextFromLine(65);
+      byte[] playerWeightText = TextCreator.combineText(currWeight, kgSlash);
       
-      byte[] maxWeight = TextCreator.CreateMassiveWithRankLength(Scripts.playerMaxWeight / 10);
-      byte[] kg = TextCreator.CopyReplicToNewMassive(64);
-      byte[] playerMaxWeightText = TextCreator.combineTextMassives(maxWeight, kg);
-      byte[] text = TextCreator.combineTextMassives(playerWeightText, playerMaxWeightText);
+      byte[] maxWeight = TextCreator.createTextFromNumber(Scripts.playerMaxWeight / 10);
+      byte[] kg = TextCreator.createTextFromLine(64);
+      byte[] playerMaxWeightText = TextCreator.combineText(maxWeight, kg);
+      byte[] text = TextCreator.combineText(playerWeightText, playerMaxWeightText);
       int x_coord = ResourseManager.getUIElementXcoord(47, 10);
       int y_coord = ResourseManager.getUIElementYcoord(47, 10);
       TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x_coord, y_coord, 5);
       
-      text = TextCreator.combineTextMassives(TextCreator.CreateTextMassiveForNumber(Scripts.getItemWeight(items[selectedItem])), TextCreator.CopyReplicToNewMassive(64));
+      text = TextCreator.combineText(TextCreator.createTextFromNumberSeparated(Scripts.getItemWeight(items[selectedItem])), TextCreator.createTextFromLine(64));
       x_coord = ResourseManager.getUIElementXcoord(47, 7);
       y_coord = ResourseManager.getUIElementYcoord(47, 7);
       TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x_coord, y_coord, 5);

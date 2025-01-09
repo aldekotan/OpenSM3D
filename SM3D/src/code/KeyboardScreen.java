@@ -35,7 +35,7 @@ public final class KeyboardScreen extends CentralText {
         graphics.fillRect(MainMenuScreen.scrWidth / 4, MainMenuScreen.scrHeight / 4 - 5, 2 * MainMenuScreen.scrWidth / 4, 2 * MainMenuScreen.scrHeight / 4 + 5);
         short var2 = TextCreator.textLinesAdress[60];
 
-        for (int var3 = 0; var3 < TextCreator.ReturnLengthOfReplic(60); ++var3) {
+        for (int var3 = 0; var3 < TextCreator.getLineLength(60); ++var3) {
             int var4 = MenuScreen.textClipX + var3 % 5 * (MenuScreen.textClipWidth / 5) + 3;
             int var5 = MenuScreen.textClipY + var3 / 5 * var_36 + 3;
             TextCreator.drawTextByAnchor(0, TextCreator.textLinesSymbols, var2 + var3, var2 + var3 + 1, var4, var5, 0);
@@ -70,7 +70,7 @@ public final class KeyboardScreen extends CentralText {
                 this.var_8c[this.var_12b++] = var3;
                 break;
             case -4:
-                if (this.var_18a < TextCreator.ReturnLengthOfReplic(60) - 1) {
+                if (this.var_18a < TextCreator.getLineLength(60) - 1) {
                     ++this.var_18a;
                 }
                 break;
@@ -80,11 +80,11 @@ public final class KeyboardScreen extends CentralText {
                 }
                 break;
             case -2:
-                if (this.var_18a / 5 < TextCreator.ReturnLengthOfReplic(60) / 5) {
+                if (this.var_18a / 5 < TextCreator.getLineLength(60) / 5) {
                     this.var_18a = (byte) (this.var_18a + 5);
                 }
 
-                if (this.var_18a >= TextCreator.ReturnLengthOfReplic(60)) {
+                if (this.var_18a >= TextCreator.getLineLength(60)) {
                     this.var_18a = (byte) (this.var_18a - 5);
                 }
                 break;

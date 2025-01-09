@@ -75,19 +75,19 @@ public final class TradeScreen implements Screen
       y2 = ResourseManager.getUIElementYcoord(49, 10);
       TextCreator.drawLineByAnchor(1, 310, x1, y2, 5);
       
-      byte[] currWeight = TextCreator.CreateTextMassiveForNumber(Scripts.playerWeight);
-      byte[] kgSlash = TextCreator.CopyReplicToNewMassive(65);
-      byte[] playerWeightText = TextCreator.combineTextMassives(currWeight, kgSlash);
+      byte[] currWeight = TextCreator.createTextFromNumberSeparated(Scripts.playerWeight);
+      byte[] kgSlash = TextCreator.createTextFromLine(65);
+      byte[] playerWeightText = TextCreator.combineText(currWeight, kgSlash);
       
-      byte[] maxWeight = TextCreator.CreateMassiveWithRankLength(Scripts.playerMaxWeight / 10);
-      byte[] kg = TextCreator.CopyReplicToNewMassive(64);
-      byte[] playerMaxWeightText = TextCreator.combineTextMassives(maxWeight, kg);
-      byte[] text = TextCreator.combineTextMassives(playerWeightText, playerMaxWeightText);
+      byte[] maxWeight = TextCreator.createTextFromNumber(Scripts.playerMaxWeight / 10);
+      byte[] kg = TextCreator.createTextFromLine(64);
+      byte[] playerMaxWeightText = TextCreator.combineText(maxWeight, kg);
+      byte[] text = TextCreator.combineText(playerWeightText, playerMaxWeightText);
       int x = ResourseManager.getUIElementXcoord(49, 12);
       int y = ResourseManager.getUIElementYcoord(49, 12);
       TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x, y, 5);
       
-      text = TextCreator.combineTextMassives(TextCreator.CreateTextMassiveForNumber(Scripts.getItemWeight(items[selectedItem])), TextCreator.CopyReplicToNewMassive(64));
+      text = TextCreator.combineText(TextCreator.createTextFromNumberSeparated(Scripts.getItemWeight(items[selectedItem])), TextCreator.createTextFromLine(64));
       x = ResourseManager.getUIElementXcoord(49, 7);
       y = ResourseManager.getUIElementYcoord(49, 7);
       TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x, y, 5);
@@ -101,7 +101,7 @@ public final class TradeScreen implements Screen
          price = Scripts.getItemPrice(items[selectedItem]);
       }
 
-      text = TextCreator.combineTextMassives(TextCreator.CreateMassiveWithRankLength(price), TextCreator.CopyReplicToNewMassive(66));
+      text = TextCreator.combineText(TextCreator.createTextFromNumber(price), TextCreator.createTextFromLine(66));
       x = ResourseManager.getUIElementXcoord(49, 11);
       y = ResourseManager.getUIElementYcoord(49, 11);
       TextCreator.drawTextByAnchor(1, text, 0, text.length, x, y, 5);
