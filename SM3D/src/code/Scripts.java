@@ -1780,7 +1780,7 @@ public final class Scripts {
     }
 
     private static void GoToNextLocation() {
-        PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.currentLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
+        PlayerHUD.textLinesStartsEnds = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.currentLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
         GameScene.nextLocation = GameScene.currentLocation;
         if (var_2204) {
             GameScene.locationCampMark[GameScene.currentLocation] = GameScene.currentLocation == 1 || GameScene.currentLocation == 6 || GameScene.currentLocation == 12;
@@ -1887,7 +1887,7 @@ public final class Scripts {
                 }
             }
 
-            PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
+            PlayerHUD.textLinesStartsEnds = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
         }
 
         if (Keys.right || Keys.down || Keys.num8 || Keys.num6) { //нажать клавишу вправо или вниз
@@ -1906,7 +1906,7 @@ public final class Scripts {
                 } while ((!var0 || GameScene.nextLocation != 0) && !sub_819(GameScene.nextLocation));
             }
 
-            PlayerHUD.textLinesPos = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
+            PlayerHUD.textLinesStartsEnds = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
         }
 
     }

@@ -17,8 +17,8 @@ public final class HelpAboutScreen extends MenuScreen {
    //383    Nomoc
    //384    www.nomoc.com
    public int yStart;
-   public int textTotalHeight;
-   public Vector textWidth;
+   public int textLinesCount;
+   public Vector textLinesStartsEnds;
 
 
    public HelpAboutScreen() 
@@ -54,8 +54,8 @@ public final class HelpAboutScreen extends MenuScreen {
       //31      here we are
       //35      Too many players. Delete some record
       this.yStart = MenuScreen.textClipY;
-      this.textTotalHeight = 0;
-      this.textWidth = new Vector();
+      this.textLinesCount = 0;
+      this.textLinesStartsEnds = new Vector();
    }
 
    public final void resetVariables() {
@@ -68,7 +68,7 @@ public final class HelpAboutScreen extends MenuScreen {
       super.onShow(screenId);
       this.textId = super.replicsMassive[3][screenId];
       super.interfaceNumber = 44;
-      this.textTotalHeight = 0;
+      this.textLinesCount = 0;
       this.yStart = MenuScreen.textClipY;
       return true;
    }
@@ -100,15 +100,15 @@ public final class HelpAboutScreen extends MenuScreen {
       //если окно "Помощь"
       else 
       {
-         this.textWidth = TextCreator.splitOnLines(this.textId, MenuScreen.textClipWidth + 15, 1);
-         this.textTotalHeight = 0;
+         this.textLinesStartsEnds = TextCreator.splitOnLines(this.textId, MenuScreen.textClipWidth + 15, 1);
+         this.textLinesCount = 0;
          graphics.setClip(MenuScreen.textClipX, MenuScreen.textClipY, MenuScreen.textClipWidth + 15, MenuScreen.textClipHeight);
          //Серый цвет текста(рамки)
          graphics.setColor(8421504);
-         this.textTotalHeight = this.textWidth.size();
+         this.textLinesCount = this.textLinesStartsEnds.size();
          TextCreator.drawReplicInsideFrame(this.textId, 
                  MenuScreen.textClipX + 5, this.yStart, 0, 1, 
-                 MasterCanvas.graphics, 0, -1, this.textWidth);
+                 MasterCanvas.graphics, 0, -1, this.textLinesStartsEnds);
          graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
          this.drawScrollbar();
       }
@@ -116,7 +116,7 @@ public final class HelpAboutScreen extends MenuScreen {
 
    private void drawScrollbar() 
    {
-      int splitVertical = (this.textTotalHeight + 1) * 
+      int splitVertical = (this.textLinesCount + 1) * 
               TextCreator.getSymbolHeight(1) 
               - MenuScreen.textClipHeight;
       int currentYpos = Math.abs(this.yStart - MenuScreen.textClipY);
@@ -148,7 +148,7 @@ public final class HelpAboutScreen extends MenuScreen {
                 Main.main.setScreen(super.screensTransitionLeftOption[super.drawingScreenId], (byte) 1);
             //Промотка текста вверх
             case 6:
-                if (this.yStart + this.textTotalHeight
+                if (this.yStart + this.textLinesCount
                         * TextCreator.getSymbolHeight(1) > MenuScreen.textClipY
                         + MenuScreen.textClipHeight) {
                     this.yStart -= TextCreator.getSymbolHeight(1);

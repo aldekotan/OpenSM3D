@@ -54,7 +54,7 @@ public class ListScreen extends MenuScreen {
     public static Screen[] settingsScreens;
     public static Screen[] pauseScreens;
     public static Screen[][] allListScreens;
-    private Vector[] obj_vectorMassive;
+    private Vector[] textLinesStartsEnds;
     private int[] i_varMassive_2;
     private int[] i_varMassive_3;
     private int var_57e;
@@ -116,19 +116,19 @@ public class ListScreen extends MenuScreen {
         this.var_588 = 0;
         this.i_varMassive_2 = new int[Scripts.var_2367];
         this.i_varMassive_3 = new int[Scripts.var_2367];
-        this.obj_vectorMassive = new Vector[Scripts.var_2367];
+        this.textLinesStartsEnds = new Vector[Scripts.var_2367];
 
         for (byte var1 = 0; var1 < Scripts.var_2367; ++var1) {
-            this.obj_vectorMassive[var1] = TextCreator.splitOnLines(this.optionsTextId[var1], 80, 0);
+            this.textLinesStartsEnds[var1] = TextCreator.splitOnLines(this.optionsTextId[var1], 80, 0);
             if (var1 > 0) {
-                this.i_varMassive_2[var1] = this.i_varMassive_2[var1 - 1] + TextCreator.getSymbolHeight(0) * (this.obj_vectorMassive[var1].size() - 1);
+                this.i_varMassive_2[var1] = this.i_varMassive_2[var1 - 1] + TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[var1].size() - 1);
             } else {
-                this.i_varMassive_2[var1] = TextCreator.getSymbolHeight(0) * (this.obj_vectorMassive[var1].size() - 1);
+                this.i_varMassive_2[var1] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[var1].size() - 1);
             }
 
-            this.i_varMassive_3[var1] = TextCreator.getSymbolHeight(0) * (this.obj_vectorMassive[var1].size() - 1);
+            this.i_varMassive_3[var1] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[var1].size() - 1);
             this.var_57e += this.i_varMassive_2[var1];
-            this.var_588 += this.obj_vectorMassive[var1].size();
+            this.var_588 += this.textLinesStartsEnds[var1].size();
         }
 
     }
@@ -138,7 +138,7 @@ public class ListScreen extends MenuScreen {
         if (super.drawingScreenId == 3) //3
         {
             int var3 = item > 0 ? this.i_varMassive_2[item - 1] : 0;
-            TextCreator.drawReplicInsideFrame(this.optionsTextId[item], AllScreens.var_4ba + 2, MenuScreen.textClipY + this.i_var_3 + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + var3, 0, 0, MasterCanvas.graphics, 0, -1, this.obj_vectorMassive[item]);
+            TextCreator.drawReplicInsideFrame(this.optionsTextId[item], AllScreens.var_4ba + 2, MenuScreen.textClipY + this.i_var_3 + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + var3, 0, 0, MasterCanvas.graphics, 0, -1, this.textLinesStartsEnds[item]);
         } else {
             byte var2 = 0;
             if (super.drawingScreenId == 2 && (item == 5 && !Scripts.var_2204 || item == 6 && Scripts.var_2367 == 0)) {

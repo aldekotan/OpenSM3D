@@ -44,7 +44,7 @@ public final class PlayerHUD {
     public static int timeToDisplayDamageIndicator;
     
     //Диалоги
-    private static Vector[] npcPhraseLines;
+    private static Vector[] npcPhraseLinesStartsEnds;
     public static int var_937;
     public static int var_993;
     public static int yNPCReplicOffset;
@@ -64,14 +64,14 @@ public final class PlayerHUD {
     //Макс ширина текстового поля с названием локации
     public static final int TEXT_TARGET_WIDTH;
     //Позиции букв для названия локации на карте
-    public static Vector textLinesPos;
+    public static Vector textLinesStartsEnds;
     //Позиции букв для костыля с названием "Лагерь" на карте
-    private static Vector textLinesSpecial;
+    private static Vector textLinesSpecialStartsEnds;
     //Растёт во время загрузки, сообщая об очистке памяти
     public static int garbageCollected;
     //Интро-текст
     public static boolean introRolledFully;
-    private static Vector introTextLines;
+    private static Vector introTextLinesStartsEnds;
     private static int textTimeToRoll;
     private static int textRollsInterval;
     //Курсор-замок
@@ -416,11 +416,11 @@ public final class PlayerHUD {
     public static void splitNPCPhraseToLines() {
         var_937 = 0;
         int length;
-        npcPhraseLines = new Vector[length = Scripts.phracesIdArray.length];
+        npcPhraseLinesStartsEnds = new Vector[length = Scripts.phracesIdArray.length];
 
         for (byte i = 0; i < length; ++i) {
             if (Scripts.phracesIdArray[i] != -1) {
-                npcPhraseLines[i] = TextCreator.splitOnLines(Scripts.phracesIdArray[i], ModChanges.dialogDrawWidth, 0);
+                npcPhraseLinesStartsEnds[i] = TextCreator.splitOnLines(Scripts.phracesIdArray[i], ModChanges.dialogDrawWidth, 0);
             }
         }
 
@@ -435,8 +435,8 @@ public final class PlayerHUD {
     private static void drawNPCcurrentPhrase() {
         int var0 = TextCreator.getSymbolHeight(0);
         int var1 = 92 / var0;
-        int var2 = TextCreator.getSymbolHeight(0) * npcPhraseLines[Scripts.currentNpcPhrase * 2].size();
-        if (npcPhraseLines[Scripts.currentNpcPhrase * 2].size() > var1) {
+        int var2 = TextCreator.getSymbolHeight(0) * npcPhraseLinesStartsEnds[Scripts.currentNpcPhrase * 2].size();
+        if (npcPhraseLinesStartsEnds[Scripts.currentNpcPhrase * 2].size() > var1) {
             int timePassed;
             if ((timePassed = (int) (System.currentTimeMillis() - (long) refTime)) >= 4000 && timePassed - npcPhrasesTimePassed >= 200) {
                 npcPhrasesTimePassed = timePassed;
@@ -452,7 +452,7 @@ public final class PlayerHUD {
         }
 
         graphics.setClip(20, 24 + var0, ModChanges.dialogDrawWidth, 91);
-        TextCreator.drawReplicInsideFrame(Scripts.phracesIdArray[Scripts.currentNpcPhrase * 2], 20, yNPCReplicOffset, 0, 0, graphics, 0, -1, npcPhraseLines[Scripts.currentNpcPhrase * 2]);
+        TextCreator.drawReplicInsideFrame(Scripts.phracesIdArray[Scripts.currentNpcPhrase * 2], 20, yNPCReplicOffset, 0, 0, graphics, 0, -1, npcPhraseLinesStartsEnds[Scripts.currentNpcPhrase * 2]);
     }
     //Рисуем ответы главгероя, если они есть
     private static void drawPlayerAnswers() {
@@ -465,10 +465,10 @@ public final class PlayerHUD {
 
             for (byte var5 = 0; var5 < var4; ++var5) {
                 int var6 = var5 != Scripts.selectedAnswer && !var0 ? 1 : 0;
-                int var7 = (Scripts.currentNpcPhrase + var1) * 2 + 1;
+                int line = (Scripts.currentNpcPhrase + var1) * 2 + 1;
                 byte var8 = Scripts.givenAnswersCount + 1 + var1 > Scripts.dialogStructure.length - 1 ? 0 : Scripts.dialogStructure[Scripts.givenAnswersCount + 1 + var1];
                 var1 += var8 > 1 ? var8 + 1 : var8;
-                npcPhraseLines[var7] = TextCreator.splitOnLines(Scripts.phracesIdArray[var7], ModChanges.dialogDrawWidth, var6);
+                npcPhraseLinesStartsEnds[line] = TextCreator.splitOnLines(Scripts.phracesIdArray[line], ModChanges.dialogDrawWidth, var6);
                 int var9 = TextCreator.getSymbolHeight(var6);
                 int var10 = var3;
                 boolean var11 = Scripts.selectedAnswer != var_ae7;
@@ -477,7 +477,7 @@ public final class PlayerHUD {
                     var_b3a = false;
                 }
 
-                boolean var12 = var3 + npcPhraseLines[var7].size() * var9 >= var_a97;
+                boolean var12 = var3 + npcPhraseLinesStartsEnds[line].size() * var9 >= var_a97;
                 if (var3 - var_ad1 < yPlayerAnswersStart && var5 == Scripts.selectedAnswer && !var0) {
                     var_ad1 = 0;
                 }
@@ -494,17 +494,17 @@ public final class PlayerHUD {
                     ++var_937;
                     if (var_937 >= 50) {
                         var_ad1 += var9 >> 3;
-                        if (var3 + npcPhraseLines[var7].size() * var9 - var_ad1 <= yPlayerAnswersStart + 46) {
+                        if (var3 + npcPhraseLinesStartsEnds[line].size() * var9 - var_ad1 <= yPlayerAnswersStart + 46) {
                             var_ad1 = 0;
                             var_937 = 0;
                         }
                     }
                 }
 
-                TextCreator.drawReplicInsideFrame(Scripts.phracesIdArray[var7], 20, var3 - var_ad1, 0, var6, graphics, 0, -1, npcPhraseLines[var7]);
-                var3 = var3 + npcPhraseLines[var7].size() * var9 + var9 / 2;
+                TextCreator.drawReplicInsideFrame(Scripts.phracesIdArray[line], 20, var3 - var_ad1, 0, var6, graphics, 0, -1, npcPhraseLinesStartsEnds[line]);
+                var3 = var3 + npcPhraseLinesStartsEnds[line].size() * var9 + var9 / 2;
                 if (var12 && var5 == Scripts.selectedAnswer && !var_b3a && !var0) {
-                    var_ad1 = var10 + npcPhraseLines[var7].size() * var9 - var_a97;
+                    var_ad1 = var10 + npcPhraseLinesStartsEnds[line].size() * var9 - var_a97;
                     var_b3a = true;
                     return;
                 }
@@ -753,20 +753,20 @@ public final class PlayerHUD {
     private static void drawLocationName() {
         int y = SCREEN_HEIGHT - 2 * ResourseManager.getRectangleHeight(8) 
                 - TextCreator.getSymbolHeight(0) 
-                * (textLinesPos.size() + 1);
+                * (textLinesStartsEnds.size() + 1);
         //Названия сюж.локаций начинаются с 354 индекса
         int locationName = Scripts.getLocationNameId((byte) GameScene.nextLocation) + 354;
         //Если мы ещё не покинули место крушения вертолёта
         if (GameScene.nextLocation == 0) {
             //385 = Место крушения
-            textLinesPos = TextCreator.splitOnLines(385, TEXT_TARGET_WIDTH, 0);
+            textLinesStartsEnds = TextCreator.splitOnLines(385, TEXT_TARGET_WIDTH, 0);
             TextCreator.drawReplicInsideFrame(385, 
-                    15, y, 0, 0, graphics, 0, -1, textLinesPos);
+                    15, y, 0, 0, graphics, 0, -1, textLinesStartsEnds);
         } 
         //Обычная процедура отрисовки названия локации
         else if (locationName >= 354) {
             TextCreator.drawReplicInsideFrame(locationName, 
-                    15, y, 0, 0, graphics, 0, -1, textLinesPos);
+                    15, y, 0, 0, graphics, 0, -1, textLinesStartsEnds);
         } 
         //По сути-то, костыль для названия первого лагеря, 
         //срабатывающий из всех трёх
@@ -774,9 +774,9 @@ public final class PlayerHUD {
                 || GameScene.nextLocation == 6 
                 || GameScene.nextLocation == 12) {
             //386 id: Лагерь
-            textLinesSpecial = TextCreator.splitOnLines(386, TEXT_TARGET_WIDTH, 0);
+            textLinesSpecialStartsEnds = TextCreator.splitOnLines(386, TEXT_TARGET_WIDTH, 0);
             TextCreator.drawReplicInsideFrame(386, 
-                    15, y, 0, 0, graphics, 0, -1, textLinesSpecial);
+                    15, y, 0, 0, graphics, 0, -1, textLinesSpecialStartsEnds);
         }
     }
 
@@ -806,13 +806,13 @@ public final class PlayerHUD {
     //  ИНТРО
     //Подготовка
     public static void prepareIntroText() {
-        introTextLines = TextCreator.splitOnLines(ModChanges.startingintroduction, 135, 0);
-        textTimeToRoll = (introTextLines.size() - 1) * 2000;
+        introTextLinesStartsEnds = TextCreator.splitOnLines(ModChanges.startingintroduction, 135, 0);
+        textTimeToRoll = (introTextLinesStartsEnds.size() - 1) * 2000;
         textRollsInterval = (int) System.currentTimeMillis() - 3000;
     }
     //Отрисовка
     private static void drawIntroText() {
-        int textHeight = introTextLines.size() * TextCreator.getSymbolHeight(0);
+        int textHeight = introTextLinesStartsEnds.size() * TextCreator.getSymbolHeight(0);
         int y = 70;
         int time = (int) (System.currentTimeMillis() - (long) textRollsInterval);
         boolean timeRanOut = false;
@@ -837,7 +837,7 @@ public final class PlayerHUD {
         ResourseManager.drawUserInterfaceItems(graphics, 44, 0, 0);
         graphics.setClip(58, 70, 135, 185);
         TextCreator.drawReplicInsideFrame(ModChanges.startingintroduction, 
-                58, y, 0, 0, graphics, 0, -1, introTextLines);
+                58, y, 0, 0, graphics, 0, -1, introTextLinesStartsEnds);
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
@@ -932,8 +932,8 @@ public final class PlayerHUD {
         yPlayerAnswersStart = SCREEN_HEIGHT / 2 + 12;
         var_a97 = yPlayerAnswersStart + 92;
         TEXT_TARGET_WIDTH = SCREEN_WIDTH / 2;
-        textLinesPos = new Vector();
-        textLinesSpecial = new Vector();
-        introTextLines = new Vector();
+        textLinesStartsEnds = new Vector();
+        textLinesSpecialStartsEnds = new Vector();
+        introTextLinesStartsEnds = new Vector();
     }
 }

@@ -39,7 +39,7 @@ public final class ItemDescriptionScreen implements Screen {
     //ЗДОРОВЬЕ:
     //СИЛА:
     public byte[][] statsClosingCharacters;//%%%%%%%%%__
-    public static Vector linedTextVector = new Vector();
+    public static Vector textLinesStartsEnds = new Vector();
 
     public final void resetVariables() {
         this.nameText = -1;
@@ -157,12 +157,12 @@ public final class ItemDescriptionScreen implements Screen {
         if (replicNumber == -1) {
             return new int[]{0, 0};
         } else {
-            linedTextVector = TextCreator.splitOnLines(replicNumber, this.frameWidth, color);
+            textLinesStartsEnds = TextCreator.splitOnLines(replicNumber, this.frameWidth, color);
             this.singleLineHeight = TextCreator.getSymbolHeight(color) + 0;
             MasterCanvas.graphics.setClip(this.xStart, this.yStart, this.frameWidth, this.maxTextWindowCapacity);
             int[] var5 = new int[2];
-            TextCreator.drawReplicInsideFrame(replicNumber, fromLeftToRight ? this.xStart : this.xStart + this.frameWidth, this.yStart + yOffsetLocal + this.linesCounter * this.singleLineHeight + this.oldYoffset - yOffset, 0, color, MasterCanvas.graphics, 0, -1, linedTextVector);
-            var5[0] = TextCreator.getSymbolHeight(color) * linedTextVector.size();
+            TextCreator.drawReplicInsideFrame(replicNumber, fromLeftToRight ? this.xStart : this.xStart + this.frameWidth, this.yStart + yOffsetLocal + this.linesCounter * this.singleLineHeight + this.oldYoffset - yOffset, 0, color, MasterCanvas.graphics, 0, -1, textLinesStartsEnds);
+            var5[0] = TextCreator.getSymbolHeight(color) * textLinesStartsEnds.size();
             return var5;
         }
     }

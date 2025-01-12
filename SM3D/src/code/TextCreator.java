@@ -361,42 +361,42 @@ public final class TextCreator {
         return finalText;
     }
 
-    public static int drawColoredText(short[] symbol_massive, int x_dest, int y_dest, int anchor) {
-        int var4;
+    public static int drawColoredText(short[] text, int x, int y, int anchor) {
+        int textWidth;
         switch (anchor) {
             case 3:
-                var4 = 0;
+                textWidth = 0;
 
-                int var5;
-                for (var5 = 0; var5 < symbol_massive.length; ++var5) {
-                    var4 += ResourseManager.ReturnWidthOfInterfaceImage(symbol_massive[var5]);
+                int symbol;
+                for (symbol = 0; symbol < text.length; ++symbol) {
+                    textWidth += ResourseManager.ReturnWidthOfInterfaceImage(text[symbol]);
                 }
 
-                x_dest -= var4 / 2;
-                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, symbol_massive[0], x_dest, y_dest, anchor);
+                x -= textWidth / 2;
+                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[0], x, y, anchor);
 
-                for (var5 = 1; var5 < symbol_massive.length; ++var5) {
-                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, symbol_massive[var5], x_dest += ResourseManager.ReturnWidthOfInterfaceImage(symbol_massive[var5 - 1]) + 1, y_dest, anchor);
+                for (symbol = 1; symbol < text.length; ++symbol) {
+                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[symbol], x += ResourseManager.ReturnWidthOfInterfaceImage(text[symbol - 1]) + 1, y, anchor);
                 }
 
-                return ResourseManager.ReturnHeightOfInterfaceImage(symbol_massive[0]);
+                return ResourseManager.ReturnHeightOfInterfaceImage(text[0]);
             case 6:
-                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, symbol_massive[0], x_dest, y_dest, anchor);
+                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[0], x, y, anchor);
 
-                for (var4 = 1; var4 < symbol_massive.length; ++var4) {
-                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, symbol_massive[var4], x_dest += ResourseManager.ReturnWidthOfInterfaceImage(symbol_massive[var4 - 1]) + 1, y_dest, anchor);
+                for (textWidth = 1; textWidth < text.length; ++textWidth) {
+                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[textWidth], x += ResourseManager.ReturnWidthOfInterfaceImage(text[textWidth - 1]) + 1, y, anchor);
                 }
 
-                return ResourseManager.ReturnHeightOfInterfaceImage(symbol_massive[0]);
+                return ResourseManager.ReturnHeightOfInterfaceImage(text[0]);
             case 10:
-                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, symbol_massive[symbol_massive.length - 1], x_dest, y_dest, anchor);
+                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[text.length - 1], x, y, anchor);
 
-                for (var4 = symbol_massive.length - 2; var4 >= 0; --var4) {
-                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, symbol_massive[var4], x_dest -= ResourseManager.ReturnWidthOfInterfaceImage(symbol_massive[var4 + 1]) + 1, y_dest, anchor);
+                for (textWidth = text.length - 2; textWidth >= 0; --textWidth) {
+                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[textWidth], x -= ResourseManager.ReturnWidthOfInterfaceImage(text[textWidth + 1]) + 1, y, anchor);
                 }
         }
 
-        return ResourseManager.ReturnHeightOfInterfaceImage(symbol_massive[0]);
+        return ResourseManager.ReturnHeightOfInterfaceImage(text[0]);
     }
 
     public static void setColoredDigitsId() {
@@ -454,12 +454,16 @@ public final class TextCreator {
         return finalText;
     }
 
+    /** Текст делится на строчки, с учётом переносов и пробелов. В выводе
+     получается вектор типа: (номер первого символа линии 1;
+     номер последнего символа линии 1;)
+     (номер первого символа линии 2 и т.д.*/
     public static Vector splitOnLines(int lineId, int targetWidth, int color) {
         Vector lines = new Vector();
         //boolean var5 = false;
         int textWidth = 1;
         int firstChar = 0;
-        boolean var10 = false;
+        boolean lineBreaksAfterFirstWord = false;
 
         while (true) {
             int distToSpace = getDistanceToFirstSymbol(lineId, -1, textWidth);
@@ -475,34 +479,34 @@ public final class TextCreator {
                 textWidth = distBeforeInterrupt;
             }
 
-            int[] var9;
-            if (!var10 && getWideLinePartWidth(color, lineId, firstChar, distBeforeInterrupt - 1) <= targetWidth) {
+            int[] symbolAdrStartEnd;
+            if (!lineBreaksAfterFirstWord && getWideLinePartWidth(color, lineId, firstChar, distBeforeInterrupt - 1) <= targetWidth) {
                 textWidth = distBeforeInterrupt + 1;
             } else {
-                var9 = new int[2];
-                var9[0] = firstChar;
-                var9[1] = textWidth - firstChar;
-                lines.addElement(var9);
+                symbolAdrStartEnd = new int[2];
+                symbolAdrStartEnd[0] = firstChar;
+                symbolAdrStartEnd[1] = textWidth - firstChar;
+                lines.addElement(symbolAdrStartEnd);
                 firstChar = textWidth++;
-                if (var10) {
+                if (lineBreaksAfterFirstWord) {
                     textWidth = distBeforeInterrupt + 1;
                 }
 
-                var10 = false;
+                lineBreaksAfterFirstWord = false;
             }
 
             if (distBeforeInterrupt == getLineLength(lineId)) {
                 if (distBeforeInterrupt - firstChar > 0) {
-                    (var9 = new int[2])[0] = firstChar;
-                    var9[1] = distBeforeInterrupt - firstChar;
-                    lines.addElement(var9);
+                    (symbolAdrStartEnd = new int[2])[0] = firstChar;
+                    symbolAdrStartEnd[1] = distBeforeInterrupt - firstChar;
+                    lines.addElement(symbolAdrStartEnd);
                 }
 
                 return lines;
             }
 
             if (distToLineBreak > 0 && distToLineBreak < distToSpace) {
-                var10 = true;
+                lineBreaksAfterFirstWord = true;
             }
         }
     }
@@ -551,27 +555,27 @@ public final class TextCreator {
                 x, y, anchor);
     }
 
-    public static void drawReplicInsideFrame(int lineId, int x, int y, int anchor, int color, Graphics graph, int startLine, int lineCount, Vector linesPos) {
+    public static void drawReplicInsideFrame(int lineId, int x, int y, int anchor, int color, Graphics graph, int startLine, int lineCount, Vector linesStartsEnds) {
         if (lineCount == -1) {
-            lineCount = linesPos.size();
+            lineCount = linesStartsEnds.size();
         }
 
         int xFinal = x;
         int yFinal = y;
         if ((anchor & 32) == 32) {
-            yFinal = y - linesPos.size() * getSymbolHeight(color);
+            yFinal = y - linesStartsEnds.size() * getSymbolHeight(color);
         } else if ((anchor & 2) == 2) {
-            yFinal = y - linesPos.size() * getSymbolHeight(color) / 2;
+            yFinal = y - linesStartsEnds.size() * getSymbolHeight(color) / 2;
         }
 
-        Object var11 = null;
-        int var12;
-        if ((var12 = startLine + lineCount) > linesPos.size()) {
-            var12 = linesPos.size();
+        //Object var11 = null;
+        int currentLine;
+        if ((currentLine = startLine + lineCount) > linesStartsEnds.size()) {
+            currentLine = linesStartsEnds.size();
         }
 
-        for (int var13 = startLine; var13 < var12; ++var13) {
-            int[] lineSymbolOffset = (int[]) linesPos.elementAt(var13);
+        for (int drawingLine = startLine; drawingLine < currentLine; ++drawingLine) {
+            int[] lineSymbolOffset = (int[]) linesStartsEnds.elementAt(drawingLine);
             drawPartOfTextByAnchorWrapper(lineId, lineSymbolOffset[0], lineSymbolOffset[1], xFinal, yFinal, anchor, color, graph);
             yFinal += getSymbolHeight(color);
         }
