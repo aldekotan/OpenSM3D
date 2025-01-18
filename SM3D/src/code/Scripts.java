@@ -220,10 +220,10 @@ public final class Scripts {
     public static short var_21a7 = 1000;
     public static int var_21d2;
 
-    public static boolean var_2204;
+    public static boolean playerCanLeaveLevel;
     public static int MoneyTaken;
     public static boolean var_228e;
-    public static boolean var_22f1;
+    public static boolean botHitPlayerBefore;
     public static int[] var_2314;
     public static byte[] var_2326;
     public static byte var_2367;
@@ -247,6 +247,8 @@ public final class Scripts {
     public static short[] stashItems;
     public static int openedActivableObjId;
     public static short[] traderItems;
+    
+    private static final short SMALL_MED = 101;
 
     private static void resetActorQuestAndDialogProgress() {
         batyaDialogState = 0;
@@ -306,9 +308,6 @@ public final class Scripts {
         playerBulletProtection = 0;
         svistunQuestCompleted = false;
         capItemGot = false;
-        /*//Для тестов
-        playerMaxWeight = 350;
-        //*/
         inventoryItems = new short[100];
         equipmentSlots = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
         locationInventoryItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
@@ -493,7 +492,7 @@ public final class Scripts {
 
     private static void NPCShootPlayer() //Урон по игроку огнестрелом
     {                                    //с определённым шансом
-        if (GameScene.botIsShooting && GameScene.activeBotId != -1 && !GameScene.showFinalDialog && !var_22f1) {
+        if (GameScene.botIsShooting && GameScene.activeBotId != -1 && !GameScene.showFinalDialog && !botHitPlayerBefore) {
             byte damage = 0;
             boolean hit_bool = false;
             byte var2;
@@ -516,7 +515,7 @@ public final class Scripts {
             }
 
             if (hit_bool) {
-                CauseDamageToActor(damage - damage * playerBulletProtection / 100);
+                damageToPlayer(damage - damage * playerBulletProtection / 100);
             }
         }
 
@@ -549,7 +548,7 @@ public final class Scripts {
         }
 
         if (GameScene.currentGameState == 2) {
-            ActorLevelUpIfItNeed();
+            updatePlayerLevel();
             botUnderCursor = GameScene.processAim();
             SoundAndVibro.stopTooLongVibro();
             NPCShootPlayer();
@@ -1046,7 +1045,7 @@ public final class Scripts {
                     ItemWalkieTalkieInInventaryBool = true;
                     dropItem(i);
                 } else {
-                    var_2204 = true;
+                    playerCanLeaveLevel = true;
                     dropItem(i);
                 }
                 break;
@@ -1275,7 +1274,7 @@ public final class Scripts {
                 }
         }
 
-        ActorAllCharControll();
+        limitPlayerStats();
     }
 
     //Экипировка брони и артефактов
@@ -1397,7 +1396,7 @@ public final class Scripts {
                     changePlayerStatsByItem(item, -1);
             }
 
-            ActorAllCharControll();
+            limitPlayerStats();
         }
     }
 
@@ -1416,7 +1415,7 @@ public final class Scripts {
         dropItem(item);
     }
 
-    private static void ActorAllCharControll() {
+    private static void limitPlayerStats() {
         playerHealth = (short) Math.min(playerHealth, playerMaxHealth);
         playerAccuracy = (byte) Math.max(0, playerAccuracy);
         playerMaxWeight = (short) Math.max(0, playerMaxWeight);
@@ -1533,7 +1532,7 @@ public final class Scripts {
 
     }
 
-    private static void ActorLevelUpIfItNeed() {
+    private static void updatePlayerLevel() {
         if (playerExp >= 150 && playerExp < 210) {
             playerLevel = (short) Math.max(2, playerLevel);
         } else if (playerExp >= 210 && playerExp < 290) {
@@ -1592,18 +1591,19 @@ public final class Scripts {
         }
     }
 
-    public static void CauseDamageToActor(int Hitpoints) //Нанести повреждение персонажу
+    /**Нанести повреждение персонажу*/
+    public static void damageToPlayer(int value)
     {
-        var_22f1 = true;
+        botHitPlayerBefore = true;
         PlayerHUD.playerDamaged = true;
         PlayerHUD.timeToDisplayDamageIndicator = (int) GameScene.gameTimeUnpaused + 500;
-        playerHealth = (short) (playerHealth - Hitpoints);
+        playerHealth = (short) (playerHealth - value);
         SoundAndVibro.vibrate(200);
     }
 
     public static void sub_72f() {
         GameScene.setDialogWindowState((short) 5);
-        GoToNextLocation();
+        finishCurrentTask();
     }
 
     private static void playerControlCheck() {
@@ -1688,7 +1688,7 @@ public final class Scripts {
                         if (ItemWalkieTalkieInInventaryBool) {
                             useItem((short) 200);
                         } else {
-                            if (var_2204) {
+                            if (playerCanLeaveLevel) {
                                 sub_72f();
                                 return;
                             }
@@ -1751,7 +1751,7 @@ public final class Scripts {
     }
 
     private static void addMarkToPDA(byte var0) {
-        var_2204 = true;
+        playerCanLeaveLevel = true;
         GameScene.locationTaskMark[var0] = true;
     }
 
@@ -1779,10 +1779,10 @@ public final class Scripts {
         return !GameScene.locationCompleted[var0] && (GameScene.locationCampMark[var0] || GameScene.locationTaskMark[var0]) || GameScene.currentLocation == var0;
     }
 
-    private static void GoToNextLocation() {
+    private static void finishCurrentTask() {
         PlayerHUD.textLinesStartsEnds = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.currentLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
         GameScene.nextLocation = GameScene.currentLocation;
-        if (var_2204) {
+        if (playerCanLeaveLevel) {
             GameScene.locationCampMark[GameScene.currentLocation] = GameScene.currentLocation == 1 || GameScene.currentLocation == 6 || GameScene.currentLocation == 12;
             GameScene.locationCompleted[GameScene.currentLocation] = !GameScene.locationCampMark[GameScene.currentLocation];
             if (GameScene.currentLocation == StoryLocationMassive[0]) {
@@ -2776,7 +2776,7 @@ public final class Scripts {
                             }
 
                             GameScene.setActiveObjState(var_23b6, (short) 0);
-                            var_2204 = true;
+                            playerCanLeaveLevel = true;
                             return;
                         }
 
@@ -2786,7 +2786,7 @@ public final class Scripts {
                             addItemToInventory((short) 141);
                             addItemToInventory((short) 124);
                             GameScene.setActiveObjState(var_23b6, (short) 0);
-                            var_2204 = true;
+                            playerCanLeaveLevel = true;
                         }
                     }
                 }
@@ -2948,14 +2948,14 @@ public final class Scripts {
             if (number < 50 || number > 58) {
                 if (number <= 126 && number != 100) {
                     if (number == 25) {
-                        stashItems = new short[]{(short) 126, (short) 107};
+                        stashItems = new short[]{(short) 126, (short) 107};//Пустышка и магаз ак
                         sub_99d();
                         return;
                     }
 
                     if (number == 26) {
-                        addItemToInventory((short) 127);
-                        addItemToInventory((short) 140);
+                        addItemToInventory((short) 127);//ключ от двери
+                        addItemToInventory((short) 140);//деньги 100
                         GameScene.setActiveObjState(type, (short) 0);
                         return;
                     }
@@ -2971,7 +2971,7 @@ public final class Scripts {
             }
 
             if (number == 50) {
-                var_2204 = true;
+                playerCanLeaveLevel = true;
                 stashItems = new short[]{(short) 131};
                 sub_99d();
             }
@@ -2983,8 +2983,8 @@ public final class Scripts {
             }
 
             if (number == 52) {
-                addItemToInventory((short) 127);
-                stashItems = new short[]{(short) 123};
+                addItemToInventory((short) 127);//ключ от двери
+                stashItems = new short[]{(short) 123};//вспышка
                 sub_99d();
             }
 
@@ -3004,7 +3004,7 @@ public final class Scripts {
             }
 
             if (number == 56) {
-                var_2204 = true;
+                playerCanLeaveLevel = true;
                 stashItems = new short[]{(short) 125, (short) 102};
                 sub_99d();
             }
@@ -3015,7 +3015,7 @@ public final class Scripts {
             }
 
             if (number == 58) {
-                var_2204 = true;
+                playerCanLeaveLevel = true;
                 GameScene.setActiveObjState(type, (short) 0);
             }
         } else {

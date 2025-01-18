@@ -366,7 +366,7 @@ public final class GameScene {
     }
 
     private static void resetLocation() {
-        Scripts.var_2204 = false;
+        Scripts.playerCanLeaveLevel = false;
         Scripts.locationInventoryItems = new short[]{(short) -1, (short) -1, (short) -1, (short) -1, (short) -1};
         botActive = new boolean[10];
         botKilled = new boolean[15][10];
@@ -1525,7 +1525,7 @@ public final class GameScene {
         if(!Scripts.IsAntiradIsUsed) {
             int hitpoints = damageZonesTypes[currentRoom] > 0 ? 7 : 4;//Радиация или аномалия, сильный или слабый урон. Что есть что?
             damageEffect = true;
-            Scripts.CauseDamageToActor(hitpoints - hitpoints * ((Scripts.playerAnomalyResistance + Scripts.playerRadiationResistance) / 2) / 100);
+            Scripts.damageToPlayer(hitpoints - hitpoints * ((Scripts.playerAnomalyResistance + Scripts.playerRadiationResistance) / 2) / 100);
         }
     }
 
@@ -1540,7 +1540,6 @@ public final class GameScene {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -2015,7 +2014,7 @@ public final class GameScene {
                         var2 = botSettings[currentRoom][var3][5];
                 }
 
-                Scripts.var_22f1 = false;
+                Scripts.botHitPlayerBefore = false;
                 botCurrentPosState[var3] = var5;
                 setBotAngles(var3, currentRoom, var5);
                 activeBotId = var3;

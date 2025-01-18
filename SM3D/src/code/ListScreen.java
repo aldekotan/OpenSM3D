@@ -141,7 +141,7 @@ public class ListScreen extends MenuScreen {
             TextCreator.drawReplicInsideFrame(this.optionsTextId[item], AllScreens.var_4ba + 2, MenuScreen.textClipY + this.i_var_3 + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + var3, 0, 0, MasterCanvas.graphics, 0, -1, this.textLinesStartsEnds[item]);
         } else {
             byte var2 = 0;
-            if (super.drawingScreenId == 2 && (item == 5 && !Scripts.var_2204 || item == 6 && Scripts.var_2367 == 0)) {
+            if (super.drawingScreenId == 2 && (item == 5 && !Scripts.playerCanLeaveLevel || item == 6 && Scripts.var_2367 == 0)) {
                 var2 = 1;
             }
 
@@ -295,7 +295,7 @@ public class ListScreen extends MenuScreen {
                                 ResourseManager.runGarbageCollector();
                                 return;
                             case 5:
-                                if (Scripts.var_2204) {
+                                if (Scripts.playerCanLeaveLevel) {
                                     Scripts.sub_72f();
                                     Main.main.setScreen(this.screenByOptionId[this.selectedIndex], this.screenIdByOptionId[this.selectedIndex]);
                                     return;

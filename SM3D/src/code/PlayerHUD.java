@@ -375,7 +375,7 @@ public final class PlayerHUD {
         short rightSoftText;
         if (Scripts.ItemWalkieTalkieInInventaryBool) {
             rightSoftText = 388;//рация
-        } else if (Scripts.var_2204) {
+        } else if (Scripts.playerCanLeaveLevel) {
             rightSoftText = 38;//карта
         } else {
             rightSoftText = 389;//оружие
