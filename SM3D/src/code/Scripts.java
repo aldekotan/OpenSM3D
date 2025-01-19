@@ -332,7 +332,7 @@ public final class Scripts {
         addItemToInventory((short) 116); //В оригинале выдаётся только пистолет
         /*addItemToInventary((short) 117);
         addItemToInventary((short) 118);
-        addItemToInventary((short) 119);
+        addItemToInventory((short) 119);
         //add artifacts
         addItemToInventary((short) 120);
         addItemToInventary((short) 121);
