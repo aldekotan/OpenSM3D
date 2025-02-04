@@ -159,9 +159,9 @@ public final class GameScene {
     //x [0]
     //y [1]
     //z [2]
-    //?? unused [3]
+    //rotation x [3] (was unused in m3g)
     //rotation y [4]
-    //?? unused [5]
+    //rotation z [5] (was unused in m3g)
     //model id [6]
     //activable object id (0 is unusable) [7]
     public static boolean[] activableObjIsUnderCursor;
@@ -176,10 +176,14 @@ public final class GameScene {
     //[roomId][bot][settings]
     //x, z [0,1] [2,3] [4,5]
     //y [6]
-    //rotation ?? [7]
-    //position number ?? wtf [8]
-    //idk.. ?? [9+]
-    //idk.. ?? [14]
+    //rotation y [7]
+    //door id [8]
+    //is state 0 can be selected [9] (second x and z, crouching)
+    //is state 1 can be selected [10] (second x and z, stading)
+    //is state 2 can be selected [11] (first x and z, stading)
+    //is state 3 can be selected [12] (third x and z, stading)
+    //is state 4 can be selected [13] (third x and z, crouching)
+    //bot type [14]
     public static boolean[][] botKilled = new boolean[15][10];
     //[roomId][bot]
     private static float[][] botPositions = new float[10][3];
@@ -197,7 +201,7 @@ public final class GameScene {
     public static boolean[] botIsUnderCursor;
     public static float[] botYAngle, botMaxXAngle, botMinXAngle;
     public static int activeBotId;
-    private static boolean activeBotHiding;
+    private static boolean activeBotCrouching;
     public static int botIdUndercursor; //not sure
     private static byte[] botCurrentPosState;
 	
@@ -748,7 +752,7 @@ public final class GameScene {
                     meshSettings[roomId][i][1] = dis.readInt() / 100.0F;
                     meshSettings[roomId][i][2] = dis.readInt() / 100.0F;
                     
-                    //rot x, rot y, rot z
+                    //rotation x, y, z
                     meshSettings[roomId][i][3] = dis.readInt() / 100.0F;
                     meshSettings[roomId][i][4] = dis.readInt() / 100.0F;
                     meshSettings[roomId][i][5] = dis.readInt() / 100.0F;
@@ -769,17 +773,15 @@ public final class GameScene {
                     activableObjSettings[roomId][i][1] = dis.readInt() / 100.0F;
                     activableObjSettings[roomId][i][2] = dis.readInt() / 100.0F;
                     
-                    //unused ??
+                    //rotation x, y, z
                     activableObjSettings[roomId][i][3] = dis.readInt() / 100.0F;
-                    
-                    //rotation y
                     activableObjSettings[roomId][i][4] = dis.readInt() / 100.0F;
-                    
-                    //unused ??
                     activableObjSettings[roomId][i][5] = dis.readInt() / 100.0F;
                     
-                    //model id, activable object id
+                    //model id
                     activableObjSettings[roomId][i][6] = dis.readUnsignedByte();
+					
+					//activable object id
                     activableObjSettings[roomId][i][7] = dis.readUnsignedByte();
                 }
 
@@ -787,14 +789,34 @@ public final class GameScene {
                 botsCount[roomId] = dis.readByte();
 
                 for(int i = 0; i < botsCount[roomId]; i++) {
-                    //uuh
-                    for(int t = 0; t < 15; ++t) {
-                        if(t < 8) {
-                            botSettings[roomId][i][t] = dis.readInt() / 100.0F;
-                        } else {
-                            botSettings[roomId][i][t] = dis.readByte();
-                        }
-                    }
+					//main x and z (used when bot hides or when bot shoots from pos 2)
+					botSettings[roomId][i][0] = dis.readInt() / 100.0F;
+					botSettings[roomId][i][1] = dis.readInt() / 100.0F;
+					//second x, z
+					botSettings[roomId][i][2] = dis.readInt() / 100.0F;
+					botSettings[roomId][i][3] = dis.readInt() / 100.0F;
+					//third x, z
+					botSettings[roomId][i][4] = dis.readInt() / 100.0F;
+					botSettings[roomId][i][5] = dis.readInt() / 100.0F;
+					
+					//y
+					botSettings[roomId][i][6] = dis.readInt() / 100.0F;
+					
+					//rotation y
+					botSettings[roomId][i][7] = dis.readInt() / 100.0F;
+
+					//bot door id
+					botSettings[roomId][i][8] = dis.readByte();
+					
+					//is hiding position 0 1 2 3 4 can be selected (0 / 1)
+					botSettings[roomId][i][9] = dis.readByte(); //second x and z, crouching
+					botSettings[roomId][i][10] = dis.readByte(); //second x and z, stading
+					botSettings[roomId][i][11] = dis.readByte(); //first x and z, stading
+					botSettings[roomId][i][12] = dis.readByte(); //third x and z, stading
+					botSettings[roomId][i][13] = dis.readByte(); //third x and z, crouching
+					
+					//bot type (from 0 to 12)
+					botSettings[roomId][i][14] = dis.readByte();
                 }
 
                 //Items for killing everyone in room
@@ -1194,13 +1216,19 @@ public final class GameScene {
 			float y = activableObjSettings[roomId][i][1];
 			float z = activableObjSettings[roomId][i][2];
 			
+			float rotX = activableObjSettings[roomId][i][3];
 			float rotY = activableObjSettings[roomId][i][4];
+			float rotZ = activableObjSettings[roomId][i][5];
 			
             if(activableObjMeshes[i] != null) {
-                activableObjMeshes[i].setOrientation(rotY, 0.0F, 1.0F, 0.0F);
+                activableObjMeshes[i].setOrientation(rotX, 1.0F, 0.0F, 0.0F);
+                activableObjMeshes[i].preRotate(rotZ, 0.0F, 0.0F, 1.0F);
+                activableObjMeshes[i].preRotate(rotY, 0.0F, 1.0F, 0.0F);
                 activableObjMeshes[i].setTranslation(x, y, z);
             } else if(staticBotMdlGroup[i] != null) {
-                staticBotMdlGroup[i].setOrientation(rotY, 0.0F, 1.0F, 0.0F);
+                staticBotMdlGroup[i].setOrientation(rotX, 1.0F, 0.0F, 0.0F);
+                staticBotMdlGroup[i].preRotate(rotZ, 0.0F, 0.0F, 1.0F);
+                staticBotMdlGroup[i].preRotate(rotY, 0.0F, 1.0F, 0.0F);
                 staticBotMdlGroup[i].setTranslation(x, y, z);
             }
         }
@@ -1335,10 +1363,10 @@ public final class GameScene {
         float var6 = cameraPos[1];
         float var7 = cameraPos[2];
         float var9 = cameraPos[1] - 1.6F;
-        activeBotHiding = botPosId == 0 || botPosId == 4;
+        activeBotCrouching = botPosId == 0 || botPosId == 4;
         float var11 = 0.0F;
-        float var12 = botSettings[roomId][botId][6] + (activeBotHiding ? 1.0999999F : 1.8F);
-        float var13 = activeBotHiding ? botSettings[roomId][botId][6] : botSettings[roomId][botId][6] + 0.9F;
+        float var12 = botSettings[roomId][botId][6] + (activeBotCrouching ? 1.0999999F : 1.8F);
+        float var13 = activeBotCrouching ? botSettings[roomId][botId][6] : botSettings[roomId][botId][6] + 0.9F;
         float var14 = 0.0F;
         switch(botPosId) {
             case 0:
@@ -1576,7 +1604,7 @@ public final class GameScene {
                 if(gameTimeUnpaused - (long) aimAssistStartTime < 300L) {
 					//interpolate to bot angle
                     cameraYRot = aimAssistOrigYRot + (botYAngle[activeBotId] - aimAssistOrigYRot) * (gameTimeUnpaused - aimAssistStartTime) / 300.0F;
-                    float newXRot = botMaxXAngle[activeBotId] - (botMaxXAngle[activeBotId] - botMinXAngle[activeBotId]) / (float) (activeBotHiding ? 4 : 2);
+                    float newXRot = botMaxXAngle[activeBotId] - (botMaxXAngle[activeBotId] - botMinXAngle[activeBotId]) / (float) (activeBotCrouching ? 4 : 2);
                     cameraXRot = aimAssistOrigXRot + (newXRot - aimAssistOrigXRot) * (gameTimeUnpaused - aimAssistStartTime) / 300.0F;
                 } else {
                     aimAssistStartTime = -1;
@@ -1985,7 +2013,7 @@ public final class GameScene {
                 }
             }
 
-            byte var5 = (byte) MathUtils.getRandomNumber(4);
+            byte var5 = (byte) MathUtils.getRandomNumber(5);
             onlyOneBotLeft = var0 - botsKilledCount == 1;
             byte botId;
             if(onlyOneBotLeft) {

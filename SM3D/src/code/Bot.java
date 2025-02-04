@@ -83,6 +83,7 @@ public final class Bot //Персонажи, модели, освещение, �
 	private static void setBotType(int botType, int botId) {
 		int weaponId;
 		
+		//0 is minimal 12 is max
 		if(botType == 0) {
 			//tutorial bandits
 			weaponId = 22;
