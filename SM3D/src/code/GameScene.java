@@ -101,14 +101,15 @@ public final class GameScene {
     private static float walkPointYRot;
 	
     private static byte[] walkPointsCount = new byte[15];
-    private static float[][][] walkPoints = new float[15][4][5];
+    private static float[][][] walkPoints = new float[15][4][6];
     //[roomId][walkPoint][settings]
     
-    //?? [0]
-    //x [1]
-    //z [2]
-    //walk to time
-    //walk from time
+    //door 1 id [0]
+	//door 2 id [1]
+    //x [2]
+    //z [3]
+    //walk time to door 2 [4]
+    //walk time to door 1 [5]
     
     private static byte[] bckMeshesCount = new byte[15];
     public static Mesh[] bckMeshes;
@@ -692,20 +693,21 @@ public final class GameScene {
                     }
                 }
 
-                //??
+                //Walk points
                 walkPointsCount[roomId] = dis.readByte();
 
                 for(int i = 0; i < walkPointsCount[roomId]; i++) {
-                    //??
-                    walkPoints[roomId][i][0] = dis.readByte() + dis.readByte();
+                    //door 1 and 2
+                    walkPoints[roomId][i][0] = dis.readByte();
+                    walkPoints[roomId][i][1] = dis.readByte();
 
                     //x, z
-                    walkPoints[roomId][i][1] = dis.readInt() / 100.0F;
                     walkPoints[roomId][i][2] = dis.readInt() / 100.0F;
+                    walkPoints[roomId][i][3] = dis.readInt() / 100.0F;
                     
-                    //walk to time, walk from time
-                    walkPoints[roomId][i][3] = dis.readByte();
+                    //walk time to door 2 and 1
                     walkPoints[roomId][i][4] = dis.readByte();
+                    walkPoints[roomId][i][5] = dis.readByte();
                 }
 
                 //Background meshes
@@ -883,7 +885,7 @@ public final class GameScene {
             }
 
             for(int i = 0; i < walkPointsCount[roomdId]; ++i) {
-                walkPoints[roomdId][i][2] *= -1;
+                walkPoints[roomdId][i][3] *= -1;
             }
 
             for(int i = 0; i < lightsCount[roomdId]; ++i) {
@@ -1436,8 +1438,8 @@ public final class GameScene {
         float var7 = walkPointTargetZ;
         float var8 = doorSettings[currentRoom][walkCurrentDoorId][0];
         float var9 = doorSettings[currentRoom][walkCurrentDoorId][2];
-        float var10 = doorSettings[currentRoom][walkNextDoorId - 1][0];
-        float var11 = doorSettings[currentRoom][walkNextDoorId - 1][2];
+        float var10 = doorSettings[currentRoom][walkNextDoorId][0];
+        float var11 = doorSettings[currentRoom][walkNextDoorId][2];
         useThirdPerson = thirdPerson;
         float var12 = sub_5d9(var4, var5, var6, var7, var2, var3);
         float[] var13 = getVectorForCrossProduct(var4, var5, var2, var3);
@@ -1639,23 +1641,31 @@ public final class GameScene {
                     return;
                 }
 
-                for(int i = 0; i < walkPointsCount[currentRoom]; ++i) {
-                    walkNextDoorId = ((int) walkPoints[currentRoom][i][0]) - 1 - walkCurrentDoorId;
+                for(int i = 0; i < walkPointsCount[currentRoom]; i++) {
+					int door1 = ((int) walkPoints[currentRoom][i][0]) - 1;
+					int door2 = ((int) walkPoints[currentRoom][i][1]) - 1;
 					
-                    if(walkNextDoorId == nextDoorId + 1) {
-                        walkPointTargetX = walkPoints[currentRoom][i][1];
-                        walkPointTargetZ = walkPoints[currentRoom][i][2];
+					if(
+						(door1 == walkCurrentDoorId && door2 == nextDoorId) ||
+						(door2 == walkCurrentDoorId && door1 == nextDoorId)
+					) {
+						walkNextDoorId = nextDoorId;
 						
-                        if(walkNextDoorId - 1 > walkCurrentDoorId) {
-                            walkTimeToWalkPoint = (int) walkPoints[currentRoom][i][3] * 1000 / 3;
+						walkPointTargetX = walkPoints[currentRoom][i][2];
+						walkPointTargetZ = walkPoints[currentRoom][i][3];
+						
+						if(door1 == walkNextDoorId) {
+                            walkTimeToWalkPoint = (int) walkPoints[currentRoom][i][5] * 1000 / 3;
                             walkTimeToDoor = (int) walkPoints[currentRoom][i][4] * 1000 / 3;
                         } else {
                             walkTimeToWalkPoint = (int) walkPoints[currentRoom][i][4] * 1000 / 3;
-                            walkTimeToDoor = (int) walkPoints[currentRoom][i][3] * 1000 / 3;
+                            walkTimeToDoor = (int) walkPoints[currentRoom][i][5] * 1000 / 3;
                         }
 						
-                        break;
-                    }
+						System.out.println("waypoint " + i);
+						
+						break;
+					}
                 }
 
                 float[] var3 = sub_7cb(walkCurrentDoorId, levelUseThirdperson[currentLocation] == 1);
@@ -2205,8 +2215,8 @@ public final class GameScene {
 				//Walk to door
                 timeElapsed -= walkTimeToWalkPoint; //Subtract walk time to walk point
 				
-				float doorX = doorSettings[currentRoom][walkNextDoorId - 1][0];
-				float doorZ = doorSettings[currentRoom][walkNextDoorId - 1][2];
+				float doorX = doorSettings[currentRoom][walkNextDoorId][0];
+				float doorZ = doorSettings[currentRoom][walkNextDoorId][2];
 				
                 float x = walkPointTargetX + (doorX - walkPointTargetX) * (float) timeElapsed / walkTimeToDoor;
                 float y = useThirdPerson ? 0 : cameraPos[1];
