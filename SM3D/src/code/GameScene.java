@@ -228,7 +228,7 @@ public final class GameScene {
     public static byte[] objectUnusedField;
     public static String[] objectModelName;
     public static String[] objectTextureName;
-    public static byte[] objectLighstBlendMode;
+    public static byte[] objectSpriteBlendMode;
     public static byte[] objectM3GId;
     public static float[] objectScale;
     public static byte[] objectStaticBotWeaponId;
@@ -283,7 +283,7 @@ public final class GameScene {
         objectModelName = new String[127];
         objectTextureName = new String[127];
 
-        objectLighstBlendMode = new byte[127];
+        objectSpriteBlendMode = new byte[127];
         objectM3GId = new byte[127];
         objectScale = new float[127];
         objectStaticBotWeaponId = new byte[100];
@@ -622,7 +622,7 @@ public final class GameScene {
                         objectStaticBotAnimTime[objId] = dis.readByte();
                     } else {
 						//load from lights??
-                        objectLighstBlendMode[objId] = dis.readByte();
+                        objectSpriteBlendMode[objId] = dis.readByte();
                         objectM3GId[objId] = dis.readByte();
                     }
 
