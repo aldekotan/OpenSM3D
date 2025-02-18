@@ -13,19 +13,21 @@ import javax.microedition.rms.RecordStoreNotFoundException;
 
 public final class ResourseManager {
 
-    public static DataInputStream DataInputStream_Object_D = new DataInputStream(Main.main.getClass().getResourceAsStream("/d"));
-    public static Image[] interfaceImages = new Image[13];
+    public static DataInputStream data = new DataInputStream(Main.main.getClass().getResourceAsStream("/d"));
+    
     public static boolean logoImageLoaded = false;
+    public static Image[] interfaceImages = new Image[13];
+    //Параметры изображений
     public static int var_e6;
-    public static byte[] MassiveWithInterfaceImagesAdress;
-    public static short[] MassiveXsrcOfInterfaceImage;
-    public static short[] MassiveYsrcOfInterfaceImage;
-    public static short[] MassiveWidthOfInterfaceImage;
-    public static short[] MassiveHeightOfInterfaceImage;
-    public static byte[] MassiveTransfOfInterfaceImage;
-    public static short[] rectangleAdrForInterfaceMassive;
-    public static short[] MassiveX_startOfInterfaceImage;
-    public static short[] MassiveY_startOfInterfaceImage;
+    public static byte[] interfaceImageIds;
+    public static short[] interfaceImageXsrc;
+    public static short[] interfaceImageYsrc;
+    public static short[] interfaceImageWidth;
+    public static short[] interfaceImageHeight;
+    public static byte[] interfaceImageTransform;
+    public static short[] interfaceImageAdditionalIds;
+    public static short[] interfaceImageXdest;
+    public static short[] interfaceImageYdest;
     public static short[] interfacePackIds;
 
     public static void saveSettings() {
@@ -317,7 +319,7 @@ public final class ResourseManager {
     private static byte[] GetFromFileMassiveOfBytesThatLength(int length) throws IOException //Достать из файла массив битов длинной в это число
     {
         byte[] resultbytemassive = new byte[length];
-        DataInputStream_Object_D.read(resultbytemassive);
+        data.read(resultbytemassive);
         return resultbytemassive;
     }
 
@@ -326,7 +328,7 @@ public final class ResourseManager {
         short[] resultshortmassive = new short[length];
 
         for (int var2 = 0; var2 < length; ++var2) {
-            resultshortmassive[var2] = DataInputStream_Object_D.readShort();
+            resultshortmassive[var2] = data.readShort();
         }
 
         return resultshortmassive;
@@ -334,35 +336,35 @@ public final class ResourseManager {
 
     public static void DrawInterfaceImageToSelectedRegion(Graphics graphics, int element_number, int x_dest, int y_dest, int anchor) {
         if (element_number != -2) {
-            graphics.drawRegion(interfaceImages[MassiveWithInterfaceImagesAdress[element_number]], MassiveXsrcOfInterfaceImage[element_number], MassiveYsrcOfInterfaceImage[element_number], MassiveWidthOfInterfaceImage[element_number], MassiveHeightOfInterfaceImage[element_number], MassiveTransfOfInterfaceImage[element_number], x_dest, y_dest, anchor);
+            graphics.drawRegion(interfaceImages[interfaceImageIds[element_number]], interfaceImageXsrc[element_number], interfaceImageYsrc[element_number], interfaceImageWidth[element_number], interfaceImageHeight[element_number], interfaceImageTransform[element_number], x_dest, y_dest, anchor);
         }
     }
 
-    public static void drawUserInterfaceItems(Graphics graphics, int itemId, int x, int y) {//Отрисовка конкретного набора элементов!
+    public static void drawUserInterfaceItems(Graphics graphics, int itemId, int x, int y) {//Отрисовка набора изображений
         //if (item >= 300) {
         //    ModChanges.DrawModIcon(graphics, item, x_start_dest, y_start_dest);
         //} else {
-            short lastId = rectangleAdrForInterfaceMassive[itemId + 1];
+            short lastId = interfaceImageAdditionalIds[itemId + 1];
 
-            for (int firstId = rectangleAdrForInterfaceMassive[itemId]; firstId < lastId; ++firstId) {
+            for (int firstId = interfaceImageAdditionalIds[itemId]; firstId < lastId; ++firstId) {
                 short unpackedItem;
                 //Если часть интерфейса сборная - она будет меньше нуля.
                 if ((unpackedItem = interfacePackIds[firstId]) < 0) {
                     //Возвращаемся и рисуем уже готовый распакованный элемент
                     drawUserInterfaceItems(graphics, unpackedItem & 32767, 
-                            x + MassiveX_startOfInterfaceImage[firstId], 
-                            y + MassiveY_startOfInterfaceImage[firstId]);
+                            x + interfaceImageXdest[firstId], 
+                            y + interfaceImageYdest[firstId]);
                     //System.out.println("ElementNumber: "+unpackedItem+ "&32767"+ " .UI element ID:"+ (unpackedItem & 32767));
                 } else {
                     //Отрисовка распакованного элемента
-                    graphics.drawRegion(interfaceImages[MassiveWithInterfaceImagesAdress[unpackedItem]], 
-                            MassiveXsrcOfInterfaceImage[unpackedItem], 
-                            MassiveYsrcOfInterfaceImage[unpackedItem], 
-                            MassiveWidthOfInterfaceImage[unpackedItem], 
-                            MassiveHeightOfInterfaceImage[unpackedItem], 
-                            MassiveTransfOfInterfaceImage[unpackedItem], 
-                            x + MassiveX_startOfInterfaceImage[firstId], 
-                            y + MassiveY_startOfInterfaceImage[firstId], 0);
+                    graphics.drawRegion(interfaceImages[interfaceImageIds[unpackedItem]], 
+                            interfaceImageXsrc[unpackedItem], 
+                            interfaceImageYsrc[unpackedItem], 
+                            interfaceImageWidth[unpackedItem], 
+                            interfaceImageHeight[unpackedItem], 
+                            interfaceImageTransform[unpackedItem], 
+                            x + interfaceImageXdest[firstId], 
+                            y + interfaceImageYdest[firstId], 0);
                 }
             }
         //}
@@ -371,52 +373,53 @@ public final class ResourseManager {
     public static void ReadDataFromFile_D(DataInputStream datainputstream) {
         try {
             short var1;
-            MassiveWithInterfaceImagesAdress = GetFromFileMassiveOfBytesThatLength(var1 = datainputstream.readShort());
+            interfaceImageIds = GetFromFileMassiveOfBytesThatLength(var1 = datainputstream.readShort());
             //System.out.println("MassiveWithInterfaceImagesAdress:"); //
             //for(int var6 = 0; var6<=127; ++var6) //
             //{ 
             //    System.out.print(var6 + ":[" + MassiveWithInterfaceImagesAdress[var6] + "] "); //
             //}
             //System.out.println();
-            MassiveXsrcOfInterfaceImage = GetFromFileMassiveOfShortsThatLength(var1);
+            interfaceImageXsrc = GetFromFileMassiveOfShortsThatLength(var1);
             //System.out.println("MassiveXsrcOfInterfaceImage");
             //for(int var6 = 0; var6<=127; ++var6) //
             //{ 
             //    System.out.print(var6 + ":[" + MassiveXsrcOfInterfaceImage[var6] + "] "); //
             //}
             //System.out.println();
-            MassiveYsrcOfInterfaceImage = GetFromFileMassiveOfShortsThatLength(var1);
+            interfaceImageYsrc = GetFromFileMassiveOfShortsThatLength(var1);
             //System.out.println("MassiveYsrcOfInterfaceImage");
             //for(int var6 = 0; var6<=127; ++var6) //
             //{ 
             //    System.out.print(var6 + ":[" + MassiveYsrcOfInterfaceImage[var6] + "] "); //
             //}
             //System.out.println();
-            MassiveWidthOfInterfaceImage = GetFromFileMassiveOfShortsThatLength(var1);
+            interfaceImageWidth = GetFromFileMassiveOfShortsThatLength(var1);
             //System.out.println("MassiveWidthOfInterfaceImage");
             //for(int var6 = 0; var6<=127; ++var6) //
             //{ 
             //    System.out.print(var6 + ":[" + MassiveWidthOfInterfaceImage[var6] + "] "); //
             //}
             //System.out.println();
-            MassiveHeightOfInterfaceImage = GetFromFileMassiveOfShortsThatLength(var1);
+            interfaceImageHeight = GetFromFileMassiveOfShortsThatLength(var1);
             //System.out.println("MassiveHeightOfInterfaceImage");
             //for(int var6 = 0; var6<=127; ++var6) //
             //{ 
             //    System.out.print(var6 + ":[" + MassiveHeightOfInterfaceImage[var6] + "] "); //
             //}
             //System.out.println();
-            MassiveTransfOfInterfaceImage = GetFromFileMassiveOfBytesThatLength(var1);
+            interfaceImageTransform = GetFromFileMassiveOfBytesThatLength(var1);
             //System.out.println("MassiveTransfOfInterfaceImage");
             //for(int var6 = 0; var6<=127; ++var6) //
             //{ 
             //    System.out.print(var6 + ":[" + MassiveTransfOfInterfaceImage[var6] + "] "); //
             //}
             //System.out.println();
-            rectangleAdrForInterfaceMassive = GetFromFileMassiveOfShortsThatLength(datainputstream.readShort());
+            interfaceImageAdditionalIds = GetFromFileMassiveOfShortsThatLength(datainputstream.readShort());
             interfacePackIds = GetFromFileMassiveOfShortsThatLength(var1 = datainputstream.readShort());
-            MassiveX_startOfInterfaceImage = GetFromFileMassiveOfShortsThatLength(var1);
-            MassiveY_startOfInterfaceImage = GetFromFileMassiveOfShortsThatLength(var1);
+            interfaceImageXdest = GetFromFileMassiveOfShortsThatLength(var1);
+            interfaceImageYdest = GetFromFileMassiveOfShortsThatLength(var1);
+            
             int[] var2 = getRectangleParams(50, 2, 10);
             int[] var3 = getRectangleParams(50, 4, 0);
             int[] var4 = getRectangleParams(50, 3, 0);
@@ -432,11 +435,11 @@ public final class ResourseManager {
     }
 
     public static int ReturnWidthOfInterfaceImage(int number_of_image) {
-        return number_of_image == -2 ? 0 : MassiveWidthOfInterfaceImage[number_of_image];
+        return number_of_image == -2 ? 0 : interfaceImageWidth[number_of_image];
     }
 
     public static int ReturnHeightOfInterfaceImage(int number_of_image) { //равно ли -2? Если да, вернуть ноль. Если нет, вернуть высоту интерфейсного изображения
-        return number_of_image == -2 ? 0 : MassiveHeightOfInterfaceImage[number_of_image];
+        return number_of_image == -2 ? 0 : interfaceImageHeight[number_of_image];
     }
 
     public static int getRectangleWidth(int image_id) {
@@ -444,7 +447,7 @@ public final class ResourseManager {
             if (image_id >= 300) {
                 return ModChanges.NewItemsWidthOfRectangle((short) image_id);
             } else {
-                return MassiveWidthOfInterfaceImage[interfacePackIds[rectangleAdrForInterfaceMassive[image_id]]];
+                return interfaceImageWidth[interfacePackIds[interfaceImageAdditionalIds[image_id]]];
             }
         } catch (Exception var1) {
             return 35;
@@ -455,22 +458,22 @@ public final class ResourseManager {
         if (image_id >= 300) {
             return ModChanges.NewItemsHeightOfRectangle((short) image_id);
         } else {
-            return MassiveHeightOfInterfaceImage[interfacePackIds[rectangleAdrForInterfaceMassive[image_id]]];
+            return interfaceImageHeight[interfacePackIds[interfaceImageAdditionalIds[image_id]]];
         }
     }
 
     public static int[] getRectangleParams(int var0, int var1, int var2) {
-        int rectangleNumber = rectangleAdrForInterfaceMassive[var0] + var1;
+        int rectangleNumber = interfaceImageAdditionalIds[var0] + var1;
         int[] rectangleParamsMassive = new int[4];
         int[] tempMassive = new int[]{0, 0, 0, 0};
-        rectangleParamsMassive[0] = MassiveX_startOfInterfaceImage[rectangleNumber];
-        rectangleParamsMassive[1] = MassiveY_startOfInterfaceImage[rectangleNumber];
+        rectangleParamsMassive[0] = interfaceImageXdest[rectangleNumber];
+        rectangleParamsMassive[1] = interfaceImageYdest[rectangleNumber];
         short var6;
         if ((var6 = interfacePackIds[rectangleNumber]) < 0) {
             tempMassive = getRectangleParams(var6 & 127, var2, 0);
         } else {
-            rectangleParamsMassive[2] = MassiveWidthOfInterfaceImage[var6];
-            rectangleParamsMassive[3] = MassiveHeightOfInterfaceImage[var6];
+            rectangleParamsMassive[2] = interfaceImageWidth[var6];
+            rectangleParamsMassive[3] = interfaceImageHeight[var6];
         }
 
         rectangleParamsMassive[0] += tempMassive[0];//xStart
@@ -481,13 +484,13 @@ public final class ResourseManager {
     }
 
     public static int getUIElementXcoord(int mainUINumber, int childElementNumber) {
-        int number_of_rectangle = rectangleAdrForInterfaceMassive[mainUINumber] + childElementNumber;
-        return MassiveX_startOfInterfaceImage[number_of_rectangle];
+        int elementId = interfaceImageAdditionalIds[mainUINumber] + childElementNumber;
+        return interfaceImageXdest[elementId];
     }
 
     public static int getUIElementYcoord(int mainUINumber, int childElementNumber) {
-        int number_of_rectangle = rectangleAdrForInterfaceMassive[mainUINumber] + childElementNumber;
-        return MassiveY_startOfInterfaceImage[number_of_rectangle];
+        int elementId = interfaceImageAdditionalIds[mainUINumber] + childElementNumber;
+        return interfaceImageYdest[elementId];
     }
 
     static {

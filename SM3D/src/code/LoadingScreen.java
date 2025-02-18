@@ -143,10 +143,10 @@ public final class LoadingScreen implements Screen {
         ResourseManager.var_e6 = 1;
         if(ResourseManager.var_e6 == 1) {
             try {
-                TextCreator.loadTextSymbols(ResourseManager.DataInputStream_Object_D, 0); //загрузка параметров
-                TextCreator.loadTextSymbols(ResourseManager.DataInputStream_Object_D, 1); //загрузка параметров
-                TextCreator.loadTextLines(ResourseManager.DataInputStream_Object_D); //загрузка текста и его параметров
-                ResourseManager.ReadDataFromFile_D(ResourseManager.DataInputStream_Object_D);
+                TextCreator.loadTextSymbols(ResourseManager.data, 0); //загрузка параметров
+                TextCreator.loadTextSymbols(ResourseManager.data, 1); //загрузка параметров
+                TextCreator.loadTextLines(ResourseManager.data); //загрузка текста и его параметров
+                ResourseManager.ReadDataFromFile_D(ResourseManager.data); //загрузка параметров изображений интерфейса
                 AllScreens.SymbolHeight = TextCreator.getSymbolHeight(1);
                 AllScreens.SymbolWidth = TextCreator.getSymbolWidth(1, 10);
             } catch (Exception var2) {
