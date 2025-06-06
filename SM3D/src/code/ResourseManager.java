@@ -316,22 +316,22 @@ public final class ResourseManager {
         System.gc();
     }
 
-    private static byte[] GetFromFileMassiveOfBytesThatLength(int length) throws IOException //Достать из файла массив битов длинной в это число
+    private static byte[] readBytesArray(int length) throws IOException //Достать из файла массив битов длинной в это число
     {
-        byte[] resultbytemassive = new byte[length];
-        data.read(resultbytemassive);
-        return resultbytemassive;
+        byte[] byteArray = new byte[length];
+        data.read(byteArray);
+        return byteArray;
     }
 
-    private static short[] GetFromFileMassiveOfShortsThatLength(int length) throws IOException //Достать из файла массив шортов длинной в это число
+    private static short[] readShortsArray(int length) throws IOException //Достать из файла массив шортов длинной в это число
     {
-        short[] resultshortmassive = new short[length];
+        short[] shortArray = new short[length];
 
-        for (int var2 = 0; var2 < length; ++var2) {
-            resultshortmassive[var2] = data.readShort();
+        for (int i = 0; i < length; ++i) {
+            shortArray[i] = data.readShort();
         }
 
-        return resultshortmassive;
+        return shortArray;
     }
 
     public static void DrawInterfaceImageToSelectedRegion(Graphics graphics, int element_number, int x_dest, int y_dest, int anchor) {
@@ -372,53 +372,23 @@ public final class ResourseManager {
 
     public static void ReadDataFromFile_D(DataInputStream datainputstream) {
         try {
+            //Одиночные части интерфейса
             short var1;
-            interfaceImageIds = GetFromFileMassiveOfBytesThatLength(var1 = datainputstream.readShort());
-            //System.out.println("MassiveWithInterfaceImagesAdress:"); //
-            //for(int var6 = 0; var6<=127; ++var6) //
-            //{ 
-            //    System.out.print(var6 + ":[" + MassiveWithInterfaceImagesAdress[var6] + "] "); //
-            //}
-            //System.out.println();
-            interfaceImageXsrc = GetFromFileMassiveOfShortsThatLength(var1);
-            //System.out.println("MassiveXsrcOfInterfaceImage");
-            //for(int var6 = 0; var6<=127; ++var6) //
-            //{ 
-            //    System.out.print(var6 + ":[" + MassiveXsrcOfInterfaceImage[var6] + "] "); //
-            //}
-            //System.out.println();
-            interfaceImageYsrc = GetFromFileMassiveOfShortsThatLength(var1);
-            //System.out.println("MassiveYsrcOfInterfaceImage");
-            //for(int var6 = 0; var6<=127; ++var6) //
-            //{ 
-            //    System.out.print(var6 + ":[" + MassiveYsrcOfInterfaceImage[var6] + "] "); //
-            //}
-            //System.out.println();
-            interfaceImageWidth = GetFromFileMassiveOfShortsThatLength(var1);
-            //System.out.println("MassiveWidthOfInterfaceImage");
-            //for(int var6 = 0; var6<=127; ++var6) //
-            //{ 
-            //    System.out.print(var6 + ":[" + MassiveWidthOfInterfaceImage[var6] + "] "); //
-            //}
-            //System.out.println();
-            interfaceImageHeight = GetFromFileMassiveOfShortsThatLength(var1);
-            //System.out.println("MassiveHeightOfInterfaceImage");
-            //for(int var6 = 0; var6<=127; ++var6) //
-            //{ 
-            //    System.out.print(var6 + ":[" + MassiveHeightOfInterfaceImage[var6] + "] "); //
-            //}
-            //System.out.println();
-            interfaceImageTransform = GetFromFileMassiveOfBytesThatLength(var1);
-            //System.out.println("MassiveTransfOfInterfaceImage");
-            //for(int var6 = 0; var6<=127; ++var6) //
-            //{ 
-            //    System.out.print(var6 + ":[" + MassiveTransfOfInterfaceImage[var6] + "] "); //
-            //}
-            //System.out.println();
-            interfaceImageAdditionalIds = GetFromFileMassiveOfShortsThatLength(datainputstream.readShort());
-            interfacePackIds = GetFromFileMassiveOfShortsThatLength(var1 = datainputstream.readShort());
-            interfaceImageXdest = GetFromFileMassiveOfShortsThatLength(var1);
-            interfaceImageYdest = GetFromFileMassiveOfShortsThatLength(var1);
+            interfaceImageIds = readBytesArray(var1 = datainputstream.readShort());
+            interfaceImageXsrc = readShortsArray(var1);
+            interfaceImageYsrc = readShortsArray(var1);
+            interfaceImageWidth = readShortsArray(var1);
+            interfaceImageHeight = readShortsArray(var1);
+            interfaceImageTransform = readBytesArray(var1);
+            //Составные интерфейсные окна
+            //Ниже указан диапазон от первого числа до второго. Из него берётся
+            //число и по нему вызывается изображение в packIds, с координатами
+            interfaceImageAdditionalIds = readShortsArray(datainputstream.readShort());
+            //В packIds хранятся айдишники элементов из interfaceImageIds и
+            //их положение относительно экрана
+            interfacePackIds = readShortsArray(var1 = datainputstream.readShort());
+            interfaceImageXdest = readShortsArray(var1);
+            interfaceImageYdest = readShortsArray(var1);
             
             int[] var2 = getRectangleParams(50, 2, 10);
             int[] var3 = getRectangleParams(50, 4, 0);

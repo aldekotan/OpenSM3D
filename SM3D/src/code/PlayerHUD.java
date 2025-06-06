@@ -677,6 +677,9 @@ public final class PlayerHUD {
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         graphics.drawImage(ResourseManager.interfaceImages[12], 0, 3, 0);
         drawLinesForPDA();
+        //Для тестов. Возвращение старого PDA
+        //ResourseManager.drawUserInterfaceItems(graphics, 41, 0, 0);
+        //
         //красный цвет
         graphics.setColor(16711680); 
 
