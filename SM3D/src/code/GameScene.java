@@ -2232,6 +2232,13 @@ public final class GameScene {
             } else {
                 CameraXPostRotate();
             }
+            
+            //restore audio walking
+            if (timeElapsed % 800 < 100)
+            {
+                SoundAndVibro.playSound(6);
+            }
+            //restore audio walking
         } else {
 			//Walk anim end
             if(useThirdPerson) playerModel.setRenderingEnable(false);

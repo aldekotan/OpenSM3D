@@ -38,7 +38,7 @@ public final class GameScreen implements Screen {
     public final void paint(Graphics g) {
         if (!MasterCanvas.paused) {
             try {
-                Scripts.checkPlayerAndSaveGame();
+                Scripts.checkPlayerAndSaveGame();//воспроизвести звук и не только
                 //Если мы в окне игры-исследования, обновить время
                 if (GameScene.currentGameState == 2
                         || GameScene.currentGameState == 1

@@ -8,7 +8,7 @@ public final class SoundAndVibro {
 
     public static boolean soundsEnabled = true, vibroEnabled = true;
 
-    private static final Player[] players = new Player[3];
+    private static final Player[] players = new Player[7];
     private static int lastPlayedSound = -1; //Текущий воспроизводимый звук
     private static long lastVibrationTime;
 
@@ -19,7 +19,7 @@ public final class SoundAndVibro {
     //Последовательная загрузка звуковых файлов
     public static final void prefetchSounds() {
         
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < 7; i++) {
             try {
                 String path, format;
                 
@@ -44,6 +44,8 @@ public final class SoundAndVibro {
 
             } catch (Exception e) {
                 players[i] = null;
+                System.out.print("Sound load error:"+i);
+                e.printStackTrace();
             }
         }
     }

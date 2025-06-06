@@ -1560,8 +1560,14 @@ public final class Scripts {
                 var_228e = true;
                 GameScene.shootStartTime = (int) GameScene.gameTimeUnpaused;
                 GameScene.shootShakeActive = true;
+                //restore sounds
+                int soundId = 4;
+                //restore sounds
                 switch (gun) {
                     case 0: //Если в руках форт
+                        //restore sounds
+                        soundId = 5;
+                        //restore sounds
                         playerAccuracy = 60; //Точность персонажа 60%
                         --playerWeaponsAmmo[0]; //Убавить боезапас на единицу
                         if (playerWeaponsAmmo[0] < 1) //Если патронов в магазине нет
@@ -1582,6 +1588,9 @@ public final class Scripts {
                         --playerWeaponsAmmo[3];
                 }
 
+                //restore sounds
+                SoundAndVibro.playSound(soundId);
+                //restore sounds
                 if (botUnderCursor && MathUtils.getRandomNumber(100) <= playerAccuracy) //Если ты всё-таки попал 
                 {
                     killBot();
@@ -1598,6 +1607,13 @@ public final class Scripts {
         PlayerHUD.playerDamaged = true;
         PlayerHUD.timeToDisplayDamageIndicator = (int) GameScene.gameTimeUnpaused + 500;
         playerHealth = (short) (playerHealth - value);
+        //restore sounds
+        if (!GameScene.damageEffect)
+        {
+            SoundAndVibro.playSound(3);
+        }
+        //restore sounds
+        
         SoundAndVibro.vibrate(200);
     }
 
