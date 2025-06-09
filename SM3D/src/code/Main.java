@@ -44,7 +44,7 @@ public class Main extends MIDlet
       repaint();
    }
 
-   public final void sub_2c() 
+   public final void initializeScreens() 
    {
       AllScreens.confirmScreen = confirmScreen = new CentralText();
       keyboardScreen = new KeyboardScreen();
@@ -127,9 +127,11 @@ public class Main extends MIDlet
       System.gc();
    }
 
-   public final void sub_175(byte[] var1, byte var2) {
-      byte[] recordData = new byte[var2];
-      System.arraycopy(var1, 0, recordData, 0, var2);
+   /**В данный момент отсылается на KeyboardScreen, 
+    * но там не используется */
+   public final void addPlayerRecord(byte[] nameText, byte length) {
+      byte[] recordData = new byte[length];
+      System.arraycopy(nameText, 0, recordData, 0, length);
       ((PlayersRecords)this.recordsScreen).addNewPlayerRecord(recordData);
    }
 

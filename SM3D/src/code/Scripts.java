@@ -4,7 +4,6 @@ package code;
 
 public final class Scripts {
     //Оружие на поясе
-
     public static byte EncasedWeapon;
     //Оружие в руках
     public static byte playerActiveWeapon;
@@ -35,35 +34,43 @@ public final class Scripts {
     //Состояние диалога
     public static byte rustyDialogState;
     //Количество вариантов ответа после каждого ответа главгероя
-    public static final byte[] var_2a9 = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 3, (byte) 1, (byte) 1, (byte) 1};
+    public static final byte[] var_2a9 = new byte[]{ 1,  1,  1,  3,  1,  1,  1};
     //Адреса на текстовые строки в главном текстовом массиве
-    public static final short[] var_2cc = new short[]{(short) 78, (short) 79, (short) 80, (short) 81, (short) 82, (short) 83, (short) 84, (short) 85, (short) 86, (short) 87, (short) 88, (short) 89, (short) 90};
-    public static final byte[] var_30f = new byte[]{(byte) 2, (byte) 3, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_369 = new short[]{(short) 91, (short) 92, (short) 93, (short) 94, (short) 95, (short) 96, (short) 97, (short) 98, (short) 99, (short) 100, (short) 101};
+    public static final short[] var_2cc = new short[]{ 78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90};
+    public static final byte[] var_30f = new byte[]{ 2,  3,  1,  1,  1,  1};
+    public static final short[] var_369 = new short[]{ 91,  92,  93,  94,  95,  96,  97,  98,  99,  100,  101};
     public static final byte[] var_412 = new byte[0];
-    public static final short[] var_44c = new short[]{(short) 102};
-    public static final byte[] var_488 = new byte[]{(byte) 1, (byte) 1, (byte) 3, (byte) 2, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_4d9 = new short[]{(short) 103, (short) 104, (short) 105, (short) 106, (short) 107, (short) 108, (short) 109, (short) 110, (short) -1, (short) 111, (short) -1, (short) 112, (short) 113, (short) 114, (short) 115};
+    public static final short[] var_44c = new short[]{ 102};
+    public static final byte[] var_488 = new byte[]{ 1,  1,  3,  2,  1,  1,  1,  1};
+    public static final short[] var_4d9 = new short[]{ 103,  104,  105,  106,  107,  108,  109,  110,  -1,  111,  -1,  112,  113,  114,  115};
     public static final byte[] var_51d = new byte[0];
-    public static final short[] var_533 = new short[]{(short) 116};
-    public static final byte[] var_54c = new byte[]{(byte) 2, (byte) 1, (byte) 2, (byte) 1, (byte) 1};
-    public static final short[] var_5a5 = new short[]{(short) 117, (short) 118, (short) 119, (short) 120, (short) 121, (short) 122, (short) 123, (short) 124, (short) 125};
+    public static final short[] var_533 = new short[]{ 116};
+    public static final byte[] var_54c = new byte[]{ 2,  1,  2,  1,  1};
+    public static final short[] var_5a5 = new short[]{ 117,  118,  119,  120,  121,  122,  123,  124,  125};
     public static final byte[] var_5c1 = new byte[0];
-    public static final short[] var_5dc = new short[]{(short) 126};
+    public static final short[] var_5dc = new short[]{ 126};
     public static final byte[][] rustyHierarchy = new byte[][]{var_2a9, var_30f, var_412, var_488, var_51d, var_54c, var_5c1};
 
     public static byte galoshQuestState;
-    public static final byte[] var_6a7 = new byte[]{(byte) 5, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_6e4 = new short[]{(short) 127, (short) 128, (short) 129, (short) 130, (short) 131, (short) 132, (short) 133, (short) 134, (short) 153, (short) 154};
-    public static final byte[] var_715 = new byte[]{(byte) 1};
-    public static final short[] var_74b = new short[]{(short) 155, (short) 156, (short) 157};
-    public static final byte[][] galoshHierarchy = new byte[][]{var_6a7, var_715};
+    public static final byte[] galoshFirstMeetAns = new byte[]{ 5,  1,  1,  1,  1,  1};
+    public static final short[] galoshFirstIds = new short[]{ 127, 
+        128,  129,  
+        130,  131,  
+        132,  133,  
+        134,  153,  
+        154};
+    public static final byte[] galoshAfterQuestAns = new byte[]{ 1};
+    public static final short[] galoshAfterQuestIds = new short[]{ 155, 156,  157};
+    public static final byte[][] galoshHierarchy = new byte[][]{galoshFirstMeetAns, galoshAfterQuestAns};
 
     public static byte zaborDialogState;
-    public static final byte[] var_882 = new byte[]{(byte) 1, (byte) 1, (byte) 2, (byte) 1, (byte) 1};
-    public static final short[] zaborPhIdBefore = new short[]{(short) 135, (short) 136, (short) 137, (short) 138, (short) 139, (short) 140, (short) 141, (short) 142};
+    public static final byte[] var_882 = new byte[]{ 1,  1,  2,  1,  1};
+    public static final short[] zaborPhrBeforeId = new short[]{ 135,  
+        136,  137,  138, 139,
+                            140,  141,//-Tы можeшь мнe чeловeчecким языком объяcнить, что ты xочeшь cкaзaть?
+                            142};//-Paзговapивaть cнaчaлa нayчиcь, обeзьянa.
     public static final byte[] var_8fe = new byte[0];
-    public static final short[] zaborPhIdAfter = new short[]{(short) 143};
+    public static final short[] zaborPhrAfterId = new short[]{ 143};
     public static final byte[][] zaborDialogSctucture = new byte[][]{var_882, var_8fe};
 
     public static byte botanikDialogState;
@@ -248,7 +255,39 @@ public final class Scripts {
     public static int openedActivableObjId;
     public static short[] traderItems;
     
+    //CONSTANTS
+    //MEDS
     private static final short SMALL_MED = 101;
+    private static final short ARMY_MED = 102;
+    private static final short ANTIRAD = 103;
+    
+    //WEAPON MAGAZINES
+    private static final short AK74_MAG = 107;
+    private static final short OC14_MAG = 108;
+    private static final short L85_MAG = 109;
+    
+    //ARMOR
+    private static final short LJAC_ARM = 110;
+    private static final short MJAC_ARM = 111;
+    private static final short MERC_ARM = 112;
+    private static final short SEVA_ARM = 113;
+    private static final short STAL_ARM = 114;
+    private static final short SPP9_ARM = 115;
+    
+    //WEAPONS
+    private static final short FORT_GUN = 116;
+    private static final short AK74_GUN = 117;
+    private static final short OC14_GUN = 118;
+    private static final short L85_GUN = 119;
+    
+    //ARTEFACTS
+    private static final short MEDU_ART = 120;
+    private static final short BALL_ART = 121;
+    private static final short CRYS_ART = 122;
+    private static final short SPAR_ART = 123;
+    private static final short MOON_ART = 124;
+    private static final short BATT_ART = 125;
+    private static final short DUMM_ART = 126;
 
     private static void resetActorQuestAndDialogProgress() {
         batyaDialogState = 0;
@@ -260,16 +299,12 @@ public final class Scripts {
         galoshQuestState = 0; //1 при взятой и выполненной миссии Галоша
         shlangDialogState = 0;
         militaryDialogState = 0; //1 при взятой миссии полученной по рации
-        //
         prizrakDialogState = 0;
-        //
         kaynazovskiDialogState = 0;
         krotDialogState = 0;
         haryaDialogState = 0;
-        //
         commanderDialogState = 0;
         manikovskiDialogState = 0;
-        //
         gutalinDialogState = 0;
         belomorDialogState = 0;
         koboldDialogState = 1;
@@ -329,7 +364,7 @@ public final class Scripts {
         addItemToInventary((short) 114);
         addItemToInventary((short) 115);*/
         //add weapons
-        addItemToInventory((short) 116); //В оригинале выдаётся только пистолет
+        addItemToInventory((short) FORT_GUN); //В оригинале выдаётся только пистолет
         /*addItemToInventary((short) 117);
         addItemToInventary((short) 118);
         addItemToInventory((short) 119);
@@ -342,7 +377,7 @@ public final class Scripts {
         addItemToInventary((short) 125);
         addItemToInventary((short) 126);*/
         
-        useItem((short) 116);
+        useItem((short) FORT_GUN);
         //ModChanges
         //ModChanges.NewStartItems();
     }
@@ -370,11 +405,11 @@ public final class Scripts {
     public static short getItemWeight(short item) //Возвращает вес выбранного предмета
     {
         switch (item) {
-            case 101: //Полевая аптечка
+            case SMALL_MED: //Полевая аптечка
                 return (short) 5;
-            case 102: //Военная аптечка
+            case ARMY_MED: //Военная аптечка
                 return (short) 10;
-            case 103:
+            case ANTIRAD:
                 return (short) 3;
             case 104:
                 return (short) 4;
@@ -382,45 +417,45 @@ public final class Scripts {
                 return (short) 12;
             case 106:
                 return (short) 3;
-            case 107:
+            case AK74_MAG:
                 return (short) 3;
-            case 108:
+            case OC14_MAG:
                 return (short) 4;
-            case 109:
+            case L85_MAG:
                 return (short) 3;
-            case 110:
+            case LJAC_ARM:
                 return (short) 30;
-            case 111:
+            case MJAC_ARM:
                 return (short) 45;
-            case 112:
+            case MERC_ARM:
                 return (short) 70;
-            case 113:
+            case SEVA_ARM:
                 return (short) 50;
-            case 114:
+            case STAL_ARM:
                 return (short) 110;
-            case 115:
+            case SPP9_ARM:
                 return (short) 80;
-            case 116:
+            case FORT_GUN:
                 return (short) 10;
-            case 117:
+            case AK74_GUN:
                 return (short) 36;
-            case 118:
+            case OC14_GUN:
                 return (short) 25;
-            case 119:
+            case L85_GUN:
                 return (short) 50;
-            case 120:
+            case MEDU_ART:
                 return (short) 5;
-            case 121:
+            case BALL_ART:
                 return (short) 5;
-            case 122:
+            case CRYS_ART:
                 return (short) 5;
-            case 123:
+            case SPAR_ART:
                 return (short) 5;
-            case 124:
+            case MOON_ART:
                 return (short) 0;
-            case 125:
+            case BATT_ART:
                 return (short) 5;
-            case 126:
+            case DUMM_ART:
                 return (short) 5;
             case 300:
                 return (short) 30;
@@ -431,11 +466,11 @@ public final class Scripts {
 
     public static short getItemPrice(short i) {
         switch (i) {
-            case 101:
+            case SMALL_MED:
                 return (short) 100;
-            case 102:
+            case ARMY_MED:
                 return (short) 250;
-            case 103:
+            case ANTIRAD:
                 return (short) 250;
             case 104:
                 return (short) 50;
@@ -443,45 +478,45 @@ public final class Scripts {
                 return (short) 350;
             case 106:
                 return (short) 0;
-            case 107:
+            case AK74_MAG:
                 return (short) 60;
-            case 108:
+            case OC14_MAG:
                 return (short) 50;
-            case 109:
+            case L85_MAG:
                 return (short) 140;
-            case 110:
+            case LJAC_ARM:
                 return armorLeatherJacketStats[3];
-            case 111:
+            case MJAC_ARM:
                 return armorMailJacketStats[3];
-            case 112:
+            case MERC_ARM:
                 return armorMercSuitStats[3];
-            case 113:
+            case SEVA_ARM:
                 return armorSevaSuitStats[3];
-            case 114:
+            case STAL_ARM:
                 return armorStalkerSuitStats[3];
-            case 115:
+            case SPP9_ARM:
                 return armorSPP9mStats[3];
-            case 116:
+            case FORT_GUN:
                 return (short) 0;
-            case 117:
+            case AK74_GUN:
                 return (short) 1500;
-            case 118:
+            case OC14_GUN:
                 return (short) 1000;
-            case 119:
+            case L85_GUN:
                 return (short) 2000;
-            case 120:
+            case MEDU_ART:
                 return (short) 400;
-            case 121:
+            case BALL_ART:
                 return (short) 500;
-            case 122:
+            case CRYS_ART:
                 return (short) 750;
-            case 123:
+            case SPAR_ART:
                 return (short) 450;
-            case 124:
+            case MOON_ART:
                 return (short) 600;
-            case 125:
+            case BATT_ART:
                 return (short) 800;
-            case 126:
+            case DUMM_ART:
                 return (short) 500;
             case 300:
                 return (short) 1000;
@@ -575,7 +610,7 @@ public final class Scripts {
         {
             var0 = equipmentSlots[0]; //Ячейке присваивается значение слота основного оружия
         } else {
-            var0 = 116; //Если ничего нет - присвоить значение пистолета
+            var0 = FORT_GUN; //Если ничего нет - присвоить значение пистолета
         }
 
         useItem(var0);
@@ -583,32 +618,32 @@ public final class Scripts {
         GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
     }
 
-    private static void ReloadThisGun(byte var0) {
-        if (var0 != 0) {
+    private static void reloadGun(byte gunNumber) {
+        if (gunNumber != 0) {
             if (!var_2075) {
                 OpticalSight = false;
                 GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
-                switch (var0) {
+                switch (gunNumber) {
                     case 1:
-                        if (!searchItem((short) 107)) {
+                        if (!searchItem((short) AK74_MAG)) {
                             return;
                         }
 
-                        useItem((short) 107);
+                        useItem((short) AK74_MAG);
                         break;
                     case 2:
-                        if (!searchItem((short) 108)) {
+                        if (!searchItem((short) OC14_MAG)) {
                             return;
                         }
 
-                        useItem((short) 108);
+                        useItem((short) OC14_MAG);
                         break;
                     case 3:
-                        if (!searchItem((short) 109)) {
+                        if (!searchItem((short) L85_MAG)) {
                             return;
                         }
 
-                        useItem((short) 109);
+                        useItem((short) L85_MAG);
                 }
 
                 var_2040 = false;
@@ -680,13 +715,13 @@ public final class Scripts {
             case 100:
             default:
                 break;
-            case 101:
+            case SMALL_MED:
                 playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
-            case 102:
+            case ARMY_MED:
                 playerWeight = (short) (playerWeight + 10 * coefWeight);
                 break;
-            case 103:
+            case ANTIRAD:
                 playerWeight = (short) (playerWeight + 3 * coefWeight);
                 break;
             case 104:
@@ -698,64 +733,64 @@ public final class Scripts {
             case 106:
                 playerWeight = (short) (playerWeight + 3 * coefWeight);
                 break;
-            case 107:
+            case AK74_MAG:
                 playerWeight = (short) (playerWeight + 3 * coefWeight);
                 break;
-            case 108:
+            case OC14_MAG:
                 playerWeight = (short) (playerWeight + 4 * coefWeight);
                 break;
-            case 109:
+            case L85_MAG:
                 playerWeight = (short) (playerWeight + 3 * coefWeight);
                 break;
-            case 110:
+            case LJAC_ARM:
                 playerWeight = (short) (playerWeight + 30 * coefWeight);
                 break;
-            case 111:
+            case MJAC_ARM:
                 playerWeight = (short) (playerWeight + 45 * coefWeight);
                 break;
-            case 112:
+            case MERC_ARM:
                 playerWeight = (short) (playerWeight + 70 * coefWeight);
                 break;
-            case 113:
+            case SEVA_ARM:
                 playerWeight = (short) (playerWeight + 50 * coefWeight);
                 break;
-            case 114:
+            case STAL_ARM:
                 playerWeight = (short) (playerWeight + 110 * coefWeight);
                 break;
-            case 115:
+            case SPP9_ARM:
                 playerWeight = (short) (playerWeight + 80 * coefWeight);
                 break;
-            case 116:
+            case FORT_GUN:
                 playerWeight = (short) (playerWeight + 10 * coefWeight);
                 break;
-            case 117:
+            case AK74_GUN:
                 playerWeight = (short) (playerWeight + 36 * coefWeight);
                 break;
-            case 118:
+            case OC14_GUN:
                 playerWeight = (short) (playerWeight + 25 * coefWeight);
                 break;
-            case 119:
+            case L85_GUN:
                 playerWeight = (short) (playerWeight + 50 * coefWeight);
                 break;
-            case 120:
+            case MEDU_ART:
                 playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
-            case 121:
+            case BALL_ART:
                 playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
-            case 122:
+            case CRYS_ART:
                 playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
-            case 123:
+            case SPAR_ART:
                 playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
-            case 124:
+            case MOON_ART:
                 playerWeight = (short) (playerWeight + 0 * coefWeight);
                 break;
-            case 125:
+            case BATT_ART:
                 playerWeight = (short) (playerWeight + 5 * coefWeight);
                 break;
-            case 126:
+            case DUMM_ART:
                 playerWeight = (short) (playerWeight + 5 * coefWeight);
             case 300:
                 playerWeight = (short) (playerWeight + 30 * coefWeight);
@@ -832,13 +867,13 @@ public final class Scripts {
             case 100:
             default:
                 break;
-            case 101:
+            case SMALL_MED:
                 playerMoney = (short) (playerMoney + 100 * t / 100);
                 break;
-            case 102:
+            case ARMY_MED:
                 playerMoney = (short) (playerMoney + 250 * t / 100);
                 break;
-            case 103:
+            case ANTIRAD:
                 playerMoney = (short) (playerMoney + 250 * t / 100);
                 break;
             case 104:
@@ -850,64 +885,64 @@ public final class Scripts {
             case 106:
                 playerMoney = (short) (playerMoney + 0 * t / 100);
                 break;
-            case 107:
+            case AK74_MAG:
                 playerMoney = (short) (playerMoney + 60 * t / 100);
                 break;
-            case 108:
+            case OC14_MAG:
                 playerMoney = (short) (playerMoney + 50 * t / 100);
                 break;
-            case 109:
+            case L85_MAG:
                 playerMoney = (short) (playerMoney + 140 * t / 100);
                 break;
-            case 110:
+            case LJAC_ARM:
                 playerMoney = (short) (playerMoney + armorLeatherJacketStats[3] * t / 100);
                 break;
-            case 111:
+            case MJAC_ARM:
                 playerMoney = (short) (playerMoney + armorMailJacketStats[3] * t / 100);
                 break;
-            case 112:
+            case MERC_ARM:
                 playerMoney = (short) (playerMoney + armorMercSuitStats[3] * t / 100);
                 break;
-            case 113:
+            case SEVA_ARM:
                 playerMoney = (short) (playerMoney + armorSevaSuitStats[3] * t / 100);
                 break;
-            case 114:
+            case STAL_ARM:
                 playerMoney = (short) (playerMoney + armorStalkerSuitStats[3] * t / 100);
                 break;
-            case 115:
+            case SPP9_ARM:
                 playerMoney = (short) (playerMoney + armorSPP9mStats[3] * t / 100);
                 break;
-            case 116:
+            case FORT_GUN:
                 playerMoney = (short) (playerMoney + 0 * t / 100);
                 break;
-            case 117:
+            case AK74_GUN:
                 playerMoney = (short) (playerMoney + 1500 * t / 100);
                 break;
-            case 118:
+            case OC14_GUN:
                 playerMoney = (short) (playerMoney + 1000 * t / 100);
                 break;
-            case 119:
+            case L85_GUN:
                 playerMoney = (short) (playerMoney + 2000 * t / 100);
                 break;
-            case 120:
+            case MEDU_ART:
                 playerMoney = (short) (playerMoney + 400 * t / 100);
                 break;
-            case 121:
+            case BALL_ART:
                 playerMoney = (short) (playerMoney + 500 * t / 100);
                 break;
-            case 122:
+            case CRYS_ART:
                 playerMoney = (short) (playerMoney + 750 * t / 100);
                 break;
-            case 123:
+            case SPAR_ART:
                 playerMoney = (short) (playerMoney + 450 * t / 100);
                 break;
-            case 124:
+            case MOON_ART:
                 playerMoney = (short) (playerMoney + 600 * t / 100);
                 break;
-            case 125:
+            case BATT_ART:
                 playerMoney = (short) (playerMoney + 800 * t / 100);
                 break;
-            case 126:
+            case DUMM_ART:
                 playerMoney = (short) (playerMoney + 500 * t / 100);
             case 300:
                 playerMoney = (short) (playerMoney + 1000 * t / 100);
@@ -941,31 +976,31 @@ public final class Scripts {
     //Добавить предмет в слоты
     private static void addToEquipmentSlot(int item) {
         //Экипировка брони, основного и доп. оружия
-        if (item <= 119) {
+        if (item <= L85_GUN) {
             switch (item) {
                 //Броня
-                case 110: //Кожаная куртка
-                case 111: //Кольчужная куртка
-                case 112: //Комбез наёмника
-                case 113: //СЕВА
-                case 114: //Комбинезон сталкера
-                case 115: //СПП-9м.
+                case LJAC_ARM: //Кожаная куртка
+                case MJAC_ARM: //Кольчужная куртка
+                case MERC_ARM: //Комбез наёмника
+                case SEVA_ARM: //СЕВА
+                case STAL_ARM: //Комбинезон сталкера
+                case SPP9_ARM: //СПП-9м.
                     equipmentSlots[2] = (short) item;
                     break;
                 //Доп.оружие (пистолет)
-                case 116: 
+                case FORT_GUN: 
                     equipmentSlots[1] = (short) item;
                     break;
                 //Основное оружие
-                case 117: //Калаш
-                case 118: //Гроза
-                case 119: //Энфилд
+                case AK74_GUN: //Калаш
+                case OC14_GUN: //Гроза
+                case L85_GUN: //Энфилд
                     equipmentSlots[0] = (short) item;
             }
         } 
         //Экипировка артефактов
         else 
-         if (item >= 120 && item <= 130) {
+         if (item >= MEDU_ART && item <= 130) {
                 for (byte a = 3; a < 7; ++a) {
                     //Поставить в пустой слот
                     if (equipmentSlots[a] == -1) {
@@ -994,19 +1029,19 @@ public final class Scripts {
                 }
             } else if (tryDropOrPickupItem(item, true)) //Если вещь помещается в рюкзаке
             {
-                if (item >= 117 && item <= 119) {
+                if (item >= AK74_GUN && item <= L85_GUN) {
                     switch (item) {
-                        case 117:
-                            addItemToInventory((short) 107);//магазин калаша
-                            useItem((short) 107);
+                        case AK74_GUN:
+                            addItemToInventory((short) AK74_MAG);//магазин калаша
+                            useItem((short) AK74_MAG);
                             break;
-                        case 118:
-                            addItemToInventory((short) 108);//магазин грозы
-                            useItem((short) 108);
+                        case OC14_GUN:
+                            addItemToInventory((short) OC14_MAG);//магазин грозы
+                            useItem((short) OC14_MAG);
                             break;
-                        case 119:
-                            addItemToInventory((short) 109);//магазин энфилда
-                            useItem((short) 109);
+                        case L85_GUN:
+                            addItemToInventory((short) L85_MAG);//магазин энфилда
+                            useItem((short) L85_MAG);
                     }
                 }
 
@@ -1029,7 +1064,7 @@ public final class Scripts {
     public static void useItem(int i) {
         //bugfix коэффициенты брони неправильно считаются
         //Если надевается броня
-        if(i>109&&i<116)
+        if(i>L85_MAG&&i<FORT_GUN)
         {
             //Если у нас уже экипирована броня
             if(equipmentSlots[2]!=-1)
@@ -1049,15 +1084,15 @@ public final class Scripts {
                     dropItem(i);
                 }
                 break;
-            case 101: //Использование полевой аптечки
+            case SMALL_MED: //Использование полевой аптечки
                 playerHealth = (short) Math.min(playerHealth + 25, playerMaxHealth);
                 dropItem(i);
                 break;
-            case 102: //Использование военной аптечки
+            case ARMY_MED: //Использование военной аптечки
                 playerHealth = (short) Math.min(playerHealth + 75, playerMaxHealth);
                 dropItem(i);
                 break;
-            case 103:
+            case ANTIRAD:
                 IsAntiradIsUsed = true;
                 dropItem(i);
             case 104:
@@ -1129,83 +1164,83 @@ public final class Scripts {
             case 199:
             default:
                 break;
-            case 107: //Смена рожка у АК
-                if (searchItem((short) 117)) {
+            case AK74_MAG: //Смена рожка у АК
+                if (searchItem((short) AK74_GUN)) {
                     playerWeaponsAmmo[1] = 30;
                     dropItem(i);
                 }
                 break;
-            case 108: //Смена рожка у Грозы
-                if (searchItem((short) 118)) {
+            case OC14_MAG: //Смена рожка у Грозы
+                if (searchItem((short) OC14_GUN)) {
                     playerWeaponsAmmo[2] = 20;
                     dropItem(i);
                 }
                 break;
-            case 109: //Смена рожка у Энфилда
-                if (searchItem((short) 119)) {
+            case L85_MAG: //Смена рожка у Энфилда
+                if (searchItem((short) L85_GUN)) {
                     playerWeaponsAmmo[3] = 25;
                     dropItem(i);
                 }
                 break;
-            case 110:
+            case LJAC_ARM:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 111:
+            case MJAC_ARM:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 112:
+            case MERC_ARM:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 113:
+            case SEVA_ARM:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 114:
+            case STAL_ARM:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 115:
+            case SPP9_ARM:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 116: //Экипировка пистолета форт
-                takeGunInHands((byte) (i - 116));
+            case FORT_GUN: //Экипировка пистолета форт
+                takeGunInHands((byte) (i - FORT_GUN));
                 break;
-            case 117: //Экипировка АК
-                takeGunInHands((byte) (i - 116));
-                if (searchItem((short) 107)) //Использовать рожок, если есть
+            case AK74_GUN: //Экипировка АК
+                takeGunInHands((byte) (i - FORT_GUN));
+                if (searchItem((short) AK74_MAG)) //Использовать рожок, если есть
                 {
-                    useItem((short) 107);
+                    useItem((short) AK74_MAG);
                 }
                 break;
-            case 118: //Экипировка Грозы
-                takeGunInHands((byte) (i - 116));
-                if (searchItem((short) 108)) {
-                    useItem((short) 108);
+            case OC14_GUN: //Экипировка Грозы
+                takeGunInHands((byte) (i - FORT_GUN));
+                if (searchItem((short) OC14_MAG)) {
+                    useItem((short) OC14_MAG);
                 }
                 break;
-            case 119: //Экипировка Энфилда
-                takeGunInHands((byte) (i - 116)); //Взять это оружие в руки
-                if (searchItem((short) 109)) {
-                    useItem((short) 109);
+            case L85_GUN: //Экипировка Энфилда
+                takeGunInHands((byte) (i - FORT_GUN)); //Взять это оружие в руки
+                if (searchItem((short) L85_MAG)) {
+                    useItem((short) L85_MAG);
                 }
                 break;
-            case 120:
+            case MEDU_ART:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 121:
+            case BALL_ART:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 122:
+            case CRYS_ART:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 123:
+            case SPAR_ART:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 124:
+            case MOON_ART:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 125:
+            case BATT_ART:
                 changePlayerStatsByItem(i, 1);
                 break;
-            case 126:
+            case DUMM_ART:
                 changePlayerStatsByItem(i, 1);
                 break;
             case 140:
@@ -1281,118 +1316,118 @@ public final class Scripts {
     private static void changePlayerStatsByItem(int item, int multip) {
         switch (item) {
             //  БРОНЯ
-            case 110:
+            case LJAC_ARM:
                 setPlayerResistances(armorLeatherJacketStats[0], armorLeatherJacketStats[1], armorLeatherJacketStats[2], multip);
                 return;
-            case 111:
+            case MJAC_ARM:
                 setPlayerResistances(armorMailJacketStats[0], armorMailJacketStats[1], armorMailJacketStats[2], multip);
                 return;
-            case 112:
+            case MERC_ARM:
                 setPlayerResistances(armorMercSuitStats[0], armorMercSuitStats[1], armorMercSuitStats[2], multip);
                 return;
-            case 113:
+            case SEVA_ARM:
                 setPlayerResistances(armorSevaSuitStats[0], armorSevaSuitStats[1], armorSevaSuitStats[2], multip);
                 return;
-            case 114:
+            case STAL_ARM:
                 setPlayerResistances(armorStalkerSuitStats[0], armorStalkerSuitStats[1], armorStalkerSuitStats[2], multip);
                 return;
-            case 115:
+            case SPP9_ARM:
                 setPlayerResistances(armorSPP9mStats[0], armorSPP9mStats[1], armorSPP9mStats[2], multip);
                 return;
             //  АРТЕФАКТЫ
             //Медуза
-            case 120:
+            case MEDU_ART:
                 setPlayerResistances((short) 5, (short) -10, (short) 0, multip);
                 return;
-            case 121:
+            case BALL_ART:
                 setPlayerResistances((short) 10, (short) 0, (short) 0, multip);
                 playerMaxWeight = (short) (playerMaxWeight - 10 * multip * 10);
                 return;
-            case 122:
+            case CRYS_ART:
                 setPlayerResistances((short) -5, (short) 0, (short) 0, multip);
                 playerMaxWeight = (short) (playerMaxWeight + 15 * multip * 10);
                 return;
-            case 123:
+            case SPAR_ART:
                 playerMaxHealth = (short) (playerMaxHealth + 50 * multip);
                 playerAccuracy = (byte) (playerAccuracy - 10 * multip);
                 return;
-            case 124:
+            case MOON_ART:
                 playerAccuracy = (byte) (playerAccuracy + 6 * multip);
                 playerMaxWeight = (short) (playerMaxWeight - 15 * multip * 10);
                 setPlayerResistances((short) 0, (short) -5, (short) 0, multip);
                 return;
-            case 125:
+            case BATT_ART:
                 setPlayerResistances((short) 0, (short) 10, (short) -60, multip);
                 playerMaxWeight = (short) (playerMaxWeight + 10 * multip * 10);
                 playerMaxHealth = (short) (playerMaxHealth + 20 * multip);
                 return;
-            case 126:
+            case DUMM_ART:
                 setPlayerResistances((short) 0, (short) 0, (short) 15, multip);
-            case 116:
-            case 117:
-            case 118:
-            case 119:
+            case FORT_GUN:
+            case AK74_GUN:
+            case OC14_GUN:
+            case L85_GUN:
             default:
         }
     }
 
     public static void unequipItem(short item) {
-        if (item != 116) {
+        if (item != FORT_GUN) {
             deleteFromEquipmentSlot(item);
             switch (item) {
-                case 103:
+                case ANTIRAD:
                     IsAntiradIsUsed = false;
                 case 104:
                 case 105:
                 case 106:
-                case 107:
-                case 108:
-                case 109:
-                case 116:
+                case AK74_MAG:
+                case OC14_MAG:
+                case L85_MAG:
+                case FORT_GUN:
                 default:
                     break;
-                case 110:
+                case LJAC_ARM:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 111:
+                case MJAC_ARM:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 112:
+                case MERC_ARM:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 113:
+                case SEVA_ARM:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 114:
+                case STAL_ARM:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 115:
+                case SPP9_ARM:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 117:
-                case 118:
-                case 119:
-                    useItem((short) 116);
+                case AK74_GUN:
+                case OC14_GUN:
+                case L85_GUN:
+                    useItem((short) FORT_GUN);
                     break;
-                case 120:
+                case MEDU_ART:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 121:
+                case BALL_ART:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 122:
+                case CRYS_ART:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 123:
+                case SPAR_ART:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 124:
+                case MOON_ART:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 125:
+                case BATT_ART:
                     changePlayerStatsByItem(item, -1);
                     break;
-                case 126:
+                case DUMM_ART:
                     changePlayerStatsByItem(item, -1);
             }
 
@@ -1425,7 +1460,7 @@ public final class Scripts {
     }
 
     public static void dropItem(int item) {
-        if (item != 116) //Любой предмет кроме пистолета форт
+        if (item != FORT_GUN) //Любой предмет кроме пистолета форт
         {
             short var1 = 0;
 
@@ -1642,7 +1677,7 @@ public final class Scripts {
                         } else if (!GameScene.getActiveObjectIdUnderCursor()) {
                             shoot(playerActiveWeapon);
                         } else {
-                            InteractionWith(GameScene.activableObjIdUnderCursor);
+                            interactionWith(GameScene.activableObjIdUnderCursor);
                         }
                     }
 
@@ -1663,7 +1698,7 @@ public final class Scripts {
                     }
 
                     if (Keys.num1) {
-                        ReloadThisGun(playerActiveWeapon);
+                        reloadGun(playerActiveWeapon);
                         Keys.num1 = false;
                     }
 
@@ -1683,10 +1718,10 @@ public final class Scripts {
                     if (Keys.num3) //Если нажата клавиша 3
                     {
                         Keys.num3 = false;
-                        if (searchItem((short) 101)) {
-                            useItem((short) 101);
-                        } else if (searchItem((short) 102)) {
-                            useItem((short) 102);
+                        if (searchItem((short) SMALL_MED)) {
+                            useItem((short) SMALL_MED);
+                        } else if (searchItem((short) ARMY_MED)) {
+                            useItem((short) ARMY_MED);
                         }
                     }
 
@@ -1960,10 +1995,10 @@ public final class Scripts {
             case 5:
                 switch (zaborDialogState) {
                     case 0: //Если ещё не говорили
-                        phracesIdArray = zaborPhIdBefore;
+                        phracesIdArray = zaborPhrBeforeId;
                         break;
                     case 1: //Если уже поговорили
-                        phracesIdArray = zaborPhIdAfter;
+                        phracesIdArray = zaborPhrAfterId;
                 }
 
                 dialogStructure = zaborDialogSctucture[zaborDialogState];
@@ -1997,10 +2032,10 @@ public final class Scripts {
             case 7: //Миссия Галоша
                 switch (galoshQuestState) {
                     case 0: //Миссия в подвешенном состоянии
-                        phracesIdArray = var_6e4; //Одному массиву присваивается другой
+                        phracesIdArray = galoshFirstIds; //Одному массиву присваивается другой
                         break;
                     case 1: //Выполненная миссия
-                        phracesIdArray = var_74b;
+                        phracesIdArray = galoshAfterQuestIds;
                 }
 
                 dialogStructure = galoshHierarchy[galoshQuestState]; //В двойном массиве ячейке Галош присваивается значение единицы
@@ -2367,13 +2402,13 @@ public final class Scripts {
                     }
 
                     if (givenAnswersCount == 2) {
-                        if (selectedAnswer == 0 && searchItem((short) 124)) {
+                        if (selectedAnswer == 0 && searchItem((short) MOON_ART)) {
                             rustyDialogState = 6;
-                            if (isItemEquipped((short) 124)) {
-                                unequipItem((short) 124);
+                            if (isItemEquipped((short) MOON_ART)) {
+                                unequipItem((short) MOON_ART);
                             }
 
-                            dropItem((short) 124);
+                            dropItem((short) MOON_ART);
                             addItemToInventory((short) 200);
                             dialogCompleted = true;
                             ++currentNpcPhrase;
@@ -2523,14 +2558,14 @@ public final class Scripts {
 
                 if (batyaDialogState == 2) {
                     if (selectedAnswer == 0) {
-                        if (searchItem((short) 125)) {
+                        if (searchItem((short) BATT_ART)) {
                             ++currentNpcPhrase;
                             dialogCompleted = true;
-                            if (isItemEquipped((short) 125)) {
-                                unequipItem((short) 125);
+                            if (isItemEquipped((short) BATT_ART)) {
+                                unequipItem((short) BATT_ART);
                             }
 
-                            dropItem((short) 125);
+                            dropItem((short) BATT_ART);
                             addMarkToPDA((byte) 9);
                             batyaDialogState = 3;
                         }
@@ -2602,7 +2637,7 @@ public final class Scripts {
 
                 if (haryaDialogState == 2) {
                     haryaDialogState = 3;
-                    addItemToInventory((short) 112);
+                    addItemToInventory((short) MERC_ARM);
                     GameScene.setDialogWindowState(GameScene.prevGameState);
                     return;
                 }
@@ -2781,14 +2816,14 @@ public final class Scripts {
                     }
 
                     if (givenAnswersCount == 1) {
-                        if (selectedAnswer == 0 && (searchItem((short) 101) || searchItem((short) 102))) {
+                        if (selectedAnswer == 0 && (searchItem((short) SMALL_MED) || searchItem((short) ARMY_MED))) {
                             ++currentNpcPhrase;
                             dialogCompleted = true;
                             svistunQuestCompleted = true;
-                            if (searchItem((short) 101)) {
-                                dropItem((short) 101);
-                            } else if (searchItem((short) 102)) {
-                                dropItem((short) 102);
+                            if (searchItem((short) SMALL_MED)) {
+                                dropItem((short) SMALL_MED);
+                            } else if (searchItem((short) ARMY_MED)) {
+                                dropItem((short) ARMY_MED);
                             }
 
                             GameScene.setActiveObjState(var_23b6, (short) 0);
@@ -2800,7 +2835,7 @@ public final class Scripts {
                             currentNpcPhrase = (byte) (currentNpcPhrase + 2);
                             dialogCompleted = true;
                             addItemToInventory((short) 141);
-                            addItemToInventory((short) 124);
+                            addItemToInventory((short) MOON_ART);
                             GameScene.setActiveObjState(var_23b6, (short) 0);
                             playerCanLeaveLevel = true;
                         }
@@ -2945,27 +2980,27 @@ public final class Scripts {
 
     }
 
-    private static void sub_99d() {
+    private static void drawStashInterface() {
         Main.main.setScreen(AllScreens.masterInventory, (byte) 6);
         Main.main.repaint();
     }
 
-    private static void sub_9d1() {
+    private static void drawTradeInterface() {
         Main.main.setScreen(AllScreens.masterInventory, (byte) 7);
         Main.main.repaint();
     }
 
-    private static void InteractionWith(int type) //Interaction - взаимодействие; 1 деньги, 2 тайник, 3 - торговец, 0 - диалог
+    private static void interactionWith(int type) //Interaction - взаимодействие; 1 деньги, 2 тайник, 3 - торговец, 0 - диалог
     {
         openedActivableObjId = type;
         int number;
         if ((number = GameScene.getActivableObjState(type)) != 0 && number > 21) //что там находится?
         {
             if (number < 50 || number > 58) {
-                if (number <= 126 && number != 100) {
+                if (number <= DUMM_ART && number != 100) {
                     if (number == 25) {
-                        stashItems = new short[]{(short) 126, (short) 107};//Пустышка и магаз ак
-                        sub_99d();
+                        stashItems = new short[]{(short) DUMM_ART, (short) AK74_MAG};//Пустышка и магаз ак
+                        drawStashInterface();
                         return;
                     }
 
@@ -2977,7 +3012,7 @@ public final class Scripts {
                     }
 
                     stashItems = new short[]{(short) number};
-                    sub_99d();
+                    drawStashInterface();
                     return;
                 }
 
@@ -2989,7 +3024,7 @@ public final class Scripts {
             if (number == 50) {
                 playerCanLeaveLevel = true;
                 stashItems = new short[]{(short) 131};
-                sub_99d();
+                drawStashInterface();
             }
 
             if (number == 51) {
@@ -3000,34 +3035,34 @@ public final class Scripts {
 
             if (number == 52) {
                 addItemToInventory((short) 127);//ключ от двери
-                stashItems = new short[]{(short) 123};//вспышка
-                sub_99d();
+                stashItems = new short[]{(short) SPAR_ART};//вспышка
+                drawStashInterface();
             }
 
             if (number == 53) {
-                stashItems = new short[]{(short) 102};
-                sub_99d();
+                stashItems = new short[]{(short) ARMY_MED};
+                drawStashInterface();
             }
 
             if (number == 54) {
-                stashItems = new short[]{(short) 118};
-                sub_99d();
+                stashItems = new short[]{(short) OC14_GUN};
+                drawStashInterface();
             }
 
             if (number == 55) {
-                stashItems = new short[]{(short) 101};
-                sub_99d();
+                stashItems = new short[]{(short) SMALL_MED};
+                drawStashInterface();
             }
 
             if (number == 56) {
                 playerCanLeaveLevel = true;
-                stashItems = new short[]{(short) 125, (short) 102};
-                sub_99d();
+                stashItems = new short[]{(short) BATT_ART, (short) ARMY_MED};
+                drawStashInterface();
             }
 
             if (number == 57) {
-                stashItems = new short[]{(short) 117};
-                sub_99d();
+                stashItems = new short[]{(short) AK74_GUN};
+                drawStashInterface();
             }
 
             if (number == 58) {
@@ -3035,21 +3070,30 @@ public final class Scripts {
                 GameScene.setActiveObjState(type, (short) 0);
             }
         } else {
-            if (number == 1) { //Ассортимент первого торговца в деревне (п. аптечка, антирад, магазин ак, сам калаш и два броника)
-                traderItems = new short[]{(short) 101, (short) 103, (short) 107, (short) 117, (short) 110, (short) 111};
-                sub_9d1();
+            if (number == 1) { //Ассортимент первого торговца в деревне
+                traderItems = new short[] {
+                    SMALL_MED, ANTIRAD, 
+                    AK74_MAG, AK74_GUN, LJAC_ARM, MJAC_ARM};
+                drawTradeInterface();
                 return;
             }
 
             if (number == 2) {
-                traderItems = new short[]{(short) 101, (short) 102, (short) 103, (short) 107, (short) 117, (short) 110, (short) 111, (short) 112, (short) 118, (short) 108};
-                sub_9d1();
+                traderItems = new short[] {
+                    SMALL_MED, ARMY_MED, ANTIRAD,  
+                    AK74_MAG, AK74_GUN, LJAC_ARM, MJAC_ARM, MERC_ARM, 
+                    OC14_GUN, OC14_MAG};
+                drawTradeInterface();
                 return;
             }
 
             if (number == 3) {
-                traderItems = new short[]{(short) 101, (short) 102, (short) 103, (short) 107, (short) 117, (short) 110, (short) 111, (short) 112, (short) 114, (short) 118, (short) 108, (short) 119, (short) 109};
-                sub_9d1();
+                traderItems = new short[] {
+                    SMALL_MED, ARMY_MED, ANTIRAD, 
+                    AK74_MAG, AK74_GUN, 
+                    LJAC_ARM, MJAC_ARM, MERC_ARM, STAL_ARM,  
+                    OC14_GUN, OC14_MAG, L85_GUN, L85_MAG};
+                drawTradeInterface();
                 return;
             }
 

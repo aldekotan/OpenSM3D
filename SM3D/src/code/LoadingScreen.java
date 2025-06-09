@@ -154,7 +154,7 @@ public final class LoadingScreen implements Screen {
             }
 
             TextCreator.setColoredDigitsId();
-            Main.main.sub_2c();
+            Main.main.initializeScreens();
             ResourceManager.loadAllInterfaceImages();
             ResourceManager.loadSettings();
         }
