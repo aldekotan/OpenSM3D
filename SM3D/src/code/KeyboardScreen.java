@@ -33,20 +33,20 @@ public final class KeyboardScreen extends CentralText {
         TextCreator.drawTextByAnchor(0, this.nameText, 0, this.nameLength, MenuScreen.textClipX + (MenuScreen.textClipWidth >> 1), MenuScreen.textClipY, 9);
         graphics.setColor(0);
         graphics.fillRect(MainMenuScreen.scrWidth / 4, MainMenuScreen.scrHeight / 4 - 5, 2 * MainMenuScreen.scrWidth / 4, 2 * MainMenuScreen.scrHeight / 4 + 5);
-        short var2 = TextCreator.textLinesAdress[60];
+        short firstSymbolAdress = TextCreator.textLinesAdress[60];
 
-        for (int var3 = 0; var3 < TextCreator.getLineLength(60); ++var3) {
-            int var4 = MenuScreen.textClipX + var3 % 5 * (MenuScreen.textClipWidth / 5) + 3;
-            int var5 = MenuScreen.textClipY + var3 / 5 * nameHeight + 3;
-            TextCreator.drawTextByAnchor(0, TextCreator.textLinesSymbols, var2 + var3, var2 + var3 + 1, var4, var5, 0);
+        for (int currentSymbol = 0; currentSymbol < TextCreator.getLineLength(60); ++currentSymbol) {
+            int x = MenuScreen.textClipX + currentSymbol % 5 * (MenuScreen.textClipWidth / 5) + 3;
+            int y = MenuScreen.textClipY + currentSymbol / 5 * nameHeight + 3;
+            TextCreator.drawTextByAnchor(0, TextCreator.textLinesSymbols, firstSymbolAdress + currentSymbol, firstSymbolAdress + currentSymbol + 1, x, y, 0);
         }
 
         graphics.setColor(8421504);
         graphics.drawRect(MenuScreen.textClipX + this.currentSelectedSymbol % 5 * (MenuScreen.textClipWidth / 5), MenuScreen.textClipY + this.currentSelectedSymbol / 5 * nameHeight, AllScreens.SymbolWidth + 6, AllScreens.SymbolHeight + 6);
     }
 
-    public final void keyPressed(int var1) {
-        switch (var1) {
+    public final void keyPressed(int key) {
+        switch (key) {
             case -7:
                 Main.main.addPlayerRecord(this.nameText, (byte) this.nameLength);
                 Main.main.currentPlayerRecordId = (byte) (Main.main.numberOfPlayers - 1);

@@ -9,10 +9,11 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public final class TextCreator {
-    //адреса текстовых строк в массиве
+    //
 
+    /**Адреса текстовых строк в массиве*/
     public static short[] textLinesAdress;
-    //символы текстовых строк
+    /**Аимволы текстовых строк*/
     public static byte[] textLinesSymbols;
     //параметры символов, используемые при отрисовке из набора глифов
     public static final byte[][] symbolXcoord = new byte[2][];
