@@ -7,7 +7,7 @@ import javax.microedition.lcdui.Command;
 public final class PlayersRecords extends ListScreen 
 {
 
-   public byte[][] var_56 = new byte[3][];
+   public byte[][] records = new byte[3][];
 
 
    public PlayersRecords() 
@@ -24,12 +24,12 @@ public final class PlayersRecords extends ListScreen
 
    public final void drawItem(int item) 
    {
-      TextCreator.drawTextByAnchor(0, this.var_56[item], 0, this.var_56[item].length, AllScreens.var_4ba + 2, MenuScreen.textClipY + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3, 0);
+      TextCreator.drawTextByAnchor(0, this.records[item], 0, this.records[item].length, AllScreens.var_4ba + 2, MenuScreen.textClipY + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3, 0);
    }
 
    public final void addNewPlayerRecord(byte[] recordData) 
    {
-      this.var_56[Main.main.numberOfPlayers] = recordData;
+      this.records[Main.main.numberOfPlayers] = recordData;
       if(++Main.main.numberOfPlayers > 3) 
       {
          Main.main.numberOfPlayers = 3;
@@ -43,7 +43,7 @@ public final class PlayersRecords extends ListScreen
    {
       if(id < Main.main.numberOfPlayers - 1) 
       {
-         System.arraycopy(this.var_56, id + 1, this.var_56, id, Main.main.numberOfPlayers - id - 1);
+         System.arraycopy(this.records, id + 1, this.records, id, Main.main.numberOfPlayers - id - 1);
       }
 
       --Main.main.numberOfPlayers;

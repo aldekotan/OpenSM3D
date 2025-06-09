@@ -17,20 +17,20 @@ public final class PlayerStatsScreen implements Screen {
 
     public final void paint(Graphics graphics) {
         //Рисуем рамку интерфейса и задаём рабочую область
-        ResourseManager.drawUserInterfaceItems(graphics, 42, 0, 0);
+        ResourceManager.drawUserInterfaceItems(graphics, 42, 0, 0);
 
         graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
 
-        ResourseManager.drawUserInterfaceItems(MasterCanvas.graphics, 87, 0, 0);
-        ResourseManager.drawUserInterfaceItems(MasterCanvas.graphics, 86, 0, 0);
+        ResourceManager.drawUserInterfaceItems(MasterCanvas.graphics, 87, 0, 0);
+        ResourceManager.drawUserInterfaceItems(MasterCanvas.graphics, 86, 0, 0);
 
         //отрисовка текущего уровня игрока
         //id 39: УРОВЕНЬ:__
         byte[] currentValueText = 
                 TextCreator.combineText(TextCreator.createTextFromLine(39), 
                         TextCreator.createTextFromNumber(Scripts.playerLevel));
-        int x_start = ResourseManager.getUIElementXcoord(43, 0);
-        int y_start = ResourseManager.getUIElementYcoord(43, 0);
+        int x_start = ResourceManager.getUIElementXcoord(43, 0);
+        int y_start = ResourceManager.getUIElementYcoord(43, 0);
         TextCreator.drawTextByAnchor(0, currentValueText, 0, currentValueText.length, x_start, y_start, 4);
 
         //сохраняем характеристики персонажа и вкаченные уровни в массив
@@ -43,10 +43,10 @@ public final class PlayerStatsScreen implements Screen {
         //Поле слева вверху. Отрисовка названия уровней для поднятия
         //id 68: ТОЧНОСТЬ: 
         TextCreator.drawLineByAnchor(color = this.selectedStat == 0 ? 0 : 1, 
-                68, ResourseManager.getUIElementXcoord(43, 2), 
-                ResourseManager.getUIElementYcoord(43, 2), 4);
-        x_start = ResourseManager.getUIElementXcoord(43, 3);
-        y_start = ResourseManager.getUIElementYcoord(43, 3);
+                68, ResourceManager.getUIElementXcoord(43, 2), 
+                ResourceManager.getUIElementYcoord(43, 2), 4);
+        x_start = ResourceManager.getUIElementXcoord(43, 3);
+        y_start = ResourceManager.getUIElementYcoord(43, 3);
         byte[] currentPlayerLevelText = TextCreator.createTextFromNumber(statsLevels[0]);
         TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
@@ -60,10 +60,10 @@ public final class PlayerStatsScreen implements Screen {
 
         //id 74: ЗДОРОВЬЕ:
         TextCreator.drawLineByAnchor(color = this.selectedStat == 1 ? 0 : 1,
-                74, ResourseManager.getUIElementXcoord(43, 4), 
-                ResourseManager.getUIElementYcoord(43, 4), 4);
-        x_start = ResourseManager.getUIElementXcoord(43, 5);
-        y_start = ResourseManager.getUIElementYcoord(43, 5);
+                74, ResourceManager.getUIElementXcoord(43, 4), 
+                ResourceManager.getUIElementYcoord(43, 4), 4);
+        x_start = ResourceManager.getUIElementXcoord(43, 5);
+        y_start = ResourceManager.getUIElementYcoord(43, 5);
         currentPlayerLevelText = TextCreator.createTextFromNumber(statsLevels[1]);
         TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
@@ -76,10 +76,10 @@ public final class PlayerStatsScreen implements Screen {
 
         //id 75: СИЛА:
         TextCreator.drawLineByAnchor(color = this.selectedStat == 2 ? 0 : 1, 
-                75, ResourseManager.getUIElementXcoord(43, 6), 
-                ResourseManager.getUIElementYcoord(43, 6), 4);
-        x_start = ResourseManager.getUIElementXcoord(43, 7);
-        y_start = ResourseManager.getUIElementYcoord(43, 7);
+                75, ResourceManager.getUIElementXcoord(43, 6), 
+                ResourceManager.getUIElementYcoord(43, 6), 4);
+        x_start = ResourceManager.getUIElementXcoord(43, 7);
+        y_start = ResourceManager.getUIElementYcoord(43, 7);
         currentPlayerLevelText = TextCreator.createTextFromNumber(statsLevels[2]);
         TextCreator.drawTextByAnchor(color, 
                 currentPlayerLevelText, 0, currentPlayerLevelText.length, 
@@ -98,36 +98,36 @@ public final class PlayerStatsScreen implements Screen {
                 true))[statValue.length - 1] = 
                 (short) (statsValues[0] < 0 ? 157 : 105);
         TextCreator.drawColoredText(statValue, 
-                ResourseManager.getUIElementXcoord(43, 14),
-                ResourseManager.getUIElementYcoord(43, 14), 10);
+                ResourceManager.getUIElementXcoord(43, 14),
+                ResourceManager.getUIElementYcoord(43, 14), 10);
         
         //точность
         (statValue = TextCreator.makeColoredTextFromNumber(statsValues[1], 
                 true))[statValue.length - 1] = -2;
         TextCreator.drawColoredText(statValue, 
-                ResourseManager.getUIElementXcoord(43, 15), 
-                ResourseManager.getUIElementYcoord(43, 15), 10);
+                ResourceManager.getUIElementXcoord(43, 15), 
+                ResourceManager.getUIElementYcoord(43, 15), 10);
         
         //пулестойкость
         (statValue = TextCreator.makeColoredTextFromNumber(statsValues[2], 
                 true))[statValue.length - 1] = (short) (statsValues[2] < 0 ? 157 : 105);
         TextCreator.drawColoredText(statValue, 
-                ResourseManager.getUIElementXcoord(43, 16), 
-                ResourseManager.getUIElementYcoord(43, 16), 10);
+                ResourceManager.getUIElementXcoord(43, 16), 
+                ResourceManager.getUIElementYcoord(43, 16), 10);
         
         //устойчивость к радиации
         (statValue = TextCreator.makeColoredTextFromNumber(statsValues[3], 
                 true))[statValue.length - 1] = (short) (statsValues[3] < 0 ? 157 : 105);
         TextCreator.drawColoredText(statValue, 
-                ResourseManager.getUIElementXcoord(43, 17), 
-                ResourseManager.getUIElementYcoord(43, 17), 10);
+                ResourceManager.getUIElementXcoord(43, 17), 
+                ResourceManager.getUIElementYcoord(43, 17), 10);
         
         //защита от аномалий
         (statValue = TextCreator.makeColoredTextFromNumber(statsValues[4], 
                 true))[statValue.length - 1] = (short) (statsValues[4] < 0 ? 157 : 105);
         TextCreator.drawColoredText(statValue, 
-                ResourseManager.getUIElementXcoord(43, 18), 
-                ResourseManager.getUIElementYcoord(43, 18), 10);
+                ResourceManager.getUIElementXcoord(43, 18), 
+                ResourceManager.getUIElementYcoord(43, 18), 10);
         
         //Поле внизу, слева. Свободные очки прокачки
         //id text: ОЧКИ: 
@@ -136,23 +136,23 @@ public final class PlayerStatsScreen implements Screen {
                         TextCreator.createTextFromNumber(statsLevels[4]));
         TextCreator.drawTextByAnchor(1, sparePointsText, 
                 0, sparePointsText.length, 
-                ResourseManager.getUIElementXcoord(43, 12), 
-                ResourseManager.getUIElementYcoord(43, 12), 4);
+                ResourceManager.getUIElementXcoord(43, 12), 
+                ResourceManager.getUIElementYcoord(43, 12), 4);
 
         //Отрисовка веса, справа внизу
         currentValueText = 
                 TextCreator.combineText(TextCreator.createTextFromNumber(Scripts.playerMaxWeight / 10), 
                         TextCreator.createTextFromLine(64));
-        x_start = ResourseManager.getUIElementXcoord(43, 13);
-        y_start = ResourseManager.getUIElementYcoord(43, 13);
+        x_start = ResourceManager.getUIElementXcoord(43, 13);
+        y_start = ResourceManager.getUIElementYcoord(43, 13);
         TextCreator.drawTextByAnchor(0, currentValueText, 
                 0, currentValueText.length, x_start, y_start, 5);
 
         //Отрисовка полоски опыта
-        int width = ResourseManager.getRectangleParams(42, 5, 10)[2] + ResourseManager.getRectangleParams(42, 5, 11)[2] + ResourseManager.getRectangleParams(42, 5, 13)[2] + ResourseManager.getRectangleParams(42, 5, 14)[2];
-        int height = ResourseManager.getRectangleParams(42, 5, 8)[3] / 3 - 1;
-        x_start = ResourseManager.getRectangleParams(42, 5, 10)[0];
-        y_start = ResourseManager.getRectangleParams(42, 5, 10)[1] + height + 3;
+        int width = ResourceManager.getRectangleParams(42, 5, 10)[2] + ResourceManager.getRectangleParams(42, 5, 11)[2] + ResourceManager.getRectangleParams(42, 5, 13)[2] + ResourceManager.getRectangleParams(42, 5, 14)[2];
+        int height = ResourceManager.getRectangleParams(42, 5, 8)[3] / 3 - 1;
+        x_start = ResourceManager.getRectangleParams(42, 5, 10)[0];
+        y_start = ResourceManager.getRectangleParams(42, 5, 10)[1] + height + 3;
         int outlineColor = 1594115; //тёмно-зелёный
         int inlineColor = 2670136; //светло-зелёный
 

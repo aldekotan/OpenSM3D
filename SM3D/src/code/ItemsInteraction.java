@@ -54,8 +54,8 @@ public final class ItemsInteraction implements Screen
    {
       for(byte i = 0; i < 14; ++i) 
       {
-         this.itemsXcoords[i] = ResourseManager.getUIElementXcoord(39, i);
-         this.itemsYcoords[i] = ResourseManager.getUIElementYcoord(39, i);
+         this.itemsXcoords[i] = ResourceManager.getUIElementXcoord(39, i);
+         this.itemsYcoords[i] = ResourceManager.getUIElementYcoord(39, i);
       }
 
    }
@@ -69,7 +69,7 @@ public final class ItemsInteraction implements Screen
       {
          if(Scripts.equipmentSlots[item] != -1) 
          {
-            ResourseManager.drawUserInterfaceItems(graphics, 
+            ResourceManager.drawUserInterfaceItems(graphics, 
                     getItemImageUIid(Scripts.equipmentSlots[item]), 
                     this.itemsXcoords[item * 2], this.itemsYcoords[item * 2]);
          }
@@ -122,10 +122,10 @@ public final class ItemsInteraction implements Screen
          do
           {
               int x = this.xClipStart + itemOffset + this.offScreenItemsXOffset;
-              ResourseManager.drawUserInterfaceItems(graphics, 
+              ResourceManager.drawUserInterfaceItems(graphics, 
                       getItemImageUIid(Scripts.inventoryItems[itemIndex]), 
                       x, this.yClipStart);
-              itemOffset += ResourseManager.getRectangleWidth(getItemImageUIid(Scripts.inventoryItems[itemIndex++]));
+              itemOffset += ResourceManager.getRectangleWidth(getItemImageUIid(Scripts.inventoryItems[itemIndex++]));
               if(itemIndex >= this.itemsTotalInInventory)
               {
                     return;
@@ -143,11 +143,11 @@ public final class ItemsInteraction implements Screen
                return;
             }
 
-            ResourseManager.drawUserInterfaceItems(graphics, 
+            ResourceManager.drawUserInterfaceItems(graphics, 
                     getItemImageUIid(Scripts.stashItems[itemIndex]), 
                     this.xClipStart + itemOffset + this.offScreenItemsXOffset, 
                     this.yClipStart);
-            itemOffset += ResourseManager.getRectangleWidth(getItemImageUIid(Scripts.stashItems[itemIndex++]));
+            itemOffset += ResourceManager.getRectangleWidth(getItemImageUIid(Scripts.stashItems[itemIndex++]));
             if(itemIndex >= itemsTotalInTopArea) 
             {
                return;
@@ -164,10 +164,10 @@ public final class ItemsInteraction implements Screen
                return;
             }
 
-            ResourseManager.drawUserInterfaceItems(graphics, 
+            ResourceManager.drawUserInterfaceItems(graphics, 
                     getItemImageUIid(Scripts.traderItems[itemIndex]), 
                     this.xClipStart + itemOffset + this.offScreenItemsXOffset, this.yClipStart);
-            itemOffset += ResourseManager.getRectangleWidth(getItemImageUIid(Scripts.traderItems[itemIndex++]));
+            itemOffset += ResourceManager.getRectangleWidth(getItemImageUIid(Scripts.traderItems[itemIndex++]));
          } 
          while(itemIndex < itemsTotalInTopArea && itemOffset + this.offScreenItemsXOffset < this.clipWidth);
       }
@@ -214,9 +214,9 @@ public final class ItemsInteraction implements Screen
 
       graphics.setColor(color);
       graphics.setStrokeStyle(0);
-      int width = ResourseManager.getRectangleWidth(getItemImageUIid(items[selectedItem]));
-      int itemHeight = ResourseManager.getRectangleHeight(getItemImageUIid(items[selectedItem]));
-      int refItemHeight = ResourseManager.getRectangleHeight(33) - 10;
+      int width = ResourceManager.getRectangleWidth(getItemImageUIid(items[selectedItem]));
+      int itemHeight = ResourceManager.getRectangleHeight(getItemImageUIid(items[selectedItem]));
+      int refItemHeight = ResourceManager.getRectangleHeight(33) - 10;
       int height = Math.min(itemHeight, refItemHeight);
       graphics.setClip(this.xClipStart, 0, PlayerHUD.SCREEN_WIDTH, PlayerHUD.SCREEN_HEIGHT);
       graphics.drawRect(this.xClipStart + this.itemFrameXStart + this.offScreenItemsXOffset, this.yClipStart, width, height);
@@ -328,13 +328,13 @@ public final class ItemsInteraction implements Screen
             selectedItem = itemsTotalNumber - 1;
             if(itemsTotalNumber - 1 > 0) 
             {
-               this.itemFrameXStart = this.totalItemsFrameWidth - ResourseManager.getRectangleWidth(getItemImageUIid(items[itemsTotalNumber - 1]));
+               this.itemFrameXStart = this.totalItemsFrameWidth - ResourceManager.getRectangleWidth(getItemImageUIid(items[itemsTotalNumber - 1]));
                this.offScreenItemsXOffset = this.totalItemsFrameWidth < this.clipWidth?0:this.clipWidth - this.totalItemsFrameWidth;
             }
          } 
          else 
          {
-            this.itemFrameXStart -= ResourseManager.getRectangleWidth(getItemImageUIid(items[selectedItem]));
+            this.itemFrameXStart -= ResourceManager.getRectangleWidth(getItemImageUIid(items[selectedItem]));
             if(-this.offScreenItemsXOffset > this.itemFrameXStart) 
             {
                this.offScreenItemsXOffset = -this.itemFrameXStart;
@@ -353,7 +353,7 @@ public final class ItemsInteraction implements Screen
       case 5:
          if(selectedItem < items.length) 
          {
-            this.itemFrameXStart += ResourseManager.getRectangleWidth(getItemImageUIid(items[selectedItem]));
+            this.itemFrameXStart += ResourceManager.getRectangleWidth(getItemImageUIid(items[selectedItem]));
          }
 
          ++selectedItem;
@@ -362,8 +362,8 @@ public final class ItemsInteraction implements Screen
             selectedItem = 0;
             this.itemFrameXStart = this.offScreenItemsXOffset = 0;
          } 
-         else if(selectedItem < items.length && -this.offScreenItemsXOffset + this.clipWidth < this.itemFrameXStart + ResourseManager.getRectangleWidth(getItemImageUIid(items[selectedItem]))) {
-            this.offScreenItemsXOffset = -this.itemFrameXStart - ResourseManager.getRectangleWidth(getItemImageUIid(items[selectedItem])) + this.clipWidth;
+         else if(selectedItem < items.length && -this.offScreenItemsXOffset + this.clipWidth < this.itemFrameXStart + ResourceManager.getRectangleWidth(getItemImageUIid(items[selectedItem]))) {
+            this.offScreenItemsXOffset = -this.itemFrameXStart - ResourceManager.getRectangleWidth(getItemImageUIid(items[selectedItem])) + this.clipWidth;
          }
        default:
          break;  
@@ -419,7 +419,7 @@ public final class ItemsInteraction implements Screen
                }
 
                ++this.itemsTotalInInventory;
-               this.totalItemsFrameWidth += ResourseManager.getRectangleWidth(getItemImageUIid(Scripts.inventoryItems[itemIndex++]));
+               this.totalItemsFrameWidth += ResourceManager.getRectangleWidth(getItemImageUIid(Scripts.inventoryItems[itemIndex++]));
             }
          default: //а здесь их нет
              break;
@@ -435,12 +435,12 @@ public final class ItemsInteraction implements Screen
                }
 
                ++itemsTotalInTopArea;
-               this.totalItemsFrameWidth += ResourseManager.getRectangleWidth(getItemImageUIid(Scripts.stashItems[itemIndex++]));
+               this.totalItemsFrameWidth += ResourceManager.getRectangleWidth(getItemImageUIid(Scripts.stashItems[itemIndex++]));
             }
          case 6:
             itemsTotalInTopArea = 0;
 
-            for(selectedTopAreaItem = 0; itemIndex < Scripts.traderItems.length; this.totalItemsFrameWidth += ResourseManager.getRectangleWidth(getItemImageUIid(Scripts.traderItems[itemIndex++]))) {
+            for(selectedTopAreaItem = 0; itemIndex < Scripts.traderItems.length; this.totalItemsFrameWidth += ResourceManager.getRectangleWidth(getItemImageUIid(Scripts.traderItems[itemIndex++]))) {
                ++itemsTotalInTopArea;
             }
          }

@@ -527,7 +527,7 @@ public final class Scripts {
         if (PlayerHUD.IsTransitWasCompleted) //Если был выполнен переход по локации
         {
             PlayerHUD.IsTransitWasCompleted = false; //Включение ожидания перехода
-            ResourseManager.saveGame(); //Провести сохранение
+            ResourceManager.saveGame(); //Провести сохранение
             GameScene.setDialogWindowState((short) -2);
         }
 
@@ -1756,7 +1756,7 @@ public final class Scripts {
                 case 14:
                     if (Keys.rightSoft) {
                         Keys.rightSoft = false;
-                        ResourseManager.runGarbageCollector();
+                        ResourceManager.runGarbageCollector();
                         GameScene.setDialogWindowState((short) 2);//закрыть диалоговое окно
                         GameScene.showIntro = false;
                         PlayerHUD.introRolledFully = false;

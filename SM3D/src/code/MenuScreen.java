@@ -56,7 +56,7 @@ public class MenuScreen implements Screen
        graphics.fillRect(0, 0, 
                MainMenuScreen.scrWidth, 
                MainMenuScreen.scrHeight);
-       ResourseManager.drawUserInterfaceItems(graphics,
+       ResourceManager.drawUserInterfaceItems(graphics,
                this.interfaceNumber, 0, 0);
        //Жёлтый цвет (цвет надписей по дефолту)
        graphics.setColor(15637809);

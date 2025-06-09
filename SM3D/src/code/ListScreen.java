@@ -107,7 +107,7 @@ public class ListScreen extends MenuScreen {
             this.notifyAll();
         }
 
-        AllScreens.var_4ba = ResourseManager.getUIElementXcoord(45, 0);
+        AllScreens.var_4ba = ResourceManager.getUIElementXcoord(45, 0);
         return true;
     }
 
@@ -183,7 +183,7 @@ public class ListScreen extends MenuScreen {
                 var3 = 20;
             }
 
-            ResourseManager.DrawInterfaceImageToSelectedRegion(this.graphics, var1, AllScreens.var_4ba - 2 - (ResourseManager.ReturnWidthOfInterfaceImage(132) >> 1), MenuScreen.textClipY + this.i_var_3 + this.selectedIndex * AllScreens.SINGLE_TEXT_LINE_HEIGHT + 3 + var3, 17);
+            ResourceManager.DrawInterfaceImageToSelectedRegion(this.graphics, var1, AllScreens.var_4ba - 2 - (ResourceManager.ReturnWidthOfInterfaceImage(132) >> 1), MenuScreen.textClipY + this.i_var_3 + this.selectedIndex * AllScreens.SINGLE_TEXT_LINE_HEIGHT + 3 + var3, 17);
         }
 
     }
@@ -285,14 +285,14 @@ public class ListScreen extends MenuScreen {
                     } else {
                         if (super.drawingScreenId == 2 && this.selectedIndex == 1) {
                             GameScene.SetToNullAllWorldnMeshMassives();
-                            ResourseManager.loadInterfaceImage(2);
+                            ResourceManager.loadInterfaceImage(2);
                         }
 
                         switch (this.selectedIndex) {
                             case 0:
                                 GameScene.gamePaused = false;
                                 Main.main.setScreen(this.screenByOptionId[this.selectedIndex], this.screenIdByOptionId[this.selectedIndex]);
-                                ResourseManager.runGarbageCollector();
+                                ResourceManager.runGarbageCollector();
                                 return;
                             case 5:
                                 if (Scripts.playerCanLeaveLevel) {

@@ -12,7 +12,7 @@ public final class EmptySceneScreen implements Screen
 
    public final void paint(Graphics graphics) 
    {
-      ResourseManager.drawUserInterfaceItems(graphics, 50, 0, 0);
+      ResourceManager.drawUserInterfaceItems(graphics, 50, 0, 0);
       graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
       graphics.setColor(0xffffff);
       graphics.drawString("Empty scene", 

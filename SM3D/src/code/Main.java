@@ -35,7 +35,7 @@ public class Main extends MIDlet
       OldDebugger.restartDebuggers("players");
       display = Display.getDisplay(main);
       canvas = new MasterCanvas();
-      AllScreens.loadingScreen = loadingScreen = new LoadingScreen(ResourseManager.interfaceImages[0]);
+      AllScreens.loadingScreen = loadingScreen = new LoadingScreen(ResourceManager.interfaceImages[0]);
       AllScreens.recordsScreen = recordsScreen = new PlayersRecords();
       AllScreens.settingsScreen = settingsScreen = new SettingsScreen();
       gameScreen = new GameScreen();
@@ -92,7 +92,7 @@ public class Main extends MIDlet
 
    public final void destroyApp(boolean var1) 
    {
-      ResourseManager.saveSettings();
+      ResourceManager.saveSettings();
       this.notifyDestroyed();
    }
 
@@ -133,9 +133,9 @@ public class Main extends MIDlet
       ((PlayersRecords)this.recordsScreen).addNewPlayerRecord(recordData);
    }
 
-   public final byte[][] sub_1d8() 
+   public final byte[][] getPlayersRecords() 
    {
-      return ((PlayersRecords)recordsScreen).var_56;
+      return ((PlayersRecords)recordsScreen).records;
    }
 
    public final void repaint() 

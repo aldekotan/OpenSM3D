@@ -31,7 +31,7 @@ public final class StashScreen implements Screen
          selectedItem = ItemsInteraction.selectedInventoryItem;
       }
 
-      ResourseManager.drawUserInterfaceItems(graphics, 46, 0, 0); //отрисовка UI
+      ResourceManager.drawUserInterfaceItems(graphics, 46, 0, 0); //отрисовка UI
       graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
       if(this.screen instanceof ItemsInteraction) 
       {
@@ -46,8 +46,8 @@ public final class StashScreen implements Screen
       boolean var4 = false;
       boolean var5 = false;
       graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
-      ResourseManager.drawUserInterfaceItems(graphics, 91, 0, 0);//?
-      ResourseManager.drawUserInterfaceItems(graphics, 82, 0, 0);//?
+      ResourceManager.drawUserInterfaceItems(graphics, 91, 0, 0);//?
+      ResourceManager.drawUserInterfaceItems(graphics, 82, 0, 0);//?
       if(this.screen == this.masterInvScreen.playerItemsZone) 
       {
          PlayerHUD.drawSoftButtonNames(1, 0, 372, true);//убрать
@@ -58,8 +58,8 @@ public final class StashScreen implements Screen
       }
 
       PlayerHUD.drawSoftButtonNames(0, 1, 6, true);
-      int x_dest = ResourseManager.getUIElementXcoord(47, 6);
-      int y_dest = ResourseManager.getUIElementYcoord(47, 6);
+      int x_dest = ResourceManager.getUIElementXcoord(47, 6);
+      int y_dest = ResourceManager.getUIElementYcoord(47, 6);
       TextCreator.drawLineByAnchor(1, 309, x_dest, y_dest, 5);
       
       byte[] currWeight = TextCreator.createTextFromNumberSeparated(Scripts.playerWeight);
@@ -70,13 +70,13 @@ public final class StashScreen implements Screen
       byte[] kg = TextCreator.createTextFromLine(64);
       byte[] playerMaxWeightText = TextCreator.combineText(maxWeight, kg);
       byte[] text = TextCreator.combineText(playerWeightText, playerMaxWeightText);
-      int x_coord = ResourseManager.getUIElementXcoord(47, 10);
-      int y_coord = ResourseManager.getUIElementYcoord(47, 10);
+      int x_coord = ResourceManager.getUIElementXcoord(47, 10);
+      int y_coord = ResourceManager.getUIElementYcoord(47, 10);
       TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x_coord, y_coord, 5);
       
       text = TextCreator.combineText(TextCreator.createTextFromNumberSeparated(Scripts.getItemWeight(items[selectedItem])), TextCreator.createTextFromLine(64));
-      x_coord = ResourseManager.getUIElementXcoord(47, 7);
-      y_coord = ResourseManager.getUIElementYcoord(47, 7);
+      x_coord = ResourceManager.getUIElementXcoord(47, 7);
+      y_coord = ResourceManager.getUIElementYcoord(47, 7);
       TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x_coord, y_coord, 5);
       
       ItemsInteraction.drawOrder = 3;
@@ -130,7 +130,7 @@ public final class StashScreen implements Screen
          this.screen.keyPressed(key);
          break;
       case 3:
-         ResourseManager.runGarbageCollector();
+         ResourceManager.runGarbageCollector();
          Main.main.setScreen(AllScreens.menu, (byte)14);
          GameScene.setActiveObjState(Scripts.openedActivableObjId, (short)0);
          break;
@@ -144,7 +144,7 @@ public final class StashScreen implements Screen
             this.masterInvScreen.playerItemsZone.onShow((byte)3);
             if(Scripts.stashItems.length == 0) {
                GameScene.setActiveObjState(Scripts.openedActivableObjId, (short)0);
-               ResourseManager.runGarbageCollector();
+               ResourceManager.runGarbageCollector();
                Main.main.setScreen(AllScreens.menu, (byte)14);
                break;
             }
@@ -177,13 +177,13 @@ public final class StashScreen implements Screen
    public final boolean onShow(byte screenId) 
    {
       this.masterInvScreen.itemDscrScreen.resetVariables();
-      int xCoord2 = ResourseManager.getUIElementXcoord(47, 2);
-      int xCoord3 = ResourseManager.getUIElementXcoord(47, 3);
-      int yCoord2 = ResourseManager.getUIElementYcoord(47, 2);
-      int yCoord5 = ResourseManager.getUIElementYcoord(47, 5);
+      int xCoord2 = ResourceManager.getUIElementXcoord(47, 2);
+      int xCoord3 = ResourceManager.getUIElementXcoord(47, 3);
+      int yCoord2 = ResourceManager.getUIElementYcoord(47, 2);
+      int yCoord5 = ResourceManager.getUIElementYcoord(47, 5);
       this.masterInvScreen.itemDscrScreen.setNameFrameLocation(xCoord2, xCoord3, yCoord2);
-      xCoord2 = ResourseManager.getUIElementXcoord(47, 4);
-      xCoord3 = ResourseManager.getUIElementXcoord(47, 5);
+      xCoord2 = ResourceManager.getUIElementXcoord(47, 4);
+      xCoord3 = ResourceManager.getUIElementXcoord(47, 5);
       this.masterInvScreen.itemDscrScreen.setDescriptionFrameLocation(xCoord2, yCoord2, xCoord3 - xCoord2, yCoord5 - yCoord2);
       this.masterInvScreen.playerItemsZone.onShow((byte)3);
       this.masterInvScreen.playerItemsZone.itemsInteraction = this.masterInvScreen.topAreaItemsZone;

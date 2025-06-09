@@ -30,7 +30,7 @@ public final class GameScreen implements Screen {
     //Здесь происходит переход от состояния игрового мира к просмотру UI
     public static void clearMemoryAndLoadUIImages() {
         GameScene.SetToNullAllWorldnMeshMassives();
-        ResourseManager.loadAllInterfaceImages();
+        ResourceManager.loadAllInterfaceImages();
         Main.main.setScreen(AllScreens.menu, (byte) 1);
         Main.main.repaint();
     }

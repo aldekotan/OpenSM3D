@@ -1625,7 +1625,7 @@ public final class GameScene {
         prevGameState = currentGameState;//Предыдущее окно?
         currentGameState = state;   //Текущее окно
         if(currentGameState == 2 && prevGameState == 9) {
-            ResourseManager.runGarbageCollector();
+            ResourceManager.runGarbageCollector();
         }
 
         switch(currentGameState) {
@@ -1633,7 +1633,7 @@ public final class GameScene {
                 PlayerHUD.garbageCollected = 0;
                 SoundAndVibro.stopPlayingSound();
                 if(!showIntro) {
-                    ResourseManager.runGarbageCollector();
+                    ResourceManager.runGarbageCollector();
                 }
                 break;
             case 1:

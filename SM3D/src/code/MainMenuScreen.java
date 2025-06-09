@@ -77,7 +77,7 @@ public final class MainMenuScreen implements Screen
          this.drawMainMenu(graphics);
          return;
       case 5:
-         new LoadingScreen(ResourseManager.interfaceImages[0]);
+         new LoadingScreen(ResourceManager.interfaceImages[0]);
          this.movingDirection = 4;
       default:
       }
@@ -138,7 +138,7 @@ public final class MainMenuScreen implements Screen
       if(screenId == 16) 
       {
          SoundAndVibro.soundsEnabled = false;
-         ResourseManager.saveSettings();
+         ResourceManager.saveSettings();
          ((SettingsScreen)AllScreens.settingsScreen).loadSettings();
       }
 
@@ -209,9 +209,9 @@ public final class MainMenuScreen implements Screen
       //цвет фона в главном меню игры
       graphics.setColor(0); 
       graphics.fillRect(0, 0, scrWidth, scrHeight);
-      int x_coord = scrWidth / 2 - ResourseManager.interfaceImages[2].getWidth() / 2;
-      int y_coord = scrHeight / 2 - ResourseManager.interfaceImages[2].getHeight() / 2;
-      graphics.drawImage(ResourseManager.interfaceImages[2], x_coord, y_coord, 0);
+      int x_coord = scrWidth / 2 - ResourceManager.interfaceImages[2].getWidth() / 2;
+      int y_coord = scrHeight / 2 - ResourceManager.interfaceImages[2].getHeight() / 2;
+      graphics.drawImage(ResourceManager.interfaceImages[2], x_coord, y_coord, 0);
    }
 
    private void drawMainMenu(Graphics graphics) 

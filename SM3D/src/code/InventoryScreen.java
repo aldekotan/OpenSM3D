@@ -26,13 +26,13 @@ public final class InventoryScreen implements Screen
    public final void paint(Graphics graphics) 
    {
       //Отрисовка основы UI и задание рабочей области
-      ResourseManager.drawUserInterfaceItems(graphics, 38, 0, 0);
+      ResourceManager.drawUserInterfaceItems(graphics, 38, 0, 0);
       graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
       
       //Рисуем кнопки. id 6: Назад
       PlayerHUD.drawSoftButtonNames(0, 1, 6, true);
-      ResourseManager.drawUserInterfaceItems(MasterCanvas.graphics, 78, 0, 0);
-      ResourseManager.drawUserInterfaceItems(MasterCanvas.graphics, 80, 0, 0);
+      ResourceManager.drawUserInterfaceItems(MasterCanvas.graphics, 78, 0, 0);
+      ResourceManager.drawUserInterfaceItems(MasterCanvas.graphics, 80, 0, 0);
 
       //Рисуем поле с текущим/максимальным переносимым весом
       byte[] currentPlayerWeight = TextCreator.createTextFromNumberSeparated(Scripts.playerWeight);
@@ -44,15 +44,15 @@ public final class InventoryScreen implements Screen
       byte[] kg = TextCreator.createTextFromLine(64); 
       byte[] rightPartText = TextCreator.combineText(maxPlayerWeight, kg);
       byte[] finalText = TextCreator.combineText(leftPartText, rightPartText);
-      int x_dest = ResourseManager.getUIElementXcoord(39, 20);
-      int y_dest = ResourseManager.getUIElementYcoord(39, 20);
+      int x_dest = ResourceManager.getUIElementXcoord(39, 20);
+      int y_dest = ResourceManager.getUIElementYcoord(39, 20);
       TextCreator.drawWeightTextByAnchor(1, finalText, 
               0, finalText.length, x_dest, y_dest, 5);
 
       //Поле с весом выбранного предмета (дописываем КГ в конце)
       finalText = TextCreator.combineText(TextCreator.createTextFromNumberSeparated(Scripts.getItemWeight(Scripts.inventoryItems[ItemsInteraction.selectedInventoryItem])), TextCreator.createTextFromLine(64));
-      x_dest = ResourseManager.getUIElementXcoord(39, 19);
-      y_dest = ResourseManager.getUIElementYcoord(39, 19);
+      x_dest = ResourceManager.getUIElementXcoord(39, 19);
+      y_dest = ResourceManager.getUIElementYcoord(39, 19);
       TextCreator.drawWeightTextByAnchor(1, finalText, 
               0, finalText.length, x_dest, y_dest, 5);
       
@@ -61,8 +61,8 @@ public final class InventoryScreen implements Screen
       //106 - символ доллара
       (moneyText = TextCreator.makeColoredTextFromNumber(Scripts.playerMoney,
               false))[moneyText.length - 1] = 106;
-      x_dest = ResourseManager.getUIElementXcoord(39, 21);
-      y_dest = ResourseManager.getUIElementYcoord(39, 21);
+      x_dest = ResourceManager.getUIElementXcoord(39, 21);
+      y_dest = ResourceManager.getUIElementYcoord(39, 21);
       TextCreator.drawColoredText(moneyText, x_dest, y_dest, 3);
       
       PlayerHUD.drawDamageIndicatorAndHealthBar(true);
@@ -132,15 +132,15 @@ public final class InventoryScreen implements Screen
       this.itemDscrScreen.resetVariables();
       
       //Задаём фреймворк для окна с названием предмета
-      int xStart = ResourseManager.getUIElementXcoord(39, 15);//Левый край 142
-      int xEnd = ResourseManager.getUIElementXcoord(39, 16);//Правый край 216
-      int yStart = ResourseManager.getUIElementYcoord(39, 15);//Верхний край 54
-      int yEnd = ResourseManager.getUIElementYcoord(39, 18);//Нижний край 206
+      int xStart = ResourceManager.getUIElementXcoord(39, 15);//Левый край 142
+      int xEnd = ResourceManager.getUIElementXcoord(39, 16);//Правый край 216
+      int yStart = ResourceManager.getUIElementYcoord(39, 15);//Верхний край 54
+      int yEnd = ResourceManager.getUIElementYcoord(39, 18);//Нижний край 206
       this.itemDscrScreen.setNameFrameLocation(xStart, xEnd, yStart);
       
       //Задаём фреймворк для окна описания
-      xStart = ResourseManager.getUIElementXcoord(39, 17);//137
-      xEnd = ResourseManager.getUIElementXcoord(39, 18);//215
+      xStart = ResourceManager.getUIElementXcoord(39, 17);//137
+      xEnd = ResourceManager.getUIElementXcoord(39, 18);//215
       this.itemDscrScreen.setDescriptionFrameLocation(xStart, yStart, xEnd - xStart, yEnd - yStart);//137,54,78,152
       this.itemsInteraction = this.masterInvScreen.playerItemsZone;
       this.itemsInteraction.onShow((byte)1);

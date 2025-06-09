@@ -11,14 +11,20 @@ import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 import javax.microedition.rms.RecordStoreNotFoundException;
 
-public final class ResourseManager {
+public final class ResourceManager {
 
     public static DataInputStream data = new DataInputStream(Main.main.getClass().getResourceAsStream("/d"));
     
     public static boolean logoImageLoaded = false;
     public static Image[] interfaceImages = new Image[13];
+    
+    //Состояние загрузки игры.
+    //1 - до появления логотипа
+    //8 - после лого
+    //0 - после загрузки игровых интерфейсов
+    public static int loadingState;
+    
     //Параметры изображений
-    public static int var_e6;
     public static byte[] interfaceImageIds;
     public static short[] interfaceImageXsrc;
     public static short[] interfaceImageYsrc;
@@ -42,9 +48,9 @@ public final class ResourseManager {
         System.out.println("ResourceManager.saveSettings: settings saved");
     }
 
-    public static void sub_4d() {//
+    public static void savePlayersRecords() {//
         try {
-            byte[][] tempMassive = Main.main.sub_1d8();
+            byte[][] records = Main.main.getPlayersRecords();
 			
             ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
             DataOutputStream dataOutput = new DataOutputStream(byteArray);
@@ -52,14 +58,14 @@ public final class ResourseManager {
             dataOutput.writeByte(Main.main.numberOfPlayers);
 
             for (int i = 0; i < Main.main.numberOfPlayers; ++i) {
-                dataOutput.writeByte((byte) tempMassive[i].length);
-                dataOutput.write(tempMassive[i]);
+                dataOutput.writeByte((byte) records[i].length);
+                dataOutput.write(records[i]);
             }
 
             saveArrayToRms(byteArray.toByteArray(), "qppla");
             byteArray.close();
-        } catch (IOException var4) {
-            var4.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -370,25 +376,25 @@ public final class ResourseManager {
         //}
     }
 
-    public static void ReadDataFromFile_D(DataInputStream datainputstream) {
+    public static void getInterfaceData(DataInputStream datainputstream) {
         try {
             //Одиночные части интерфейса
-            short var1;
-            interfaceImageIds = readBytesArray(var1 = datainputstream.readShort());
-            interfaceImageXsrc = readShortsArray(var1);
-            interfaceImageYsrc = readShortsArray(var1);
-            interfaceImageWidth = readShortsArray(var1);
-            interfaceImageHeight = readShortsArray(var1);
-            interfaceImageTransform = readBytesArray(var1);
+            short numberOfInterfaces;
+            interfaceImageIds = readBytesArray(numberOfInterfaces = datainputstream.readShort());
+            interfaceImageXsrc = readShortsArray(numberOfInterfaces);
+            interfaceImageYsrc = readShortsArray(numberOfInterfaces);
+            interfaceImageWidth = readShortsArray(numberOfInterfaces);
+            interfaceImageHeight = readShortsArray(numberOfInterfaces);
+            interfaceImageTransform = readBytesArray(numberOfInterfaces);
             //Составные интерфейсные окна
             //Ниже указан диапазон от первого числа до второго. Из него берётся
             //число и по нему вызывается изображение в packIds, с координатами
             interfaceImageAdditionalIds = readShortsArray(datainputstream.readShort());
             //В packIds хранятся айдишники элементов из interfaceImageIds и
             //их положение относительно экрана
-            interfacePackIds = readShortsArray(var1 = datainputstream.readShort());
-            interfaceImageXdest = readShortsArray(var1);
-            interfaceImageYdest = readShortsArray(var1);
+            interfacePackIds = readShortsArray(numberOfInterfaces = datainputstream.readShort());
+            interfaceImageXdest = readShortsArray(numberOfInterfaces);
+            interfaceImageYdest = readShortsArray(numberOfInterfaces);
             
             int[] var2 = getRectangleParams(50, 2, 10);
             int[] var3 = getRectangleParams(50, 4, 0);
@@ -432,8 +438,8 @@ public final class ResourseManager {
         }
     }
 
-    public static int[] getRectangleParams(int var0, int var1, int var2) {
-        int rectangleNumber = interfaceImageAdditionalIds[var0] + var1;
+    public static int[] getRectangleParams(int interfId, int var1, int var2) {
+        int rectangleNumber = interfaceImageAdditionalIds[interfId] + var1;
         int[] rectangleParamsMassive = new int[4];
         int[] tempMassive = new int[]{0, 0, 0, 0};
         rectangleParamsMassive[0] = interfaceImageXdest[rectangleNumber];
@@ -466,8 +472,8 @@ public final class ResourseManager {
     static {
         try {
             interfaceImages[0] = Image.createImage("/gamedata/textures/i0.png");
-        } catch (IOException var1) {
-            var1.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 }

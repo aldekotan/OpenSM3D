@@ -26,16 +26,16 @@ public final class MasterInventoryScreen implements Screen
        //%%%%%%%%%%%
        
       //Окно предметов игрока
-      int xStart = ResourseManager.getUIElementXcoord(49, 14);
-      int yStart = ResourseManager.getUIElementYcoord(49, 14);
-      int xEnd = ResourseManager.getUIElementXcoord(49, 15);
-      int yEnd = ResourseManager.getUIElementYcoord(49, 15);
+      int xStart = ResourceManager.getUIElementXcoord(49, 14);
+      int yStart = ResourceManager.getUIElementYcoord(49, 14);
+      int xEnd = ResourceManager.getUIElementXcoord(49, 15);
+      int yEnd = ResourceManager.getUIElementYcoord(49, 15);
       this.playerItemsZone = new ItemsInteraction(xStart, yStart + 2, xEnd - xStart, yEnd - yStart);
       //Окно торгаша/тайника
-      xStart = ResourseManager.getUIElementXcoord(49, 0);
-      yStart = ResourseManager.getUIElementYcoord(49, 0);
-      xEnd = ResourseManager.getUIElementXcoord(49, 1);
-      yEnd = ResourseManager.getUIElementYcoord(49, 1);
+      xStart = ResourceManager.getUIElementXcoord(49, 0);
+      yStart = ResourceManager.getUIElementYcoord(49, 0);
+      xEnd = ResourceManager.getUIElementXcoord(49, 1);
+      yEnd = ResourceManager.getUIElementYcoord(49, 1);
       this.topAreaItemsZone = new ItemsInteraction(xStart, yStart, xEnd - xStart, yEnd - yStart);
       //Окно описания предметов
       this.itemDscrScreen = new ItemDescriptionScreen();

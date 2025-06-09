@@ -92,7 +92,7 @@ public final class LoadingScreen implements Screen {
                 loadGameStuff();
                 
                 //Unload logo
-                ResourseManager.interfaceImages[0] = null;
+                ResourceManager.interfaceImages[0] = null;
                 System.gc();
                 
                 if(SoundAndVibro.soundsEnabled) {
@@ -103,20 +103,20 @@ public final class LoadingScreen implements Screen {
                 Main.main.setScreen(AllScreens.menu, (byte) 1);
                 return;
             case 2:
-                this.sub_cc();
+                this.gamePreload();
                 Main.main.setScreen(this.var_22d, this.var_25a);
             default:
         }
     }
 
-    private void sub_cc() //загрузка и начало новой игры, сохранение настроек
+    private void gamePreload() //загрузка и начало новой игры, сохранение настроек
     {
         switch(this.toLoad) {
             case 4: //сохранение игровых настроек
-                ResourseManager.saveSettings();
+                ResourceManager.saveSettings();
                 break;
             case 5:
-                ResourseManager.sub_4d();
+                ResourceManager.savePlayersRecords();
             case 6:
             case 7:
             case 9:
@@ -124,29 +124,29 @@ public final class LoadingScreen implements Screen {
             default:
                 break;
             case 8:
-                ResourseManager.removeLogoImageFromMemory();
+                ResourceManager.removeLogoImageFromMemory();
                 break;
             case 11: //начало новой игры
                 GameScene.setDialogWindowState((short) -2);
                 GameScene.init();
                 break;
             case 12: //загрузка сохранённой игры
-                ResourseManager.loadGameSave();
+                ResourceManager.loadGameSave();
                 PlayerHUD.loadLocationsCoordinates();
                 Scripts.sub_72f();
         }
 
-        ResourseManager.var_e6 = 0;
+        ResourceManager.loadingState = 0;
     }
 
     private void loadGameStuff() {
-        ResourseManager.var_e6 = 1;
-        if(ResourseManager.var_e6 == 1) {
+        ResourceManager.loadingState = 1;
+        if(ResourceManager.loadingState == 1) {
             try {
-                TextCreator.loadTextSymbols(ResourseManager.data, 0); //загрузка параметров
-                TextCreator.loadTextSymbols(ResourseManager.data, 1); //загрузка параметров
-                TextCreator.loadTextLines(ResourseManager.data); //загрузка текста и его параметров
-                ResourseManager.ReadDataFromFile_D(ResourseManager.data); //загрузка параметров изображений интерфейса
+                TextCreator.loadTextSymbols(ResourceManager.data, 0); //загрузка параметров
+                TextCreator.loadTextSymbols(ResourceManager.data, 1); //загрузка параметров
+                TextCreator.loadTextLines(ResourceManager.data); //загрузка текста и его параметров
+                ResourceManager.getInterfaceData(ResourceManager.data); //загрузка параметров изображений интерфейса
                 AllScreens.SymbolHeight = TextCreator.getSymbolHeight(1);
                 AllScreens.SymbolWidth = TextCreator.getSymbolWidth(1, 10);
             } catch (Exception var2) {
@@ -155,8 +155,8 @@ public final class LoadingScreen implements Screen {
 
             TextCreator.setColoredDigitsId();
             Main.main.sub_2c();
-            ResourseManager.loadAllInterfaceImages();
-            ResourseManager.loadSettings();
+            ResourceManager.loadAllInterfaceImages();
+            ResourceManager.loadSettings();
         }
 
         Main.main.repaint();
@@ -166,8 +166,8 @@ public final class LoadingScreen implements Screen {
         }
 
         this.logo = null;
-        ResourseManager.logoImageLoaded = true;
-        ResourseManager.var_e6 = 8;
+        ResourceManager.logoImageLoaded = true;
+        ResourceManager.loadingState = 8;
     }
 
 }

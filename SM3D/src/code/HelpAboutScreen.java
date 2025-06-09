@@ -121,7 +121,7 @@ public final class HelpAboutScreen extends MenuScreen {
               - MenuScreen.textClipHeight;
       int currentYpos = Math.abs(this.yStart - MenuScreen.textClipY);
       int x = MenuScreen.textClipX + MenuScreen.textClipWidth + 20;
-      int yOuter = ResourseManager.getRectangleParams(44, 4, 0)[1] + 5;
+      int yOuter = ResourceManager.getRectangleParams(44, 4, 0)[1] + 5;
       int heightOuter = MenuScreen.textClipHeight + 25;
       //Серый цвет
       MasterCanvas.graphics.setColor(8421504);

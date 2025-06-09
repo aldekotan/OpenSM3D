@@ -36,9 +36,9 @@ public final class TradeScreen implements Screen
       }
 
       //МЕНЮ ТОРГОВЛИ. ОСНОВА
-      ResourseManager.drawUserInterfaceItems(graphics, 48, 0, 0);
+      ResourceManager.drawUserInterfaceItems(graphics, 48, 0, 0);
       //надпись ТОРГОВЛЯ
-      ResourseManager.drawUserInterfaceItems(graphics, 92, 0, 0);
+      ResourceManager.drawUserInterfaceItems(graphics, 92, 0, 0);
       
       graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
       //предмет вне окна предпрсмотра
@@ -56,7 +56,7 @@ public final class TradeScreen implements Screen
       boolean var4 = false;
       boolean var5 = false;
       graphics.setClip(0, 0, MainMenuScreen.scrWidth, MainMenuScreen.scrHeight);
-      ResourseManager.drawUserInterfaceItems(graphics, 82, 0, 0); //надпись ИНФО
+      ResourceManager.drawUserInterfaceItems(graphics, 82, 0, 0); //надпись ИНФО
       if(this.screen == this.masterInvScreen.playerItemsZone) 
       {
          PlayerHUD.drawSoftButtonNames(1, 0, 375, true);//продать
@@ -67,12 +67,12 @@ public final class TradeScreen implements Screen
       }
 
       PlayerHUD.drawSoftButtonNames(0, 1, 6, true);//назад
-      int x1 = ResourseManager.getUIElementXcoord(49, 6);
-      int y2 = ResourseManager.getUIElementYcoord(49, 6);
+      int x1 = ResourceManager.getUIElementXcoord(49, 6);
+      int y2 = ResourceManager.getUIElementYcoord(49, 6);
       TextCreator.drawLineByAnchor(1, 309, x1, y2, 5);
       
-      x1 = ResourseManager.getUIElementXcoord(49, 10);
-      y2 = ResourseManager.getUIElementYcoord(49, 10);
+      x1 = ResourceManager.getUIElementXcoord(49, 10);
+      y2 = ResourceManager.getUIElementYcoord(49, 10);
       TextCreator.drawLineByAnchor(1, 310, x1, y2, 5);
       
       byte[] currWeight = TextCreator.createTextFromNumberSeparated(Scripts.playerWeight);
@@ -83,13 +83,13 @@ public final class TradeScreen implements Screen
       byte[] kg = TextCreator.createTextFromLine(64);
       byte[] playerMaxWeightText = TextCreator.combineText(maxWeight, kg);
       byte[] text = TextCreator.combineText(playerWeightText, playerMaxWeightText);
-      int x = ResourseManager.getUIElementXcoord(49, 12);
-      int y = ResourseManager.getUIElementYcoord(49, 12);
+      int x = ResourceManager.getUIElementXcoord(49, 12);
+      int y = ResourceManager.getUIElementYcoord(49, 12);
       TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x, y, 5);
       
       text = TextCreator.combineText(TextCreator.createTextFromNumberSeparated(Scripts.getItemWeight(items[selectedItem])), TextCreator.createTextFromLine(64));
-      x = ResourseManager.getUIElementXcoord(49, 7);
-      y = ResourseManager.getUIElementYcoord(49, 7);
+      x = ResourceManager.getUIElementXcoord(49, 7);
+      y = ResourceManager.getUIElementYcoord(49, 7);
       TextCreator.drawWeightTextByAnchor(1, text, 0, text.length, x, y, 5);
       
       int price;
@@ -102,14 +102,14 @@ public final class TradeScreen implements Screen
       }
 
       text = TextCreator.combineText(TextCreator.createTextFromNumber(price), TextCreator.createTextFromLine(66));
-      x = ResourseManager.getUIElementXcoord(49, 11);
-      y = ResourseManager.getUIElementYcoord(49, 11);
+      x = ResourceManager.getUIElementXcoord(49, 11);
+      y = ResourceManager.getUIElementYcoord(49, 11);
       TextCreator.drawTextByAnchor(1, text, 0, text.length, x, y, 5);
       
       short[] playerMoneyText;
       (playerMoneyText = TextCreator.makeColoredTextFromNumber(Scripts.playerMoney, false))[playerMoneyText.length - 1] = 106;
-      x = ResourseManager.getUIElementXcoord(49, 13);
-      y = ResourseManager.getUIElementYcoord(49, 13);
+      x = ResourceManager.getUIElementXcoord(49, 13);
+      y = ResourceManager.getUIElementYcoord(49, 13);
       TextCreator.drawColoredText(playerMoneyText, x, y, 3);
       
       ItemsInteraction.drawOrder = 5;
@@ -154,7 +154,7 @@ public final class TradeScreen implements Screen
          this.screen.keyPressed(key);
          break;
       case 3:
-         ResourseManager.runGarbageCollector();
+         ResourceManager.runGarbageCollector();
          Main.main.setScreen(AllScreens.menu, (byte)14);
          break;
       case 4:
@@ -167,7 +167,7 @@ public final class TradeScreen implements Screen
             this.masterInvScreen.playerItemsZone.onShow((byte)5);
             if(Scripts.traderItems.length == 0) //Если у торговца предметов нет
             {
-               ResourseManager.runGarbageCollector();
+               ResourceManager.runGarbageCollector();
                Main.main.setScreen(AllScreens.menu, (byte)14);
                break;
             }
@@ -194,14 +194,14 @@ public final class TradeScreen implements Screen
 
    public final boolean onShow(byte var1) {
       this.masterInvScreen.itemDscrScreen.resetVariables();
-      int xCoord2 = ResourseManager.getUIElementXcoord(49, 2);
-      int xCoord3 = ResourseManager.getUIElementXcoord(49, 3);
-      int yCoord2 = ResourseManager.getUIElementYcoord(49, 2);
-      int yCoord5 = ResourseManager.getUIElementYcoord(49, 5);
+      int xCoord2 = ResourceManager.getUIElementXcoord(49, 2);
+      int xCoord3 = ResourceManager.getUIElementXcoord(49, 3);
+      int yCoord2 = ResourceManager.getUIElementYcoord(49, 2);
+      int yCoord5 = ResourceManager.getUIElementYcoord(49, 5);
       this.masterInvScreen.itemDscrScreen.setNameFrameLocation(xCoord2, 
               xCoord3, yCoord2);
-      xCoord2 = ResourseManager.getUIElementXcoord(49, 4);
-      xCoord3 = ResourseManager.getUIElementXcoord(49, 5);
+      xCoord2 = ResourceManager.getUIElementXcoord(49, 4);
+      xCoord3 = ResourceManager.getUIElementXcoord(49, 5);
       this.masterInvScreen.itemDscrScreen.setDescriptionFrameLocation(xCoord2, 
               yCoord2, xCoord3 - xCoord2, yCoord5 - yCoord2);
       this.masterInvScreen.playerItemsZone.onShow((byte)5);

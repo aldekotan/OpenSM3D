@@ -83,56 +83,56 @@ public final class PlayerHUD {
     public static void loadLocationsCoordinates() {
         //TODO: выяснить, к каким коордам какая локация относится на карте
         //x 209        y 289    Место крушения
-        locCoord4 = new int[]{ResourseManager.getRectangleParams(41, 4, 0)[0], 
-            ResourseManager.getRectangleParams(41, 4, 0)[1]};
+        locCoord4 = new int[]{ResourceManager.getRectangleParams(41, 4, 0)[0], 
+            ResourceManager.getRectangleParams(41, 4, 0)[1]};
         //x 197        y 281    Лагерь (Первый)
-        locCoord5 = new int[]{ResourseManager.getRectangleParams(41, 5, 0)[0], 
-            ResourseManager.getRectangleParams(41, 5, 0)[1]};
+        locCoord5 = new int[]{ResourceManager.getRectangleParams(41, 5, 0)[0], 
+            ResourceManager.getRectangleParams(41, 5, 0)[1]};
         //x 219        y 274    Найти артефакт на базе бандитов. Галош
-        locCoord6 = new int[]{ResourseManager.getRectangleParams(41, 6, 0)[0], 
-            ResourseManager.getRectangleParams(41, 6, 0)[1]};
+        locCoord6 = new int[]{ResourceManager.getRectangleParams(41, 6, 0)[0], 
+            ResourceManager.getRectangleParams(41, 6, 0)[1]};
         //x 195        y 256    Найти сталкера в канализации. Ржавый
-        locCoord8 = new int[]{ResourseManager.getRectangleParams(41, 8, 0)[0], 
-            ResourseManager.getRectangleParams(41, 8, 0)[1]};
+        locCoord8 = new int[]{ResourceManager.getRectangleParams(41, 8, 0)[0], 
+            ResourceManager.getRectangleParams(41, 8, 0)[1]};
         //x 204        y 266    Убить бандитов на лесной дороге. Ржавый
-        locCoord7 = new int[]{ResourseManager.getRectangleParams(41, 7, 0)[0], 
-            ResourseManager.getRectangleParams(41, 7, 0)[1]};
+        locCoord7 = new int[]{ResourceManager.getRectangleParams(41, 7, 0)[0], 
+            ResourceManager.getRectangleParams(41, 7, 0)[1]};
         //x 206        y 244
-        locCoord9 = new int[]{ResourseManager.getRectangleParams(41, 9, 0)[0], 
-            ResourseManager.getRectangleParams(41, 9, 0)[1]};
+        locCoord9 = new int[]{ResourceManager.getRectangleParams(41, 9, 0)[0], 
+            ResourceManager.getRectangleParams(41, 9, 0)[1]};
         //x 206        y 222
-        locCoord10 = new int[]{ResourseManager.getRectangleParams(41, 10, 0)[0], 
-            ResourseManager.getRectangleParams(41, 10, 0)[1]};
+        locCoord10 = new int[]{ResourceManager.getRectangleParams(41, 10, 0)[0], 
+            ResourceManager.getRectangleParams(41, 10, 0)[1]};
         //x 186        y 230
-        locCoord11 = new int[]{ResourseManager.getRectangleParams(41, 11, 0)[0], 
-            ResourseManager.getRectangleParams(41, 11, 0)[1]};
+        locCoord11 = new int[]{ResourceManager.getRectangleParams(41, 11, 0)[0], 
+            ResourceManager.getRectangleParams(41, 11, 0)[1]};
         //x 166        y 242
-        locCoord12 = new int[]{ResourseManager.getRectangleParams(41, 12, 0)[0], 
-            ResourseManager.getRectangleParams(41, 12, 0)[1]};
+        locCoord12 = new int[]{ResourceManager.getRectangleParams(41, 12, 0)[0], 
+            ResourceManager.getRectangleParams(41, 12, 0)[1]};
         //x 102        y 280
-        locCoord13 = new int[]{ResourseManager.getRectangleParams(41, 13, 0)[0], 
-            ResourseManager.getRectangleParams(41, 13, 0)[1]};
+        locCoord13 = new int[]{ResourceManager.getRectangleParams(41, 13, 0)[0], 
+            ResourceManager.getRectangleParams(41, 13, 0)[1]};
         //x 66        y 273
-        locCoord14 = new int[]{ResourseManager.getRectangleParams(41, 14, 0)[0], 
-            ResourseManager.getRectangleParams(41, 14, 0)[1]};
+        locCoord14 = new int[]{ResourceManager.getRectangleParams(41, 14, 0)[0], 
+            ResourceManager.getRectangleParams(41, 14, 0)[1]};
         //x 88        y 252
-        locCoord15 = new int[]{ResourseManager.getRectangleParams(41, 15, 0)[0], 
-            ResourseManager.getRectangleParams(41, 15, 0)[1]};
+        locCoord15 = new int[]{ResourceManager.getRectangleParams(41, 15, 0)[0], 
+            ResourceManager.getRectangleParams(41, 15, 0)[1]};
         //x 96        y 34
-        locCoord16 = new int[]{ResourseManager.getRectangleParams(41, 16, 0)[0], 
-            ResourseManager.getRectangleParams(41, 16, 0)[1]};
+        locCoord16 = new int[]{ResourceManager.getRectangleParams(41, 16, 0)[0], 
+            ResourceManager.getRectangleParams(41, 16, 0)[1]};
         //x 169        y 50
-        locCoord17 = new int[]{ResourseManager.getRectangleParams(41, 17, 0)[0], 
-            ResourseManager.getRectangleParams(41, 17, 0)[1]};
+        locCoord17 = new int[]{ResourceManager.getRectangleParams(41, 17, 0)[0], 
+            ResourceManager.getRectangleParams(41, 17, 0)[1]};
         //x 114       y 80
-        locCoord18 = new int[]{ResourseManager.getRectangleParams(41, 18, 0)[0], 
-            ResourseManager.getRectangleParams(41, 18, 0)[1]};
+        locCoord18 = new int[]{ResourceManager.getRectangleParams(41, 18, 0)[0], 
+            ResourceManager.getRectangleParams(41, 18, 0)[1]};
         //x 26        y 108
-        locCoord19 = new int[]{ResourseManager.getRectangleParams(41, 19, 0)[0], 
-            ResourseManager.getRectangleParams(41, 19, 0)[1]};
+        locCoord19 = new int[]{ResourceManager.getRectangleParams(41, 19, 0)[0], 
+            ResourceManager.getRectangleParams(41, 19, 0)[1]};
         //x 26        y 108
-        locCoord19second = new int[]{ResourseManager.getRectangleParams(41, 19, 0)[0], 
-            ResourseManager.getRectangleParams(41, 19, 0)[1]};
+        locCoord19second = new int[]{ResourceManager.getRectangleParams(41, 19, 0)[0], 
+            ResourceManager.getRectangleParams(41, 19, 0)[1]};
         locationsCoordinates = new int[][]{locCoord4, locCoord5, locCoord6, 
             locCoord7, locCoord8, locCoord9, locCoord10, locCoord11, locCoord12, 
             locCoord13, locCoord14, locCoord15, locCoord16, locCoord17, 
@@ -190,7 +190,7 @@ public final class PlayerHUD {
     //  ОРУЖЕЙНАЯ СИСТЕМА
     //Сама пушка
     private static void drawWeapon(byte weapId) {
-        int var1 = SCREEN_HEIGHT - ResourseManager.getRectangleHeight(9) + 10;
+        int var1 = SCREEN_HEIGHT - ResourceManager.getRectangleHeight(9) + 10;
         int x = SCREEN_WIDTH - weaponHUDImages[weapId].getWidth();
         int y = var1 - weaponHUDImages[weapId].getHeight();
         //рисуем вспышку от выстрела
@@ -316,11 +316,11 @@ public final class PlayerHUD {
         int var2;
         int var3;
         if (insideInv) {
-            var2 = ResourseManager.getRectangleParams(38, 7, 0)[0] + ResourseManager.getRectangleWidth(11);
-            var3 = ResourseManager.getRectangleParams(38, 7, 0)[1] + ResourseManager.getRectangleHeight(11) / 2 - 1;
+            var2 = ResourceManager.getRectangleParams(38, 7, 0)[0] + ResourceManager.getRectangleWidth(11);
+            var3 = ResourceManager.getRectangleParams(38, 7, 0)[1] + ResourceManager.getRectangleHeight(11) / 2 - 1;
         } else {
-            var2 = ResourseManager.getRectangleParams(11, 1, 0)[0] + 1;
-            var3 = ResourseManager.getRectangleParams(11, 1, 0)[1] + ResourseManager.getRectangleHeight(11) / 2 - 1;
+            var2 = ResourceManager.getRectangleParams(11, 1, 0)[0] + 1;
+            var3 = ResourceManager.getRectangleParams(11, 1, 0)[1] + ResourceManager.getRectangleHeight(11) / 2 - 1;
         }
 
         int var4 = 0;
@@ -342,11 +342,11 @@ public final class PlayerHUD {
     }
     //Если ширнулись антирадом
     private static void drawAntiradIndicator() {
-        int var0 = ResourseManager.getRectangleParams(12, 0, 0)[0];
-        int var1 = ResourseManager.getRectangleParams(12, 1, 0)[1] + ResourseManager.getRectangleHeight(12) / 2 - 1;
-        int var2 = ResourseManager.getRectangleParams(12, 1, 0)[0] + 1;
+        int var0 = ResourceManager.getRectangleParams(12, 0, 0)[0];
+        int var1 = ResourceManager.getRectangleParams(12, 1, 0)[1] + ResourceManager.getRectangleHeight(12) / 2 - 1;
+        int var2 = ResourceManager.getRectangleParams(12, 1, 0)[0] + 1;
         int var3 = 55 * Scripts.AntiradDuration / 20000;
-        graphics.drawImage(antiradHUDImage, var0, var1 - (ResourseManager.getRectangleHeight(12) / 2 - 1), 0);
+        graphics.drawImage(antiradHUDImage, var0, var1 - (ResourceManager.getRectangleHeight(12) / 2 - 1), 0);
         int var4 = 0;
 
         for (byte var5 = 0; var5 < 3; ++var5) {
@@ -367,10 +367,10 @@ public final class PlayerHUD {
     //Патроны в магазине и объём магазина
     private static void drawWeaponHUD() {
         graphics.setColor(0);
-        graphics.fillRect(0, SCREEN_HEIGHT - (ResourseManager.getRectangleHeight(8) >> 1), SCREEN_WIDTH, ResourseManager.getRectangleHeight(8) >> 1);
-        ResourseManager.drawUserInterfaceItems(graphics, 37, 0, 0);
+        graphics.fillRect(0, SCREEN_HEIGHT - (ResourceManager.getRectangleHeight(8) >> 1), SCREEN_WIDTH, ResourceManager.getRectangleHeight(8) >> 1);
+        ResourceManager.drawUserInterfaceItems(graphics, 37, 0, 0);
         int var0 = SCREEN_WIDTH / 2 - 36 + 7;
-        int var1 = SCREEN_HEIGHT - ResourseManager.getRectangleHeight(13);
+        int var1 = SCREEN_HEIGHT - ResourceManager.getRectangleHeight(13);
         drawSoftButtonNames(1, 0, 1, true);//меню/menu
         short rightSoftText;
         if (Scripts.ItemWalkieTalkieInInventaryBool) {
@@ -385,7 +385,7 @@ public final class PlayerHUD {
         drawSoftButtonNames(0, 1, rightSoftText, true);
         int var3 = TextCreator.getWideLineWidth(1, 377); //символ /
         int var4 = var0 + 24 - (Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon] / 10 > 0 ? var3 * 2 : var3 + 1);
-        int var5 = var1 + ResourseManager.getRectangleHeight(13) / 2 - TextCreator.getSymbolHeight(1) / 2;
+        int var5 = var1 + ResourceManager.getRectangleHeight(13) / 2 - TextCreator.getSymbolHeight(1) / 2;
         TextCreator.drawNumber(1, Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon], var4, var5, 0);
         int var6 = var0 + 24;
         TextCreator.drawLineByAnchor(1, 377, var6, var5, 0);// символ /
@@ -604,15 +604,15 @@ public final class PlayerHUD {
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         if (Scripts.phracesIdArray != null && Scripts.dialogStructure != null) {
 
-            ResourseManager.drawUserInterfaceItems(graphics, 35, 0, -3);
+            ResourceManager.drawUserInterfaceItems(graphics, 35, 0, -3);
             int yDest = 10;
             short nameId;
             if ((nameId = getNpcNameTextId()) == 387) {
-                yDest = 10 + (ResourseManager.getRectangleParams(2, 6, 0)[3] 
-                        + ResourseManager.getRectangleParams(2, 7, 0)[3] 
-                        + ResourseManager.getRectangleParams(2, 8, 0)[3] 
-                        + ResourseManager.getRectangleParams(2, 9, 0)[3] 
-                        + ResourseManager.getRectangleParams(2, 10, 0)[3] - 12);
+                yDest = 10 + (ResourceManager.getRectangleParams(2, 6, 0)[3] 
+                        + ResourceManager.getRectangleParams(2, 7, 0)[3] 
+                        + ResourceManager.getRectangleParams(2, 8, 0)[3] 
+                        + ResourceManager.getRectangleParams(2, 9, 0)[3] 
+                        + ResourceManager.getRectangleParams(2, 10, 0)[3] - 12);
             }
 
             TextCreator.drawLineByAnchor(0, nameId, 15, yDest, 0);
@@ -630,12 +630,12 @@ public final class PlayerHUD {
 
         if (drawLeft == 1) {
             if (!uiAlreadyDrawn) {
-                ResourseManager.drawUserInterfaceItems(graphics, 8, 0, 0);
-                width = ResourseManager.getRectangleWidth(8) / 4;
-                height = SCREEN_HEIGHT - ResourseManager.getRectangleHeight(8) + 2;
+                ResourceManager.drawUserInterfaceItems(graphics, 8, 0, 0);
+                width = ResourceManager.getRectangleWidth(8) / 4;
+                height = SCREEN_HEIGHT - ResourceManager.getRectangleHeight(8) + 2;
             } else {
-                width = ResourseManager.getRectangleWidth(8) / 4;
-                height = SCREEN_HEIGHT - ResourseManager.getRectangleHeight(8) + 1;
+                width = ResourceManager.getRectangleWidth(8) / 4;
+                height = SCREEN_HEIGHT - ResourceManager.getRectangleHeight(8) + 1;
             }
 
             if (textId != -1) {
@@ -648,12 +648,12 @@ public final class PlayerHUD {
             }
         } else if (left0right1 == 1) {
             if (!uiAlreadyDrawn) {
-                ResourseManager.drawUserInterfaceItems(graphics, 9, 0, 0);
-                width = SCREEN_WIDTH - 3 * ResourseManager.getRectangleWidth(8) / 4;
-                height = SCREEN_HEIGHT - ResourseManager.getRectangleHeight(8) + 2;
+                ResourceManager.drawUserInterfaceItems(graphics, 9, 0, 0);
+                width = SCREEN_WIDTH - 3 * ResourceManager.getRectangleWidth(8) / 4;
+                height = SCREEN_HEIGHT - ResourceManager.getRectangleHeight(8) + 2;
             } else {
-                width = SCREEN_WIDTH - 3 * ResourseManager.getRectangleWidth(8) / 4;
-                height = SCREEN_HEIGHT - ResourseManager.getRectangleHeight(8) + 1;
+                width = SCREEN_WIDTH - 3 * ResourceManager.getRectangleWidth(8) / 4;
+                height = SCREEN_HEIGHT - ResourceManager.getRectangleHeight(8) + 1;
             }
 
             if (textId != -1) {
@@ -675,7 +675,7 @@ public final class PlayerHUD {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        graphics.drawImage(ResourseManager.interfaceImages[12], 0, 3, 0);
+        graphics.drawImage(ResourceManager.interfaceImages[12], 0, 3, 0);
         drawLinesForPDA();
         //Для тестов. Возвращение старого PDA
         //ResourseManager.drawUserInterfaceItems(graphics, 41, 0, 0);
@@ -686,9 +686,9 @@ public final class PlayerHUD {
         for (byte locId = 0; locId < 17; ++locId) {
             if (Scripts.sub_819(locId) || locId == GameScene.currentLocation || locId == previousLocation) {
                 if (!GameScene.locationCampMark[locId] && locId != 0) {
-                    ResourseManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                    ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
                 } else {
-                    ResourseManager.DrawInterfaceImageToSelectedRegion(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                    ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
                 }
             }
         }
@@ -723,7 +723,7 @@ public final class PlayerHUD {
             if (x_start <= var6 && var6 > 0) {
                 x_second_end = y_start + (y_end - y_start) * x_start / var6;
                 y_second_end = x_end + (y_second_start - x_end) * x_start / var6;
-                ResourseManager.DrawInterfaceImageToSelectedRegion(graphics, 61, x_second_end, y_second_end, 0);
+                ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 61, x_second_end, y_second_end, 0);
             } else {
                 //вертикальная линия
                 y_end = locationsCoordinates[GameScene.nextLocation][0];
@@ -754,7 +754,7 @@ public final class PlayerHUD {
     }
     //Рисуем название выделенной локации
     private static void drawLocationName() {
-        int y = SCREEN_HEIGHT - 2 * ResourseManager.getRectangleHeight(8) 
+        int y = SCREEN_HEIGHT - 2 * ResourceManager.getRectangleHeight(8) 
                 - TextCreator.getSymbolHeight(0) 
                 * (textLinesStartsEnds.size() + 1);
         //Названия сюж.локаций начинаются с 354 индекса
@@ -837,7 +837,7 @@ public final class PlayerHUD {
 
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        ResourseManager.drawUserInterfaceItems(graphics, 44, 0, 0);
+        ResourceManager.drawUserInterfaceItems(graphics, 44, 0, 0);
         graphics.setClip(58, 70, 135, 185);
         TextCreator.drawReplicInsideFrame(ModChanges.startingintroduction, 
                 58, y, 0, 0, graphics, 0, -1, introTextLinesStartsEnds);

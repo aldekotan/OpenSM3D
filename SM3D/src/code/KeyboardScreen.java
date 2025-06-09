@@ -20,7 +20,7 @@ public final class KeyboardScreen extends CentralText {
             }
 
             ((PlayersRecords) AllScreens.recordsScreen).deletePlayerRecord((byte) 0);
-            ResourseManager.sub_4d();
+            ResourceManager.savePlayersRecords();
         }
 
         super.onShow(screenId);

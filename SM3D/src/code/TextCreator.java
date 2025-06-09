@@ -369,34 +369,34 @@ public final class TextCreator {
 
                 int symbol;
                 for (symbol = 0; symbol < text.length; ++symbol) {
-                    textWidth += ResourseManager.ReturnWidthOfInterfaceImage(text[symbol]);
+                    textWidth += ResourceManager.ReturnWidthOfInterfaceImage(text[symbol]);
                 }
 
                 x -= textWidth / 2;
-                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[0], x, y, anchor);
+                ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[0], x, y, anchor);
 
                 for (symbol = 1; symbol < text.length; ++symbol) {
-                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[symbol], x += ResourseManager.ReturnWidthOfInterfaceImage(text[symbol - 1]) + 1, y, anchor);
+                    ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[symbol], x += ResourceManager.ReturnWidthOfInterfaceImage(text[symbol - 1]) + 1, y, anchor);
                 }
 
-                return ResourseManager.ReturnHeightOfInterfaceImage(text[0]);
+                return ResourceManager.ReturnHeightOfInterfaceImage(text[0]);
             case 6:
-                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[0], x, y, anchor);
+                ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[0], x, y, anchor);
 
                 for (textWidth = 1; textWidth < text.length; ++textWidth) {
-                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[textWidth], x += ResourseManager.ReturnWidthOfInterfaceImage(text[textWidth - 1]) + 1, y, anchor);
+                    ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[textWidth], x += ResourceManager.ReturnWidthOfInterfaceImage(text[textWidth - 1]) + 1, y, anchor);
                 }
 
-                return ResourseManager.ReturnHeightOfInterfaceImage(text[0]);
+                return ResourceManager.ReturnHeightOfInterfaceImage(text[0]);
             case 10:
-                ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[text.length - 1], x, y, anchor);
+                ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[text.length - 1], x, y, anchor);
 
                 for (textWidth = text.length - 2; textWidth >= 0; --textWidth) {
-                    ResourseManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[textWidth], x -= ResourseManager.ReturnWidthOfInterfaceImage(text[textWidth + 1]) + 1, y, anchor);
+                    ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[textWidth], x -= ResourceManager.ReturnWidthOfInterfaceImage(text[textWidth + 1]) + 1, y, anchor);
                 }
         }
 
-        return ResourseManager.ReturnHeightOfInterfaceImage(text[0]);
+        return ResourceManager.ReturnHeightOfInterfaceImage(text[0]);
     }
 
     public static void setColoredDigitsId() {
