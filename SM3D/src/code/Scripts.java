@@ -61,128 +61,128 @@ public final class Scripts {
         154};
     public static final byte[] galoshAfterQuestAns = new byte[]{ 1};
     public static final short[] galoshAfterQuestIds = new short[]{ 155, 156,  157};
-    public static final byte[][] galoshHierarchy = new byte[][]{galoshFirstMeetAns, galoshAfterQuestAns};
+    public static final byte[][] galoshDialogStructure = new byte[][]{galoshFirstMeetAns, galoshAfterQuestAns};
 
     public static byte zaborDialogState;
-    public static final byte[] var_882 = new byte[]{ 1,  1,  2,  1,  1};
-    public static final short[] zaborPhrBeforeId = new short[]{ 135,  
+    public static final byte[] zaborBeforeAnsCount = new byte[]{ 1,  1,  2,  1,  1};
+    public static final short[] zaborBeforePhrId = new short[]{ 135,  
         136,  137,  138, 139,
                             140,  141,//-Tы можeшь мнe чeловeчecким языком объяcнить, что ты xочeшь cкaзaть?
                             142};//-Paзговapивaть cнaчaлa нayчиcь, обeзьянa.
-    public static final byte[] var_8fe = new byte[0];
-    public static final short[] zaborPhrAfterId = new short[]{ 143};
-    public static final byte[][] zaborDialogSctucture = new byte[][]{var_882, var_8fe};
+    public static final byte[] zaborAfterAnsCount = new byte[0];
+    public static final short[] zaborAfterPhrId = new short[]{ 143};
+    public static final byte[][] zaborDialogSctucture = new byte[][]{zaborBeforeAnsCount, zaborAfterAnsCount};
 
     public static byte botanikDialogState;
-    public static final byte[] var_9ab = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 1};
+    public static final byte[] botanikAnsCount = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 1};
     public static final short[] botanikPhracesId = new short[]{(short) 144, (short) 145, (short) 146, (short) 147, (short) 148, (short) 149, (short) 150, (short) 151, (short) 152};
-    public static final byte[][] botanikDialogStructure = new byte[][]{var_9ab};
+    public static final byte[][] botanikDialogStructure = new byte[][]{botanikAnsCount};
 
     public static byte svistunDialogState;
-    public static final byte[] var_acc = new byte[]{(byte) 1, (byte) 2, (byte) 1, (byte) 1};
-    public static final short[] var_afa = new short[]{(short) 158, (short) 159, (short) 160, (short) 161, (short) 162, (short) 163, (short) 164};
-    public static final byte[][] var_b08 = new byte[][]{var_acc};
+    public static final byte[] svistunAnsCount = new byte[]{(byte) 1, (byte) 2, (byte) 1, (byte) 1};
+    public static final short[] svistunPhrId = new short[]{(short) 158, (short) 159, (short) 160, (short) 161, (short) 162, (short) 163, (short) 164};
+    public static final byte[][] svistunDialogStructure = new byte[][]{svistunAnsCount};
 
     public static byte trusDialogState;
-    public static final byte[] var_b5d = new byte[]{(byte) 1, (byte) 1};
-    public static final short[] var_bad = new short[]{(short) 165, (short) 166, (short) 167, (short) 168};
-    public static final byte[][] var_bc1 = new byte[][]{var_b5d};
+    public static final byte[] trusAnsCount = new byte[]{(byte) 1, (byte) 1};
+    public static final short[] trusPhrId = new short[]{(short) 165, (short) 166, (short) 167, (short) 168};
+    public static final byte[][] trusDialogStruct = new byte[][]{trusAnsCount};
 
     public static byte krotDialogState;
-    public static final byte[] var_c09 = new byte[]{(byte) 3, (byte) 4, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_c56 = new short[]{(short) 169, (short) 170, (short) 171, (short) 172, (short) 173, (short) 174, (short) 175, (short) 176, (short) 177, (short) 178, (short) -1, (short) 179, (short) 180, (short) 181};
-    public static final byte[][] var_c64 = new byte[][]{var_c09};
+    public static final byte[] krotAnsCount = new byte[]{(byte) 3, (byte) 4, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
+    public static final short[] krotPhrId = new short[]{(short) 169, (short) 170, (short) 171, (short) 172, (short) 173, (short) 174, (short) 175, (short) 176, (short) 177, (short) 178, (short) -1, (short) 179, (short) 180, (short) 181};
+    public static final byte[][] krotDialogStruct = new byte[][]{krotAnsCount};
 
     public static byte haryaDialogState;
-    public static final byte[] var_cad = new byte[]{(byte) 3, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_cf9 = new short[]{(short) 182, (short) 183, (short) 184, (short) 185, (short) 186, (short) 187};
-    public static final byte[] var_d08 = new byte[]{(byte) 1};
-    public static final short[] var_d49 = new short[]{(short) 188, (short) 189, (short) 190};
-    public static final byte[] var_d6a = new byte[0];
-    public static final short[] var_da7 = new short[]{(short) 191};
-    public static final byte[] var_de0 = new byte[0];
-    public static final short[] var_ded = new short[]{(short) 192};
-    public static final byte[][] var_e4b = new byte[][]{var_cad, var_d08, var_d6a, var_de0};
+    public static final byte[] haryaFirstAnsCount = new byte[]{(byte) 3, (byte) 1, (byte) 1, (byte) 1};
+    public static final short[] haryaFirstPhrId = new short[]{(short) 182, (short) 183, (short) 184, (short) 185, (short) 186, (short) 187};
+    public static final byte[] haryaSecondAnsCount = new byte[]{(byte) 1};
+    public static final short[] haryaSecondPhrId = new short[]{(short) 188, (short) 189, (short) 190};
+    public static final byte[] haryaThirdAnsCount = new byte[0];
+    public static final short[] haryaThirdPhrId = new short[]{(short) 191};
+    public static final byte[] haryaFourthAnsCount = new byte[0];
+    public static final short[] haryaFourthPhrId = new short[]{(short) 192};
+    public static final byte[][] haryaDialogStruct = new byte[][]{haryaFirstAnsCount, haryaSecondAnsCount, haryaThirdAnsCount, haryaFourthAnsCount};
 
     public static byte batyaDialogState;
-    public static final byte[] var_e7f = new byte[]{(byte) 1, (byte) 1, (byte) 3, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_e8e = new short[]{(short) 193, (short) 194, (short) 195, (short) 196, (short) 197, (short) 198, (short) 199, (short) 200, (short) 201, (short) 202, (short) 203};
-    public static final byte[] var_e9a = new byte[]{(byte) 2, (byte) 1, (byte) 1};
-    public static final short[] var_ed0 = new short[]{(short) 204, (short) 205, (short) 206, (short) 207};
-    public static final byte[] var_f30 = new byte[]{(byte) 3, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_f44 = new short[]{(short) 208, (short) 209, (short) 210, (short) 211, (short) 212, (short) 394};
-    public static final byte[] var_f64 = new byte[0];
-    public static final short[] var_fad = new short[]{(short) 213};
-    public static final byte[] var_ffd = new byte[]{(byte) 1, (byte) 1};
-    public static final short[] var_102d = new short[]{(short) 214, (short) 215, (short) 216, (short) 217};
-    public static final byte[][] var_1084 = new byte[][]{var_e7f, var_e9a, var_f30, var_f64, var_ffd};
+    public static final byte[] batyaFirstAnsCount = new byte[]{(byte) 1, (byte) 1, (byte) 3, (byte) 1, (byte) 1, (byte) 1};
+    public static final short[] batyaFirstPhrId = new short[]{(short) 193, (short) 194, (short) 195, (short) 196, (short) 197, (short) 198, (short) 199, (short) 200, (short) 201, (short) 202, (short) 203};
+    public static final byte[] batyaSecondAnsCount = new byte[]{(byte) 2, (byte) 1, (byte) 1};
+    public static final short[] batyaSecondPhrId = new short[]{(short) 204, (short) 205, (short) 206, (short) 207};
+    public static final byte[] batyaThirdAnsCount = new byte[]{(byte) 3, (byte) 1, (byte) 1, (byte) 1};
+    public static final short[] batyaThirdPhrId = new short[]{(short) 208, (short) 209, (short) 210, (short) 211, (short) 212, (short) 394};
+    public static final byte[] batyaFourthAnsCount = new byte[0];
+    public static final short[] batyaFourthPhrId = new short[]{(short) 213};
+    public static final byte[] batyaFifthAnsCount = new byte[]{(byte) 1, (byte) 1};
+    public static final short[] batyaFifthPhrId = new short[]{(short) 214, (short) 215, (short) 216, (short) 217};
+    public static final byte[][] batyaDialogStruct = new byte[][]{batyaFirstAnsCount, batyaSecondAnsCount, batyaThirdAnsCount, batyaFourthAnsCount, batyaFifthAnsCount};
 
     public static byte commanderDialogState;
-    public static final byte[] var_10a1 = new byte[]{(byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_10ce = new short[]{(short) 218, (short) 219, (short) 220, (short) 221, (short) 222, (short) 223};
-    public static final byte[][] var_10e7 = new byte[][]{var_10a1};
+    public static final byte[] commanderAnsCount = new byte[]{(byte) 1, (byte) 1, (byte) 1};
+    public static final short[] commanderPhrId = new short[]{(short) 218, (short) 219, (short) 220, (short) 221, (short) 222, (short) 223};
+    public static final byte[][] commanderDialogStruct = new byte[][]{commanderAnsCount};
 
     public static byte manikovskiDialogState;
-    public static final byte[] var_1148 = new byte[]{(byte) 2, (byte) 1, (byte) 1};
-    public static final short[] var_1153 = new short[]{(short) 224, (short) 225, (short) -1, (short) 226, (short) 227};
-    public static final byte[][] var_117d = new byte[][]{var_1148};
+    public static final byte[] manikovskiAnsCount = new byte[]{(byte) 2, (byte) 1, (byte) 1};
+    public static final short[] manikovskiPhrId = new short[]{(short) 224, (short) 225, (short) -1, (short) 226, (short) 227};
+    public static final byte[][] manikovskiDialogStruct = new byte[][]{manikovskiAnsCount};
 
     public static byte gutalinDialogState;
-    public static final byte[] var_11ae = new byte[]{(byte) 2, (byte) 1, (byte) 1};
-    public static final short[] var_11d1 = new short[]{(short) 228, (short) 229, (short) 230, (short) 231, (short) 232};
-    public static final byte[] var_11e4 = new byte[0];
-    public static final short[] var_123d = new short[]{(short) 233};
-    public static final byte[][] var_1254 = new byte[][]{var_11ae, var_11e4};
+    public static final byte[] gutalinFirstAnsCount = new byte[]{(byte) 2, (byte) 1, (byte) 1};
+    public static final short[] gutalinFirstPhrId = new short[]{(short) 228, (short) 229, (short) 230, (short) 231, (short) 232};
+    public static final byte[] gutalinSecondAnsCount = new byte[0];
+    public static final short[] gutalinSecondPhrId = new short[]{(short) 233};
+    public static final byte[][] gutalinDialogStruct = new byte[][]{gutalinFirstAnsCount, gutalinSecondAnsCount};
 
     public static byte belomorDialogState;
-    public static final byte[] var_12cc = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 2, (byte) 1, (byte) 1};
-    public static final short[] var_132d = new short[]{(short) 234, (short) 235, (short) 236, (short) 237, (short) 238, (short) 239, (short) 240, (short) 241, (short) -1, (short) 242, (short) -1};
-    public static final byte[] var_1385 = new byte[0];
-    public static final short[] var_1397 = new short[]{(short) 248};
-    public static final byte[] var_13ec = new byte[]{(byte) 1, (byte) 1};
-    public static final short[] var_1411 = new short[]{(short) 243, (short) 244, (short) 245, (short) 246};
-    public static final byte[] var_145f = new byte[0];
-    public static final short[] var_14b3 = new short[]{(short) 247};
-    public static final byte[][] var_14ef = new byte[][]{var_12cc, var_1385, var_13ec, var_145f};
+    public static final byte[] belomorFirstAnsCount = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 2, (byte) 1, (byte) 1};
+    public static final short[] belomorFirstPhrId = new short[]{(short) 234, (short) 235, (short) 236, (short) 237, (short) 238, (short) 239, (short) 240, (short) 241, (short) -1, (short) 242, (short) -1};
+    public static final byte[] belomorSecondAnsCount = new byte[0];
+    public static final short[] belomorSecondPhrId = new short[]{(short) 248};
+    public static final byte[] belomorThirdAnsCount = new byte[]{(byte) 1, (byte) 1};
+    public static final short[] belomorThirdPhrId = new short[]{(short) 243, (short) 244, (short) 245, (short) 246};
+    public static final byte[] belomorFourthAnsCount = new byte[0];
+    public static final short[] belomorFourthPhrId = new short[]{(short) 247};
+    public static final byte[][] belomorDialogStruct = new byte[][]{belomorFirstAnsCount, belomorSecondAnsCount, belomorThirdAnsCount, belomorFourthAnsCount};
 
     public static byte shlangDialogState;
-    public static final byte[] var_1551 = new byte[]{(byte) 1, (byte) 2, (byte) 1, (byte) 1};
-    public static final short[] var_15b3 = new short[]{(short) 249, (short) 250, (short) 251, (short) 252, (short) 253, (short) 254, (short) 255};
-    public static final byte[] var_15dd = new byte[]{(byte) 1};
-    public static final short[] var_1609 = new short[]{(short) 256, (short) 257};
-    public static final byte[] var_1621 = new byte[]{(byte) 1};
-    public static final short[] var_1680 = new short[]{(short) 258, (short) 259, (short) 260};
-    public static final byte[][] var_16a8 = new byte[][]{var_1551, var_15dd, var_1621};
+    public static final byte[] shlangFirstAnsCount = new byte[]{(byte) 1, (byte) 2, (byte) 1, (byte) 1};
+    public static final short[] shlangFirstPhrId = new short[]{(short) 249, (short) 250, (short) 251, (short) 252, (short) 253, (short) 254, (short) 255};
+    public static final byte[] shlangSecondAnsCount = new byte[]{(byte) 1};
+    public static final short[] shlangSecondPhrId = new short[]{(short) 256, (short) 257};
+    public static final byte[] shlangThirdAnsCount = new byte[]{(byte) 1};
+    public static final short[] shlangThirdPhrId = new short[]{(short) 258, (short) 259, (short) 260};
+    public static final byte[][] shlangDialogStruct = new byte[][]{shlangFirstAnsCount, shlangSecondAnsCount, shlangThirdAnsCount};
 
     public static byte kaynazovskiDialogState;
-    public static final byte[] var_1733 = new byte[]{(byte) 1, (byte) 2, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_178f = new short[]{(short) 261, (short) 262, (short) 263, (short) 264, (short) -1, (short) 265, (short) 266, (short) 267, (short) 268, (short) 269, (short) 270, (short) 271};
-    public static final byte[] var_17e5 = new byte[]{(byte) 1, (byte) 1};
-    public static final short[] var_1821 = new short[]{(short) 272, (short) 273, (short) 274, (short) 275};
-    public static final byte[] var_1837 = new byte[]{(byte) 1};
-    public static final short[] var_187a = new short[]{(short) 289, (short) 290};
-    public static final byte[][] var_18fb = new byte[][]{var_1733, var_17e5, var_1837};
+    public static final byte[] kaynazovskiFirstAnsCount = new byte[]{(byte) 1, (byte) 2, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
+    public static final short[] kaynazovskiFirstPhrId = new short[]{(short) 261, (short) 262, (short) 263, (short) 264, (short) -1, (short) 265, (short) 266, (short) 267, (short) 268, (short) 269, (short) 270, (short) 271};
+    public static final byte[] kaynazovskiSecondAnsCount = new byte[]{(byte) 1, (byte) 1};
+    public static final short[] kaynazovskiSecondPhrId = new short[]{(short) 272, (short) 273, (short) 274, (short) 275};
+    public static final byte[] kaynazovskiThirdAnsCount = new byte[]{(byte) 1};
+    public static final short[] kaynazovskiThirdPhrId = new short[]{(short) 289, (short) 290};
+    public static final byte[][] kaynazovskiDialogStruct = new byte[][]{kaynazovskiFirstAnsCount, kaynazovskiSecondAnsCount, kaynazovskiThirdAnsCount};
 
     public static byte koboldDialogState = 1;
-    public static final byte[] var_193a = new byte[]{(byte) 1, (byte) 1};
-    public static final short[] var_198b = new short[]{(short) 276, (short) 277, (short) 278, (short) 279};
-    public static final byte[] var_1995 = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_19e8 = new short[]{(short) 280, (short) 281, (short) 282, (short) 283, (short) 284, (short) 285, (short) 286, (short) 287};
-    public static final byte[] var_1a16 = new byte[0];
-    public static final short[] var_1a64 = new short[]{(short) 288};
-    public static final byte[][] var_1a9d = new byte[][]{var_193a, var_1995, var_1a16};
+    public static final byte[] koboldFirstAnsCount = new byte[]{(byte) 1, (byte) 1};
+    public static final short[] koboldFirstPhrId = new short[]{(short) 276, (short) 277, (short) 278, (short) 279};
+    public static final byte[] koboldSecondAnsCount = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 1};
+    public static final short[] koboldSecondPhrId = new short[]{(short) 280, (short) 281, (short) 282, (short) 283, (short) 284, (short) 285, (short) 286, (short) 287};
+    public static final byte[] koboldThirdAnsCount = new byte[0];
+    public static final short[] koboldThirdPhrId = new short[]{(short) 288};
+    public static final byte[][] koboldDialogStruct = new byte[][]{koboldFirstAnsCount, koboldSecondAnsCount, koboldThirdAnsCount};
 
     public static byte prizrakDialogState = 0;
-    public static final byte[] var_1b1c = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
-    public static final short[] var_1b50 = new short[]{(short) 291, (short) 292, (short) 293, (short) 294, (short) 295, (short) 296, (short) 297, (short) 298, (short) 299, (short) 300};
-    public static final byte[][] var_1b69 = new byte[][]{var_1b1c};
+    public static final byte[] prizrakAnsCount = new byte[]{(byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
+    public static final short[] prizrakPhrId = new short[]{(short) 291, (short) 292, (short) 293, (short) 294, (short) 295, (short) 296, (short) 297, (short) 298, (short) 299, (short) 300};
+    public static final byte[][] prizrakDialogStruct = new byte[][]{prizrakAnsCount};
 
     public static byte militaryDialogState = 0;
-    public static final byte[] var_1bb3 = new byte[]{(byte) 1};
-    public static final short[] var_1bde = new short[]{(short) 301, (short) 302, (short) 303};
-    public static final byte[] var_1c02 = new byte[]{(byte) 1, (byte) 1};
-    public static final short[] var_1c1e = new short[]{(short) 304, (short) 305, (short) 306, (short) 307, (short) 308};
-    public static final byte[][] var_1c6a = new byte[][]{var_1bb3, var_1c02};
+    public static final byte[] militaryFirstAnsCount = new byte[]{(byte) 1};
+    public static final short[] militaryFirstPhrId = new short[]{(short) 301, (short) 302, (short) 303};
+    public static final byte[] militarySecondAnsCount = new byte[]{(byte) 1, (byte) 1};
+    public static final short[] militarySecondPhrId = new short[]{(short) 304, (short) 305, (short) 306, (short) 307, (short) 308};
+    public static final byte[][] militaryDialogStruct = new byte[][]{militaryFirstAnsCount, militarySecondAnsCount};
 
     //Используется ли оптический прицел в данный момент?
     public static boolean OpticalSight;
@@ -219,12 +219,12 @@ public final class Scripts {
     public static int AntiradDuration = 20000;
 
     private static boolean botUnderCursor;
-    private static boolean var_2040;
+    private static boolean gunSoundPlayed;
     public static boolean var_2075;
-    public static short var_20d6 = 1000;
+    public static short timeToSwitchWeapon = 1000;
     public static int var_2108;
     public static boolean var_215f;
-    public static short var_21a7 = 1000;
+    public static short timeToReload = 1000;
     public static int var_21d2;
 
     public static boolean playerCanLeaveLevel;
@@ -572,14 +572,14 @@ public final class Scripts {
             GameScene.setDialogWindowState((short) 2);
         }
 
-        if (var_215f && GameScene.gameTimeUnpaused - (long) var_21d2 >= (long) (var_21a7 / 2) && !var_2040) {
-            SoundAndVibro.playSound(1);
-            var_2040 = true;
+        if (var_215f && GameScene.gameTimeUnpaused - (long) var_21d2 >= (long) (timeToReload / 2) && !gunSoundPlayed) {
+            SoundAndVibro.playSound(1);//reload sound
+            gunSoundPlayed = true;
         }
 
-        if (var_2075 && GameScene.gameTimeUnpaused - (long) var_2108 >= (long) (var_20d6 / 2) && !var_2040) {
-            SoundAndVibro.playSound(2);
-            var_2040 = true;
+        if (var_2075 && GameScene.gameTimeUnpaused - (long) var_2108 >= (long) (timeToSwitchWeapon / 2) && !gunSoundPlayed) {
+            SoundAndVibro.playSound(2);//unholster sound
+            gunSoundPlayed = true;
         }
 
         if (GameScene.currentGameState == 2) {
@@ -596,7 +596,7 @@ public final class Scripts {
             var_2108 = (int) GameScene.gameTimeUnpaused;
             EncasedWeapon = playerActiveWeapon;
             playerActiveWeapon = var0;
-            var_2040 = false;
+            gunSoundPlayed = false;
             if (OpticalSight) {
                 OpticalSight = false;
                 GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
@@ -646,7 +646,7 @@ public final class Scripts {
                         useItem((short) L85_MAG);
                 }
 
-                var_2040 = false;
+                gunSoundPlayed = false;
                 var_215f = true;
                 var_21d2 = (int) GameScene.gameTimeUnpaused;
             }
@@ -1997,10 +1997,10 @@ public final class Scripts {
             case 5:
                 switch (zaborDialogState) {
                     case 0: //Если ещё не говорили
-                        phracesIdArray = zaborPhrBeforeId;
+                        phracesIdArray = zaborBeforePhrId;
                         break;
                     case 1: //Если уже поговорили
-                        phracesIdArray = zaborPhrAfterId;
+                        phracesIdArray = zaborAfterPhrId;
                 }
 
                 dialogStructure = zaborDialogSctucture[zaborDialogState];
@@ -2040,175 +2040,175 @@ public final class Scripts {
                         phracesIdArray = galoshAfterQuestIds;
                 }
 
-                dialogStructure = galoshHierarchy[galoshQuestState]; //В двойном массиве ячейке Галош присваивается значение единицы
+                dialogStructure = galoshDialogStructure[galoshQuestState]; //В двойном массиве ячейке Галош присваивается значение единицы
                 break;
             case 8:
                 switch (krotDialogState) {
                     case 0:
-                        phracesIdArray = var_c56;
+                        phracesIdArray = krotPhrId;
                     default:
-                        dialogStructure = var_c64[krotDialogState];
+                        dialogStructure = krotDialogStruct[krotDialogState];
                         break label142;
                 }
             case 9:
                 switch (batyaDialogState) {
                     case 0:
-                        phracesIdArray = var_e8e;
+                        phracesIdArray = batyaFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_ed0;
+                        phracesIdArray = batyaSecondPhrId;
                         break;
                     case 2:
-                        phracesIdArray = var_f44;
+                        phracesIdArray = batyaThirdPhrId;
                         break;
                     case 3:
-                        phracesIdArray = var_fad;
+                        phracesIdArray = batyaFourthPhrId;
                         break;
                     case 4:
-                        phracesIdArray = var_102d;
+                        phracesIdArray = batyaFifthPhrId;
                 }
 
-                dialogStructure = var_1084[batyaDialogState];
+                dialogStructure = batyaDialogStruct[batyaDialogState];
                 break;
             case 10:
                 switch (haryaDialogState) {
                     case 0:
-                        phracesIdArray = var_cf9;
+                        phracesIdArray = haryaFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_d49;
+                        phracesIdArray = haryaSecondPhrId;
                         break;
                     case 2:
-                        phracesIdArray = var_da7;
+                        phracesIdArray = haryaThirdPhrId;
                         break;
                     case 3:
-                        phracesIdArray = var_ded;
+                        phracesIdArray = haryaFourthPhrId;
                 }
 
-                dialogStructure = var_e4b[haryaDialogState];
+                dialogStructure = haryaDialogStruct[haryaDialogState];
                 break;
             case 11:
                 switch (gutalinDialogState) {
                     case 0:
-                        phracesIdArray = var_11d1;
+                        phracesIdArray = gutalinFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_123d;
+                        phracesIdArray = gutalinSecondPhrId;
                 }
 
-                dialogStructure = var_1254[gutalinDialogState];
+                dialogStructure = gutalinDialogStruct[gutalinDialogState];
                 break;
             case 12:
                 switch (shlangDialogState) {
                     case -1:
                         return;
                     case 0:
-                        phracesIdArray = var_15b3;
+                        phracesIdArray = shlangFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_1609;
+                        phracesIdArray = shlangSecondPhrId;
                         break;
                     case 2:
-                        phracesIdArray = var_1680;
+                        phracesIdArray = shlangThirdPhrId;
                 }
 
-                dialogStructure = var_16a8[shlangDialogState];
+                dialogStructure = shlangDialogStruct[shlangDialogState];
                 break;
             case 13:
                 switch (belomorDialogState) {
                     case 0:
-                        phracesIdArray = var_132d;
+                        phracesIdArray = belomorFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_1397;
+                        phracesIdArray = belomorSecondPhrId;
                         break;
                     case 2:
-                        phracesIdArray = var_1411;
+                        phracesIdArray = belomorThirdPhrId;
                         break;
                     case 3:
-                        phracesIdArray = var_14b3;
+                        phracesIdArray = belomorFourthPhrId;
                 }
 
-                dialogStructure = var_14ef[belomorDialogState];
+                dialogStructure = belomorDialogStruct[belomorDialogState];
                 break;
             case 14:
                 switch (kaynazovskiDialogState) {
                     case 0:
-                        phracesIdArray = var_178f;
+                        phracesIdArray = kaynazovskiFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_1821;
+                        phracesIdArray = kaynazovskiSecondPhrId;
                         break;
                     case 2:
-                        phracesIdArray = var_187a;
+                        phracesIdArray = kaynazovskiThirdPhrId;
                 }
 
-                dialogStructure = var_18fb[kaynazovskiDialogState];
+                dialogStructure = kaynazovskiDialogStruct[kaynazovskiDialogState];
                 break;
             case 15:
                 switch (trusDialogState) {
                     case 0:
-                        phracesIdArray = var_bad;
+                        phracesIdArray = trusPhrId;
                     default:
-                        dialogStructure = var_bc1[trusDialogState];
+                        dialogStructure = trusDialogStruct[trusDialogState];
                         break label142;
                 }
             case 16:
                 switch (svistunDialogState) {
                     case 0:
-                        phracesIdArray = var_afa;
+                        phracesIdArray = svistunPhrId;
                     default:
-                        dialogStructure = var_b08[svistunDialogState];
+                        dialogStructure = svistunDialogStructure[svistunDialogState];
                         break label142;
                 }
             case 17:
                 switch (manikovskiDialogState) {
                     case 0:
-                        phracesIdArray = var_1153;
+                        phracesIdArray = manikovskiPhrId;
                     default:
-                        dialogStructure = var_117d[manikovskiDialogState];
+                        dialogStructure = manikovskiDialogStruct[manikovskiDialogState];
                         break label142;
                 }
             case 18:
                 switch (commanderDialogState) {
                     case 0:
-                        phracesIdArray = var_10ce;
+                        phracesIdArray = commanderPhrId;
                     default:
-                        dialogStructure = var_10e7[commanderDialogState];
+                        dialogStructure = commanderDialogStruct[commanderDialogState];
                         break label142;
                 }
             case 19:
                 switch (koboldDialogState) {
                     case 0:
-                        phracesIdArray = var_198b;
+                        phracesIdArray = koboldFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_19e8;
+                        phracesIdArray = koboldSecondPhrId;
                         break;
                     case 2:
-                        phracesIdArray = var_1a64;
+                        phracesIdArray = koboldThirdPhrId;
                 }
 
-                dialogStructure = var_1a9d[koboldDialogState];
+                dialogStructure = koboldDialogStruct[koboldDialogState];
                 break;
             case 20:
                 switch (prizrakDialogState) {
                     case 0:
-                        phracesIdArray = var_1b50;
+                        phracesIdArray = prizrakPhrId;
                     default:
-                        dialogStructure = var_1b69[prizrakDialogState];
+                        dialogStructure = prizrakDialogStruct[prizrakDialogState];
                         break label142;
                 }
             case 21:
                 switch (militaryDialogState) {
                     case 0:
-                        phracesIdArray = var_1bde;
+                        phracesIdArray = militaryFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_1c1e;
+                        phracesIdArray = militarySecondPhrId;
                 }
 
-                dialogStructure = var_1c6a[militaryDialogState];
+                dialogStructure = militaryDialogStruct[militaryDialogState];
         }
 
         if (phracesIdArray != null) {

@@ -118,17 +118,17 @@ public class ListScreen extends MenuScreen {
         this.i_varMassive_3 = new int[Scripts.allQuestsNumber];
         this.textLinesStartsEnds = new Vector[Scripts.allQuestsNumber];
 
-        for (byte var1 = 0; var1 < Scripts.allQuestsNumber; ++var1) {
-            this.textLinesStartsEnds[var1] = TextCreator.splitOnLines(this.optionsTextId[var1], 80, 0);
-            if (var1 > 0) {
-                this.i_varMassive_2[var1] = this.i_varMassive_2[var1 - 1] + TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[var1].size() - 1);
+        for (byte option = 0; option < Scripts.allQuestsNumber; ++option) {
+            this.textLinesStartsEnds[option] = TextCreator.splitOnLines(this.optionsTextId[option], 80, 0);
+            if (option > 0) {
+                this.i_varMassive_2[option] = this.i_varMassive_2[option - 1] + TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
             } else {
-                this.i_varMassive_2[var1] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[var1].size() - 1);
+                this.i_varMassive_2[option] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
             }
 
-            this.i_varMassive_3[var1] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[var1].size() - 1);
-            this.var_57e += this.i_varMassive_2[var1];
-            this.var_588 += this.textLinesStartsEnds[var1].size();
+            this.i_varMassive_3[option] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
+            this.var_57e += this.i_varMassive_2[option];
+            this.var_588 += this.textLinesStartsEnds[option].size();
         }
 
     }

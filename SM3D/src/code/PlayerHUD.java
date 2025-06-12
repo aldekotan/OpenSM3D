@@ -219,7 +219,7 @@ public final class PlayerHUD {
         short var9;
         if (Scripts.var_215f) {
             var8 = (int) GameScene.gameTimeUnpaused - Scripts.var_21d2;
-            var9 = Scripts.var_21a7;
+            var9 = Scripts.timeToReload;
             if (var8 <= var9) {
                 if (var8 <= var9 / 2) {
                     y += (var1 - weaponHUDImages[weapId].getHeight()) * var8 / var9;
@@ -233,7 +233,7 @@ public final class PlayerHUD {
 
         if (Scripts.var_2075) {
             var8 = (int) GameScene.gameTimeUnpaused - Scripts.var_2108;
-            var9 = Scripts.var_20d6;
+            var9 = Scripts.timeToSwitchWeapon;
             if (var8 <= var9) {
                 if (var8 <= var9 / 2) {
                     int var6 = var1 - weaponHUDImages[Scripts.EncasedWeapon].getHeight();
@@ -492,7 +492,7 @@ public final class PlayerHUD {
 
                 if (var0 && var12) {
                     ++var_937;
-                    if (var_937 >= 50) {
+                    if (var_937 >= 50) {//50
                         var_ad1 += var9 >> 3;
                         if (var3 + npcPhraseLinesStartsEnds[line].size() * var9 - var_ad1 <= yPlayerAnswersStart + 46) {
                             var_ad1 = 0;
