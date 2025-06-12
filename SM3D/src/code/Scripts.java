@@ -231,9 +231,9 @@ public final class Scripts {
     public static int MoneyTaken;
     public static boolean var_228e;
     public static boolean botHitPlayerBefore;
-    public static int[] var_2314;
-    public static byte[] var_2326;
-    public static byte var_2367;
+    public static int[] questLocationDescriptionId;
+    public static byte[] questLocationNumber;
+    public static byte allQuestsNumber;
 
     //  Диалоговая система
     public static short currentDialogId;
@@ -382,7 +382,7 @@ public final class Scripts {
         //ModChanges.NewStartItems();
     }
 
-    public static void sub_8b() {
+    public static void disableLockedDoorIcon() {
         PlayerHUD.doorLocked = false;
     }
 
@@ -1652,7 +1652,7 @@ public final class Scripts {
         SoundAndVibro.vibrate(200);
     }
 
-    public static void sub_72f() {
+    public static void openMap() {
         GameScene.setDialogWindowState((short) 5);
         finishCurrentTask();
     }
@@ -1740,7 +1740,7 @@ public final class Scripts {
                             useItem((short) 200);
                         } else {
                             if (playerCanLeaveLevel) {
-                                sub_72f();
+                                openMap();
                                 return;
                             }
 
@@ -1751,7 +1751,7 @@ public final class Scripts {
                     if (Keys.leftSoft) {
                         Keys.leftSoft = false;
                         GameScene.gamePaused = true;
-                        sub_7cd();
+                        setCurrentQuestsDescriptions();
                         AllScreens.masterInventory = new MasterInventoryScreen();
                         Main.main.setScreen(AllScreens.pauseScreen, (byte) 2);
                         Main.main.repaint();
@@ -1810,24 +1810,26 @@ public final class Scripts {
         return GameScene.sub_165(var0, StoryLocationMassive);
     }
 
-    private static void sub_7cd() {
-        var_2314 = new int[13];
-        var_2326 = new byte[13];
-        var_2367 = 0;
+    private static void setCurrentQuestsDescriptions() {
+        questLocationDescriptionId = new int[13];
+        questLocationNumber = new byte[13];
+        allQuestsNumber = 0;
 
-        for (byte var1 = 1; var1 < 17; ++var1) {
-            byte var0;
-            if (sub_819(var1) && (var0 = getLocationNameId(var1)) != -1) {
-                var_2314[var_2367] = (short) (var0 + 354);
-                var_2326[var_2367] = var1;
-                ++var_2367;
+        for (byte location = 1; location < 17; ++location) {
+            byte i;
+            if (checkLocationAvailability(location) && (i = getLocationNameId(location)) != -1) {
+                questLocationDescriptionId[allQuestsNumber] = (short) (i + 354);
+                questLocationNumber[allQuestsNumber] = location;
+                ++allQuestsNumber;
             }
         }
 
     }
 
-    public static boolean sub_819(int var0) {
-        return !GameScene.locationCompleted[var0] && (GameScene.locationCampMark[var0] || GameScene.locationTaskMark[var0]) || GameScene.currentLocation == var0;
+    /**Если локация не пройдена и локация есть в списке заданий или лагерей,
+     * а также если локация отличается от текущей*/
+    public static boolean checkLocationAvailability(int location) {
+        return !GameScene.locationCompleted[location] && (GameScene.locationCampMark[location] || GameScene.locationTaskMark[location]) || GameScene.currentLocation == location;
     }
 
     private static void finishCurrentTask() {
@@ -1907,7 +1909,7 @@ public final class Scripts {
                 return;
             }
 
-            if (!sub_819(GameScene.nextLocation)) {
+            if (!checkLocationAvailability(GameScene.nextLocation)) {
                 return;
             }
 
@@ -1921,14 +1923,14 @@ public final class Scripts {
             Keys.num2 = false;
             Keys.up = false;
             Keys.left = false;
-            if (sub_8da()) {
+            if (checkIfAnyLocationAvailable()) {
                 while (true) {
                     ++GameScene.nextLocation;
                     if (GameScene.nextLocation > 16) {
                         GameScene.nextLocation = 1;
                     }
 
-                    if (sub_819(GameScene.nextLocation)) {
+                    if (checkLocationAvailability(GameScene.nextLocation)) {
                         break;
                     }
 
@@ -1947,14 +1949,14 @@ public final class Scripts {
             Keys.down = false;
             Keys.right = false;
             boolean var0 = GameScene.currentLocation == 0;
-            if (sub_8da()) {
+            if (checkIfAnyLocationAvailable()) {
                 do {
                     --GameScene.nextLocation;
                     byte var1 = (byte) (var0 ? 0 : 1);
                     if (GameScene.nextLocation < var1) {
                         GameScene.nextLocation = 16;
                     }
-                } while ((!var0 || GameScene.nextLocation != 0) && !sub_819(GameScene.nextLocation));
+                } while ((!var0 || GameScene.nextLocation != 0) && !checkLocationAvailability(GameScene.nextLocation));
             }
 
             PlayerHUD.textLinesStartsEnds = TextCreator.splitOnLines(getLocationNameId((byte) GameScene.nextLocation) + 354, PlayerHUD.TEXT_TARGET_WIDTH, 0);
@@ -1962,13 +1964,13 @@ public final class Scripts {
 
     }
 
-    private static boolean sub_8da() {
-        for (byte var0 = 1; var0 < 17; ++var0) {
-            if (var0 != GameScene.currentLocation && sub_819(var0)) {
+    private static boolean checkIfAnyLocationAvailable() {
+        for (byte location = 1; location < 17; ++location) {
+            if (location != GameScene.currentLocation && 
+                    checkLocationAvailability(location)) {
                 return true;
             }
         }
-
         return false;
     }
 

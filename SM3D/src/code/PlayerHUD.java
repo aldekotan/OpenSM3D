@@ -684,7 +684,7 @@ public final class PlayerHUD {
         graphics.setColor(16711680); 
 
         for (byte locId = 0; locId < 17; ++locId) {
-            if (Scripts.sub_819(locId) || locId == GameScene.currentLocation || locId == previousLocation) {
+            if (Scripts.checkLocationAvailability(locId) || locId == GameScene.currentLocation || locId == previousLocation) {
                 if (!GameScene.locationCampMark[locId] && locId != 0) {
                     ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
                 } else {

@@ -133,7 +133,7 @@ public final class LoadingScreen implements Screen {
             case 12: //загрузка сохранённой игры
                 ResourceManager.loadGameSave();
                 PlayerHUD.loadLocationsCoordinates();
-                Scripts.sub_72f();
+                Scripts.openMap();
         }
 
         ResourceManager.loadingState = 0;

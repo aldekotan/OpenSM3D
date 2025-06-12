@@ -79,8 +79,8 @@ public class ListScreen extends MenuScreen {
     public boolean onShow(byte screenId) {
         super.onShow(screenId);
         if (screenId == 3) {
-            this.numberOfOptions = Scripts.var_2367;
-            this.optionsTextId = Scripts.var_2314;
+            this.numberOfOptions = Scripts.allQuestsNumber;
+            this.optionsTextId = Scripts.questLocationDescriptionId;
             this.sub_88();
         } else if (!(this instanceof PlayersRecords)) {
             this.optionsTextId = allListOptionsTextId[screenId];//
@@ -114,11 +114,11 @@ public class ListScreen extends MenuScreen {
     private void sub_88() {
         this.var_57e = 0;
         this.var_588 = 0;
-        this.i_varMassive_2 = new int[Scripts.var_2367];
-        this.i_varMassive_3 = new int[Scripts.var_2367];
-        this.textLinesStartsEnds = new Vector[Scripts.var_2367];
+        this.i_varMassive_2 = new int[Scripts.allQuestsNumber];
+        this.i_varMassive_3 = new int[Scripts.allQuestsNumber];
+        this.textLinesStartsEnds = new Vector[Scripts.allQuestsNumber];
 
-        for (byte var1 = 0; var1 < Scripts.var_2367; ++var1) {
+        for (byte var1 = 0; var1 < Scripts.allQuestsNumber; ++var1) {
             this.textLinesStartsEnds[var1] = TextCreator.splitOnLines(this.optionsTextId[var1], 80, 0);
             if (var1 > 0) {
                 this.i_varMassive_2[var1] = this.i_varMassive_2[var1 - 1] + TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[var1].size() - 1);
@@ -133,7 +133,7 @@ public class ListScreen extends MenuScreen {
 
     }
 
-    //отрисовка реплик меню паузы или настроек
+    //отрисовка реплик меню паузы или настроек или пда?
     public void drawItem(int item) {
         if (super.drawingScreenId == 3) //3
         {
@@ -141,7 +141,7 @@ public class ListScreen extends MenuScreen {
             TextCreator.drawReplicInsideFrame(this.optionsTextId[item], AllScreens.var_4ba + 2, MenuScreen.textClipY + this.i_var_3 + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + var3, 0, 0, MasterCanvas.graphics, 0, -1, this.textLinesStartsEnds[item]);
         } else {
             byte var2 = 0;
-            if (super.drawingScreenId == 2 && (item == 5 && !Scripts.playerCanLeaveLevel || item == 6 && Scripts.var_2367 == 0)) {
+            if (super.drawingScreenId == 2 && (item == 5 && !Scripts.playerCanLeaveLevel || item == 6 && Scripts.allQuestsNumber == 0)) {
                 var2 = 1;
             }
 
@@ -248,12 +248,12 @@ public class ListScreen extends MenuScreen {
                     }
 
                     if (super.drawingScreenId == 3) {
-                        this.selectedIndex = Math.min(Scripts.var_2367 - 1, this.selectedIndex);
+                        this.selectedIndex = Math.min(Scripts.allQuestsNumber - 1, this.selectedIndex);
                     }
                 } else {
                     this.selectedIndex = this.numberOfOptions - 1;
                     if (super.drawingScreenId == 3) {
-                        this.selectedIndex = Math.min(Scripts.var_2367 - 1, this.selectedIndex);
+                        this.selectedIndex = Math.min(Scripts.allQuestsNumber - 1, this.selectedIndex);
                     }
 
                     this.by_var_1 = (byte) Math.max(this.selectedIndex - this.by_var_2, 0);
@@ -296,14 +296,14 @@ public class ListScreen extends MenuScreen {
                                 return;
                             case 5:
                                 if (Scripts.playerCanLeaveLevel) {
-                                    Scripts.sub_72f();
+                                    Scripts.openMap();
                                     Main.main.setScreen(this.screenByOptionId[this.selectedIndex], this.screenIdByOptionId[this.selectedIndex]);
                                     return;
                                 }
 
                                 return;
                             case 6:
-                                if (Scripts.var_2367 != 0) {
+                                if (Scripts.allQuestsNumber != 0) {
                                     Main.main.setScreen(this.screenByOptionId[this.selectedIndex], this.screenIdByOptionId[this.selectedIndex]);
                                     return;
                                 }
@@ -353,7 +353,7 @@ public class ListScreen extends MenuScreen {
                     }
 
                     if (super.drawingScreenId == 3) {
-                        this.selectedIndex = Math.min(Scripts.var_2367 - 1, this.selectedIndex);
+                        this.selectedIndex = Math.min(Scripts.allQuestsNumber - 1, this.selectedIndex);
                     }
                 } else {
                     this.selectedIndex = 0;

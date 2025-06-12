@@ -1277,7 +1277,7 @@ public final class GameScene {
         }
 
         dyingBotId = -1;
-        Scripts.sub_8b();
+        Scripts.disableLockedDoorIcon();
     }
 
     private static void setCamera(int roomId, int doorId) {
