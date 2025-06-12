@@ -34,22 +34,22 @@ public final class Scripts {
     //Состояние диалога
     public static byte rustyDialogState;
     //Количество вариантов ответа после каждого ответа главгероя
-    public static final byte[] var_2a9 = new byte[]{ 1,  1,  1,  3,  1,  1,  1};
+    public static final byte[] rustyFirstAnsCount = new byte[]{ 1,  1,  1,  3,  1,  1,  1};
     //Адреса на текстовые строки в главном текстовом массиве
-    public static final short[] var_2cc = new short[]{ 78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90};
-    public static final byte[] var_30f = new byte[]{ 2,  3,  1,  1,  1,  1};
-    public static final short[] var_369 = new short[]{ 91,  92,  93,  94,  95,  96,  97,  98,  99,  100,  101};
-    public static final byte[] var_412 = new byte[0];
-    public static final short[] var_44c = new short[]{ 102};
-    public static final byte[] var_488 = new byte[]{ 1,  1,  3,  2,  1,  1,  1,  1};
-    public static final short[] var_4d9 = new short[]{ 103,  104,  105,  106,  107,  108,  109,  110,  -1,  111,  -1,  112,  113,  114,  115};
-    public static final byte[] var_51d = new byte[0];
-    public static final short[] var_533 = new short[]{ 116};
-    public static final byte[] var_54c = new byte[]{ 2,  1,  2,  1,  1};
-    public static final short[] var_5a5 = new short[]{ 117,  118,  119,  120,  121,  122,  123,  124,  125};
-    public static final byte[] var_5c1 = new byte[0];
-    public static final short[] var_5dc = new short[]{ 126};
-    public static final byte[][] rustyHierarchy = new byte[][]{var_2a9, var_30f, var_412, var_488, var_51d, var_54c, var_5c1};
+    public static final short[] rustyFirstPhrId = new short[]{ 78,  79,  80,  81,  82,  83,  84,  85,  86,  87,  88,  89,  90};
+    public static final byte[] rustySecondAnsCount = new byte[]{ 2,  3,  1,  1,  1,  1};
+    public static final short[] rustySecondPhrId = new short[]{ 91,  92,  93,  94,  95,  96,  97,  98,  99,  100,  101};
+    public static final byte[] rustyThirdAnsCount = new byte[0];
+    public static final short[] rustyThirdPhrId = new short[]{ 102};
+    public static final byte[] rustyFourthAnsCount = new byte[]{ 1,  1,  3,  2,  1,  1,  1,  1};
+    public static final short[] rustyFourthPhrId = new short[]{ 103,  104,  105,  106,  107,  108,  109,  110,  -1,  111,  -1,  112,  113,  114,  115};
+    public static final byte[] rustyFifthAnsCount = new byte[0];
+    public static final short[] rustyFifthPhrId = new short[]{ 116};
+    public static final byte[] rustySixthAnsCount = new byte[]{ 2,  1,  2,  1,  1};
+    public static final short[] rustySixthPhrId = new short[]{ 117,  118,  119,  120,  121,  122,  123,  124,  125};
+    public static final byte[] rustySeventhAnsCount = new byte[0];
+    public static final short[] rustySeventhPhrId = new short[]{ 126};
+    public static final byte[][] rustyDialogStructure = new byte[][]{rustyFirstAnsCount, rustySecondAnsCount, rustyThirdAnsCount, rustyFourthAnsCount, rustyFifthAnsCount, rustySixthAnsCount, rustySeventhAnsCount};
 
     public static byte galoshQuestState;
     public static final byte[] galoshFirstMeetAns = new byte[]{ 5,  1,  1,  1,  1,  1};
@@ -2008,28 +2008,28 @@ public final class Scripts {
             case 6:
                 switch (rustyDialogState) {
                     case 0:
-                        phracesIdArray = var_2cc;
+                        phracesIdArray = rustyFirstPhrId;
                         break;
                     case 1:
-                        phracesIdArray = var_369;
+                        phracesIdArray = rustySecondPhrId;
                         break;
                     case 2:
-                        phracesIdArray = var_44c;
+                        phracesIdArray = rustyThirdPhrId;
                         break;
                     case 3:
-                        phracesIdArray = var_4d9;
+                        phracesIdArray = rustyFourthPhrId;
                         break;
                     case 4:
-                        phracesIdArray = var_533;
+                        phracesIdArray = rustyFifthPhrId;
                         break;
                     case 5:
-                        phracesIdArray = var_5a5;
+                        phracesIdArray = rustySixthPhrId;
                         break;
                     case 6:
-                        phracesIdArray = var_5dc;
+                        phracesIdArray = rustySeventhPhrId;
                 }
 
-                dialogStructure = rustyHierarchy[rustyDialogState];
+                dialogStructure = rustyDialogStructure[rustyDialogState];
                 break;
             case 7: //Миссия Галоша
                 switch (galoshQuestState) {
@@ -2274,7 +2274,7 @@ public final class Scripts {
             //Ржавый
             case 6:
                 if (rustyDialogState == 0) {
-                    if (rustyHierarchy[rustyDialogState][givenAnswersCount] == 1) {
+                    if (rustyDialogStructure[rustyDialogState][givenAnswersCount] == 1) {
                         ++givenAnswersCount;
                         ++currentNpcPhrase;
                         return;
@@ -2345,7 +2345,7 @@ public final class Scripts {
                 }
 
                 if (rustyDialogState == 3) {
-                    if (rustyHierarchy[rustyDialogState][givenAnswersCount] == 1) {
+                    if (rustyDialogStructure[rustyDialogState][givenAnswersCount] == 1) {
                         ++givenAnswersCount;
                         ++currentNpcPhrase;
                         return;
