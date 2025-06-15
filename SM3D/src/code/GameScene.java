@@ -272,6 +272,7 @@ public final class GameScene {
 	
     private static boolean onlyOneBotLeft; //todo remove?
     public static boolean notInRoom;
+    private static boolean walkingSoundActive = false;
 
     static {
         botCenterStatePos = new float[10][3];
@@ -2234,8 +2235,10 @@ public final class GameScene {
             }
             
             //restore audio walking
-            if (timeElapsed % 800 < 100)
+            //if (timeElapsed % 800 < 100)
+            if (walkingSoundActive == false)
             {
+                walkingSoundActive = true;
                 SoundAndVibro.playSound(6);
             }
             //restore audio walking
@@ -2368,6 +2371,10 @@ public final class GameScene {
         currentRoom = nextRoom;
         ConfigureAndActivateCamera();
         setDialogWindowState((short) 13);
+        //audioStuttersFix
+            walkingSoundActive = false;
+            SoundAndVibro.stopPlayingSound();
+        //
     }
 
     public static void renderWorld(Graphics graphics) {
