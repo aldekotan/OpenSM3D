@@ -220,16 +220,16 @@ public final class Scripts {
 
     private static boolean botUnderCursor;
     private static boolean gunSoundPlayed;
-    public static boolean var_2075;
+    public static boolean gunSwitchInProcess;
     public static short timeToSwitchWeapon = 1000;
-    public static int var_2108;
-    public static boolean var_215f;
+    public static int switchingGunTimePassed;
+    public static boolean gunReloadInProcess;
     public static short timeToReload = 1000;
-    public static int var_21d2;
+    public static int reloadingTimePassed;
 
     public static boolean playerCanLeaveLevel;
     public static int MoneyTaken;
-    public static boolean var_228e;
+    public static boolean weaponFireflareHidden;
     public static boolean botHitPlayerBefore;
     public static int[] questLocationDescriptionId;
     public static byte[] questLocationNumber;
@@ -237,7 +237,7 @@ public final class Scripts {
 
     //  Диалоговая система
     public static short currentDialogId;
-    public static byte var_23b6;
+    public static byte currentDialogActiveObjId;
     public static short[] phracesIdArray = null;
     //Иерархия ответов
     public static byte[] dialogStructure = null;
@@ -572,12 +572,12 @@ public final class Scripts {
             GameScene.setDialogWindowState((short) 2);
         }
 
-        if (var_215f && GameScene.gameTimeUnpaused - (long) var_21d2 >= (long) (timeToReload / 2) && !gunSoundPlayed) {
+        if (gunReloadInProcess && GameScene.gameTimeUnpaused - (long) reloadingTimePassed >= (long) (timeToReload / 2) && !gunSoundPlayed) {
             SoundAndVibro.playSound(1);//reload sound
             gunSoundPlayed = true;
         }
 
-        if (var_2075 && GameScene.gameTimeUnpaused - (long) var_2108 >= (long) (timeToSwitchWeapon / 2) && !gunSoundPlayed) {
+        if (gunSwitchInProcess && GameScene.gameTimeUnpaused - (long) switchingGunTimePassed >= (long) (timeToSwitchWeapon / 2) && !gunSoundPlayed) {
             SoundAndVibro.playSound(2);//unholster sound
             gunSoundPlayed = true;
         }
@@ -590,12 +590,12 @@ public final class Scripts {
         }
     }
 
-    public static void takeGunInHands(byte var0) {
-        if (!var_215f) {
-            var_2075 = true;
-            var_2108 = (int) GameScene.gameTimeUnpaused;
+    public static void takeGunInHands(byte gun) {
+        if (!gunReloadInProcess) {
+            gunSwitchInProcess = true;
+            switchingGunTimePassed = (int) GameScene.gameTimeUnpaused;
             EncasedWeapon = playerActiveWeapon;
-            playerActiveWeapon = var0;
+            playerActiveWeapon = gun;
             gunSoundPlayed = false;
             if (OpticalSight) {
                 OpticalSight = false;
@@ -620,7 +620,7 @@ public final class Scripts {
 
     private static void reloadGun(byte gunNumber) {
         if (gunNumber != 0) {
-            if (!var_2075) {
+            if (!gunSwitchInProcess) {
                 OpticalSight = false;
                 GameScene.camera.setPerspective(50.0F, (float) MainMenuScreen.scrWidth / (float) MainMenuScreen.scrHeight, 0.1F, 10000.0F);
                 switch (gunNumber) {
@@ -647,8 +647,8 @@ public final class Scripts {
                 }
 
                 gunSoundPlayed = false;
-                var_215f = true;
-                var_21d2 = (int) GameScene.gameTimeUnpaused;
+                gunReloadInProcess = true;
+                reloadingTimePassed = (int) GameScene.gameTimeUnpaused;
             }
         }
     }
@@ -1590,9 +1590,9 @@ public final class Scripts {
     }
 
     private static void shoot(byte gun) {
-        if (!var_2075 && !var_215f) {
+        if (!gunSwitchInProcess && !gunReloadInProcess) {
             if (playerWeaponsAmmo[gun] > 0 || gun == 0) {
-                var_228e = true;
+                weaponFireflareHidden = true;
                 GameScene.shootStartTime = (int) GameScene.gameTimeUnpaused;
                 GameScene.shootShakeActive = true;
                 //restore sounds
@@ -1652,7 +1652,7 @@ public final class Scripts {
         SoundAndVibro.vibrate(200);
     }
 
-    public static void openMap() {
+    public static void openPDA() {
         GameScene.setDialogWindowState((short) 5);
         finishCurrentTask();
     }
@@ -1740,7 +1740,7 @@ public final class Scripts {
                             useItem((short) 200);
                         } else {
                             if (playerCanLeaveLevel) {
-                                openMap();
+                                openPDA();
                                 return;
                             }
 
@@ -1974,9 +1974,9 @@ public final class Scripts {
         return false;
     }
 
-    public static void startDialog(int id, int var1) {
-        currentDialogId = (short) id; //
-        var_23b6 = (byte) var1; //
+    public static void startDialog(int dialogId, int activeObjId) {
+        currentDialogId = (short) dialogId; //
+        currentDialogActiveObjId = (byte) activeObjId; //
         givenAnswersCount = 0;
         selectedAnswer = 0;
         currentNpcPhrase = 0;
@@ -2599,7 +2599,7 @@ public final class Scripts {
                 if (batyaDialogState == 4) {
                     if (givenAnswersCount == 1) {
                         addMarkToPDA(StoryLocationMassive[8]);
-                        GameScene.setActiveObjState(var_23b6, (short) 0);
+                        GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                         GameScene.setDialogWindowState(GameScene.prevGameState);
                         return;
                     }
@@ -2706,7 +2706,7 @@ public final class Scripts {
                     ++currentNpcPhrase;
                     dialogCompleted = true;
                     playerMoney = (short) (playerMoney + 2000);
-                    GameScene.setActiveObjState(var_23b6, (short) 0);
+                    GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                     shlangDialogState = -1;
                 }
                 break;
@@ -2787,7 +2787,7 @@ public final class Scripts {
 
                 if (kaynazovskiDialogState == 2) {
                     GameScene.setDialogWindowState(GameScene.prevGameState);
-                    GameScene.setActiveObjState(var_23b6, (short) 0);
+                    GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                     koboldDialogState = 2;
                     addItemToInventory((short) 128);
                 }
@@ -2803,7 +2803,7 @@ public final class Scripts {
 
                     if (givenAnswersCount == 1) {
                         addMarkToPDA(StoryLocationMassive[4]);
-                        GameScene.setActiveObjState(var_23b6, (short) 0);
+                        GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                         GameScene.setDialogWindowState(GameScene.prevGameState);
                     }
                 }
@@ -2828,7 +2828,7 @@ public final class Scripts {
                                 dropItem((short) ARMY_MED);
                             }
 
-                            GameScene.setActiveObjState(var_23b6, (short) 0);
+                            GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                             playerCanLeaveLevel = true;
                             return;
                         }
@@ -2838,7 +2838,7 @@ public final class Scripts {
                             dialogCompleted = true;
                             addItemToInventory((short) 141);
                             addItemToInventory((short) MOON_ART);
-                            GameScene.setActiveObjState(var_23b6, (short) 0);
+                            GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                             playerCanLeaveLevel = true;
                         }
                     }
@@ -2846,7 +2846,7 @@ public final class Scripts {
                 break;
             //Маниковский, по заданию Кэпа
             case 17:
-                GameScene.setActiveObjState(var_23b6, (short) 0);
+                GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                 if (selectedAnswer == 0) {
                     capItemGot = true;
                     addItemToInventory((short) 200);
@@ -2863,7 +2863,7 @@ public final class Scripts {
             case 18:
                 if (givenAnswersCount == 2) {
                     addMarkToPDA(StoryLocationMassive[7]);
-                    GameScene.setActiveObjState(var_23b6, (short) 0);
+                    GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                     GameScene.setDialogWindowState(GameScene.prevGameState);
                 }
 
@@ -2875,7 +2875,7 @@ public final class Scripts {
                 //Перед посещением третьего лагеря
                 if (koboldDialogState == 0) {
                     if (givenAnswersCount == 1) {
-                        GameScene.setActiveObjState(var_23b6, (short) 0);
+                        GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                         GameScene.setDialogWindowState(GameScene.prevGameState);
                         addItemToInventory((short) 127);
                         kaynazovskiDialogState = 2;
@@ -2895,7 +2895,7 @@ public final class Scripts {
                         GameScene.locationCampMark[GameScene.currentLocation] = GameScene.currentLocation == 1 || GameScene.currentLocation == 6 || GameScene.currentLocation == 12;
                         GameScene.locationCompleted[GameScene.currentLocation] = !GameScene.locationCampMark[GameScene.currentLocation];
                         GameScene.setDialogWindowState((short) -2);
-                        GameScene.setActiveObjState(var_23b6, (short) 0);
+                        GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                         return;
                     }
 
@@ -2905,7 +2905,7 @@ public final class Scripts {
 
                 if (koboldDialogState == 2) {
                     GameScene.setDialogWindowState((short) 2);
-                    GameScene.setActiveObjState(var_23b6, (short) 0);
+                    GameScene.setActiveObjState(currentDialogActiveObjId, (short) 0);
                     endingCutscene = true;
                 }
                 break;

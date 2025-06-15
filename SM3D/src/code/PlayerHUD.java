@@ -194,7 +194,7 @@ public final class PlayerHUD {
         int x = SCREEN_WIDTH - weaponHUDImages[weapId].getWidth();
         int y = var1 - weaponHUDImages[weapId].getHeight();
         //рисуем вспышку от выстрела
-        if (GameScene.shootShakeActive || Scripts.var_228e) {
+        if (GameScene.shootShakeActive || Scripts.weaponFireflareHidden) {
             byte var4 = 0;
             byte var5 = 0;
             switch (weapId) {
@@ -212,41 +212,41 @@ public final class PlayerHUD {
             }
 
             graphics.drawImage(weaponFireImage, x + var4 - (weaponFireImage.getWidth() >> 1), y + var5 - (weaponFireImage.getHeight() >> 1), 0);
-            Scripts.var_228e = false;
+            Scripts.weaponFireflareHidden = false;
         }
 
-        int var8;
-        short var9;
-        if (Scripts.var_215f) {
-            var8 = (int) GameScene.gameTimeUnpaused - Scripts.var_21d2;
-            var9 = Scripts.timeToReload;
-            if (var8 <= var9) {
-                if (var8 <= var9 / 2) {
-                    y += (var1 - weaponHUDImages[weapId].getHeight()) * var8 / var9;
+        int timeToCompare;
+        short timeDestination;
+        if (Scripts.gunReloadInProcess) {
+            timeToCompare = (int) GameScene.gameTimeUnpaused - Scripts.reloadingTimePassed;
+            timeDestination = Scripts.timeToReload;
+            if (timeToCompare <= timeDestination) {
+                if (timeToCompare <= timeDestination / 2) {
+                    y += (var1 - weaponHUDImages[weapId].getHeight()) * timeToCompare / timeDestination;
                 } else {
-                    y = var1 - weaponHUDImages[weapId].getHeight() * var8 / var9;
+                    y = var1 - weaponHUDImages[weapId].getHeight() * timeToCompare / timeDestination;
                 }
             } else {
-                Scripts.var_215f = false;
+                Scripts.gunReloadInProcess = false;
             }
         }
 
-        if (Scripts.var_2075) {
-            var8 = (int) GameScene.gameTimeUnpaused - Scripts.var_2108;
-            var9 = Scripts.timeToSwitchWeapon;
-            if (var8 <= var9) {
-                if (var8 <= var9 / 2) {
+        if (Scripts.gunSwitchInProcess) {
+            timeToCompare = (int) GameScene.gameTimeUnpaused - Scripts.switchingGunTimePassed;
+            timeDestination = Scripts.timeToSwitchWeapon;
+            if (timeToCompare <= timeDestination) {
+                if (timeToCompare <= timeDestination / 2) {
                     int var6 = var1 - weaponHUDImages[Scripts.EncasedWeapon].getHeight();
-                    int var7 = (var1 - weaponHUDImages[Scripts.EncasedWeapon].getHeight() - 10) * var8 / var9;
+                    int var7 = (var1 - weaponHUDImages[Scripts.EncasedWeapon].getHeight() - 10) * timeToCompare / timeDestination;
                     y = var6 + var7;
                     x = SCREEN_WIDTH - weaponHUDImages[Scripts.EncasedWeapon].getWidth();
                     graphics.drawImage(weaponHUDImages[Scripts.EncasedWeapon], x, y, 0);
                     return;
                 }
 
-                y = var1 - weaponHUDImages[weapId].getHeight() * var8 / var9;
+                y = var1 - weaponHUDImages[weapId].getHeight() * timeToCompare / timeDestination;
             } else {
-                Scripts.var_2075 = false;
+                Scripts.gunSwitchInProcess = false;
             }
         }
 

@@ -296,7 +296,7 @@ public class ListScreen extends MenuScreen {
                                 return;
                             case 5:
                                 if (Scripts.playerCanLeaveLevel) {
-                                    Scripts.openMap();
+                                    Scripts.openPDA();
                                     Main.main.setScreen(this.screenByOptionId[this.selectedIndex], this.screenIdByOptionId[this.selectedIndex]);
                                     return;
                                 }
