@@ -1237,7 +1237,8 @@ public final class GameScene {
         }
     }
 
-    private static float sub_5d9(float x1, float y1, float x2, float y2, float x3, float y3) 
+    //temp name
+    private static float getActivObjYAngle(float x1, float y1, float x2, float y2, float x3, float y3) 
     {
         float dist1to2 = MathUtils.distance2D(x1, y1, x2, y2);
         float dist1to3 = MathUtils.distance2D(x1, y1, x3, y3);
@@ -1245,7 +1246,8 @@ public final class GameScene {
         return dist1to2 != 0.0F && dist1to3 != 0.0F ? (float) MathUtils.acos((dist1to2 * dist1to2 + dist1to3 * dist1to3 - dist2to3 * dist2to3) / (2.0F * dist1to2 * dist1to3)) : -500.0F;
     }
 
-    private static float sub_5e5(float var0, float var1, float var2, float var3, float var4, float var5, float var6, float var7, float var8) {
+    //temp name
+    private static float getXAngleACos(float var0, float var1, float var2, float var3, float var4, float var5, float var6, float var7, float var8) {
         float var9 = MathUtils.distance3D(var0, var1, var2, var3, var4, var5);
         float var10 = MathUtils.distance3D(var0, var1, var2, var6, var7, var8);
         float var11 = MathUtils.distance3D(var3, var4, var5, var6, var7, var8);
@@ -1387,17 +1389,17 @@ public final class GameScene {
                 var14 = botSettings[roomId][botId][5];
         }
 
-        botYAngle[botId] = sub_5d9(var5, var7, var11, var14, var3, var4);
+        botYAngle[botId] = getActivObjYAngle(var5, var7, var11, var14, var3, var4);
         float[] var15 = getVectorForCrossProduct(var5, var7, var3, var4);
         float[] var16 = getVectorForCrossProduct(var5, var7, var11, var14);
         byte var17 = getCrossProductSign(var15, var16);
         botYAngle[botId] *= (float) var17;
         if(var12 <= var6) {
-            botMaxXAngle[botId] = -(90.0F - sub_5e5(var5, var6, var7, var11, var12, var14, var5, var9, var7));
-            botMinXAngle[botId] = -(90.0F - sub_5e5(var5, var6, var7, var11, var13, var14, var5, var9, var7));
+            botMaxXAngle[botId] = -(90.0F - getXAngleACos(var5, var6, var7, var11, var12, var14, var5, var9, var7));
+            botMinXAngle[botId] = -(90.0F - getXAngleACos(var5, var6, var7, var11, var13, var14, var5, var9, var7));
         } else {
-            botMaxXAngle[botId] = sub_5e5(var5, var6, var7, var11, var12, var14, var5, var9, var7) - 90.0F;
-            botMinXAngle[botId] = sub_5e5(var5, var6, var7, var11, var13, var14, var5, var9, var7) - 90.0F;
+            botMaxXAngle[botId] = getXAngleACos(var5, var6, var7, var11, var12, var14, var5, var9, var7) - 90.0F;
+            botMinXAngle[botId] = getXAngleACos(var5, var6, var7, var11, var13, var14, var5, var9, var7) - 90.0F;
         }
     }
 
@@ -1412,7 +1414,7 @@ public final class GameScene {
         float var9 = (var8 = doorSettings[roomId][doorId][1] + 0.4F) - 2.0F;
         float var10 = doorSettings[roomId][doorId][2];
         float var12 = cameraPos[1] - 1.6F;
-        doorYAngle[doorId] = sub_5d9(var4, var6, var7, var10, var2, var3);
+        doorYAngle[doorId] = getActivObjYAngle(var4, var6, var7, var10, var2, var3);
         float[] var14 = getVectorForCrossProduct(var4, var6, var2, var3);
         float[] var15 = getVectorForCrossProduct(var4, var6, var7, var10);
         byte var16 = getCrossProductSign(var14, var15);
@@ -1422,16 +1424,16 @@ public final class GameScene {
         }
 
         if(var8 <= var5) {
-            doorMaxXAngle[doorId] = -(90.0F - sub_5e5(var4, var5, var6, var7, var8, var10, var4, var12, var6));
-            doorMinXAngle[doorId] = -(90.0F - sub_5e5(var4, var5, var6, var7, var9, var10, var4, var12, var6));
+            doorMaxXAngle[doorId] = -(90.0F - getXAngleACos(var4, var5, var6, var7, var8, var10, var4, var12, var6));
+            doorMinXAngle[doorId] = -(90.0F - getXAngleACos(var4, var5, var6, var7, var9, var10, var4, var12, var6));
         } else {
-            doorMaxXAngle[doorId] = sub_5e5(var4, var5, var6, var7, var8, var10, var4, var12, var6) - 90.0F;
-            doorMinXAngle[doorId] = sub_5e5(var4, var5, var6, var7, var9, var10, var4, var12, var6) - 90.0F;
+            doorMaxXAngle[doorId] = getXAngleACos(var4, var5, var6, var7, var8, var10, var4, var12, var6) - 90.0F;
+            doorMinXAngle[doorId] = getXAngleACos(var4, var5, var6, var7, var9, var10, var4, var12, var6) - 90.0F;
         }
     }
 
-    //Не рискну в это лезть
-    private static float[] sub_7cb(int walkCurrentDoorId, boolean thirdPerson) {
+    //temp name
+    private static float[] getWalkPointsThirdperson(int walkCurrentDoorId, boolean thirdPerson) {
         float var2 = roomSettings[currentRoom][0];
         float var3 = roomSettings[currentRoom][2];
         float var4 = cameraPos[0];
@@ -1443,11 +1445,11 @@ public final class GameScene {
         float var10 = doorSettings[currentRoom][walkNextDoorId][0];
         float var11 = doorSettings[currentRoom][walkNextDoorId][2];
         useThirdPerson = thirdPerson;
-        float var12 = sub_5d9(var4, var5, var6, var7, var2, var3);
+        float var12 = getActivObjYAngle(var4, var5, var6, var7, var2, var3);
         float[] var13 = getVectorForCrossProduct(var4, var5, var2, var3);
         float[] var14 = getVectorForCrossProduct(var4, var5, var6, var7);
         byte var15 = getCrossProductSign(var13, var14);
-        float var16 = sub_5d9(var6, var7, var10, var11, var8, var9);
+        float var16 = getActivObjYAngle(var6, var7, var10, var11, var8, var9);
         var13 = getVectorForCrossProduct(var6, var7, var10, var11);
         var14 = getVectorForCrossProduct(var6, var7, var8, var9);
         byte var17 = getCrossProductSign(var13, var14);
@@ -1465,17 +1467,17 @@ public final class GameScene {
         float yObjMinPos = (yObjMaxPos = activableObjSettings[roomId][objId][1] + 1.5F) - 1.5F;
         float zObjPos = activableObjSettings[roomId][objId][2];
         float yCamMinPos = cameraPos[1] - 1.6F;
-        activObjYAngle[objId] = sub_5d9(xCamPos, zCamPos, xObjPos, zObjPos, xRoomPos, zRoomPos);//2d distance acos
+        activObjYAngle[objId] = getActivObjYAngle(xCamPos, zCamPos, xObjPos, zObjPos, xRoomPos, zRoomPos);//2d distance acos
         float[] var14 = getVectorForCrossProduct(xCamPos, zCamPos, xRoomPos, zRoomPos);//3d distance acos
         float[] var15 = getVectorForCrossProduct(xCamPos, zCamPos, xObjPos, zObjPos);//3d distance acos
         byte var16 = getCrossProductSign(var14, var15);
         activObjYAngle[objId] *= (float) var16;
         if(yCamPos <= yObjMaxPos) {
-            activObjMaxXAngle[objId] = -(90.0F - sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMaxPos, zObjPos, xCamPos, yCamMinPos, zCamPos));
-            activObjMinXAngle[objId] = -(90.0F - sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMinPos, zObjPos, xCamPos, yCamMinPos, zCamPos));
+            activObjMaxXAngle[objId] = -(90.0F - getXAngleACos(xCamPos, yCamPos, zCamPos, xObjPos, yObjMaxPos, zObjPos, xCamPos, yCamMinPos, zCamPos));
+            activObjMinXAngle[objId] = -(90.0F - getXAngleACos(xCamPos, yCamPos, zCamPos, xObjPos, yObjMinPos, zObjPos, xCamPos, yCamMinPos, zCamPos));
         } else {
-            activObjMaxXAngle[objId] = sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMaxPos, zObjPos, xCamPos, yCamMinPos, zCamPos) - 90.0F;
-            activObjMinXAngle[objId] = sub_5e5(xCamPos, yCamPos, zCamPos, xObjPos, yObjMinPos, zObjPos, xCamPos, yCamMinPos, zCamPos) - 90.0F;
+            activObjMaxXAngle[objId] = getXAngleACos(xCamPos, yCamPos, zCamPos, xObjPos, yObjMaxPos, zObjPos, xCamPos, yCamMinPos, zCamPos) - 90.0F;
+            activObjMinXAngle[objId] = getXAngleACos(xCamPos, yCamPos, zCamPos, xObjPos, yObjMinPos, zObjPos, xCamPos, yCamMinPos, zCamPos) - 90.0F;
         }
     }
 
@@ -1670,9 +1672,9 @@ public final class GameScene {
 					}
                 }
 
-                float[] var3 = sub_7cb(walkCurrentDoorId, levelUseThirdperson[currentLocation] == 1);
-                walkStartYRot = var3[0] != 180.0F ? var3[0] : 0.0F;
-                walkPointYRot = walkStartYRot + var3[1];
+                float[] walkpoints = getWalkPointsThirdperson(walkCurrentDoorId, levelUseThirdperson[currentLocation] == 1);
+                walkStartYRot = walkpoints[0] != 180.0F ? walkpoints[0] : 0.0F;
+                walkPointYRot = walkStartYRot + walkpoints[1];
                 walkAnimStartTime = (int) gameTimeUnpaused;
                 backupCameraPos();
                 if(useThirdPerson) {
