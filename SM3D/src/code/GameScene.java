@@ -195,7 +195,7 @@ public final class GameScene {
     public static boolean isBotDeathAnimFinished; //makes no sense todo remove ???
 	
 	//something bot related too
-    private static int[] var_1dce; 
+    private static int[] botsStateChangeTimePassed; 
     private static int botsStateChangeTime;
     private static float[][] botCenterStatePos; //used for hide/look out position interpolation??
 	
@@ -323,7 +323,7 @@ public final class GameScene {
         tmpTransArr = new float[16];
         isBotDeathAnimFinished = true;
         dyingBotId = -1;
-        var_1dce = new int[10];
+        botsStateChangeTimePassed = new int[10];
         botDeadAnimEndTime = new int[10];
         botsStateChangeTime = 2000;
         botCurrentPosState = new byte[10];
@@ -430,10 +430,10 @@ public final class GameScene {
 		setObjAngles(roomId);
     }
 
-    public static byte sub_165(byte var0, byte[] var1) {
-        for(byte var2 = 0; var2 < var1.length; ++var2) {
-            if(var0 == var1[var2]) {
-                return var2;
+    public static byte findInMassive(byte var0, byte[] massive) {
+        for(byte i = 0; i < massive.length; ++i) {
+            if(var0 == massive[i]) {
+                return i;
             }
         }
 
@@ -1137,7 +1137,7 @@ public final class GameScene {
         botsKilledCount = 0;
 
         for(int i = 0; i < botsCount[roomId]; i++) {
-            var_1dce[i] = (int) gameTimeUnpaused + botsStateChangeTime;
+            botsStateChangeTimePassed[i] = (int) gameTimeUnpaused + botsStateChangeTime;
             botDeadAnimEndTime[i] = (int) gameTimeUnpaused + 500;
             botCurrentPosState[i] = 2;
 			
@@ -1154,7 +1154,7 @@ public final class GameScene {
             Scripts.giveItemsForKillingAll();
         }
 
-        sub_1072();
+        updateBotsStates();
     }
 
     private static void setRoomBckMeshes(int roomId) {
@@ -1430,6 +1430,7 @@ public final class GameScene {
         }
     }
 
+    //Не рискну в это лезть
     private static float[] sub_7cb(int walkCurrentDoorId, boolean thirdPerson) {
         float var2 = roomSettings[currentRoom][0];
         float var3 = roomSettings[currentRoom][2];
@@ -1494,7 +1495,7 @@ public final class GameScene {
         }
     }
 
-    private static void sub_86e() {
+    private static void ifActiveBotIsUnderCursor() {
         int botId = activeBotId;
         if(activeBotId >= 0) {
             if(cameraYRot > botYAngle[botId] - 10.0F && cameraYRot < botYAngle[botId] + 10.0F && cameraXRot >= botMinXAngle[botId] - 5.0F && cameraXRot <= botMaxXAngle[botId] + 5.0F) {
@@ -1518,7 +1519,7 @@ public final class GameScene {
         }
     }
 
-    public static boolean sub_911() {
+    public static boolean playerDamagedFromRightSide() {
         return activeBotId >= 0 && botYAngle[activeBotId] - cameraYRot >= 0.0F;
     }
 
@@ -1706,30 +1707,30 @@ public final class GameScene {
         currentGameState = var0;
     }
 
-    private static void sub_b67() {
+    private static void checkIfTimeToEndGamePassed() {
         if(gameTimeUnpaused >= (long) timeToEndGame) {
             switch(currentGameState) {
                 case 4:
-                    sub_b83();
+                    openGameMainMenu();
                     return;
                 case 11:
-                    sub_b83();
+                    openGameMainMenu();
             }
         }
 
     }
 
-    private static void sub_b83() {
+    private static void openGameMainMenu() {
         GameScreen.clearMemoryAndLoadUIImages();
     }
 
-    private static void sub_bd0() {
+    private static void openKoboldEndingDialog() {
         Scripts.koboldDialogState = 2;
         loadPlayerModel();
         preparePlayerModel(Scripts.playerActiveWeapon);
         Scripts.startDialog((short) 19, (byte) 0);
         botsStateChangeTime = 500;
-        koboldCutsceneStartTime = (int) gameTimeUnpaused;
+        koboldCutsceneStartTime = (int) gameTimeUnpaused;//todo переименовать
     }
 
     private static void updateGameState() {
@@ -1750,16 +1751,16 @@ public final class GameScene {
             case 1://переход между уровнями?
                 if(nextDoorId == walkCurrentDoorId) {
                     PlayerHUD.garbageCollected = 0;
-                    sub_115f();
+                    loadNextRoom();
                     return;
                 }
 
-                sub_1117();
+                updateCurrentCutscene();
                 return;
             case 2://Основное игровое окно
-                sub_103b();//подсчёт мёртвых и живых
-                sub_1072();//рендер неписей
-                sub_86e();//??
+                countDeadBots();//подсчёт мёртвых
+                updateBotsStates();//обновление позиций ботов
+                ifActiveBotIsUnderCursor();//
                 checkDoorAngles();//doors obj status
                 checkActiveObjsAngles();//activable obj status
                 antiradTimer();
@@ -1767,7 +1768,7 @@ public final class GameScene {
                     endGame((short) 4, 3000);
                 }
 
-                sub_1117();
+                updateCurrentCutscene();
                 return;
             case 4:
                 return;
@@ -1779,7 +1780,7 @@ public final class GameScene {
                 setupAllObjects(currentRoom);
                 setDialogWindowState((short) 2);
                 if(currentLocation == 16 && currentRoom == 6 && currentDoorId == 0) {
-                    sub_bd0();
+                    openKoboldEndingDialog();
                 }
             case -1:
             case 6:
@@ -1798,7 +1799,7 @@ public final class GameScene {
         camera.postRotate(cameraXRot, 1.0F, 0.0F, 0.0F);
     }
 
-    public static void sub_c4f(int doorId) {//переход по локации, если враги мертвы
+    public static void initWalkingTowardsDoor(int doorId) {//переход по локации, если враги мертвы
         if(allBotsKilledInRoom[currentLocation][currentRoom] || botsAlive == 0) {
             walkCurrentDoorId = currentDoorId;
             nextRoom = (byte) (loadedDoorsSettings[currentRoom][doorId][0] - 1);
@@ -1814,7 +1815,7 @@ public final class GameScene {
         camera.setTranslation(x, y, z);
     }
 
-    private static void sub_d23() {
+    private static void updateGameTicksAndUnpausedTime() {
         long time = System.currentTimeMillis();
 		
         tickDuration = Math.min(250, (int) (time - currentTime));
@@ -1826,12 +1827,12 @@ public final class GameScene {
 
     }
 
-    private static void sub_d9f() {
+    private static void shakeCameraIfActive() {
         if(shootShakeActive) {
-            boolean var0 = MathUtils.fps < 10;
+            boolean tooLowFps = MathUtils.fps < 10;
             int var1;
             if((var1 = (int) gameTimeUnpaused - shootStartTime) <= 200) {
-                if(!var0) {
+                if(!tooLowFps) {
                     float x_angle;
                     float y_angle;
                     if(var1 <= 100) {
@@ -1859,7 +1860,7 @@ public final class GameScene {
         }
     }
 
-    public static void sub_daf() {
+    public static void enableRenderOfBloodSprite() {
 		Mesh var_e6b;
         switch(botCurrentPosState[botIdUndercursor]) {
             case 0:
@@ -1921,37 +1922,37 @@ public final class GameScene {
         }
     }
 
-    private static void sub_e55(int botId, int botPosState) {
-        short var2 = 0;
-        short var3 = 0;
+    private static void updateAnimationOfBotState(int botId, int botPosState) {
+        short startingAnimTime = 0;
+        short endAnimTime = 0;
         switch(botPosState) {
             case 0:
-                var2 = 300;
-                var3 = 500;
+                startingAnimTime = 300;
+                endAnimTime = 500;
                 break;
             case 1:
-                var2 = 900;
-                var3 = 1100;
+                startingAnimTime = 900;
+                endAnimTime = 1100;
                 break;
             case 2:
-                var2 = 0;
-                var3 = 200;
+                startingAnimTime = 0;
+                endAnimTime = 200;
                 break;
             case 3:
-                var2 = 1200;
-                var3 = 1400;
+                startingAnimTime = 1200;
+                endAnimTime = 1400;
                 break;
             case 4:
-                var2 = 600;
-                var3 = 800;
+                startingAnimTime = 600;
+                endAnimTime = 800;
         }
 
-        int var4 = (int) (gameTimeUnpaused - var_1dce[botId] + botsStateChangeTime);
+        int var4 = (int) (gameTimeUnpaused - botsStateChangeTimePassed[botId] + botsStateChangeTime);
         int var5 = botsStateChangeTime;
         muzzleFlashSprite.setRenderingEnable(false);
         if(var4 > var5 / 2 - 750 && var4 < var5 / 2 + 750) {
             botIsShooting = true;
-            roomBotGroups[botId].animate(var3);
+            roomBotGroups[botId].animate(endAnimTime);
             if(var4 % 300 <= 150) {
                 Light light = (Light) roomBotGroups[activeBotId].find(50);
                 light.getTransformTo(gameWorld, tmpTrans);
@@ -1976,16 +1977,16 @@ public final class GameScene {
                 if(var4 <= var5 / 2 - 750) {
                     var9 = botCenterStatePos[botId][0] + var7 * (float) var4 / (float) (botsStateChangeTime / 2 - 750);
                     var11 = botCenterStatePos[botId][2] + var8 * (float) var4 / (float) (botsStateChangeTime / 2 - 750);
-                    var13 = (var3 - var2) * var4 / (botsStateChangeTime / 2 - 750);
-                    var6 = var2 + var13;
+                    var13 = (endAnimTime - startingAnimTime) * var4 / (botsStateChangeTime / 2 - 750);
+                    var6 = startingAnimTime + var13;
                     roomBotGroups[botId].animate(var6);
                 }
 
                 if(var4 >= var5 / 2 + 750) {
                     var9 = botCenterStatePos[botId][0] + var7 * (float) (var5 - var4) / (float) (botsStateChangeTime / 2 - 750);
                     var11 = botCenterStatePos[botId][2] + var8 * (float) (var5 - var4) / (float) (botsStateChangeTime / 2 - 750);
-                    var13 = (var3 - var2) * (var5 - var4) / (botsStateChangeTime / 2 - 750);
-                    var6 = var2 + var13;
+                    var13 = (endAnimTime - startingAnimTime) * (var5 - var4) / (botsStateChangeTime / 2 - 750);
+                    var6 = startingAnimTime + var13;
                     roomBotGroups[botId].animate(var6);
                 }
 
@@ -1996,26 +1997,35 @@ public final class GameScene {
         }
     }
 
-    private static boolean sub_e95(int botId) {
-        return botId == -1 ? true : (botsCount[currentRoom] - botsKilledCount == 1 ? gameTimeUnpaused >= (long) (var_1dce[botId] + 2000) : gameTimeUnpaused >= (long) var_1dce[botId]);
+    /**Проверка на то, прошло ли достаточно времени с последней атаки*/
+    private static boolean checkIfEnoughTimePassedForBot(int botId) {
+        return botId == -1 ? 
+                true : 
+                (botsCount[currentRoom] - botsKilledCount == 1 ? //Если бот остался один
+                gameTimeUnpaused >= (long) (botsStateChangeTimePassed[botId] + 2000) //Прошло 2 секунды
+                : gameTimeUnpaused >= (long) botsStateChangeTimePassed[botId]); //
     }
 
-    private static boolean sub_eee(int botId) {
-        return botActive[botId] && !botKilled[currentRoom][botId] && sub_e95(activeBotId);
+    private static boolean checkIfBotIsReadyAndAlive(int botId) {
+        return botActive[botId] && !botKilled[currentRoom][botId] && checkIfEnoughTimePassedForBot(activeBotId);
     }
 
-    private static void sub_f2e() {
-        byte var0;
-        if((var0 = botsCount[currentRoom]) != 0) {
-            float var1 = 0.0F;
-            float var2 = 0.0F;
-            byte var3 = (byte) MathUtils.getRandomNumber(var0);
-            float var4 = botSettings[currentRoom][var3][6];
-            if(var3 == activeBotId) {
-                var3 = (byte) MathUtils.getRandomNumber(var0);
+    private static void changeRandomBotPositionAndAnimation() {
+        byte botsInTheRoom;
+        //если в комнате есть боты
+        if((botsInTheRoom = botsCount[currentRoom]) != 0) {
+            //берём случайного бота
+            float botXpos = 0.0F;
+            float botZpos = 0.0F;
+            byte aliveBotId = (byte) MathUtils.getRandomNumber(botsInTheRoom);
+            float botYpos = botSettings[currentRoom][aliveBotId][6];
+            //если он уже активен, ищем следующего
+            if(aliveBotId == activeBotId) {
+                aliveBotId = (byte) MathUtils.getRandomNumber(botsInTheRoom);
             }
 
-            if(var0 - botsKilledCount == 0) {
+            //если живых ботов не осталось
+            if(botsInTheRoom - botsKilledCount == 0) {
                 aimAssistActive = false;
                 muzzleFlashSprite.setRenderingEnable(false);
                 if(dyingBotId != -1) {
@@ -2024,79 +2034,83 @@ public final class GameScene {
                 }
             }
 
-            byte var5 = (byte) MathUtils.getRandomNumber(5);
-            onlyOneBotLeft = var0 - botsKilledCount == 1;
+            byte botState = (byte) MathUtils.getRandomNumber(5);
+            onlyOneBotLeft = botsInTheRoom - botsKilledCount == 1;
             byte botId;
+            //Если бот последний, забить на рандом и выбрать его
             if(onlyOneBotLeft) {
-                for(botId = 0; botId < var0; ++botId) {
+                for(botId = 0; botId < botsInTheRoom; ++botId) {
                     if(!botKilled[currentRoom][botId]) {
-                        var3 = botId;
+                        aliveBotId = botId;
                         break;
                     }
                 }
             }
 
-            if(botSettings[currentRoom][var3][9 + var5] != 0.0F && sub_eee(var3) && dyingBotId == -1) {
-                switch(var5) {
+            //Если поза у бота доступна и никто не умирает, установить эту позу
+            if(botSettings[currentRoom][aliveBotId][9 + botState] != 0.0F && checkIfBotIsReadyAndAlive(aliveBotId) && dyingBotId == -1) {
+                switch(botState) {
                     case 0:
                     case 1:
-                        var1 = botSettings[currentRoom][var3][2];
-                        var2 = botSettings[currentRoom][var3][3];
+                        botXpos = botSettings[currentRoom][aliveBotId][2];
+                        botZpos = botSettings[currentRoom][aliveBotId][3];
                         break;
                     case 2:
-                        var1 = botSettings[currentRoom][var3][0];
-                        var2 = botSettings[currentRoom][var3][1];
+                        botXpos = botSettings[currentRoom][aliveBotId][0];
+                        botZpos = botSettings[currentRoom][aliveBotId][1];
                         break;
                     case 3:
                     case 4:
-                        var1 = botSettings[currentRoom][var3][4];
-                        var2 = botSettings[currentRoom][var3][5];
+                        botXpos = botSettings[currentRoom][aliveBotId][4];
+                        botZpos = botSettings[currentRoom][aliveBotId][5];
                 }
 
                 Scripts.botHitPlayerBefore = false;
-                botCurrentPosState[var3] = var5;
-                setBotAngles(var3, currentRoom, var5);
-                activeBotId = var3;
-                setBotPosition(var3, var1, var4, var2);
-                botCenterStatePos[var3][0] = botSettings[currentRoom][var3][0];
-                botCenterStatePos[var3][1] = botSettings[currentRoom][var3][6];
-                botCenterStatePos[var3][2] = botSettings[currentRoom][var3][1];
-                var_1dce[var3] = (int) gameTimeUnpaused + botsStateChangeTime;
+                botCurrentPosState[aliveBotId] = botState;
+                setBotAngles(aliveBotId, currentRoom, botState);
+                activeBotId = aliveBotId;
+                setBotPosition(aliveBotId, botXpos, botYpos, botZpos);
+                botCenterStatePos[aliveBotId][0] = botSettings[currentRoom][aliveBotId][0];
+                botCenterStatePos[aliveBotId][1] = botSettings[currentRoom][aliveBotId][6];
+                botCenterStatePos[aliveBotId][2] = botSettings[currentRoom][aliveBotId][1];
+                botsStateChangeTimePassed[aliveBotId] = (int) gameTimeUnpaused + botsStateChangeTime;
             }
 
+            
             if(activeBotId != -1 && !botKilled[currentRoom][activeBotId]) {
                 if(!Scripts.endingCutscene) {
-                    sub_e55(activeBotId, botCurrentPosState[activeBotId]);
+                    updateAnimationOfBotState(activeBotId, botCurrentPosState[activeBotId]);
                 } else {
-                    sub_e55(activeBotId, (byte) 2);
+                    updateAnimationOfBotState(activeBotId, (byte) 2);
                 }
             }
 
             if(Scripts.endingCutscene) {
-                for(botId = 0; botId < var0; ++botId) {
-                    var1 = botSettings[currentRoom][botId][0];
-                    var2 = botSettings[currentRoom][botId][1];
-                    float var7 = botSettings[currentRoom][botId][6];
-                    setBotPosition(botId, var1, var7, var2);
+                for(botId = 0; botId < botsInTheRoom; ++botId) {
+                    botXpos = botSettings[currentRoom][botId][0];
+                    botZpos = botSettings[currentRoom][botId][1];
+                    float yPos = botSettings[currentRoom][botId][6];
+                    setBotPosition(botId, botXpos, yPos, botZpos);
                     roomBotGroups[botId].animate(200);
                 }
             }
 
+            //Если бот не активен, и не умирает
             if(dyingBotId != -1 && activeBotId != -1) {
                 muzzleFlashSprite.setRenderingEnable(false);
                 playBotDeadAnim(dyingBotId, botCurrentPosState[activeBotId]);
             } else {
-                for(botId = 0; botId < var0; ++botId) {
-                    //если атакует?
+                for(botId = 0; botId < botsInTheRoom; ++botId) {
+                    
                     if(Scripts.endingCutscene) {
                         roomBotGroups[botId].setRenderingEnable(true);
                     } else {
-                        //отключить отрисовку, если спрятался за укрытием
+                        //Если не активен, но жив
                         if(!botKilled[currentRoom][botId] && botId != activeBotId) {
                             roomBotGroups[botId].setRenderingEnable(false);
                         }
 
-                        //включить анимацию смерти
+                        //Если умер
                         if(botKilled[currentRoom][botId]) {
                             roomBotGroups[botId].animate(2000);
                         }
@@ -2135,16 +2149,16 @@ public final class GameScene {
 
     public static void updateGameTime() {
         if(currentGameState != 0 && currentGameState != 13 && currentGameState != -2) {
-            sub_d23();
+            updateGameTicksAndUnpausedTime();
             animateSpritesAndLights();
             updateGameState();
-            sub_b67();
+            checkIfTimeToEndGamePassed();
         } else {
             updateGameState();
         }
     }
 
-    private static void sub_103b() {//проверка на то, убиты ли все враги
+    private static void countDeadBots() {//проверка на то, убиты ли все враги
         if(botsCount[currentRoom] == 0) {
             allBotsKilledInRoom[currentLocation][currentRoom] = true;
 			return;
@@ -2159,7 +2173,7 @@ public final class GameScene {
         allBotsKilledInRoom[currentLocation][currentRoom] = botsDead == botsCount[currentRoom];
     }
 
-    private static void sub_1072() {//выглядывание ботов
+    private static void updateBotsStates() {
         botsAlive = 0;
 
         for(int i = 0; i < botsCount[currentRoom]; ++i) {
@@ -2184,7 +2198,7 @@ public final class GameScene {
             }
         }
 
-        sub_f2e();
+        changeRandomBotPositionAndAnimation();
     }
 
     private static void updateWalkAnimation(Node node) {
@@ -2246,11 +2260,11 @@ public final class GameScene {
 			//Walk anim end
             if(useThirdPerson) playerModel.setRenderingEnable(false);
 
-            sub_115f();
+            loadNextRoom();
         }
     }
 
-    private static void sub_1117() {
+    private static void updateCurrentCutscene() {
         try {
             switch(currentGameState) {
                 case 1:
@@ -2300,7 +2314,7 @@ public final class GameScene {
                     } else {
                         SetCameraOrientAndPostRotate();
                         setCameraPos(cameraPos[0], cameraPos[1], cameraPos[2]);
-                        sub_d9f();
+                        shakeCameraIfActive();
                     }
 
             }
@@ -2365,7 +2379,7 @@ public final class GameScene {
         notInRoom = true;
     }
 
-    private static void sub_115f() {
+    private static void loadNextRoom() {
         prepareObjectArraysForNextRoom();
         useThirdPerson = false;
         currentRoom = nextRoom;

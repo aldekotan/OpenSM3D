@@ -305,7 +305,7 @@ public final class PlayerHUD {
             if (GameScene.damageEffect) {
                 graphics.drawImage(damageImage, 0, SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
                 graphics.drawRegion(damageImage, 0, 0, damageImage.getWidth(), damageImage.getHeight(), 2, SCREEN_WIDTH - damageImage.getWidth(), SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
-            } else if (GameScene.sub_911()) {
+            } else if (GameScene.playerDamagedFromRightSide()) {
                 graphics.drawImage(damageImage, 0, SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);
             } else {
                 graphics.drawRegion(damageImage, 0, 0, damageImage.getWidth(), damageImage.getHeight(), 2, SCREEN_WIDTH - damageImage.getWidth(), SCREEN_HEIGHT / 2 - damageImage.getHeight() / 2, 0);

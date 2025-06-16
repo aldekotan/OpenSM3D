@@ -1498,7 +1498,7 @@ public final class Scripts {
 
     private static void openDoor(int doorId) {
         if (GameScene.dyingBotId == -1) {
-            GameScene.sub_c4f(doorId);
+            GameScene.initWalkingTowardsDoor(doorId);
         }
     }
 
@@ -1518,7 +1518,7 @@ public final class Scripts {
         GameScene.botsKilledCount++;
 		
         GameScene.playBotDieAnimation(GameScene.botIdUndercursor);
-        GameScene.sub_daf();
+        GameScene.enableRenderOfBloodSprite();
 		
         switch (Bot.getBotType(GameScene.botIdUndercursor)) {
             case 0:
@@ -1806,8 +1806,8 @@ public final class Scripts {
         GameScene.locationTaskMark[var0] = true;
     }
 
-    public static byte getLocationNameId(byte var0) {
-        return GameScene.sub_165(var0, StoryLocationMassive);
+    public static byte getLocationNameId(byte location) {
+        return GameScene.findInMassive(location, StoryLocationMassive);
     }
 
     private static void setCurrentQuestsDescriptions() {
