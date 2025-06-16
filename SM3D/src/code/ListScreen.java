@@ -7,9 +7,9 @@ public class ListScreen extends MenuScreen {
 
     public int numberOfOptions;
     public int selectedIndex;
-    public int i_var_3;
-    public byte by_var_1;
-    public byte by_var_2;
+    public int offScreenTextHeight;
+    public byte offScreenIndex;
+    public byte screenOptionsCapacity;
     public byte redrawAnimOnly;
     private Timer timer;
     public Graphics graphics;
@@ -55,16 +55,16 @@ public class ListScreen extends MenuScreen {
     public static Screen[] pauseScreens;
     public static Screen[][] allListScreens;
     private Vector[] textLinesStartsEnds;
-    private int[] i_varMassive_2;
-    private int[] i_varMassive_3;
-    private int var_57e;
-    private int var_588;
+    private int[] optionNameHeight;
+    private int[] optionDescrHeight;
+    private int optionsNamesTotalHeight;
+    private int optionsTextTotalSize;
 
     public ListScreen() {
         super.replicsMassive = new short[][]{{(short) 0, (short) 23, (short) 37, (short) 367, (short) 41}, {(short) 0, (short) 6, (short) 0, (short) 0, (short) 7}, {(short) 0, (short) 10, (short) 10, (short) 6, (short) 11}};
         super.screenIdTransitionLeftOption = new byte[]{(byte) 0, (byte) 1, (byte) 0, (byte) 2, (byte) 0};
-        this.by_var_1 = 0;
-        this.by_var_2 = (byte) Math.min(MenuScreen.textClipHeight / AllScreens.SINGLE_TEXT_LINE_HEIGHT, this.numberOfOptions);
+        this.offScreenIndex = 0;
+        this.screenOptionsCapacity = (byte) Math.min(MenuScreen.textClipHeight / AllScreens.SINGLE_TEXT_LINE_HEIGHT, this.numberOfOptions);
         this.timer = new Timer(true, 100L);
         Main.main.repaint();
     }
@@ -81,7 +81,7 @@ public class ListScreen extends MenuScreen {
         if (screenId == 3) {
             this.numberOfOptions = Scripts.allQuestsNumber;
             this.optionsTextId = Scripts.questLocationDescriptionId;
-            this.sub_88();
+            this.initList();
         } else if (!(this instanceof PlayersRecords)) {
             this.optionsTextId = allListOptionsTextId[screenId];//
             this.screenByOptionId = allListScreens[screenId];//screen
@@ -91,7 +91,7 @@ public class ListScreen extends MenuScreen {
 
         super.interfaceNumber = 44;
         this.selectedIndex = 0;
-        this.by_var_1 = 0;
+        this.offScreenIndex = 0;
         int var2;
         if (screenId == 3) {
             var2 = TextCreator.getSymbolHeight(0) * 3;
@@ -99,36 +99,36 @@ public class ListScreen extends MenuScreen {
             var2 = 0;
         }
 
-        this.by_var_2 = (byte) Math.min(MenuScreen.textClipHeight / (AllScreens.SINGLE_TEXT_LINE_HEIGHT + var2), this.numberOfOptions);
-        this.i_var_3 = 0;
+        this.screenOptionsCapacity = (byte) Math.min(MenuScreen.textClipHeight / (AllScreens.SINGLE_TEXT_LINE_HEIGHT + var2), this.numberOfOptions);
+        this.offScreenTextHeight = 0;
         this.redrawAnimOnly = 4;
         this.timer.resetTimer();
         synchronized (this) {
             this.notifyAll();
         }
 
-        AllScreens.var_4ba = ResourceManager.getUIElementXcoord(45, 0);
+        AllScreens.listDefaultXoffset = ResourceManager.getUIElementXcoord(45, 0);
         return true;
     }
 
-    private void sub_88() {
-        this.var_57e = 0;
-        this.var_588 = 0;
-        this.i_varMassive_2 = new int[Scripts.allQuestsNumber];
-        this.i_varMassive_3 = new int[Scripts.allQuestsNumber];
+    private void initList() {
+        this.optionsNamesTotalHeight = 0;
+        this.optionsTextTotalSize = 0;
+        this.optionNameHeight = new int[Scripts.allQuestsNumber];
+        this.optionDescrHeight = new int[Scripts.allQuestsNumber];
         this.textLinesStartsEnds = new Vector[Scripts.allQuestsNumber];
 
         for (byte option = 0; option < Scripts.allQuestsNumber; ++option) {
             this.textLinesStartsEnds[option] = TextCreator.splitOnLines(this.optionsTextId[option], 80, 0);
             if (option > 0) {
-                this.i_varMassive_2[option] = this.i_varMassive_2[option - 1] + TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
+                this.optionNameHeight[option] = this.optionNameHeight[option - 1] + TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
             } else {
-                this.i_varMassive_2[option] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
+                this.optionNameHeight[option] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
             }
 
-            this.i_varMassive_3[option] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
-            this.var_57e += this.i_varMassive_2[option];
-            this.var_588 += this.textLinesStartsEnds[option].size();
+            this.optionDescrHeight[option] = TextCreator.getSymbolHeight(0) * (this.textLinesStartsEnds[option].size() - 1);
+            this.optionsNamesTotalHeight += this.optionNameHeight[option];
+            this.optionsTextTotalSize += this.textLinesStartsEnds[option].size();
         }
 
     }
@@ -137,15 +137,15 @@ public class ListScreen extends MenuScreen {
     public void drawItem(int item) {
         if (super.drawingScreenId == 3) //3
         {
-            int var3 = item > 0 ? this.i_varMassive_2[item - 1] : 0;
-            TextCreator.drawReplicInsideFrame(this.optionsTextId[item], AllScreens.var_4ba + 2, MenuScreen.textClipY + this.i_var_3 + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + var3, 0, 0, MasterCanvas.graphics, 0, -1, this.textLinesStartsEnds[item]);
+            int var3 = item > 0 ? this.optionNameHeight[item - 1] : 0;
+            TextCreator.drawReplicInsideFrame(this.optionsTextId[item], AllScreens.listDefaultXoffset + 2, MenuScreen.textClipY + this.offScreenTextHeight + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + var3, 0, 0, MasterCanvas.graphics, 0, -1, this.textLinesStartsEnds[item]);
         } else {
             byte var2 = 0;
             if (super.drawingScreenId == 2 && (item == 5 && !Scripts.playerCanLeaveLevel || item == 6 && Scripts.allQuestsNumber == 0)) {
                 var2 = 1;
             }
 
-            TextCreator.drawLineByAnchor(var2, this.optionsTextId[item], AllScreens.var_4ba + 2, MenuScreen.textClipY + this.i_var_3 + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + 20, 0);
+            TextCreator.drawLineByAnchor(var2, this.optionsTextId[item], AllScreens.listDefaultXoffset + 2, MenuScreen.textClipY + this.offScreenTextHeight + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3 + 20, 0);
         }
     }
 
@@ -178,12 +178,12 @@ public class ListScreen extends MenuScreen {
 
             int var3;
             if (super.drawingScreenId == 3) {
-                var3 = this.selectedIndex > 0 ? this.i_varMassive_2[this.selectedIndex - 1] : 0;
+                var3 = this.selectedIndex > 0 ? this.optionNameHeight[this.selectedIndex - 1] : 0;
             } else {
                 var3 = 20;
             }
 
-            ResourceManager.DrawInterfaceImageToSelectedRegion(this.graphics, var1, AllScreens.var_4ba - 2 - (ResourceManager.ReturnWidthOfInterfaceImage(132) >> 1), MenuScreen.textClipY + this.i_var_3 + this.selectedIndex * AllScreens.SINGLE_TEXT_LINE_HEIGHT + 3 + var3, 17);
+            ResourceManager.DrawInterfaceImageToSelectedRegion(this.graphics, var1, AllScreens.listDefaultXoffset - 2 - (ResourceManager.ReturnWidthOfInterfaceImage(132) >> 1), MenuScreen.textClipY + this.offScreenTextHeight + this.selectedIndex * AllScreens.SINGLE_TEXT_LINE_HEIGHT + 3 + var3, 17);
         }
 
     }
@@ -214,7 +214,7 @@ public class ListScreen extends MenuScreen {
             case 5:
                 MenuScreen.menuClipX = MenuScreen.textClipX;
                 MenuScreen.menuClipY = MenuScreen.textClipY;
-                MenuScreen.menuClipWidth = AllScreens.var_4ba - MenuScreen.textClipX;
+                MenuScreen.menuClipWidth = AllScreens.listDefaultXoffset - MenuScreen.textClipX;
                 MenuScreen.menuClipHight = MenuScreen.textClipHeight;
                 super.paint(graphics);
                 this.updateAnimatedImage();
@@ -232,14 +232,14 @@ public class ListScreen extends MenuScreen {
                     --this.selectedIndex;
                     boolean var9 = false;
                     if (super.drawingScreenId == 3) {
-                        var8 = this.i_varMassive_3[this.selectedIndex];
+                        var8 = this.optionDescrHeight[this.selectedIndex];
                     } else {
                         var8 = 0;
                     }
 
-                    if (this.selectedIndex < this.by_var_1) {
-                        --this.by_var_1;
-                        this.i_var_3 += AllScreens.SINGLE_TEXT_LINE_HEIGHT + var8;
+                    if (this.selectedIndex < this.offScreenIndex) {
+                        --this.offScreenIndex;
+                        this.offScreenTextHeight += AllScreens.SINGLE_TEXT_LINE_HEIGHT + var8;
                         this.redrawAnimOnly = 4;
                     }
 
@@ -256,14 +256,14 @@ public class ListScreen extends MenuScreen {
                         this.selectedIndex = Math.min(Scripts.allQuestsNumber - 1, this.selectedIndex);
                     }
 
-                    this.by_var_1 = (byte) Math.max(this.selectedIndex - this.by_var_2, 0);
+                    this.offScreenIndex = (byte) Math.max(this.selectedIndex - this.screenOptionsCapacity, 0);
                     if (super.drawingScreenId == 3) {
                         var8 = TextCreator.getSymbolHeight(0) * 3;
                     } else {
                         var8 = 0;
                     }
 
-                    this.i_var_3 = -this.by_var_1 * (AllScreens.SINGLE_TEXT_LINE_HEIGHT + var8);
+                    this.offScreenTextHeight = -this.offScreenIndex * (AllScreens.SINGLE_TEXT_LINE_HEIGHT + var8);
                     this.redrawAnimOnly = 4;
                 }
 
@@ -334,16 +334,16 @@ public class ListScreen extends MenuScreen {
                         var2 = 1;
                     }
 
-                    if (this.selectedIndex == this.by_var_1 + this.by_var_2 - var2) {
-                        ++this.by_var_1;
+                    if (this.selectedIndex == this.offScreenIndex + this.screenOptionsCapacity - var2) {
+                        ++this.offScreenIndex;
                         int var3;
                         if (super.drawingScreenId == 3) {
-                            var3 = this.i_varMassive_3[this.by_var_1 - 1];
+                            var3 = this.optionDescrHeight[this.offScreenIndex - 1];
                         } else {
                             var3 = 0;
                         }
 
-                        this.i_var_3 -= AllScreens.SINGLE_TEXT_LINE_HEIGHT + var3;
+                        this.offScreenTextHeight -= AllScreens.SINGLE_TEXT_LINE_HEIGHT + var3;
                         this.redrawAnimOnly = 4;
                     }
 
@@ -357,8 +357,8 @@ public class ListScreen extends MenuScreen {
                     }
                 } else {
                     this.selectedIndex = 0;
-                    this.by_var_1 = (byte) this.selectedIndex;
-                    this.i_var_3 = 0;
+                    this.offScreenIndex = (byte) this.selectedIndex;
+                    this.offScreenTextHeight = 0;
                     this.redrawAnimOnly = 4;
                 }
 

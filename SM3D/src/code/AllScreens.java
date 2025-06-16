@@ -43,7 +43,7 @@ public final class AllScreens {
    public static int rightsoftTextYCoord;
    public static int leftSoftTextXCoord;
    public static int leftSoftTextYCoord;
-   public static int var_4ba;
+   public static int listDefaultXoffset;
    public static final int SINGLE_TEXT_LINE_HEIGHT;
    //Main screens duplicate?
    public static Screen confirmScreen;
@@ -69,7 +69,7 @@ public final class AllScreens {
       var_2a8 = MainMenuScreen.scrHeight - var_231;//320-18=302
       halfScrWidth = MainMenuScreen.scrWidth >> 1;
       textY = MainMenuScreen.scrHeight - 3;
-      var_4ba = 60;
+      listDefaultXoffset = 60;//перезаписывается
       SINGLE_TEXT_LINE_HEIGHT = TEXT_LINE_HEIGHT_NOINDENT + 6;
    }
 }

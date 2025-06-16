@@ -24,7 +24,7 @@ public final class PlayersRecords extends ListScreen
 
    public final void drawItem(int item) 
    {
-      TextCreator.drawTextByAnchor(0, this.records[item], 0, this.records[item].length, AllScreens.var_4ba + 2, MenuScreen.textClipY + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3, 0);
+      TextCreator.drawTextByAnchor(0, this.records[item], 0, this.records[item].length, AllScreens.listDefaultXoffset + 2, MenuScreen.textClipY + AllScreens.SINGLE_TEXT_LINE_HEIGHT * item + 3, 0);
    }
 
    public final void addNewPlayerRecord(byte[] recordData) 
@@ -36,7 +36,7 @@ public final class PlayersRecords extends ListScreen
       }
 
       super.numberOfOptions = Main.main.numberOfPlayers;
-      super.by_var_2 = (byte)Math.min(MenuScreen.textClipHeight / AllScreens.SINGLE_TEXT_LINE_HEIGHT, super.numberOfOptions);
+      super.screenOptionsCapacity = (byte)Math.min(MenuScreen.textClipHeight / AllScreens.SINGLE_TEXT_LINE_HEIGHT, super.numberOfOptions);
    }
 
    public final void deletePlayerRecord(byte id) 
@@ -48,7 +48,7 @@ public final class PlayersRecords extends ListScreen
 
       --Main.main.numberOfPlayers;
       super.numberOfOptions = Main.main.numberOfPlayers;
-      super.by_var_2 = (byte)Math.min(MenuScreen.textClipHeight / AllScreens.SINGLE_TEXT_LINE_HEIGHT, super.numberOfOptions);
+      super.screenOptionsCapacity = (byte)Math.min(MenuScreen.textClipHeight / AllScreens.SINGLE_TEXT_LINE_HEIGHT, super.numberOfOptions);
       Main.main.currentPlayerRecordId = -1;
    }
 
