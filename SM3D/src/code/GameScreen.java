@@ -7,7 +7,7 @@ import javax.microedition.lcdui.Graphics;
 public final class GameScreen implements Screen {
 
     //Нигде не используется
-    public byte var_16;
+    //public byte var_16;
 
     //На каком-то этапе разработки игровая логика связанная со временем
     //отрабатывалась через GameScreen
@@ -20,7 +20,7 @@ public final class GameScreen implements Screen {
         new Timer(true, false, 100L);
         //Таймер без проверки - идей нет
         new Timer(false, 100L);
-        this.var_16 = 8;
+        //this.var_16 = 8;
         OldDebugger.restartDebuggers("timers");
     }
 
