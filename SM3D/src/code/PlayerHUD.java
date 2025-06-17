@@ -712,7 +712,7 @@ public final class PlayerHUD {
                 if (!GameScene.locationCampMark[locId] && locId != 0) {
                     ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
                 } else {
-                    ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                    ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 60, locationsCoordinates[locId][0] - 4, locationsCoordinates[locId][1] - 4, 0);
                 }
             }
         }
@@ -752,53 +752,97 @@ public final class PlayerHUD {
                 y_second_end = x_end + (y_second_start - x_end) * x_start / var6;
                 ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 61, x_second_end, y_second_end, 0);
             } else {
-                //вертикальная линия
+                //вертикальная линия верхняя половина
                 y_end = locationsCoordinates[GameScene.nextLocation][0];
                 x_second_end = locationsCoordinates[GameScene.nextLocation][0];
                 y_second_end = SCREEN_HEIGHT;
                 graphics.drawLine(y_end, 0, x_second_end, y_second_end);
                 
-                //горизонтальная линия
+                
+                //горизонтальная линия левая половина
                 y_second_start = locationsCoordinates[GameScene.nextLocation][1];
                 x_second_end = SCREEN_WIDTH;
                 y_second_end = locationsCoordinates[GameScene.nextLocation][1];
                 graphics.drawLine(0, y_second_start, x_second_end, y_second_end);
+                
+                
                 
                 IsTransitActive = false;
                 IsTransitWasCompleted = true;
                 previousLocation = -1;
             }
         }
-
+        //vertical line top
         x_start = locationsCoordinates[GameScene.nextLocation][0];
         x_end = locationsCoordinates[GameScene.nextLocation][0];
         y_end = SCREEN_HEIGHT;
-        graphics.drawLine(x_start, 0, x_end, y_end);
+        graphics.drawLine(x_start, 0, x_end, locationsCoordinates[GameScene.nextLocation][1]-6);
+        //bottom part
+        graphics.drawLine(x_start, locationsCoordinates[GameScene.nextLocation][1]+5, x_end, y_end);
+        
+        //horizontal line left
         y_start = locationsCoordinates[GameScene.nextLocation][1];
         x_end = SCREEN_WIDTH;
         y_end = locationsCoordinates[GameScene.nextLocation][1];
-        graphics.drawLine(0, y_start, x_end, y_end);
-        //graphics fix
-        //graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        graphics.drawLine(0, y_start, locationsCoordinates[GameScene.nextLocation][0]-6, y_end);
+        //right part
+        graphics.drawLine(locationsCoordinates[GameScene.nextLocation][0]+6, y_start, x_end, y_end);
     }
     //Рисуем название выделенной локации
     private static void drawLocationName() {
-        int y = SCREEN_HEIGHT - 2 * ResourceManager.getRectangleHeight(8) 
-                - TextCreator.getSymbolHeight(0) 
-                * (textLinesStartsEnds.size() + 1);
         //Названия сюж.локаций начинаются с 354 индекса
         int locationName = Scripts.getLocationNameId((byte) GameScene.nextLocation) + 354;
+        /*        if (GameScene.nextLocation == 0) {
+         * locationName = 385;
+         * }
+         * if (GameScene.nextLocation == 1 || GameScene.nextLocation == 6
+         * || GameScene.nextLocation == 12)
+         * {
+         * locationName = 386;
+         * }*/
+            
+        //Если цель слишком низко
+        int yStart;
+        if(locationsCoordinates[GameScene.nextLocation][1]>=SCREEN_HEIGHT/2)
+        {
+            yStart = locationsCoordinates[GameScene.nextLocation][1]-
+                    TextCreator.getSymbolHeight(0) * (textLinesStartsEnds.size() + 1);
+        }
+        else
+        {
+            yStart = locationsCoordinates[GameScene.nextLocation][1]+
+                    TextCreator.getSymbolHeight(0);
+        }
+        
+        //Если цель не помещается с правой стороны
+        int xStart;
+        if(locationsCoordinates[GameScene.nextLocation][0]>=SCREEN_WIDTH/2)
+        {
+            if(TextCreator.getWideLineWidth(0, locationName)<=105)
+            {
+                xStart = locationsCoordinates[GameScene.nextLocation][0]-
+                        TextCreator.getWideLineWidth(0, locationName)+7;
+            }
+            else{
+                xStart = locationsCoordinates[GameScene.nextLocation][0]-110;
+            }
+        }
+        else
+        {
+            xStart = locationsCoordinates[GameScene.nextLocation][0]+11;
+        }
+
         //Если мы ещё не покинули место крушения вертолёта
         if (GameScene.nextLocation == 0) {
             //385 = Место крушения
             textLinesStartsEnds = TextCreator.splitOnLines(385, TEXT_TARGET_WIDTH, 0);
             TextCreator.drawReplicInsideFrame(385, 
-                    15, y, 0, 0, graphics, 0, -1, textLinesStartsEnds);
+                    xStart, yStart, 0, 0, graphics, 0, -1, textLinesStartsEnds);
         } 
         //Обычная процедура отрисовки названия локации
         else if (locationName >= 354) {
             TextCreator.drawReplicInsideFrame(locationName, 
-                    15, y, 0, 0, graphics, 0, -1, textLinesStartsEnds);
+                    xStart, yStart, 0, 0, graphics, 0, -1, textLinesStartsEnds);
         } 
         //По сути-то, костыль для названия первого лагеря, 
         //срабатывающий из всех трёх
@@ -808,7 +852,7 @@ public final class PlayerHUD {
             //386 id: Лагерь
             textLinesSpecialStartsEnds = TextCreator.splitOnLines(386, TEXT_TARGET_WIDTH, 0);
             TextCreator.drawReplicInsideFrame(386, 
-                    15, y, 0, 0, graphics, 0, -1, textLinesSpecialStartsEnds);
+                    xStart, yStart, 0, 0, graphics, 0, -1, textLinesSpecialStartsEnds);
         }
     }
 
