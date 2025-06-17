@@ -33,8 +33,8 @@ public final class AllScreens {
    public static int SymbolHeight;
    public static int SymbolWidth;
    public static final int textLineHeightPlusFour;
-   public static final int scrClipHeight;
-   public static final int scrClipYstart;
+   public static final int screenClipHeight;
+   public static final int screenClipYstart;
    public static final int halfScrWidth;
    public static final int textY;
    public static int menuNameXCoord;
@@ -65,8 +65,8 @@ public final class AllScreens {
       //no use
       textLineHeightPlusFour = TEXT_LINE_HEIGHT_NOINDENT + -1 + 3;// (17)
       
-      scrClipHeight = TEXT_LINE_HEIGHT_NOINDENT + 1 + 3;//18
-      scrClipYstart = MainMenuScreen.scrHeight - scrClipHeight;//320-18=302
+      screenClipHeight = TEXT_LINE_HEIGHT_NOINDENT + 1 + 3;//18
+      screenClipYstart = MainMenuScreen.scrHeight - screenClipHeight;//320-18=302
       halfScrWidth = MainMenuScreen.scrWidth >> 1;
       textY = MainMenuScreen.scrHeight - 3;
       listDefaultXoffset = 60;//перезаписывается

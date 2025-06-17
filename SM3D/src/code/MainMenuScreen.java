@@ -228,7 +228,7 @@ public final class MainMenuScreen implements Screen
       this.prevTextX -= 20;
       sleepForAWhile(1L);
       drawMainMenuLogo(graphics);
-      graphics.setClip(0, AllScreens.scrClipYstart, scrWidth, AllScreens.scrClipHeight);
+      graphics.setClip(0, AllScreens.screenClipYstart, scrWidth, AllScreens.screenClipHeight);
       graphics.setColor(15637809);
       TextCreator.drawLineByAnchor(0, AllScreens.mainMenuTextIds[this.menuOptionId], this.newTextX, AllScreens.textY, 9);
       TextCreator.drawLineByAnchor(0, AllScreens.mainMenuTextIds[this.prevMenuOptionId], this.prevTextX, AllScreens.textY, 9);
@@ -251,7 +251,7 @@ public final class MainMenuScreen implements Screen
       this.prevTextX += 20;
       sleepForAWhile(1L);
       drawMainMenuLogo(graphics);
-      graphics.setClip(0, AllScreens.scrClipYstart, scrWidth, AllScreens.scrClipHeight);
+      graphics.setClip(0, AllScreens.screenClipYstart, scrWidth, AllScreens.screenClipHeight);
       //cнова задаём жёлтый цвет, который не используется для текста
       graphics.setColor(15637809);
       TextCreator.drawLineByAnchor(0, AllScreens.mainMenuTextIds[this.menuOptionId], this.newTextX, AllScreens.textY, 9);
