@@ -681,9 +681,28 @@ public final class PlayerHUD {
         //graphics.drawImage(ResourceManager.interfaceImages[12], 0, 3, 0);
         //drawLinesForPDA();
         
-        //Return of old pda
-        ResourceManager.drawUserInterfaceItems(graphics, 41, 0, 0);
+        //***Return of old pda
+        //draw pda's interface
+        //ResourceManager.drawUserInterfaceItems(graphics, 41, 0, 0);
+        
+        //map
+        graphics.drawImage(ResourceManager.interfaceImages[12], 0, 3, 0);
         drawLinesForPDA();
+        
+        //bottom panel
+        ResourceManager.drawUserInterfaceItems(graphics, 3, 7, 290);
+        
+        //frame
+        ResourceManager.drawUserInterfaceItems(graphics, 1, 0, 0);
+        
+        
+        //draw button
+        ResourceManager.drawUserInterfaceItems(graphics, 9, 0, 0);
+        
+        //top panel
+        ResourceManager.drawUserInterfaceItems(graphics, 5, 3, 1);
+        //word "КАРТА"
+        ResourceManager.drawUserInterfaceItems(graphics, 83, 0, 0);
         //
         //красный цвет
         graphics.setColor(16711680); 
@@ -711,7 +730,7 @@ public final class PlayerHUD {
     //Рисуем линии, указывающие на нужную нам позицию
     private static void drawLinesForPDA() {
         //fix for overlapping lines
-        graphics.setClip(3, 17, SCREEN_WIDTH-6, SCREEN_HEIGHT-38);
+        //graphics.setClip(3, 17, SCREEN_WIDTH-6, SCREEN_HEIGHT-38);
         //
         graphics.setColor('\uff00');
         int x_start;
@@ -760,7 +779,7 @@ public final class PlayerHUD {
         y_end = locationsCoordinates[GameScene.nextLocation][1];
         graphics.drawLine(0, y_start, x_end, y_end);
         //graphics fix
-        graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        //graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
     //Рисуем название выделенной локации
     private static void drawLocationName() {
