@@ -81,7 +81,6 @@ public final class PlayerHUD {
     private static byte moneyTakenCount;
 
     public static void loadLocationsCoordinates() {
-        //TODO: выяснить, к каким коордам какая локация относится на карте
         //x 209        y 289    Место крушения
         locCoord4 = new int[]{ResourceManager.getRectangleParams(41, 4, 0)[0], 
             ResourceManager.getRectangleParams(41, 4, 0)[1]};
@@ -97,40 +96,40 @@ public final class PlayerHUD {
         //x 204        y 266    Убить бандитов на лесной дороге. Ржавый
         locCoord7 = new int[]{ResourceManager.getRectangleParams(41, 7, 0)[0], 
             ResourceManager.getRectangleParams(41, 7, 0)[1]};
-        //x 206        y 244
+        //x 206        y 244    Найти командира в логове бандитов. Командование
         locCoord9 = new int[]{ResourceManager.getRectangleParams(41, 9, 0)[0], 
             ResourceManager.getRectangleParams(41, 9, 0)[1]};
-        //x 206        y 222
+        //x 206        y 222    Отправиться в лагерь сталкеров. Трусливый бандит
         locCoord10 = new int[]{ResourceManager.getRectangleParams(41, 10, 0)[0], 
             ResourceManager.getRectangleParams(41, 10, 0)[1]};
-        //x 186        y 230
+        //x 186        y 230    Достать батарейку. Батька
         locCoord11 = new int[]{ResourceManager.getRectangleParams(41, 11, 0)[0], 
             ResourceManager.getRectangleParams(41, 11, 0)[1]};
-        //x 166        y 242
+        //x 166        y 242    Разобраться с бандитами. Харя
         locCoord12 = new int[]{ResourceManager.getRectangleParams(41, 12, 0)[0], 
             ResourceManager.getRectangleParams(41, 12, 0)[1]};
-        //x 102        y 280
+        //x 102        y 280    Без описания
         locCoord13 = new int[]{ResourceManager.getRectangleParams(41, 13, 0)[0], 
             ResourceManager.getRectangleParams(41, 13, 0)[1]};
-        //x 66        y 273
+        //x 66        y 273     Ликвидировать учёного Маниковского. Кэп
         locCoord14 = new int[]{ResourceManager.getRectangleParams(41, 14, 0)[0], 
             ResourceManager.getRectangleParams(41, 14, 0)[1]};
-        //x 88        y 252
+        //x 88        y 252     Прибыть в "точку выхода". Командование
         locCoord15 = new int[]{ResourceManager.getRectangleParams(41, 15, 0)[0], 
             ResourceManager.getRectangleParams(41, 15, 0)[1]};
-        //x 96        y 34
+        //x 96        y 34      Найти ассистента учёного Кайназовского в убежище. Маниковский
         locCoord16 = new int[]{ResourceManager.getRectangleParams(41, 16, 0)[0], 
             ResourceManager.getRectangleParams(41, 16, 0)[1]};
-        //x 169        y 50
+        //x 169        y 50     Разобраться с друзьями Беломора. Беломор
         locCoord17 = new int[]{ResourceManager.getRectangleParams(41, 17, 0)[0], 
             ResourceManager.getRectangleParams(41, 17, 0)[1]};
-        //x 114       y 80
+        //x 114       y 80      Найти компакт-диск в канализации. Шланг
         locCoord18 = new int[]{ResourceManager.getRectangleParams(41, 18, 0)[0], 
             ResourceManager.getRectangleParams(41, 18, 0)[1]};
-        //x 26        y 108
+        //x 26        y 108     Отправиться в убежище второй группы и разобраться со сложившейся ситуацией. Кайназовский
         locCoord19 = new int[]{ResourceManager.getRectangleParams(41, 19, 0)[0], 
             ResourceManager.getRectangleParams(41, 19, 0)[1]};
-        //x 26        y 108
+        //x 26        y 108     Без описания
         locCoord19second = new int[]{ResourceManager.getRectangleParams(41, 19, 0)[0], 
             ResourceManager.getRectangleParams(41, 19, 0)[1]};
         locationsCoordinates = new int[][]{locCoord4, locCoord5, locCoord6, 
@@ -149,10 +148,13 @@ public final class PlayerHUD {
         //7 - задание батьки "батарейка"
         //8 - задание хари "разобраться с бандитами"
         //9 - туннели с военными, поиск Кэпа
-        //10 - ??? агропром с наёмниками
+        //10 - Ликвидировать учёного Маниковского. Кэп
         //11 - задание командования "прибыть в точку выхода"
-        //12 - третий лагерь сталкеров
+        //12 - третий лагерь сталкеров. Найти ассистента учёного Кайназовского в убежище. Маниковский
         //13 - друзья беломора
+        //14 - Найти компакт-диск в канализации. Шланг
+        //15 - Отправиться в убежище второй группы и разобраться со сложившейся ситуацией. Кайназовский
+        //16 - Без описания. Финальная локация
     }
 
     public static void loadHUDTexturesAndLocationCoorditates() {
@@ -675,15 +677,18 @@ public final class PlayerHUD {
         graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         graphics.setColor(0);
         graphics.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        graphics.drawImage(ResourceManager.interfaceImages[12], 0, 3, 0);
+        //original pda
+        //graphics.drawImage(ResourceManager.interfaceImages[12], 0, 3, 0);
+        //drawLinesForPDA();
+        
+        //Return of old pda
+        ResourceManager.drawUserInterfaceItems(graphics, 41, 0, 0);
         drawLinesForPDA();
-        //Для тестов. Возвращение старого PDA
-        //ResourseManager.drawUserInterfaceItems(graphics, 41, 0, 0);
         //
         //красный цвет
         graphics.setColor(16711680); 
 
-        for (byte locId = 0; locId < 17; ++locId) {
+        for (byte locId = 0; locId < 17; ++locId) {//17
             if (Scripts.checkLocationAvailability(locId) || locId == GameScene.currentLocation || locId == previousLocation) {
                 if (!GameScene.locationCampMark[locId] && locId != 0) {
                     ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
@@ -705,6 +710,9 @@ public final class PlayerHUD {
     }
     //Рисуем линии, указывающие на нужную нам позицию
     private static void drawLinesForPDA() {
+        //fix for overlapping lines
+        graphics.setClip(3, 17, SCREEN_WIDTH-6, SCREEN_HEIGHT-38);
+        //
         graphics.setColor('\uff00');
         int x_start;
         int y_start;
@@ -751,6 +759,8 @@ public final class PlayerHUD {
         x_end = SCREEN_WIDTH;
         y_end = locationsCoordinates[GameScene.nextLocation][1];
         graphics.drawLine(0, y_start, x_end, y_end);
+        //graphics fix
+        graphics.setClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     }
     //Рисуем название выделенной локации
     private static void drawLocationName() {
