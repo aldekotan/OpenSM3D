@@ -286,6 +286,10 @@ public class ListScreen extends MenuScreen {
                         if (super.drawingScreenId == 2 && this.selectedIndex == 1) {
                             GameScene.SetToNullAllWorldnMeshMassives();
                             ResourceManager.loadInterfaceImage(2);
+                            if (GameScene.currentLocation == 1 || GameScene.currentLocation == 6 || GameScene.currentLocation == 12)
+                            {
+                                ResourceManager.saveGame();
+                            }
                         }
 
                         switch (this.selectedIndex) {

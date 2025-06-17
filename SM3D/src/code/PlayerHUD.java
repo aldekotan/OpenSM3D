@@ -705,14 +705,22 @@ public final class PlayerHUD {
         ResourceManager.drawUserInterfaceItems(graphics, 83, 0, 0);
         //
         //красный цвет
-        graphics.setColor(16711680); 
+        graphics.setColor(16711680);
+        
 
         for (byte locId = 0; locId < 17; ++locId) {//17
             if (Scripts.checkLocationAvailability(locId) || locId == GameScene.currentLocation || locId == previousLocation) {
-                if (!GameScene.locationCampMark[locId] && locId != 0) {
-                    ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
-                } else {
-                    ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 60, locationsCoordinates[locId][0] - 4, locationsCoordinates[locId][1] - 4, 0);
+                if (locId != 0) {
+                    if (!GameScene.locationCompleted[locId]&&!GameScene.locationCampMark[locId]) {
+                        ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                    }
+                    else if (!GameScene.locationCampMark[locId] && GameScene.locationTaskMark[locId] && GameScene.locationCompleted[locId]) {
+                        ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                    }
+                    else
+                    {
+                        ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 60, locationsCoordinates[locId][0] - 4, locationsCoordinates[locId][1] - 4, 0);
+                    }
                 }
             }
         }
@@ -792,14 +800,20 @@ public final class PlayerHUD {
     private static void drawLocationName() {
         //Названия сюж.локаций начинаются с 354 индекса
         int locationName = Scripts.getLocationNameId((byte) GameScene.nextLocation) + 354;
-        /*        if (GameScene.nextLocation == 0) {
-         * locationName = 385;
-         * }
-         * if (GameScene.nextLocation == 1 || GameScene.nextLocation == 6
-         * || GameScene.nextLocation == 12)
-         * {
-         * locationName = 386;
-         * }*/
+        textLinesStartsEnds = TextCreator.splitOnLines(locationName, TEXT_TARGET_WIDTH, 0);
+        
+        if (GameScene.nextLocation == 0) {
+            textLinesStartsEnds = TextCreator.splitOnLines(385, TEXT_TARGET_WIDTH, 0);
+            locationName = 385;
+        }
+        if (GameScene.locationCampMark[GameScene.nextLocation] && (GameScene.nextLocation == 1 
+                || GameScene.nextLocation == 6
+                || GameScene.nextLocation == 12))
+        {
+            locationName = 386;
+            textLinesSpecialStartsEnds = TextCreator.splitOnLines(386, TEXT_TARGET_WIDTH, 0);
+            textLinesStartsEnds = textLinesSpecialStartsEnds;
+        }
             
         //Если цель слишком низко
         int yStart;
@@ -821,7 +835,7 @@ public final class PlayerHUD {
             if(TextCreator.getWideLineWidth(0, locationName)<=105)
             {
                 xStart = locationsCoordinates[GameScene.nextLocation][0]-
-                        TextCreator.getWideLineWidth(0, locationName)+7;
+                        TextCreator.getWideLineWidth(0, locationName)+1;
             }
             else{
                 xStart = locationsCoordinates[GameScene.nextLocation][0]-110;
@@ -835,12 +849,11 @@ public final class PlayerHUD {
         //Если мы ещё не покинули место крушения вертолёта
         if (GameScene.nextLocation == 0) {
             //385 = Место крушения
-            textLinesStartsEnds = TextCreator.splitOnLines(385, TEXT_TARGET_WIDTH, 0);
             TextCreator.drawReplicInsideFrame(385, 
                     xStart, yStart, 0, 0, graphics, 0, -1, textLinesStartsEnds);
         } 
         //Обычная процедура отрисовки названия локации
-        else if (locationName >= 354) {
+        else if (locationName >= 354 && locationName < 367) {
             TextCreator.drawReplicInsideFrame(locationName, 
                     xStart, yStart, 0, 0, graphics, 0, -1, textLinesStartsEnds);
         } 
@@ -850,7 +863,6 @@ public final class PlayerHUD {
                 || GameScene.nextLocation == 6 
                 || GameScene.nextLocation == 12) {
             //386 id: Лагерь
-            textLinesSpecialStartsEnds = TextCreator.splitOnLines(386, TEXT_TARGET_WIDTH, 0);
             TextCreator.drawReplicInsideFrame(386, 
                     xStart, yStart, 0, 0, graphics, 0, -1, textLinesSpecialStartsEnds);
         }
