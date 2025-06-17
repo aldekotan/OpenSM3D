@@ -9,9 +9,9 @@ public final class LoadingScreen implements Screen {
     public static final byte[] thingsToLoad = new byte[]{0, 3, 6, 4, 7, 5, 5, 9, 10, 11, 12};
     
     public static Screen[] screens;
-    public static final byte[] var_151 = new byte[]{(byte) 1, (byte) 2, (byte) 2, (byte) 1, (byte) 14, (byte) 14, (byte) 1, (byte) 14, (byte) 14, (byte) 14, (byte) 14};
-    private Screen var_22d;
-    private byte var_25a;
+    public static final byte[] screenIds = new byte[]{(byte) 1, (byte) 2, (byte) 2, (byte) 1, (byte) 14, (byte) 14, (byte) 1, (byte) 14, (byte) 14, (byte) 14, (byte) 14};
+    private Screen screen;
+    private byte screenId;
     private Timer timer = new Timer(false, 3000L);
     
     private Image logo;
@@ -23,13 +23,13 @@ public final class LoadingScreen implements Screen {
         this.logo = logo;
     }
 
-    public final boolean onShow(byte var1) {
-        this.state = statesList[var1];
-        this.toLoad = thingsToLoad[var1];
+    public final boolean onShow(byte screenId) {
+        this.state = statesList[screenId];
+        this.toLoad = thingsToLoad[screenId];
         
-        if(var1 != 0) {
-            this.var_22d = screens[var1];
-            this.var_25a = var_151[var1];
+        if(screenId != 0) {
+            this.screen = screens[screenId];
+            this.screenId = screenIds[screenId];
         }
 
         return true;
@@ -104,7 +104,7 @@ public final class LoadingScreen implements Screen {
                 return;
             case 2:
                 this.gamePreload();
-                Main.main.setScreen(this.var_22d, this.var_25a);
+                Main.main.setScreen(this.screen, this.screenId);
             default:
         }
     }
