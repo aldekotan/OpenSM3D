@@ -225,12 +225,12 @@ public final class ItemsInteraction implements Screen
    //У иконок предметов и UI - свои ID, отличные от ID предметов
    private static int getItemImageUIid(short itemId) 
    {
-      if(itemId>=300)
-      {
-          return ModChanges.NewItemsID(itemId);
-      }
-      else
-      {
+       /*      if(itemId>=900)
+        * {
+        * return ModChanges.NewItemsID(itemId);
+        * }
+        * else
+        * {*/
           switch(itemId) 
           {
           case 101:
@@ -286,7 +286,7 @@ public final class ItemsInteraction implements Screen
              return 73;
           case 126:
              return 74;
-          }
+          //}
       }
    }
 
