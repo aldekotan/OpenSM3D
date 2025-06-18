@@ -1786,7 +1786,7 @@ public final class Scripts {
                     PDA_Keypad();
                     return;
                 case 9:
-                    dialogSelector();
+                    dialogControls();
                     return;
                 case 14:
                     if (Keys.rightSoft) {
@@ -2212,7 +2212,7 @@ public final class Scripts {
         }
 
         if (phracesIdArray != null) {
-            PlayerHUD.splitNPCPhraseToLines();
+            PlayerHUD.getDialogLinesBreaks();
             PlayerHUD.resetNPCPhraseOffsetByTime();
             GameScene.setDialogWindowState((short) 9);
         }
@@ -2948,8 +2948,8 @@ public final class Scripts {
 
     }
 
-    private static void dialogSelector() {
-        if (dialogStructure.length != 0) //диалоги?
+    private static void dialogControls() {
+        if (dialogStructure.length != 0)
         {
             NumberOfAnswers = dialogStructure[givenAnswersCount];
             if (Keys.left || Keys.up) {
@@ -2976,7 +2976,7 @@ public final class Scripts {
             }
 
             updateDialogState();
-            PlayerHUD.splitNPCPhraseToLines();
+            PlayerHUD.getDialogLinesBreaks();
             PlayerHUD.resetNPCPhraseOffsetByTime();
         }
 

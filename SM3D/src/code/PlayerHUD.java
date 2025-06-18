@@ -44,17 +44,19 @@ public final class PlayerHUD {
     public static int timeToDisplayDamageIndicator;
     
     //Диалоги
-    private static Vector[] npcPhraseLinesStartsEnds;
-    public static int var_937;
-    public static int var_993;
+    /**<pre>[номер фразы][номер линии][0] - начало строки
+    *[номер фразы][номер линии][1] - конец строки</pre>*/
+    private static Vector[] dialogLinesBreaks;
+    public static int offScreenAnswers;
+    public static int yNPCReplicOffsetRelativeToWindow;
     public static int yNPCReplicOffset;
     private static int refTime;
     public static int npcPhrasesTimePassed;
     private static final int yPlayerAnswersStart;
-    private static final int var_a97;
-    private static int var_ad1;
-    private static byte var_ae7;
-    private static boolean var_b3a;
+    private static final int yAnswersWindowCapacity;
+    private static int offsetFromPreviousAnswer;
+    private static byte previousAnswer;
+    private static boolean highlightCurrentAnswer;
     
     //Переход по карте
     public static boolean IsTransitActive;
@@ -387,42 +389,45 @@ public final class PlayerHUD {
         drawSoftButtonNames(0, 1, rightSoftText, true);
         int var3 = TextCreator.getWideLineWidth(1, 377); //символ /
         int var4 = var0 + 24 - (Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon] / 10 > 0 ? var3 * 2 : var3 + 1);
-        int var5 = var1 + ResourceManager.getRectangleHeight(13) / 2 - TextCreator.getSymbolHeight(1) / 2;
-        TextCreator.drawNumber(1, Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon], var4, var5, 0);
+        int yCoord = var1 + ResourceManager.getRectangleHeight(13) / 2 - TextCreator.getSymbolHeight(1) / 2;
+        TextCreator.drawNumber(1, Scripts.playerWeaponsAmmo[Scripts.playerActiveWeapon], var4, yCoord, 0);
         int var6 = var0 + 24;
-        TextCreator.drawLineByAnchor(1, 377, var6, var5, 0);// символ /
-        int var8 = var0 + 24 + var3;
-        byte var10;
+        TextCreator.drawLineByAnchor(1, 377, var6, yCoord, 0);// символ /
+        int xCoord = var0 + 24 + var3;
+        byte magSize;
         switch (Scripts.playerActiveWeapon) {
             case 0:
-                var10 = 12;
+                magSize = 12;
                 break;
             case 1:
-                var10 = 30;
+                magSize = 30;
                 break;
             case 2:
-                var10 = 20;
+                magSize = 20;
                 break;
             case 3:
-                var10 = 25;
+                magSize = 25;
                 break;
             default:
-                var10 = 0;
+                magSize = 0;
         }
 
-        TextCreator.drawNumber(1, var10, var8, var5, 0);
+        TextCreator.drawNumber(1, magSize, xCoord, yCoord, 0);
     }
 
     //  ДИАЛОГОВАЯ СИСТЕМА
-    //Делим текст на линии
-    public static void splitNPCPhraseToLines() {
-        var_937 = 0;
+    /** Делит каждую фразу всех участников диалога на линии с помощью пробелов
+    и переносов строк, по схеме:<pre>[номер фразы][номер линии][0] - начало строки
+    *[номер фразы][номер линии][1] - конец строки</pre>*/
+    public static void getDialogLinesBreaks() {
+        offScreenAnswers = 0;
         int length;
-        npcPhraseLinesStartsEnds = new Vector[length = Scripts.phracesIdArray.length];
+        //Создание двойного массива размером в число реплик
+        dialogLinesBreaks = new Vector[length = Scripts.phracesIdArray.length];
 
         for (byte i = 0; i < length; ++i) {
             if (Scripts.phracesIdArray[i] != -1) {
-                npcPhraseLinesStartsEnds[i] = TextCreator.splitOnLines(Scripts.phracesIdArray[i], ModChanges.dialogDrawWidth, 0);
+                dialogLinesBreaks[i] = TextCreator.splitOnLines(Scripts.phracesIdArray[i], ModChanges.dialogDrawWidth, 0);
             }
         }
 
@@ -430,84 +435,91 @@ public final class PlayerHUD {
     //Сбрасываем время промотки текста
     public static void resetNPCPhraseOffsetByTime() {
         refTime = (int) System.currentTimeMillis();
-        var_993 = 0;
+        yNPCReplicOffsetRelativeToWindow = 0;
         npcPhrasesTimePassed = 0;
     }
     //Рисуем текущую реплику нпс в диалоге с ним
-    private static void drawNPCcurrentPhrase() {
-        int var0 = TextCreator.getSymbolHeight(0);
-        int var1 = 92 / var0;
-        int var2 = TextCreator.getSymbolHeight(0) * npcPhraseLinesStartsEnds[Scripts.currentNpcPhrase * 2].size();
-        if (npcPhraseLinesStartsEnds[Scripts.currentNpcPhrase * 2].size() > var1) {
+    private static void drawNPCPhrase() {
+        int symbHeight = TextCreator.getSymbolHeight(0);
+        int windowLinesCapacity = 92 / symbHeight;
+        int phraceHeight = TextCreator.getSymbolHeight(0) * dialogLinesBreaks[Scripts.currentNpcPhrase * 2].size();
+        //включить промотку текста, если он выходит за рамки
+        if (dialogLinesBreaks[Scripts.currentNpcPhrase * 2].size() > windowLinesCapacity) {
             int timePassed;
             if ((timePassed = (int) (System.currentTimeMillis() - (long) refTime)) >= 4000 && timePassed - npcPhrasesTimePassed >= 200) {
                 npcPhrasesTimePassed = timePassed;
-                var_993 += var0 / 4;
-                yNPCReplicOffset = 24 + var0 - var_993;
-                if (var_993 > var2) {
-                    yNPCReplicOffset = 24 + var0;
+                //скорость промотки
+                yNPCReplicOffsetRelativeToWindow += symbHeight / 4;
+                yNPCReplicOffset = 24 + symbHeight - yNPCReplicOffsetRelativeToWindow;
+                if (yNPCReplicOffsetRelativeToWindow > phraceHeight) {
+                    yNPCReplicOffset = 24 + symbHeight;
                     resetNPCPhraseOffsetByTime();
                 }
             }
         } else {
-            yNPCReplicOffset = 24 + var0;
+            yNPCReplicOffset = 24 + symbHeight;
         }
 
-        graphics.setClip(20, 24 + var0, ModChanges.dialogDrawWidth, 91);
-        TextCreator.drawReplicInsideFrame(Scripts.phracesIdArray[Scripts.currentNpcPhrase * 2], 20, yNPCReplicOffset, 0, 0, graphics, 0, -1, npcPhraseLinesStartsEnds[Scripts.currentNpcPhrase * 2]);
+        graphics.setClip(20, 24 + symbHeight, ModChanges.dialogDrawWidth, 91);
+        TextCreator.drawReplicInsideFrame(Scripts.phracesIdArray[Scripts.currentNpcPhrase * 2], 20, yNPCReplicOffset, 0, 0, graphics, 0, -1, dialogLinesBreaks[Scripts.currentNpcPhrase * 2]);
     }
     //Рисуем ответы главгероя, если они есть
     private static void drawPlayerAnswers() {
-        boolean var0 = Scripts.currentDialogId == 21;
+        boolean militaryDialog = Scripts.currentDialogId == 21;//military, unskippable
         graphics.setClip(20, yPlayerAnswersStart, ModChanges.dialogDrawWidth, 91);
+        //Если диалог не закончен и есть о чём говорить
         if (!Scripts.dialogCompleted && Scripts.dialogStructure.length != 0) {
             int var1 = 0;
-            int var3 = yPlayerAnswersStart;
-            byte var4 = Scripts.dialogStructure[Scripts.givenAnswersCount];
-
-            for (byte var5 = 0; var5 < var4; ++var5) {
-                int var6 = var5 != Scripts.selectedAnswer && !var0 ? 1 : 0;
-                int line = (Scripts.currentNpcPhrase + var1) * 2 + 1;
+            int yAnswersOffset = yPlayerAnswersStart;
+            byte answersNumber = Scripts.dialogStructure[Scripts.givenAnswersCount];
+            
+            //Рисуем каждый ответ по порядку
+            for (byte answer = 0; answer < answersNumber; ++answer) {
+                //1 серый текст, 0 - выделенный
+                int color = answer != Scripts.selectedAnswer && !militaryDialog ? 1 : 0;
+                int phraceId = (Scripts.currentNpcPhrase + var1) * 2 + 1;
                 byte var8 = Scripts.givenAnswersCount + 1 + var1 > Scripts.dialogStructure.length - 1 ? 0 : Scripts.dialogStructure[Scripts.givenAnswersCount + 1 + var1];
                 var1 += var8 > 1 ? var8 + 1 : var8;
-                npcPhraseLinesStartsEnds[line] = TextCreator.splitOnLines(Scripts.phracesIdArray[line], ModChanges.dialogDrawWidth, var6);
-                int var9 = TextCreator.getSymbolHeight(var6);
-                int var10 = var3;
-                boolean var11 = Scripts.selectedAnswer != var_ae7;
-                var_ae7 = Scripts.selectedAnswer;
-                if (var11) {
-                    var_b3a = false;
+                dialogLinesBreaks[phraceId] = TextCreator.splitOnLines(Scripts.phracesIdArray[phraceId], ModChanges.dialogDrawWidth, color);
+                int symbolHeight = TextCreator.getSymbolHeight(color);
+                int var10 = yAnswersOffset;
+                boolean moreThanOneAnswer = Scripts.selectedAnswer != previousAnswer;
+                previousAnswer = Scripts.selectedAnswer;
+                if (moreThanOneAnswer) {
+                    highlightCurrentAnswer = false;
                 }
 
-                boolean var12 = var3 + npcPhraseLinesStartsEnds[line].size() * var9 >= var_a97;
-                if (var3 - var_ad1 < yPlayerAnswersStart && var5 == Scripts.selectedAnswer && !var0) {
-                    var_ad1 = 0;
+                boolean answerIsOffscreen = yAnswersOffset + dialogLinesBreaks[phraceId].size() * symbolHeight >= yAnswersWindowCapacity;
+                //Если выбранный ответ зашёл за рамку
+                if (yAnswersOffset - offsetFromPreviousAnswer < yPlayerAnswersStart && answer == Scripts.selectedAnswer && !militaryDialog) {
+                    offsetFromPreviousAnswer = 0;
                 }
 
-                if (var12 && !var_b3a) {
-                    var6 = 1;
+                if (answerIsOffscreen && !highlightCurrentAnswer) {
+                    color = 1;
                 }
 
-                if (var0) {
-                    var6 = 0;
+                //Ответы в разговоре по рации всегда выделены
+                if (militaryDialog) {
+                    color = 0;
                 }
 
-                if (var0 && var12) {
-                    ++var_937;
-                    if (var_937 >= 50) {//50
-                        var_ad1 += var9 >> 3;
-                        if (var3 + npcPhraseLinesStartsEnds[line].size() * var9 - var_ad1 <= yPlayerAnswersStart + 46) {
-                            var_ad1 = 0;
-                            var_937 = 0;
+                if (militaryDialog && answerIsOffscreen) {
+                    ++offScreenAnswers;
+                    if (offScreenAnswers >= 50) {//50
+                        offsetFromPreviousAnswer += symbolHeight >> 3;
+                        if (yAnswersOffset + dialogLinesBreaks[phraceId].size() * symbolHeight - offsetFromPreviousAnswer <= yPlayerAnswersStart + 46) {
+                            offsetFromPreviousAnswer = 0;
+                            offScreenAnswers = 0;
                         }
                     }
                 }
 
-                TextCreator.drawReplicInsideFrame(Scripts.phracesIdArray[line], 20, var3 - var_ad1, 0, var6, graphics, 0, -1, npcPhraseLinesStartsEnds[line]);
-                var3 = var3 + npcPhraseLinesStartsEnds[line].size() * var9 + var9 / 2;
-                if (var12 && var5 == Scripts.selectedAnswer && !var_b3a && !var0) {
-                    var_ad1 = var10 + npcPhraseLinesStartsEnds[line].size() * var9 - var_a97;
-                    var_b3a = true;
+                TextCreator.drawReplicInsideFrame(Scripts.phracesIdArray[phraceId], 20, yAnswersOffset - offsetFromPreviousAnswer, 0, color, graphics, 0, -1, dialogLinesBreaks[phraceId]);
+                yAnswersOffset = yAnswersOffset + dialogLinesBreaks[phraceId].size() * symbolHeight + symbolHeight / 2;
+                if (answerIsOffscreen && answer == Scripts.selectedAnswer && !highlightCurrentAnswer && !militaryDialog) {
+                    offsetFromPreviousAnswer = var10 + dialogLinesBreaks[phraceId].size() * symbolHeight - yAnswersWindowCapacity;
+                    highlightCurrentAnswer = true;
                     return;
                 }
             }
@@ -619,7 +631,7 @@ public final class PlayerHUD {
 
             TextCreator.drawLineByAnchor(0, nameId, 15, yDest, 0);
             drawSoftButtonNames(0, 1, 371, true);
-            drawNPCcurrentPhrase();
+            drawNPCPhrase();
             drawPlayerAnswers();
         }
 
@@ -1018,7 +1030,7 @@ public final class PlayerHUD {
         Font.getFont(0, 0, 8);
         Font.getFont(0, 1, 8);
         yPlayerAnswersStart = SCREEN_HEIGHT / 2 + 12;
-        var_a97 = yPlayerAnswersStart + 92;
+        yAnswersWindowCapacity = yPlayerAnswersStart + 92;
         TEXT_TARGET_WIDTH = SCREEN_WIDTH / 2;
         textLinesStartsEnds = new Vector();
         textLinesSpecialStartsEnds = new Vector();
