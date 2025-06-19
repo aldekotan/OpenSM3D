@@ -374,26 +374,26 @@ public final class TextCreator {
                 }
 
                 x -= textWidth / 2;
-                ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[0], x, y, anchor);
+                ResourceManager.drawUserInterfacePart(MasterCanvas.graphics, text[0], x, y, anchor);
 
                 for (symbol = 1; symbol < text.length; ++symbol) {
-                    ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[symbol], x += ResourceManager.ReturnWidthOfInterfaceImage(text[symbol - 1]) + 1, y, anchor);
+                    ResourceManager.drawUserInterfacePart(MasterCanvas.graphics, text[symbol], x += ResourceManager.ReturnWidthOfInterfaceImage(text[symbol - 1]) + 1, y, anchor);
                 }
 
                 return ResourceManager.ReturnHeightOfInterfaceImage(text[0]);
             case 6:
-                ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[0], x, y, anchor);
+                ResourceManager.drawUserInterfacePart(MasterCanvas.graphics, text[0], x, y, anchor);
 
                 for (textWidth = 1; textWidth < text.length; ++textWidth) {
-                    ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[textWidth], x += ResourceManager.ReturnWidthOfInterfaceImage(text[textWidth - 1]) + 1, y, anchor);
+                    ResourceManager.drawUserInterfacePart(MasterCanvas.graphics, text[textWidth], x += ResourceManager.ReturnWidthOfInterfaceImage(text[textWidth - 1]) + 1, y, anchor);
                 }
 
                 return ResourceManager.ReturnHeightOfInterfaceImage(text[0]);
             case 10:
-                ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[text.length - 1], x, y, anchor);
+                ResourceManager.drawUserInterfacePart(MasterCanvas.graphics, text[text.length - 1], x, y, anchor);
 
                 for (textWidth = text.length - 2; textWidth >= 0; --textWidth) {
-                    ResourceManager.DrawInterfaceImageToSelectedRegion(MasterCanvas.graphics, text[textWidth], x -= ResourceManager.ReturnWidthOfInterfaceImage(text[textWidth + 1]) + 1, y, anchor);
+                    ResourceManager.drawUserInterfacePart(MasterCanvas.graphics, text[textWidth], x -= ResourceManager.ReturnWidthOfInterfaceImage(text[textWidth + 1]) + 1, y, anchor);
                 }
         }
 

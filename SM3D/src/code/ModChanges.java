@@ -17,7 +17,11 @@ import javax.microedition.m3g.World;
 
 public class ModChanges //Здесь буду размещать внесённые мною изменения
 {
-
+    //Значения для адаптивного интерфейса
+    public static boolean adaptiveUI = true;
+    private static int scrWidth = code.MainMenuScreen.scrWidth;
+    private static int scrHeight = code.MainMenuScreen.scrHeight;
+    
     public static int dialogDrawWidth = 200; //160
     public static boolean ModChanges_Active = false;
     //1.08.17 Пробую ввести новое оружие
@@ -427,4 +431,107 @@ public class ModChanges //Здесь буду размещать внесённ�
         Image2D img2d = new Image2D(Image2D.RGBA, w, h, indexes, palette);
         return img2d;
     }
+
+    public static void drawAdaptiveUI(Graphics graphics, int uiNumber, int x, int y)
+            {
+                //Если интерфейс уже подогнан под нужное разрешение или
+                //адаптивка отключена                                                                                                                                                                                                                                                                                                                                                                                                                              
+                if ((scrWidth == 240 && scrHeight == 320) || !adaptiveUI)
+                {
+                    ResourceManager.drawUserInterfaceItems(graphics, uiNumber, x, y);
+                }
+                else
+                {
+                    //System.out.println("Adaptive interface activated");
+                    int widthDiffCenter = (scrWidth-240)/2;
+                    int heightDiffCenter = (scrHeight-320)/2;
+                    int heightDiff = scrHeight-320;
+                    int widthDiff = scrWidth-240;
+                    
+                    switch (uiNumber) {
+                        case 1:
+                            //Ingame frame window
+                            
+                            //Horizontal
+                            //Top
+                            int tempX = 4;
+                            int tempY = 3;
+                            for(int i = 0; i+44<=164+widthDiff; i=i+44)
+                            {
+                                ResourceManager.drawUserInterfacePart(graphics, 3, tempX, tempY, 0);
+                                tempX+=44;
+                            }
+                            ResourceManager.drawUserInterfacePart(graphics, 3, 164+widthDiff+4, tempY, 16|8);
+                            //Bottom
+                            tempX = 2;
+                            tempY = 317+heightDiff;
+                            for(int i = 0; i+44<=234+widthDiff; i=i+44)
+                            {
+                                ResourceManager.drawUserInterfacePart(graphics, 3, tempX, tempY, 0);
+                                tempX+=44;
+                            }
+                            ResourceManager.drawUserInterfacePart(graphics, 3, scrWidth-2, tempY, 16|8);
+                            
+                            //Vertical
+                            //Left
+                            tempX = 237+widthDiff;
+                            tempY = 11;
+                            for(int i = 0; i+71<=312+heightDiff; i=i+71)//307
+                            {
+                                ResourceManager.drawUserInterfacePart(graphics, 1, tempX, tempY, 0);
+                                ResourceManager.drawUserInterfacePart(graphics, 2, tempX, tempY+29, 0);
+                                tempY+=71;
+                            }
+                            ResourceManager.drawUserInterfacePart(graphics, 1, tempX+3, scrHeight-44, 32|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 2, tempX+3, scrHeight-2, 32|8);
+                            //Right
+                            tempX = 0;
+                            tempY = 6;
+                            for(int i = 0; i+71<=307+heightDiff; i=i+71)//307
+                            {
+                                ResourceManager.drawUserInterfacePart(graphics, 1, tempX, tempY, 0);
+                                ResourceManager.drawUserInterfacePart(graphics, 2, tempX, tempY+29, 0);
+                                tempY+=71;
+                            }
+                            ResourceManager.drawUserInterfacePart(graphics, 1, tempX+3, scrHeight-44, 32|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 2, tempX+3, scrHeight-2, 32|8);
+                            
+                            //Additional stuff
+                            ResourceManager.drawUserInterfacePart(graphics, 0, 0, 3, 0);
+                            ResourceManager.drawUserInterfacePart(graphics, 4, scrWidth-38, 3, 16|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 5, scrWidth-19, 2, 16|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 6, scrWidth, 0, 16|8);
+                            break;
+                        case 8:
+                            //Bottom left button
+                            ResourceManager.drawUserInterfaceItems(graphics, uiNumber, x, y+heightDiff);
+                            break;
+                        case 9:
+                            //Bottom right button
+                            ResourceManager.drawUserInterfaceItems(graphics, 9, x+widthDiff, y+heightDiff);
+                            break;
+                        case 11:
+                            //Health bar
+                            ResourceManager.drawUserInterfaceItems(graphics, 11, x, y);
+                            break;
+                        case 13:
+                            //Ammo background
+                            ResourceManager.drawUserInterfaceItems(graphics, 13, x+widthDiffCenter, y+heightDiff-2);
+                            break;
+                        case 37:
+                            //3D Ingame HUD
+                            drawAdaptiveUI(graphics, 1, x, y);
+                            drawAdaptiveUI(graphics, 13, x, y);
+                            drawAdaptiveUI(graphics, 9, x, y);
+                            drawAdaptiveUI(graphics, 8, x, y);
+                            drawAdaptiveUI(graphics, 11, x, y);
+                            break;
+                        default:
+                            System.out.println("UI#"+uiNumber+" has not created");
+                            ResourceManager.drawUserInterfaceItems(graphics, uiNumber, x, y);
+                    }
+                }
+            }
+            //ResourceManager.drawUserInterfaceItems
+            //ResourceManager.DrawInterfaceImageToSelectedRegion
 }

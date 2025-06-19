@@ -81,7 +81,7 @@ public final class PlayerHUD {
     //Деньги
     public static boolean showMoneyTaken;
     private static byte moneyTakenCount;
-
+    
     public static void loadLocationsCoordinates() {
         //x 209        y 289    Место крушения
         locCoord4 = new int[]{ResourceManager.getRectangleParams(41, 4, 0)[0], 
@@ -368,11 +368,16 @@ public final class PlayerHUD {
         }
 
     }
-    //Патроны в магазине и объём магазина
+    /**Патроны в магазине и объём магазина*/
     private static void drawWeaponHUD() {
         graphics.setColor(0);
         graphics.fillRect(0, SCREEN_HEIGHT - (ResourceManager.getRectangleHeight(8) >> 1), SCREEN_WIDTH, ResourceManager.getRectangleHeight(8) >> 1);
-        ResourceManager.drawUserInterfaceItems(graphics, 37, 0, 0);
+        
+        //интерфейс игровой сцены. Патроны, здоровье, кнопки, рамка
+        //ResourceManager.drawUserInterfaceItems(graphics, 37, 0, 0);
+        //Адаптивная реализация
+        ModChanges.drawAdaptiveUI(graphics, 37, 0, 0);
+        
         int var0 = SCREEN_WIDTH / 2 - 36 + 7;
         int var1 = SCREEN_HEIGHT - ResourceManager.getRectangleHeight(13);
         drawSoftButtonNames(1, 0, 1, true);//меню/menu
@@ -724,14 +729,14 @@ public final class PlayerHUD {
             if (Scripts.checkLocationAvailability(locId) || locId == GameScene.currentLocation || locId == previousLocation) {
                 if (locId != 0) {
                     if (!GameScene.locationCompleted[locId]&&!GameScene.locationCampMark[locId]) {
-                        ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                        ResourceManager.drawUserInterfacePart(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
                     }
                     else if (!GameScene.locationCampMark[locId] && GameScene.locationTaskMark[locId] && GameScene.locationCompleted[locId]) {
-                        ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                        ResourceManager.drawUserInterfacePart(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
                     }
                     else
                     {
-                        ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 60, locationsCoordinates[locId][0] - 4, locationsCoordinates[locId][1] - 4, 0);
+                        ResourceManager.drawUserInterfacePart(graphics, 60, locationsCoordinates[locId][0] - 4, locationsCoordinates[locId][1] - 4, 0);
                     }
                 }
             }
@@ -770,7 +775,7 @@ public final class PlayerHUD {
             if (x_start <= var6 && var6 > 0) {
                 x_second_end = y_start + (y_end - y_start) * x_start / var6;
                 y_second_end = x_end + (y_second_start - x_end) * x_start / var6;
-                ResourceManager.DrawInterfaceImageToSelectedRegion(graphics, 61, x_second_end, y_second_end, 0);
+                ResourceManager.drawUserInterfacePart(graphics, 61, x_second_end, y_second_end, 0);
             } else {
                 //вертикальная линия верхняя половина
                 y_end = locationsCoordinates[GameScene.nextLocation][0];

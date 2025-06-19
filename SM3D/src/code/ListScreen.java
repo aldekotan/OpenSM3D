@@ -183,7 +183,7 @@ public class ListScreen extends MenuScreen {
                 var3 = 20;
             }
 
-            ResourceManager.DrawInterfaceImageToSelectedRegion(this.graphics, var1, AllScreens.listDefaultXoffset - 2 - (ResourceManager.ReturnWidthOfInterfaceImage(132) >> 1), MenuScreen.textClipY + this.offScreenTextHeight + this.selectedIndex * AllScreens.SINGLE_TEXT_LINE_HEIGHT + 3 + var3, 17);
+            ResourceManager.drawUserInterfacePart(this.graphics, var1, AllScreens.listDefaultXoffset - 2 - (ResourceManager.ReturnWidthOfInterfaceImage(132) >> 1), MenuScreen.textClipY + this.offScreenTextHeight + this.selectedIndex * AllScreens.SINGLE_TEXT_LINE_HEIGHT + 3 + var3, 17);
         }
 
     }

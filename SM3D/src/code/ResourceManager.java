@@ -340,7 +340,7 @@ public final class ResourceManager {
         return shortArray;
     }
 
-    public static void DrawInterfaceImageToSelectedRegion(Graphics graphics, int element_number, int x_dest, int y_dest, int anchor) {
+    public static void drawUserInterfacePart(Graphics graphics, int element_number, int x_dest, int y_dest, int anchor) {
         if (element_number != -2) {
             graphics.drawRegion(interfaceImages[interfaceImageIds[element_number]], interfaceImageXsrc[element_number], interfaceImageYsrc[element_number], interfaceImageWidth[element_number], interfaceImageHeight[element_number], interfaceImageTransform[element_number], x_dest, y_dest, anchor);
         }

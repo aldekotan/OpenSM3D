@@ -14,8 +14,8 @@ public final class MainMenuScreen implements Screen
    private byte[] screenIdByOptionId;
    private int newTextX;
    private int prevTextX;
-   public static int scrWidth = 240;
-   public static int scrHeight = 320;
+   public static int scrWidth = code.MasterCanvas.instance.getWidth();
+   public static int scrHeight = code.MasterCanvas.instance.getHeight();
    
    private static final byte[] screenIdsIfSavedBefore = new byte[]{(byte)4, (byte)9, (byte)10, (byte)1, (byte)1, (byte)2, (byte)15, (byte)3};
    private static Screen[] screensIfSavedBefore;
