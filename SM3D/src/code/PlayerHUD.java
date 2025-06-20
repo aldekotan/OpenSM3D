@@ -688,6 +688,42 @@ public final class PlayerHUD {
 
     }
 
+    private static int getScrollX()
+    {
+        int scrollX = 0;
+        if (SCREEN_WIDTH>=ResourceManager.interfaceImages[12].getWidth())
+        {
+            return scrollX;
+        }
+        if (locationsCoordinates[GameScene.nextLocation][0]>SCREEN_WIDTH+20)
+        {
+            scrollX+=locationsCoordinates[GameScene.nextLocation][0]+20-SCREEN_WIDTH;
+        }
+        if(scrollX>(ResourceManager.interfaceImages[12].getWidth()-SCREEN_WIDTH)/2)
+        {
+            scrollX=(ResourceManager.interfaceImages[12].getWidth()-SCREEN_WIDTH)/2;
+        }
+        return scrollX;
+    }
+    
+    private static int getScrollY()
+    {
+        int scrollY = 0;
+        if (SCREEN_HEIGHT>=ResourceManager.interfaceImages[12].getHeight())
+        {
+            return scrollY;
+        }
+        if (locationsCoordinates[GameScene.nextLocation][1]>SCREEN_HEIGHT+20)
+        {
+            scrollY+=locationsCoordinates[GameScene.nextLocation][1]+20-SCREEN_HEIGHT;
+        }
+        if(scrollY>(ResourceManager.interfaceImages[12].getHeight()-SCREEN_HEIGHT)/2+20)
+        {
+            scrollY=(ResourceManager.interfaceImages[12].getHeight()-SCREEN_HEIGHT)/2+20;
+        }
+        return scrollY;
+    }
+    
     //  ГЛОБАЛЬНАЯ КАРТА
     //Отрисовка самого пда
     private static void drawPDA() {
@@ -703,23 +739,32 @@ public final class PlayerHUD {
         //ResourceManager.drawUserInterfaceItems(graphics, 41, 0, 0);
         
         //map
-        graphics.drawImage(ResourceManager.interfaceImages[12], 0, 3, 0);
+        //Adaptive zoom
+        int scrollX = getScrollX();
+        int scrollY = getScrollY();
+        //
+        graphics.drawImage(ResourceManager.interfaceImages[12], ModChanges.getCenteredVarUpscale(0, false)-scrollX, ModChanges.getCenteredVarUpscale(3, true)-scrollY, 0);
         drawLinesForPDA();
         
         //bottom panel
-        ResourceManager.drawUserInterfaceItems(graphics, 3, 7, 290);
+        ModChanges.drawAdaptiveUI(graphics, 3, 7, 290);
+        //ResourceManager.drawUserInterfaceItems(graphics, 3, 7, 290);
         
         //frame
-        ResourceManager.drawUserInterfaceItems(graphics, 1, 0, 0);
+        ModChanges.drawAdaptiveUI(graphics, 1, 0, 0);
+        //ResourceManager.drawUserInterfaceItems(graphics, 1, 0, 0);
         
         
         //draw button
-        ResourceManager.drawUserInterfaceItems(graphics, 9, 0, 0);
+        ModChanges.drawAdaptiveUI(graphics, 9, 0, 0);
+        //ResourceManager.drawUserInterfaceItems(graphics, 9, 0, 0);
         
         //top panel
-        ResourceManager.drawUserInterfaceItems(graphics, 5, 3, 1);
+        ModChanges.drawAdaptiveUI(graphics, 5, 3, 1);
+        //ResourceManager.drawUserInterfaceItems(graphics, 5, 3, 1);
         //word "КАРТА"
-        ResourceManager.drawUserInterfaceItems(graphics, 83, 0, 0);
+        ModChanges.drawAdaptiveUI(graphics, 83, 0, 0);
+        //ResourceManager.drawUserInterfaceItems(graphics, 83, 0, 0);
         //
         //красный цвет
         graphics.setColor(16711680);
@@ -729,14 +774,20 @@ public final class PlayerHUD {
             if (Scripts.checkLocationAvailability(locId) || locId == GameScene.currentLocation || locId == previousLocation) {
                 if (locId != 0) {
                     if (!GameScene.locationCompleted[locId]&&!GameScene.locationCampMark[locId]) {
-                        ResourceManager.drawUserInterfacePart(graphics, 58, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                        ResourceManager.drawUserInterfacePart(graphics, 58, 
+                                ModChanges.getCenteredVarUpscale(locationsCoordinates[locId][0] - 5-scrollX, false) , 
+                                ModChanges.getCenteredVarUpscale(locationsCoordinates[locId][1] - 5-scrollY, true), 0);
                     }
                     else if (!GameScene.locationCampMark[locId] && GameScene.locationTaskMark[locId] && GameScene.locationCompleted[locId]) {
-                        ResourceManager.drawUserInterfacePart(graphics, 59, locationsCoordinates[locId][0] - 5, locationsCoordinates[locId][1] - 5, 0);
+                        ResourceManager.drawUserInterfacePart(graphics, 59, 
+                                ModChanges.getCenteredVarUpscale(locationsCoordinates[locId][0] - 5-scrollX, false), 
+                                ModChanges.getCenteredVarUpscale(locationsCoordinates[locId][1] - 5-scrollY, true), 0);
                     }
                     else
                     {
-                        ResourceManager.drawUserInterfacePart(graphics, 60, locationsCoordinates[locId][0] - 4, locationsCoordinates[locId][1] - 4, 0);
+                        ResourceManager.drawUserInterfacePart(graphics, 60, 
+                                ModChanges.getCenteredVarUpscale(locationsCoordinates[locId][0] - 4-scrollX, false), 
+                                ModChanges.getCenteredVarUpscale(locationsCoordinates[locId][1] - 4-scrollY, true), 0);
                     }
                 }
             }
@@ -757,6 +808,12 @@ public final class PlayerHUD {
         //fix for overlapping lines
         //graphics.setClip(3, 17, SCREEN_WIDTH-6, SCREEN_HEIGHT-38);
         //
+        
+        //Adaptive zoom
+        int scrollX = getScrollX();
+        int scrollY = getScrollY();
+        //
+        
         graphics.setColor('\uff00');
         int x_start;
         int y_start;
@@ -775,7 +832,7 @@ public final class PlayerHUD {
             if (x_start <= var6 && var6 > 0) {
                 x_second_end = y_start + (y_end - y_start) * x_start / var6;
                 y_second_end = x_end + (y_second_start - x_end) * x_start / var6;
-                ResourceManager.drawUserInterfacePart(graphics, 61, x_second_end, y_second_end, 0);
+                ResourceManager.drawUserInterfacePart(graphics, 61, ModChanges.getCenteredVarUpscale(x_second_end, false)-scrollX, ModChanges.getCenteredVarUpscale(y_second_end, true)-scrollY, 0);
             } else {
                 //вертикальная линия верхняя половина
                 y_end = locationsCoordinates[GameScene.nextLocation][0];
@@ -798,20 +855,21 @@ public final class PlayerHUD {
             }
         }
         //vertical line top
-        x_start = locationsCoordinates[GameScene.nextLocation][0];
-        x_end = locationsCoordinates[GameScene.nextLocation][0];
+        x_start = ModChanges.getCenteredVarUpscale(locationsCoordinates[GameScene.nextLocation][0], false)-scrollX;
+        x_end = ModChanges.getCenteredVarUpscale(locationsCoordinates[GameScene.nextLocation][0], false)-scrollX;
+        y_start = ModChanges.getCenteredVarUpscale(locationsCoordinates[GameScene.nextLocation][1], true)-scrollY;
         y_end = SCREEN_HEIGHT;
-        graphics.drawLine(x_start, 0, x_end, locationsCoordinates[GameScene.nextLocation][1]-6);
+        graphics.drawLine(x_start, 0, x_end, y_start-6);
         //bottom part
-        graphics.drawLine(x_start, locationsCoordinates[GameScene.nextLocation][1]+5, x_end, y_end);
+        graphics.drawLine(x_start, y_start+5, x_end, y_end);
         
         //horizontal line left
-        y_start = locationsCoordinates[GameScene.nextLocation][1];
+        
         x_end = SCREEN_WIDTH;
-        y_end = locationsCoordinates[GameScene.nextLocation][1];
-        graphics.drawLine(0, y_start, locationsCoordinates[GameScene.nextLocation][0]-6, y_end);
+        y_end = ModChanges.getCenteredVarUpscale(locationsCoordinates[GameScene.nextLocation][1], true)-scrollY;
+        graphics.drawLine(0, y_start, x_start-6, y_end);
         //right part
-        graphics.drawLine(locationsCoordinates[GameScene.nextLocation][0]+6, y_start, x_end, y_end);
+        graphics.drawLine(x_start+6, y_start, x_end, y_end);
     }
     //Рисуем название выделенной локации
     private static void drawLocationName() {
@@ -832,36 +890,48 @@ public final class PlayerHUD {
             textLinesStartsEnds = textLinesSpecialStartsEnds;
         }
             
+        //Adaptive interface
+        //Adaptive zoom
+        int scrollX = getScrollX();
+        int scrollY = getScrollY();
+        //
+        
+        int locCoordY = ModChanges.getCenteredVarUpscale(locationsCoordinates[GameScene.nextLocation][1]-scrollY, true);
+        int locCoordX = ModChanges.getCenteredVarUpscale(locationsCoordinates[GameScene.nextLocation][0]-scrollX, false);
+        
         //Если цель слишком низко
         int yStart;
-        if(locationsCoordinates[GameScene.nextLocation][1]>=SCREEN_HEIGHT/2)
+        if(locCoordY>=SCREEN_HEIGHT/2)
         {
-            yStart = locationsCoordinates[GameScene.nextLocation][1]-
+            yStart = locCoordY-
                     TextCreator.getSymbolHeight(0) * (textLinesStartsEnds.size() + 1);
         }
         else
         {
-            yStart = locationsCoordinates[GameScene.nextLocation][1]+
+            yStart = locCoordY+
                     TextCreator.getSymbolHeight(0);
         }
         
         //Если цель не помещается с правой стороны
         int xStart;
-        if(locationsCoordinates[GameScene.nextLocation][0]>=SCREEN_WIDTH/2)
+        if(locCoordX>=SCREEN_WIDTH/2)
         {
-            if(TextCreator.getWideLineWidth(0, locationName)<=105)
+            if(TextCreator.getWideLineWidth(0, locationName)<=TEXT_TARGET_WIDTH)
             {
-                xStart = locationsCoordinates[GameScene.nextLocation][0]-
-                        TextCreator.getWideLineWidth(0, locationName)+1;
+                xStart = locCoordX-
+                        (TextCreator.getWideLineWidth(0, locationName)-TextCreator.getLineLength(locationName)*1)-10;
             }
             else{
-                xStart = locationsCoordinates[GameScene.nextLocation][0]-110;
+                xStart = locCoordX-TEXT_TARGET_WIDTH+25;
             }
         }
         else
         {
-            xStart = locationsCoordinates[GameScene.nextLocation][0]+11;
+            xStart = locCoordX+11;
         }
+        
+        //xStart = 
+        //yStart = 
 
         //Если мы ещё не покинули место крушения вертолёта
         if (GameScene.nextLocation == 0) {

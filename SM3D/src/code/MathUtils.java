@@ -103,4 +103,10 @@ public final class MathUtils {
 
         return newItems;
     }
+    
+    public static int clamp(int value, int min, int max)
+    {
+        Math.min(Math.max(value, min), max);
+        return value;
+    }
 }
