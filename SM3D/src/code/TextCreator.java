@@ -145,6 +145,7 @@ public final class TextCreator {
          number_of_replic=513;
          }*/
         //System.out.println("DrawReplic: " + number_of_replic + " " + massive_withStartnEnds[number_of_replic-2] + " " + massive_withStartnEnds[number_of_replic-1] + " " + massive_withStartnEnds[number_of_replic] + " " + massive_withStartnEnds[number_of_replic+1]);
+        
         drawTextByAnchor(color, textLinesSymbols, textLinesAdress[adress], textLinesAdress[adress + 1], x, y, anchor);
     }
 

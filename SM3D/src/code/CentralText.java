@@ -75,6 +75,7 @@ public class CentralText extends MenuScreen {
                 3 * MainMenuScreen.scrWidth / 5, 
                 3 * MainMenuScreen.scrHeight / 5);
         if (!(this instanceof KeyboardScreen)) {// надпись по центру
+            //TextCreator.drawLineByAnchor(0, super.replicsMassive[3][super.drawingScreenId], MenuScreen.textClipX + (MenuScreen.textClipWidth >> 1), MenuScreen.textClipY + (MenuScreen.textClipHeight >> 1), 9)
             TextCreator.drawLineByAnchor(0, super.replicsMassive[3][super.drawingScreenId], MenuScreen.textClipX + (MenuScreen.textClipWidth >> 1), MenuScreen.textClipY + (MenuScreen.textClipHeight >> 1), 9);
         }//55+(125>>1=62)=117                   70+(180>>1=90)=160
     }

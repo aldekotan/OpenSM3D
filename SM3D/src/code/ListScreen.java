@@ -107,7 +107,11 @@ public class ListScreen extends MenuScreen {
             this.notifyAll();
         }
 
-        AllScreens.listDefaultXoffset = ResourceManager.getUIElementXcoord(45, 0);
+        //AllScreens.listDefaultXoffset = ResourceManager.getUIElementXcoord(45, 0);
+        //Adaptive UI
+        AllScreens.listDefaultXoffset = ModChanges.adaptiveUI?
+                ModChanges.getCenteredVarUpscale(ResourceManager.getUIElementXcoord(45, 0), false)
+                :ResourceManager.getUIElementXcoord(45, 0);
         return true;
     }
 

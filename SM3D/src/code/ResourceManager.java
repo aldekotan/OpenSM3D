@@ -401,8 +401,8 @@ public final class ResourceManager {
             int[] var4 = getRectangleParams(50, 3, 0);
             AllScreens.menuNameXCoord = var2[0] + var2[2] / 2;
             AllScreens.menuNameYCoord = var2[1] + var2[3] / 2;
-            AllScreens.rightSoftTextXCoord = var4[0] + var4[2] / 2;
-            AllScreens.rightsoftTextYCoord = var4[1] + var4[3] / 2;
+            AllScreens.rightSoftTextXCoord = ModChanges.getCornerVarUpscale(var4[0] + var4[2] / 2, false);
+            AllScreens.rightsoftTextYCoord = ModChanges.getCornerVarUpscale(var4[1] + var4[3] / 2, true);
             AllScreens.leftSoftTextXCoord = var3[0] + var3[2] / 2;
             AllScreens.leftSoftTextYCoord = AllScreens.rightsoftTextYCoord;
         } catch (Exception var5) {

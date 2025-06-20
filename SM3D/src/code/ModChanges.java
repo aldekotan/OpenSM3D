@@ -19,8 +19,12 @@ public class ModChanges //Здесь буду размещать внесённ�
 {
     //Значения для адаптивного интерфейса
     public static boolean adaptiveUI = true;
-    private static int scrWidth = code.MainMenuScreen.scrWidth;
-    private static int scrHeight = code.MainMenuScreen.scrHeight;
+    private static final int scrWidth = code.MainMenuScreen.scrWidth;
+    private static final int scrHeight = code.MainMenuScreen.scrHeight;
+    private static final int widthDiffCenter = (scrWidth-240)/2;
+    private static final int heightDiffCenter = (scrHeight-320)/2;
+    private static final int heightDiff = scrHeight-320;
+    private static final int widthDiff = scrWidth-240;
     
     public static int dialogDrawWidth = 200; //160
     public static boolean ModChanges_Active = false;
@@ -443,10 +447,6 @@ public class ModChanges //Здесь буду размещать внесённ�
                 else
                 {
                     //System.out.println("Adaptive interface activated");
-                    int widthDiffCenter = (scrWidth-240)/2;
-                    int heightDiffCenter = (scrHeight-320)/2;
-                    int heightDiff = scrHeight-320;
-                    int widthDiff = scrWidth-240;
                     
                     switch (uiNumber) {
                         case 1:
@@ -473,10 +473,10 @@ public class ModChanges //Здесь буду размещать внесённ�
                             ResourceManager.drawUserInterfacePart(graphics, 3, scrWidth-2, tempY, 16|8);
                             
                             //Vertical
-                            //Left
+                            //Right
                             tempX = 237+widthDiff;
                             tempY = 11;
-                            for(int i = 0; i+71<=312+heightDiff; i=i+71)//307
+                            for(int i = 0; i+71<=307+heightDiff; i=i+71)//307
                             {
                                 ResourceManager.drawUserInterfacePart(graphics, 1, tempX, tempY, 0);
                                 ResourceManager.drawUserInterfacePart(graphics, 2, tempX, tempY+29, 0);
@@ -484,10 +484,10 @@ public class ModChanges //Здесь буду размещать внесённ�
                             }
                             ResourceManager.drawUserInterfacePart(graphics, 1, tempX+3, scrHeight-44, 32|8);
                             ResourceManager.drawUserInterfacePart(graphics, 2, tempX+3, scrHeight-2, 32|8);
-                            //Right
+                            //Left
                             tempX = 0;
                             tempY = 6;
-                            for(int i = 0; i+71<=307+heightDiff; i=i+71)//307
+                            for(int i = 0; i+71<=312+heightDiff; i=i+71)//307
                             {
                                 ResourceManager.drawUserInterfacePart(graphics, 1, tempX, tempY, 0);
                                 ResourceManager.drawUserInterfacePart(graphics, 2, tempX, tempY+29, 0);
@@ -501,6 +501,65 @@ public class ModChanges //Здесь буду размещать внесённ�
                             ResourceManager.drawUserInterfacePart(graphics, 4, scrWidth-38, 3, 16|8);
                             ResourceManager.drawUserInterfacePart(graphics, 5, scrWidth-19, 2, 16|8);
                             ResourceManager.drawUserInterfacePart(graphics, 6, scrWidth, 0, 16|8);
+                            break;
+                        case 3:   
+                            //Bottom concrete panel with fence
+                            //middle
+                            tempX = 37;
+                            tempY = scrHeight-2;
+                            for(int i = 0; i+30<=200+widthDiff;i=i+30)
+                            {
+                                ResourceManager.drawUserInterfacePart(graphics, 31, tempX, tempY, 32|4);
+                                tempX+=30;
+                            }
+                            //fence back and top
+                            tempX = 34;
+                            tempY = scrHeight-19;
+                            for(int i = 0; i+24<=142+widthDiff;i=i+24)
+                            {
+                                ResourceManager.drawUserInterfacePart(graphics, 19, tempX, tempY, 32|4);
+                                ResourceManager.drawUserInterfacePart(graphics, 20, tempX, tempY-2, 32|4);
+                                tempX+=24;
+                            }
+                            //дорисовка сетки
+                            for(int i = tempX-24; i+8<=scrWidth-80;i=i+8)
+                            {
+                                ResourceManager.drawUserInterfacePart(graphics, 19, i, tempY-0, 32|4);    //0
+                                ResourceManager.drawUserInterfacePart(graphics, 20, i, tempY-2, 32|4);//-2
+                                //tempX+=8;
+                            }
+                            
+                            //left
+                            ResourceManager.drawUserInterfacePart(graphics, 30, 7, scrHeight-2, 32|4);
+                            ResourceManager.drawUserInterfacePart(graphics, 18, 9, scrHeight-19, 32|4);
+                            
+                            //right
+                            ResourceManager.drawUserInterfacePart(graphics, 31, scrWidth-3, scrHeight-2, 32|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 19, scrWidth-15, scrHeight-19, 32|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 19, scrWidth-7, scrHeight-19, 32|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 19, scrWidth-39, scrHeight-19, 32|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 20, scrWidth-40, scrHeight-21, 32|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 21, scrWidth-9, scrHeight-21, 32|8);                            
+                            break;
+                        case 5:
+                            //Top concrete panel with lightbulp and black screen
+                            //middle
+                            tempX = 33;
+                            tempY = 1;
+                            for(int i = 0; i+30<=200+widthDiff;i=i+30)
+                            {
+                                ResourceManager.drawUserInterfacePart(graphics, 31, tempX, tempY, 0);
+                                tempX+=30;
+                            }
+                            //top left
+                            ResourceManager.drawUserInterfacePart(graphics, 34, 2, 3, 0);
+                            ResourceManager.drawUserInterfacePart(graphics, 30, 3, 1, 0);
+                            ResourceManager.drawUserInterfacePart(graphics, 33, 10, 3, 0);
+                            
+                            //top right
+                            ResourceManager.drawUserInterfacePart(graphics, 25, scrWidth-35, 2, 16|8);
+                            ResourceManager.drawUserInterfacePart(graphics, 32, scrWidth-2, 1, 16|8);
+                            
                             break;
                         case 8:
                             //Bottom left button
@@ -518,6 +577,12 @@ public class ModChanges //Здесь буду размещать внесённ�
                             //Ammo background
                             ResourceManager.drawUserInterfaceItems(graphics, 13, x+widthDiffCenter, y+heightDiff-2);
                             break;
+                        case 19:
+                            //large wide frame
+                            tempX = 46+widthDiffCenter;
+                            tempY = 47+heightDiffCenter;
+                            ResourceManager.drawUserInterfaceItems(graphics, 19, tempX, tempY);
+                            break;
                         case 37:
                             //3D Ingame HUD
                             drawAdaptiveUI(graphics, 1, x, y);
@@ -525,6 +590,14 @@ public class ModChanges //Здесь буду размещать внесённ�
                             drawAdaptiveUI(graphics, 9, x, y);
                             drawAdaptiveUI(graphics, 8, x, y);
                             drawAdaptiveUI(graphics, 11, x, y);
+                            break;
+                        case 44:
+                            //Menu frame with small frame inside
+                            drawAdaptiveUI(graphics, 3, x, y);
+                            drawAdaptiveUI(graphics, 1, x, y);
+                            drawAdaptiveUI(graphics, 5, x, y);
+                            drawAdaptiveUI(graphics, 9, x, y);
+                            drawAdaptiveUI(graphics, 19, x, y);
                             break;
                         default:
                             System.out.println("UI#"+uiNumber+" has not created");
@@ -534,4 +607,55 @@ public class ModChanges //Здесь буду размещать внесённ�
             }
             //ResourceManager.drawUserInterfaceItems
             //ResourceManager.DrawInterfaceImageToSelectedRegion
+    public static int getTextClipVars(int varNumber)
+    {
+        int varResult = 0;
+        switch (varNumber)
+        {
+            case 55:
+                varResult=varNumber+widthDiffCenter;
+                break;
+            case 70:
+                varResult=varNumber+heightDiffCenter;
+                break;
+            case 125:
+                //varResult=varNumber+widthDiffCenter;
+                varResult=varNumber;
+                break;
+            case 180:
+                //varResult=varNumber+heightDiffCenter;
+                varResult=varNumber;
+                break;
+            default:
+                varResult = 0;
+        }
+        return adaptiveUI?varResult:varNumber;
+    }
+    
+    public static int getCenteredVarUpscale(int var, boolean height)
+    {
+        int varResult = 0;
+        if(height)
+        {
+            varResult=var+heightDiffCenter;
+        }
+        else
+        {
+            varResult=var+widthDiffCenter;
+        }
+        return adaptiveUI?varResult:var;
+    }
+    public static int getCornerVarUpscale(int var, boolean height)
+    {
+        int varResult = 0;
+        if(height)
+        {
+            varResult=var+heightDiff;
+        }
+        else
+        {
+            varResult=var+widthDiff;
+        }
+        return adaptiveUI?varResult:var;
+    }
 }

@@ -56,8 +56,12 @@ public class MenuScreen implements Screen
        graphics.fillRect(0, 0, 
                MainMenuScreen.scrWidth, 
                MainMenuScreen.scrHeight);
-       ResourceManager.drawUserInterfaceItems(graphics,
-               this.interfaceNumber, 0, 0);
+       //ResourceManager.drawUserInterfaceItems(graphics,
+       //        this.interfaceNumber, 0, 0);
+       //Adaptive interface
+       ModChanges.drawAdaptiveUI(graphics, this.interfaceNumber, 0, 0);
+       //
+       
        //Жёлтый цвет (цвет надписей по дефолту)
        graphics.setColor(15637809);
        
@@ -82,5 +86,9 @@ public class MenuScreen implements Screen
       textClipY = 70;
       textClipWidth = 125;
       textClipHeight = 180;
+      textClipX = ModChanges.getTextClipVars(textClipX);
+      textClipY = ModChanges.getTextClipVars(textClipY);
+      textClipWidth = ModChanges.getTextClipVars(textClipWidth);
+      textClipHeight = ModChanges.getTextClipVars(textClipHeight);
    }
 }
