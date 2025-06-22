@@ -551,15 +551,14 @@ public class ModChanges //Здесь буду размещать внесённ�
                                 ResourceManager.drawUserInterfacePart(graphics, 31, tempX, tempY, 0);
                                 tempX+=30;
                             }
-                            //top left
-                            ResourceManager.drawUserInterfacePart(graphics, 34, 2, 3, 0);
-                            ResourceManager.drawUserInterfacePart(graphics, 30, 3, 1, 0);
-                            ResourceManager.drawUserInterfacePart(graphics, 33, 10, 3, 0);
-                            
                             //top right
                             ResourceManager.drawUserInterfacePart(graphics, 25, scrWidth-35, 2, 16|8);
                             ResourceManager.drawUserInterfacePart(graphics, 32, scrWidth-2, 1, 16|8);
                             
+                            //top left
+                            ResourceManager.drawUserInterfacePart(graphics, 34, 2, 3, 0);
+                            ResourceManager.drawUserInterfacePart(graphics, 30, 3, 1, 0);
+                            ResourceManager.drawUserInterfacePart(graphics, 33, 10, 3, 0);
                             break;
                         case 8:
                             //Bottom left button

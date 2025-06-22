@@ -691,17 +691,32 @@ public final class PlayerHUD {
     private static int getScrollX()
     {
         int scrollX = 0;
-        if (SCREEN_WIDTH>=ResourceManager.interfaceImages[12].getWidth())
+        int mapWidth = ResourceManager.interfaceImages[12].getWidth();
+        int locCoordX = locationsCoordinates[GameScene.nextLocation][0];
+        //Ничего не скроллим, если карта меньше разрешения экрана
+        if (SCREEN_WIDTH>=mapWidth)
         {
             return scrollX;
         }
-        if (locationsCoordinates[GameScene.nextLocation][0]>SCREEN_WIDTH+20)
+        //Если координата точки - правее середины карты
+        if (locCoordX>mapWidth/2)
         {
-            scrollX+=locationsCoordinates[GameScene.nextLocation][0]+20-SCREEN_WIDTH;
+            scrollX+=Math.max(TEXT_TARGET_WIDTH-20, (mapWidth/2)-locCoordX-20);
+        }//Или если левее
+        else if (locCoordX<mapWidth/2)
+        {
+            scrollX-=Math.max(TEXT_TARGET_WIDTH-20, (mapWidth/2)-locCoordX-20);
         }
-        if(scrollX>(ResourceManager.interfaceImages[12].getWidth()-SCREEN_WIDTH)/2)
+        
+        //Если скроллим больше половины - вернуть половину скролла
+        if(scrollX>((mapWidth-SCREEN_WIDTH)/2)+3)
         {
-            scrollX=(ResourceManager.interfaceImages[12].getWidth()-SCREEN_WIDTH)/2;
+            scrollX=(mapWidth-SCREEN_WIDTH)/2+3;
+        }
+        //Если больше половины в обратную сторону
+        else if(scrollX< -((mapWidth-SCREEN_WIDTH)/2)+3)
+        {
+            scrollX= -((mapWidth-SCREEN_WIDTH)/2)+3;
         }
         return scrollX;
     }
@@ -709,17 +724,29 @@ public final class PlayerHUD {
     private static int getScrollY()
     {
         int scrollY = 0;
-        if (SCREEN_HEIGHT>=ResourceManager.interfaceImages[12].getHeight())
+        int mapHeight = ResourceManager.interfaceImages[12].getHeight();
+        int locCoordY = locationsCoordinates[GameScene.nextLocation][1];
+        if (SCREEN_HEIGHT>=mapHeight)
         {
             return scrollY;
         }
-        if (locationsCoordinates[GameScene.nextLocation][1]>SCREEN_HEIGHT+20)
+        if (locCoordY>mapHeight/2)
         {
-            scrollY+=locationsCoordinates[GameScene.nextLocation][1]+20-SCREEN_HEIGHT;
+            scrollY-=(mapHeight/2)-locCoordY;
         }
-        if(scrollY>(ResourceManager.interfaceImages[12].getHeight()-SCREEN_HEIGHT)/2+20)
+        else if (locCoordY<mapHeight/2)
         {
-            scrollY=(ResourceManager.interfaceImages[12].getHeight()-SCREEN_HEIGHT)/2+20;
+            scrollY-=(mapHeight/2)-locCoordY-30;
+        }
+        
+        
+        if(scrollY>((mapHeight-SCREEN_HEIGHT)/2)+20)
+        {
+            scrollY=((mapHeight-SCREEN_HEIGHT)/2)+20;
+        }
+        else if(scrollY< -((mapHeight-SCREEN_HEIGHT)/2)+10)
+        {
+            scrollY= -(((mapHeight-SCREEN_HEIGHT)/2)+10);
         }
         return scrollY;
     }
@@ -794,6 +821,26 @@ public final class PlayerHUD {
         }
 
         drawLocationName();
+        
+        //bottom panel
+        ModChanges.drawAdaptiveUI(graphics, 3, 7, 290);
+        //ResourceManager.drawUserInterfaceItems(graphics, 3, 7, 290);
+        
+        //frame
+        ModChanges.drawAdaptiveUI(graphics, 1, 0, 0);
+        //ResourceManager.drawUserInterfaceItems(graphics, 1, 0, 0);
+        
+        
+        //draw button
+        ModChanges.drawAdaptiveUI(graphics, 9, 0, 0);
+        //ResourceManager.drawUserInterfaceItems(graphics, 9, 0, 0);
+        
+        //top panel
+        ModChanges.drawAdaptiveUI(graphics, 5, 3, 1);
+        //ResourceManager.drawUserInterfaceItems(graphics, 5, 3, 1);
+        //word "КАРТА"
+        ModChanges.drawAdaptiveUI(graphics, 83, 0, 0);
+        
         //Идти (GO)
         drawSoftButtonNames(0, 1, 390, true);
     }
@@ -905,29 +952,28 @@ public final class PlayerHUD {
         {
             yStart = locCoordY-
                     TextCreator.getSymbolHeight(0) * (textLinesStartsEnds.size() + 1);
+            if(SCREEN_HEIGHT<240) yStart = locCoordY-(TextCreator.getSymbolHeight(0) * textLinesStartsEnds.size())-3;
         }
         else
         {
             yStart = locCoordY+
                     TextCreator.getSymbolHeight(0);
+            if(SCREEN_HEIGHT<240) yStart = locCoordY+3;
+            
         }
         
         //Если цель не помещается с правой стороны
         int xStart;
         if(locCoordX>=SCREEN_WIDTH/2)
         {
-            if(TextCreator.getWideLineWidth(0, locationName)<=TEXT_TARGET_WIDTH)
-            {
-                xStart = locCoordX-
-                        (TextCreator.getWideLineWidth(0, locationName)-TextCreator.getLineLength(locationName)*1)-10;
-            }
-            else{
-                xStart = locCoordX-TEXT_TARGET_WIDTH+25;
-            }
+            //Однострочный текст
+            xStart = locCoordX-TextCreator.getWidestLineWidth(locationName, TEXT_TARGET_WIDTH, 0)-10;
+            if(SCREEN_WIDTH<240) xStart = locCoordX-TextCreator.getWidestLineWidth(locationName, TEXT_TARGET_WIDTH, 0);
         }
         else
         {
-            xStart = locCoordX+11;
+            xStart = locCoordX+10;
+            if(SCREEN_WIDTH<240) xStart = locCoordX+2;
         }
         
         //xStart = 

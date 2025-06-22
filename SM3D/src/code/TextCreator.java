@@ -556,7 +556,7 @@ public final class TextCreator {
         drawPartOfTextByAnchor(graphics, color, lineId, startOffset, endOffset, 
                 x, y, anchor);
     }
-
+    
     public static void drawReplicInsideFrame(int lineId, int x, int y, int anchor, int color, Graphics graph, int startLine, int lineCount, Vector linesStartsEnds) {
         if (lineCount == -1) {
             lineCount = linesStartsEnds.size();
@@ -583,6 +583,29 @@ public final class TextCreator {
         }
 
     }
+    
+    //Получить ширину самой широкой строки в тексте
+    public static int getWidestLineWidth(int textId, int width, int color)
+    {
+        Vector linesStartsEnds = splitOnLines(textId,width,color);
+        int lineCount = linesStartsEnds.size();
+        if (lineCount<=1)
+        {
+            return getLineWidth(color,textId);
+        }
+        int finalWidth = 0;
+        int currentWidth;
+        for (int i = 0; i<lineCount;i++)
+        {
+            int[] lineSymbolOffset = (int[]) linesStartsEnds.elementAt(i);
+            currentWidth = getLinePartWidth(0, textId,lineSymbolOffset[0],lineSymbolOffset[0]+lineSymbolOffset[1]);
+            if(currentWidth>finalWidth) {
+                finalWidth=currentWidth;
+            }
+        }
+        
+        return finalWidth;
+    }
 
     //Получить ширину строки с +1 расстоянием между символами, из текста
     private static int getWideTextWidth(int color, byte[] text, int firstSymbol, int lastSymbol) {
@@ -593,6 +616,18 @@ public final class TextCreator {
         }
 
         return lineWidth;
+    }
+    
+    //Получить ширину строки в пикселях
+    public static int getLineWidth(int color, int adress) {
+        return getTextWidth(color, textLinesSymbols, 
+                textLinesAdress[adress], textLinesAdress[adress + 1]);
+    }
+    
+    //Получить ширину части строки в пикселях
+    public static int getLinePartWidth(int color, int adress, int firstSymbol, int lastSymbol) {
+        return getTextWidth(color, textLinesSymbols, 
+                textLinesAdress[adress] + firstSymbol, textLinesAdress[adress] + lastSymbol);
     }
 
     //Получить ширину строки с +1 расстоянием между символами, по номеру строки
